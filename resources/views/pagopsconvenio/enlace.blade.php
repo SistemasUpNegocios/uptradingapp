@@ -1,0 +1,6 @@
+@if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_encargado || auth()->user()->is_ps_asistente || auth()->user()->is_cliente_ps_asistente || auth()->user()->is_cliente_ps_encargado)
+    <a href="" class="btn btn-sm principal-button new" id="seePagosPS" data-convenioid="{{ $convenioid }}"><i class="bi bi-eye"></i> Ver pagos de PS</a>
+@endif
+@if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_encargado)
+    <a href="" class="btn btn-sm principal-button seeConvenio" data-id="{{ $convenioid }}" data-folio="{{ $folio }}" data-nombrecliente="{{ $clientenombre }}" data-monto="{{ $monto }}" data-monto_letra="{{ $monto_letra }}" data-fecha_inicio="{{ $fecha_inicio }}" data-fecha_fin="{{ $fecha_fin }}" data-capertura="{{ $capertura }}" data-cmensual="{{ $cmensual }}" data-ctrimestral="{{ $ctrimestral }}" data-status="{{ $status }}" data-numerocuenta="{{ $numerocuenta }}" data-ps_id="{{ $ps_id }}" data-cliente_id="{{ $cliente_id }}" data-banco_id="{{ $banco_id }}"><i class="bi bi-eye"></i> Ver convenio</a>
+@endif

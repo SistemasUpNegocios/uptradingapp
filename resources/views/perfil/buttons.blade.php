@@ -1,0 +1,1 @@
+<a href="" data-id="{{ auth()->user()->id }}" type="button" class="btn btn-success editar" title="Editar perfil"><i class="bi bi-pencil"></i> Editar perfil</a>

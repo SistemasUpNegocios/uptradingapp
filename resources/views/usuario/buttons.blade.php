@@ -1,0 +1,5 @@
+@if (auth()->user()->is_root)
+<a href="" data-nombre="{{ $nombre }}" data-apellidop="{{ $apellido_p }}" data-apellidom="{{ $apellido_m }}" data-correo="{{ $correo }}" data-privilegio="{{ $privilegio }}" data-oficina="{{ $oficina_id }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
+<a href="" data-id="{{ $id }}" data-nombre="{{ $nombre }}" data-apellidop="{{ $apellido_p }}" data-apellidom="{{ $apellido_m }}" data-correo="{{ $correo }}" data-privilegio="{{ $privilegio }}" data-oficina="{{ $oficina_id }}" type="button" title="Editar usuario" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
+<a href="" data-id="{{ $id }}" type="button" title="Eliminar usuario" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
+@endif
