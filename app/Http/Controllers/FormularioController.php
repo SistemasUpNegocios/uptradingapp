@@ -52,89 +52,106 @@ class FormularioController extends Controller
 
             $formulario = new Formulario;
 
-            $formulario->codigoCliente = strtoupper($request->codigocliente);
-            $formulario->nombre = strtoupper($request->nombre);
-            $formulario->apellido_p = strtoupper($request->apellido_p);
-            $formulario->apellido_m = strtoupper($request->apellido_m);
-            $formulario->estado_civil = strtoupper($request->estado_civil);
-            $formulario->fecha_nacimiento = $request->fecha_nacimiento;
-            $formulario->nacionalidad = strtoupper($request->nacionalidad);
-            $formulario->direccion = strtoupper($request->direccion);
-            $formulario->colonia = strtoupper($request->colonia);
-            $formulario->cp = $request->cp;
-            $formulario->ciudad = strtoupper($request->ciudad);
-            $formulario->estado = strtoupper($request->estado);
-            $formulario->pais = strtoupper($request->pais);
-            $formulario->celular = $request->celular;
-            $formulario->correo_personal = strtoupper($request->correo_personal);
-            $formulario->correo_institucional = strtoupper($request->correo_institucional);
-            $formulario->fuera_mexico = strtoupper($request->fuera_mexico);
-            $formulario->situacion_laboral = strtoupper($request->situacion_laboral);
-            if (!empty($request->nombre_direccion)) {
-                $formulario->nombre_direccion = strtoupper($request->nombre_direccion);
-            } else {
-                $formulario->nombre_direccion = strtoupper($request->nombre_direccion2);
+            $codigo_cliente = strtoupper($request->codigocliente);
+            $codigo_cliente = explode("-", $codigo_cliente);
+            $codigo_cliente = $codigo_cliente[2];
+
+            $codigo_cliente_sql = Formulario::where('codigoCliente', 'like', "%$codigo_cliente%")->get();
+            
+            if(sizeof($codigo_cliente_sql) <= 0){
+                $formulario->codigoCliente = strtoupper($request->codigocliente);
+                $formulario->nombre = strtoupper($request->nombre);
+                $formulario->apellido_p = strtoupper($request->apellido_p);
+                $formulario->apellido_m = strtoupper($request->apellido_m);
+                $formulario->estado_civil = strtoupper($request->estado_civil);
+                $formulario->fecha_nacimiento = $request->fecha_nacimiento;
+                $formulario->nacionalidad = strtoupper($request->nacionalidad);
+                $formulario->direccion = strtoupper($request->direccion);
+                $formulario->colonia = strtoupper($request->colonia);
+                $formulario->cp = $request->cp;
+                $formulario->ciudad = strtoupper($request->ciudad);
+                $formulario->estado = strtoupper($request->estado);
+                $formulario->pais = strtoupper($request->pais);
+                $formulario->celular = $request->celular;
+                $formulario->correo_personal = strtoupper($request->correo_personal);
+                $formulario->correo_institucional = strtoupper($request->correo_institucional);
+                $formulario->fuera_mexico = strtoupper($request->fuera_mexico);
+                $formulario->situacion_laboral = strtoupper($request->situacion_laboral);
+                if (!empty($request->nombre_direccion)) {
+                    $formulario->nombre_direccion = strtoupper($request->nombre_direccion);
+                } else {
+                    $formulario->nombre_direccion = strtoupper($request->nombre_direccion2);
+                }
+                $formulario->giro_empresa = strtoupper($request->giro_empresa);
+                if (!empty($request->puesto)) {
+                    $formulario->puesto = strtoupper($request->puesto);
+                } else {
+                    $formulario->puesto = strtoupper($request->puesto2);
+                }
+                $formulario->sector_empresa = strtoupper($request->sector_empresa);
+                $formulario->personas_cargo = $request->personas_cargo;
+                $formulario->porcentaje_acciones = $request->porcentaje_acciones;
+
+                if (!empty($request->monto_anio)) {
+                    $monto_anio = str_replace(array("$", ","), "", $request->monto_anio);
+                    $formulario->monto_anio = $monto_anio;
+                }
+
+                $formulario->pagina_web = $request->pagina_web;
+                if (!empty($request->ultimo_empleo)) {
+                    $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo);
+                } else {
+                    $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo2);
+                }
+                $formulario->ultimo_empleador = strtoupper($request->ultimo_empleador);
+                $formulario->status_anterior = strtoupper($request->status_anterior);
+
+                if (!empty($request->monto_mensual_jubilacion)) {
+                    $monto_mensual_jubilacion = str_replace(array("$", ","), "", $request->monto_mensual_jubilacion);
+                    $formulario->monto_mensual_jubilacion = $monto_mensual_jubilacion;
+                }
+
+                $formulario->escuela_universidad = strtoupper($request->escuela_universidad);
+                $formulario->campo_facultad = strtoupper($request->campo_facultad);
+                $formulario->especificacion_trabajo = strtoupper($request->especificacion_trabajo);
+                $formulario->funcion_publica = strtoupper($request->funcion_publica);
+                $formulario->descripcion_funcion_publica = strtoupper($request->descripcion_funcion_publica);
+                $formulario->residencia = strtoupper($request->residencia);
+                $formulario->rfc = strtoupper($request->rfc);
+
+                if (!empty($request->deposito_inicial)) {
+                    $deposito_inicial = str_replace(array("$", ","), "", $request->deposito_inicial);
+                    $formulario->deposito_inicial = $deposito_inicial;
+                }
+
+                $formulario->origen_dinero = strtoupper($request->origen_dinero);
+                $formulario->ps_nombre = strtoupper($request->ps_nombre);
+
+                $formulario->save();
+
+                $formulario_id = $formulario->id;
+                $bitacora_id = session('bitacora_id');
+
+                $log = new Log;
+
+                $log->tipo_accion = "Inserción";
+                $log->tabla = "Formulario";
+                $log->id_tabla = $formulario_id;
+                $log->bitacora_id = $bitacora_id;
+
+                $log->save();
+
+                return response($formulario);
+            }else{
+                return response()->json(
+                    [
+                        'errors' => [
+                            "codigocliente" => ["El código de cliente ya está en uso."]
+                        ]
+                    ], 
+                    422
+                );
             }
-            $formulario->giro_empresa = strtoupper($request->giro_empresa);
-            if (!empty($request->puesto)) {
-                $formulario->puesto = strtoupper($request->puesto);
-            } else {
-                $formulario->puesto = strtoupper($request->puesto2);
-            }
-            $formulario->sector_empresa = strtoupper($request->sector_empresa);
-            $formulario->personas_cargo = $request->personas_cargo;
-            $formulario->porcentaje_acciones = $request->porcentaje_acciones;
-
-            if (!empty($request->monto_anio)) {
-                $monto_anio = str_replace(array("$", ","), "", $request->monto_anio);
-                $formulario->monto_anio = $monto_anio;
-            }
-
-            $formulario->pagina_web = $request->pagina_web;
-            if (!empty($request->ultimo_empleo)) {
-                $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo);
-            } else {
-                $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo2);
-            }
-            $formulario->ultimo_empleador = strtoupper($request->ultimo_empleador);
-            $formulario->status_anterior = strtoupper($request->status_anterior);
-
-            if (!empty($request->monto_mensual_jubilacion)) {
-                $monto_mensual_jubilacion = str_replace(array("$", ","), "", $request->monto_mensual_jubilacion);
-                $formulario->monto_mensual_jubilacion = $monto_mensual_jubilacion;
-            }
-
-            $formulario->escuela_universidad = strtoupper($request->escuela_universidad);
-            $formulario->campo_facultad = strtoupper($request->campo_facultad);
-            $formulario->especificacion_trabajo = strtoupper($request->especificacion_trabajo);
-            $formulario->funcion_publica = strtoupper($request->funcion_publica);
-            $formulario->descripcion_funcion_publica = strtoupper($request->descripcion_funcion_publica);
-            $formulario->residencia = strtoupper($request->residencia);
-            $formulario->rfc = strtoupper($request->rfc);
-
-            if (!empty($request->deposito_inicial)) {
-                $deposito_inicial = str_replace(array("$", ","), "", $request->deposito_inicial);
-                $formulario->deposito_inicial = $deposito_inicial;
-            }
-
-            $formulario->origen_dinero = strtoupper($request->origen_dinero);
-            $formulario->ps_nombre = strtoupper($request->ps_nombre);
-
-            $formulario->save();
-
-            $formulario_id = $formulario->id;
-            $bitacora_id = session('bitacora_id');
-
-            $log = new Log;
-
-            $log->tipo_accion = "Inserción";
-            $log->tabla = "Formulario";
-            $log->id_tabla = $formulario_id;
-            $log->bitacora_id = $bitacora_id;
-
-            $log->save();
-
-            return response($formulario);
         }
     }
 
@@ -151,89 +168,106 @@ class FormularioController extends Controller
 
             $formulario = Formulario::find($request->id);
 
-            $formulario->codigoCliente = strtoupper($request->codigocliente);
-            $formulario->nombre = strtoupper($request->nombre);
-            $formulario->apellido_p = strtoupper($request->apellido_p);
-            $formulario->apellido_m = strtoupper($request->apellido_m);
-            $formulario->estado_civil = strtoupper($request->estado_civil);
-            $formulario->fecha_nacimiento = $request->fecha_nacimiento;
-            $formulario->nacionalidad = strtoupper($request->nacionalidad);
-            $formulario->direccion = strtoupper($request->direccion);
-            $formulario->colonia = strtoupper($request->colonia);
-            $formulario->cp = $request->cp;
-            $formulario->ciudad = strtoupper($request->ciudad);
-            $formulario->estado = strtoupper($request->estado);
-            $formulario->pais = strtoupper($request->pais);
-            $formulario->celular = $request->celular;
-            $formulario->correo_personal = strtoupper($request->correo_personal);
-            $formulario->correo_institucional = strtoupper($request->correo_institucional);
-            $formulario->fuera_mexico = strtoupper($request->fuera_mexico);
-            $formulario->situacion_laboral = strtoupper($request->situacion_laboral);
-            if (!empty($request->nombre_direccion)) {
-                $formulario->nombre_direccion = strtoupper($request->nombre_direccion);
-            } else {
-                $formulario->nombre_direccion = strtoupper($request->nombre_direccion2);
+            $codigo_cliente = strtoupper($request->codigocliente);
+            $codigo_cliente = explode("-", $codigo_cliente);
+            $codigo_cliente = $codigo_cliente[2];
+
+            $codigo_cliente_sql = Formulario::where('codigoCliente', 'like', "%$codigo_cliente%")->get();
+            
+            if(sizeof($codigo_cliente_sql) <= 0){
+                $formulario->codigoCliente = strtoupper($request->codigocliente);
+                $formulario->nombre = strtoupper($request->nombre);
+                $formulario->apellido_p = strtoupper($request->apellido_p);
+                $formulario->apellido_m = strtoupper($request->apellido_m);
+                $formulario->estado_civil = strtoupper($request->estado_civil);
+                $formulario->fecha_nacimiento = $request->fecha_nacimiento;
+                $formulario->nacionalidad = strtoupper($request->nacionalidad);
+                $formulario->direccion = strtoupper($request->direccion);
+                $formulario->colonia = strtoupper($request->colonia);
+                $formulario->cp = $request->cp;
+                $formulario->ciudad = strtoupper($request->ciudad);
+                $formulario->estado = strtoupper($request->estado);
+                $formulario->pais = strtoupper($request->pais);
+                $formulario->celular = $request->celular;
+                $formulario->correo_personal = strtoupper($request->correo_personal);
+                $formulario->correo_institucional = strtoupper($request->correo_institucional);
+                $formulario->fuera_mexico = strtoupper($request->fuera_mexico);
+                $formulario->situacion_laboral = strtoupper($request->situacion_laboral);
+                if (!empty($request->nombre_direccion)) {
+                    $formulario->nombre_direccion = strtoupper($request->nombre_direccion);
+                } else {
+                    $formulario->nombre_direccion = strtoupper($request->nombre_direccion2);
+                }
+                $formulario->giro_empresa = strtoupper($request->giro_empresa);
+                if (!empty($request->puesto)) {
+                    $formulario->puesto = strtoupper($request->puesto);
+                } else {
+                    $formulario->puesto = strtoupper($request->puesto2);
+                }
+                $formulario->sector_empresa = strtoupper($request->sector_empresa);
+                $formulario->personas_cargo = $request->personas_cargo;
+                $formulario->porcentaje_acciones = $request->porcentaje_acciones;
+
+                if (!empty($request->monto_anio)) {
+                    $monto_anio = str_replace(array("$", ","), "", $request->monto_anio);
+                    $formulario->monto_anio = $monto_anio;
+                }
+
+                $formulario->pagina_web = $request->pagina_web;
+                if (!empty($request->ultimo_empleo)) {
+                    $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo);
+                } else {
+                    $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo2);
+                }
+                $formulario->ultimo_empleador = strtoupper($request->ultimo_empleador);
+                $formulario->status_anterior = strtoupper($request->status_anterior);
+
+                if (!empty($request->monto_mensual_jubilacion)) {
+                    $monto_mensual_jubilacion = str_replace(array("$", ","), "", $request->monto_mensual_jubilacion);
+                    $formulario->monto_mensual_jubilacion = $monto_mensual_jubilacion;
+                }
+
+                $formulario->escuela_universidad = strtoupper($request->escuela_universidad);
+                $formulario->campo_facultad = strtoupper($request->campo_facultad);
+                $formulario->especificacion_trabajo = strtoupper($request->especificacion_trabajo);
+                $formulario->funcion_publica = strtoupper($request->funcion_publica);
+                $formulario->descripcion_funcion_publica = strtoupper($request->descripcion_funcion_publica);
+                $formulario->residencia = strtoupper($request->residencia);
+                $formulario->rfc = strtoupper($request->rfc);
+
+                if (!empty($request->deposito_inicial)) {
+                    $deposito_inicial = str_replace(array("$", ","), "", $request->deposito_inicial);
+                    $formulario->deposito_inicial = $deposito_inicial;
+                }
+
+                $formulario->origen_dinero = strtoupper($request->origen_dinero);
+                $formulario->ps_nombre = strtoupper($request->ps_nombre);
+
+                $formulario->update();
+
+                $formulario_id = $formulario->id;
+                $bitacora_id = session('bitacora_id');
+
+                $log = new Log;
+
+                $log->tipo_accion = "Actualización";
+                $log->tabla = "Formulario";
+                $log->id_tabla = $formulario_id;
+                $log->bitacora_id = $bitacora_id;
+
+                $log->save();
+
+                return response($formulario);
+            }else{
+                return response()->json(
+                    [
+                        'errors' => [
+                            "codigocliente" => ["El código de cliente ya está en uso."]
+                        ]
+                    ], 
+                    422
+                );
             }
-            $formulario->giro_empresa = strtoupper($request->giro_empresa);
-            if (!empty($request->puesto)) {
-                $formulario->puesto = strtoupper($request->puesto);
-            } else {
-                $formulario->puesto = strtoupper($request->puesto2);
-            }
-            $formulario->sector_empresa = strtoupper($request->sector_empresa);
-            $formulario->personas_cargo = $request->personas_cargo;
-            $formulario->porcentaje_acciones = $request->porcentaje_acciones;
-
-            if (!empty($request->monto_anio)) {
-                $monto_anio = str_replace(array("$", ","), "", $request->monto_anio);
-                $formulario->monto_anio = $monto_anio;
-            }
-
-            $formulario->pagina_web = $request->pagina_web;
-            if (!empty($request->ultimo_empleo)) {
-                $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo);
-            } else {
-                $formulario->ultimo_empleo = strtoupper($request->ultimo_empleo2);
-            }
-            $formulario->ultimo_empleador = strtoupper($request->ultimo_empleador);
-            $formulario->status_anterior = strtoupper($request->status_anterior);
-
-            if (!empty($request->monto_mensual_jubilacion)) {
-                $monto_mensual_jubilacion = str_replace(array("$", ","), "", $request->monto_mensual_jubilacion);
-                $formulario->monto_mensual_jubilacion = $monto_mensual_jubilacion;
-            }
-
-            $formulario->escuela_universidad = strtoupper($request->escuela_universidad);
-            $formulario->campo_facultad = strtoupper($request->campo_facultad);
-            $formulario->especificacion_trabajo = strtoupper($request->especificacion_trabajo);
-            $formulario->funcion_publica = strtoupper($request->funcion_publica);
-            $formulario->descripcion_funcion_publica = strtoupper($request->descripcion_funcion_publica);
-            $formulario->residencia = strtoupper($request->residencia);
-            $formulario->rfc = strtoupper($request->rfc);
-
-            if (!empty($request->deposito_inicial)) {
-                $deposito_inicial = str_replace(array("$", ","), "", $request->deposito_inicial);
-                $formulario->deposito_inicial = $deposito_inicial;
-            }
-
-            $formulario->origen_dinero = strtoupper($request->origen_dinero);
-            $formulario->ps_nombre = strtoupper($request->ps_nombre);
-
-            $formulario->update();
-
-            $formulario_id = $formulario->id;
-            $bitacora_id = session('bitacora_id');
-
-            $log = new Log;
-
-            $log->tipo_accion = "Actualización";
-            $log->tabla = "Formulario";
-            $log->id_tabla = $formulario_id;
-            $log->bitacora_id = $bitacora_id;
-
-            $log->save();
-
-            return response($formulario);
         }
     }
 
@@ -265,8 +299,8 @@ class FormularioController extends Controller
             $numeroOficina = "001";
         }
 
-        $codigoForm = Formulario::select('codigoCliente')->orderBy('id', 'desc')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->orderBy('id', 'desc')->first();
+        $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'desc')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'desc')->first();
 
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 

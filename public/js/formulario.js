@@ -281,8 +281,9 @@ $(document).ready(function () {
                     });
                 }
             },
-            error: function (jqXHR, exception) {
-                var validacion = jqXHR.responseJSON.errors;
+            error: function (error, exception) {
+                console.log(error);
+                var validacion = error.responseJSON.errors;
                 for (let clave in validacion) {
                     $("#alertMessage").append(
                         `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`

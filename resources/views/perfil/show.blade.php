@@ -147,7 +147,7 @@
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="email" title="Campo obligatorio / example@uptrading.com" minlength="3" maxlength="70" class="form-control" placeholder="Ingresa el correo" id="correoiInput" name="correo" value="{{ auth()->user()->correo }}" readonly required>
+                                    <input style="text-transform: none;" type="email" title="Campo obligatorio / example@uptrading.com" minlength="3" maxlength="70" class="form-control" placeholder="Ingresa el correo" id="correoiInput" name="correo" value="{{ auth()->user()->correo }}" readonly required>
                                     <label for="floatingInput">Email</label>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12 d-none" id="colPassOld">
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control"
+                                    <input style="text-transform: none;" type="password" class="form-control"
                                         placeholder="Ingresa tú antigua contraseña" id="passOldInput"
                                         name="pass-old">
                                     <label for="passOldInput">Ingresa tu contraseña anterior</label>
@@ -171,7 +171,7 @@
                             </div>
                             <div class="col-md-6 col-12 d-none" id="colPassNew">
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control"
+                                    <input style="text-transform: none;" type="password" class="form-control"
                                         placeholder="Ingresa tu nueva contraseña" id="passNewInput"
                                         name="pass-new" >
                                     <label for="passNewInput">Ingresa tu nueva contraseña</label>

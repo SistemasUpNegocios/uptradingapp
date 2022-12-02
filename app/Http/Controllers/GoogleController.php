@@ -81,7 +81,7 @@ class GoogleController extends Controller
         
         $response = Http::withToken(json_encode($token['access_token']))->get('https://admin.googleapis.com/admin/directory/v1/users?customer=my_customer&domain=uptradingexperts.com&maxResults=500&orderBy=email&query=email%3Amx*')->json();
 
-        $ultima_cuenta = Http::withToken(json_encode($google_client_token['access_token']))->get("https://admin.googleapis.com/admin/directory/v1/users?customer=my_customer&domain=uptradingexperts.com&maxResults=1&orderBy=email&sortOrder=DESCENDING&query=email%3Amxa_0*")->json();
+        $ultima_cuenta = Http::withToken(json_encode($token['access_token']))->get("https://admin.googleapis.com/admin/directory/v1/users?customer=my_customer&domain=uptradingexperts.com&maxResults=1&orderBy=email&sortOrder=DESCENDING&query=email%3Amxa_0*")->json();
 
 
         return response($response['users']);

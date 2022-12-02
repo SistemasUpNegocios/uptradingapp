@@ -1,7 +1,7 @@
 <div class="col-md-6 col-12">
     <div class="form-floating mb-3">
-        <select name="nombre" class="form-control" id="nombreInput" required>
-            <option value="" disabled selected>Selecciona el cliente...</option>
+        <select name="nombre" class="form-control" id="nombreInput" required style="text-transform: none;">
+            <option value="" disabled selected>SELECCIONA AL CLIENTE...</option>
             @foreach($clientes as $cliente)
             @php
                 $nombre_cliente = $cliente->apellido_p . ' ' .
@@ -17,7 +17,7 @@
     <div class="form-floating mb-3">
         <input type="email" class="form-control"
             placeholder="Ingresa el correo electrónico" id="emailInput"
-            name="email" required>
+            name="email" required style="text-transform: none;">
         <label for="emailInput">Correo electrónico</label>
     </div>
 </div>

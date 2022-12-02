@@ -97,7 +97,7 @@ $(document).ready(function () {
             <div class="form-floating mb-3">
                 <input type="text" class="form-control"
                     placeholder="Ingresa el nombre completo" id="nombreInput"
-                    name="nombre" required>
+                    name="nombre" required style="text-transform: none;">
                 <label for="nombreInput">Nombre completo del inversor</label>
             </div>
         </div>
@@ -105,7 +105,7 @@ $(document).ready(function () {
         <div class="form-floating mb-3">
             <input type="email" class="form-control"
                 placeholder="Ingresa el correo electrónico" id="emailInput"
-                name="email" required>
+                name="email" required style="text-transform: none;">
             <label for="emailInput">Correo electrónico</label>
         </div>
     </div>

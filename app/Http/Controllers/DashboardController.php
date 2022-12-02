@@ -29,9 +29,8 @@ class DashboardController extends Controller
         $psid = session("psid");
         $codigo = session("codigo_oficina");
 
-        $ps = Ps::count();
-        $clientesCount = Cliente::count();
-        $clientes = Cliente::orderBy('apellido_p')->get();
+        $ps = Ps::where('codigoPS', 'like', "$codigo%")->count();
+        $clientesCount = Cliente::where("codigoCliente", "like", "MXN-$codigo%")->count();
 
         $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -114,7 +113,6 @@ class DashboardController extends Controller
         $data = array(
             "ps" => $ps,
             "clientesCount" => $clientesCount,
-            "clientes" => $clientes,
             "contratos_compuestos" => $contratos_compuestos,
             "contratos_mensuales" => $contratos_mensuales,
 

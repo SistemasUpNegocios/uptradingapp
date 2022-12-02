@@ -33,8 +33,8 @@ return [
     'google' => [
         'client_id' => "687012759901-bg53062s0agir9blduomqc5lffgme1mb.apps.googleusercontent.com",
         'client_secret' => "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",
-        // 'redirect' => "https://admin.uptradingexperts.com/admin/cuentasGsuite",
-        'redirect' => "http://127.0.0.1:8000/admin/cuentasGsuite",
+        'redirect' => "https://admin.uptradingexperts.com/admin/cuentasGsuite",
+        // 'redirect' => "http://127.0.0.1:8000/admin/cuentasGsuite",
     ],
 
 ];

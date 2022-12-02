@@ -109,6 +109,11 @@
 
 </header>
 
+@php
+    use App\Models\User;
+    $ps_encargados = User::where('privilegio', 'ps_encargado')->get();
+@endphp
+
 <div class="sidebar-nav sidebar offcanvas offcanvas-start" tabindex="-1" id="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
 
@@ -130,7 +135,7 @@
             </a>
         </li>
 
-        @if (!auth()->user()->is_cliente)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_encargado)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/tickets') }}">
@@ -138,68 +143,88 @@
                     <span>Tickets</span>
                 </a>
             </li>
-        @endif
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#chat-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                
-                @if (auth()->user()->id != 232)
-                    <li>
-                        <a href="#" id="deptoPS" class="chatModal" data-chatid="232">
-                            <i class="bi bi-circle"></i><span>Hugo</span>
-                        </a>
-                    </li> 
-                @endif
-               
-                @if (auth()->user()->id != 1)
-                    <li>
-                        <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
-                            <i class="bi bi-circle"></i><span>Departamento de sistemas</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->id != 246)
-                    <li>
-                        <a href="#" id="deptoEgresos" class="chatModal" data-chatid="246">
-                            <i class="bi bi-circle"></i><span>Departamento de egresos</span>
-                        </a>
-                    </li>
-                @endif
-                <li class="nav-heading">Departamento de administración</li>
-                @if (auth()->user()->id != 234)
-                    <li>
-                        <a href="#" id="deptoAdmin" class="chatModal" data-chatid="234">
-                            <i class="bi bi-circle"></i><span>Maru</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->id != 235)
-                    <li>
-                        <a href="#" id="deptoAdmin" class="chatModal" data-chatid="235">
-                            <i class="bi bi-circle"></i><span>Karen</span>
-                        </a>
-                    </li>
-                @endif
-                <li class="nav-heading">Departamento de contabilidad</li>
-                @if (auth()->user()->id != 236)
-                    <li>
-                        <a href="#" id="deptoConta" class="chatModal" data-chatid="236">
-                            <i class="bi bi-circle"></i><span>Valeria</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->id != 239)
-                    <li>
-                        <a href="#" id="deptoConta" class="chatModal" data-chatid="239">
-                            <i class="bi bi-circle"></i><span>Ofelia</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#chat-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    
+                    @if (auth()->user()->id != 1)
+                        <li>
+                            <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
+                                <i class="bi bi-circle"></i><span>Departamento de sistemas</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->id != 246)
+                        <li>
+                            <a href="#" id="deptoEgresos" class="chatModal" data-chatid="246">
+                                <i class="bi bi-circle"></i><span>Departamento de egresos</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-heading">Departamento de administración</li>
+                    @if (auth()->user()->id != 234)
+                        <li>
+                            <a href="#" id="deptoAdmin" class="chatModal" data-chatid="234">
+                                <i class="bi bi-circle"></i><span>Maru</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->id != 235)
+                        <li>
+                            <a href="#" id="deptoAdmin" class="chatModal" data-chatid="235">
+                                <i class="bi bi-circle"></i><span>Karen</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-heading">Departamento de contabilidad</li>
+                    @if (auth()->user()->id != 236)
+                        <li>
+                            <a href="#" id="deptoConta" class="chatModal" data-chatid="236">
+                                <i class="bi bi-circle"></i><span>Valeria</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->id != 239)
+                        <li>
+                            <a href="#" id="deptoConta" class="chatModal" data-chatid="239">
+                                <i class="bi bi-circle"></i><span>Ofelia</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if (auth()->user()->is_ps_encargado)
+                        @if (sizeof($ps_encargados) > 1)
+                            <li class="nav-heading">PS encargados</li>
+                            @foreach ($ps_encargados as $ps)
+                                @if (auth()->user()->id != $ps->id)
+                                    <li>
+                                        <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
+                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+                    @else
+                        @if (sizeof($ps_encargados) > 0)
+                            <li class="nav-heading">PS encargados</li>
+                            @foreach ($ps_encargados as $ps)
+                                @if (auth()->user()->id != $ps->id)
+                                    <li>
+                                        <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
+                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endif                                   
+                </ul>
+            </li>
+        @endif
 
         <li class="nav-heading">Opciones de administrador</li>
         @if (!auth()->user()->is_cliente)
@@ -332,19 +357,7 @@
                         <a href="{{ URL::to('admin/pagoPS') }}">
                             <i class="bi bi-circle"></i><span>Pago a PS</span>
                         </a>
-                    </li>
-                    {{-- @if (!auth()->user()->is_ps_asistente)
-                        <li>
-                            <a href="{{ URL::to('admin/reporteMesPagoPS') }}">
-                                <i class="bi bi-circle"></i><span>Reporte mensual</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/reporteFiltroPagoPS') }}">
-                                <i class="bi bi-circle"></i><span>Reporte con filtro</span>
-                            </a>
-                        </li>
-                    @endif --}}
+                    </li>                    
                     <li class="nav-heading">Convenios</li>
                     <li>
                         <a href="{{ URL::to('admin/pagoPSConvenio') }}">
@@ -362,23 +375,23 @@
                     <i class="bi bi-person-workspace"></i><span>PS</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="ps-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ URL::to('admin/oficina') }}">
-                            <i class="bi bi-circle"></i><span>Oficinas</span>
-                        </a>
-                    </li>
+                    @if (!auth()->user()->is_ps_encargado && !auth()->user()->is_ps_asistente)
+                        <li>
+                            <a href="{{ URL::to('admin/oficina') }}">
+                                <i class="bi bi-circle"></i><span>Oficinas</span>
+                            </a>
+                        </li>                        
+                        <li>
+                            <a href="{{ URL::to('admin/psOficina') }}">
+                                <i class="bi bi-circle"></i><span>PS de oficina</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
                         </a>
                     </li>
-                    @if (!auth()->user()->is_ps_encargado)
-                    <li>
-                        <a href="{{ URL::to('admin/psOficina') }}">
-                            <i class="bi bi-circle"></i><span>PS de oficina</span>
-                        </a>
-                    </li>
-                    @endif
                     <li>
                         <a href="{{ URL::to('admin/resumenPS') }}">
                             <i class="bi bi-circle"></i><span>Resumen de PS</span>
