@@ -39,6 +39,7 @@ class ConvenioController extends Controller
             );
 
             return response()->view('convenio.show', $data, 200);
+            
         }else{
             return redirect()->to('/admin/dashboard');
         }

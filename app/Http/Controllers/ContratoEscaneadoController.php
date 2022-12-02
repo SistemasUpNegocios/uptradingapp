@@ -38,6 +38,7 @@ class ContratoEscaneadoController extends Controller
 
                 $anverso->move(public_path('documentos/contrato_escaneado'), $filename);
                 $contrato_escaneado->img_anverso = $filename;
+                
             } 
 
             if ($request->hasFile('reverso')) {

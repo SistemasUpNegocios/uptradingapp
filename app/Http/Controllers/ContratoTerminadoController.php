@@ -78,6 +78,7 @@ class ContratoTerminadoController extends Controller
             ->get();        
 
         return datatables()->of($contrato)->addColumn('btn', 'contratoterminado.buttons')->rawColumns(['btn'])->toJson();
+        
     }
 
     public function editContrato(Request $request)

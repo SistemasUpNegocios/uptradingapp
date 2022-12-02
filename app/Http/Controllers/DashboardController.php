@@ -129,6 +129,7 @@ class DashboardController extends Controller
         );
 
         return response()->view('dashboard.show', $data, 200);
+        
     }
 
 }
