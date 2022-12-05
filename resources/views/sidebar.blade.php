@@ -195,33 +195,18 @@
                         </li>
                     @endif
 
-                    @if (auth()->user()->is_ps_encargado)
-                        @if (sizeof($ps_encargados) > 1)
-                            <li class="nav-heading">PS encargados</li>
-                            @foreach ($ps_encargados as $ps)
-                                @if (auth()->user()->id != $ps->id)
-                                    <li>
-                                        <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
-                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        @endif
-                    @else
-                        @if (sizeof($ps_encargados) > 0)
-                            <li class="nav-heading">PS encargados</li>
-                            @foreach ($ps_encargados as $ps)
-                                @if (auth()->user()->id != $ps->id)
-                                    <li>
-                                        <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
-                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        @endif
-                    @endif                                   
+                    @if (!auth()->user()->is_ps_encargado)
+                        <li class="nav-heading">PS encargados</li>
+                        @foreach ($ps_encargados as $ps)
+                            @if (auth()->user()->id != $ps->id)
+                                <li>
+                                    <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
+                                        <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
+                    @endif
                 </ul>
             </li>
         @endif

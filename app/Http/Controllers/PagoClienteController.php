@@ -37,8 +37,12 @@ class PagoClienteController extends Controller
 
     public function getCliente()
     {
+
+        $codigo = session('codigo_oficina');
+
         $cliente = DB::table('cliente')            
             ->select(DB::raw("codigoCliente, id AS clienteid, CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS clientenombre"))
+            ->where('codigoCliente', 'like', "MXN-$codigo%")
             ->get();
 
         return datatables()->of($cliente)->addColumn('enlace', 'pagocliente.enlace')->rawColumns(['enlace'])->toJson();

@@ -43,10 +43,6 @@
                             <tbody id="psBody" style="vertical-align: middle;">
                             </tbody>
                         </table>
-
-
-                        {{-- <p class='fw-bold mt-3'>No se ha registrado ninguna calle destacada. ¡Añade una ahora!</p> --}}
-
                     </div>
                 </div>
 
