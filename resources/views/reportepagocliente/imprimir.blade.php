@@ -40,7 +40,7 @@
       <tr>
         <th data-priority="0" scope="col">Contrato</th>
         <th data-priority="0" scope="col">Cliente</th>
-        <th data-priority="0" scope="col">Comisión</th>
+        <th data-priority="0" scope="col">Rendimiento (USD)</th>
         <th data-priority="0" scope="col">Pago</th>
       </tr>
     </thead>

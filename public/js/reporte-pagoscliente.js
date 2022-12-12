@@ -134,4 +134,45 @@ $(document).ready(function () {
         $("#fechaInicioInput").val(fecha);
         $("#fechaFinInput").val(fecha);
     });
+
+    $(document).on("click", "#imprimirReporte", function () {
+        var formatearCantidad = new Intl.NumberFormat("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 2,
+        });
+
+        let pago = $(this).data("pago");
+        let cliente = $(this).data("cliente");
+        let rendimiento = $(this).data("rendimiento").replace(",", "");
+        let fecha = $(this).data("fecha");
+        let contrato = $(this).data("contrato");
+        let dolar = 0;
+        $.ajax({
+            url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+            jsonp: "callback",
+            dataType: "jsonp",
+            success: function (response) {
+                var series = response.bmx.series;
+                for (var i in series) {
+                    var serie = series[i];
+
+                    dolar = serie.datos[0].dato;
+                }
+
+                rendimiento = parseFloat(dolar) * parseFloat(rendimiento);
+                rendimiento = formatearCantidad
+                    .format(rendimiento)
+                    .replace("$", "")
+                    .replace(",", "");
+
+                let letra = numeroALetrasMXN(rendimiento);
+
+                window.open(
+                    `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}`,
+                    "_blank"
+                );
+            },
+        });
+    });
 });

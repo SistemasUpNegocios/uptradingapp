@@ -24,9 +24,11 @@ class ReportePagoClienteController extends Controller
     {
         $resumenContrato = DB::table('contrato')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, pago_cliente.memo, pago_cliente.serie"))
-            ->whereBetween('pago_cliente.fecha_pago', [$request->fecha_inicio, $request->fecha_fin])
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+            ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
+            ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
@@ -41,9 +43,11 @@ class ReportePagoClienteController extends Controller
     {
         $resumenContrato = DB::table('contrato')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+        ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
         ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, pago_cliente.memo, pago_cliente.serie"))
-        ->whereBetween('pago_cliente.fecha_pago', [$request->fecha_inicio, $request->fecha_fin])
+        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+        ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
+        ->distinct("clientenombre")
         ->orderBy('contrato.id', 'DESC')
         ->get();
 
@@ -53,8 +57,8 @@ class ReportePagoClienteController extends Controller
             "fecha_fin" => $request->fecha_fin,
         );
 
-        $inicio = Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
-        $fin = Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
+        $inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
+        $fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
 
         $pdf = PDF::loadView('reportepagocliente.imprimir', $data);
         $nombreDescarga = "Resumen de pagos a clientes de $inicio hasta $fin.pdf";
@@ -65,9 +69,11 @@ class ReportePagoClienteController extends Controller
     {
         $resumenContrato = DB::table('contrato')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, pago_cliente.memo, pago_cliente.serie"))
-            ->where('pago_cliente.fecha_pago', $request->fecha)
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+            ->where('amortizacion.fecha', $request->fecha)
+            ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
@@ -76,6 +82,26 @@ class ReportePagoClienteController extends Controller
         );
 
         return response()->view('reportepagocliente.tabla', $data, 200);
+    }
+
+    public function getReportePago(Request $request)
+    {        
+        
+        $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');        
+        $rendimiento = number_format($request->rendimiento, 2);
+        
+        $data = array(
+            "pago" => $request->pago,
+            "cliente" => $request->cliente,
+            "rendimiento" => $rendimiento,
+            "contrato" => $request->contrato,
+            "fecha" => $fecha,
+            "letra" => $request->letra,
+        );
+
+        $pdf = PDF::loadView('reportepagocliente.reporte', $data);
+        $nombreDescarga = "Reporte del pago de $request->cliente numero $request->pago con fecha de $fecha";
+        return $pdf->stream($nombreDescarga);
     }
 
     public function export(Request $request){

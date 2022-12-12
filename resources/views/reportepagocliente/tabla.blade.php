@@ -4,28 +4,39 @@
             <tr>
                 <th data-priority="0" scope="col">Contrato</th>
                 <th data-priority="0" scope="col">Cliente</th>
-                <th data-priority="0" scope="col">Comisión</th>
+                <th data-priority="0" scope="col">Rendimiento (USD)</th>
                 <th data-priority="0" scope="col">Pago</th>
+                <th data-priority="0" scope="col">Reporte</th>
             </tr>
         </thead>
-        <tbody id="resuemnBody">
+        <tbody id="resuemnBody" style="vertical-align: middle">
             @foreach ($resumenes_contrato as $resumen)
+                @php
+                    if (strlen($resumen->contrato) == 11){
+                        $contrato = substr($resumen->contrato, 0, -2);
+                    }else{
+                        $contrato = substr($resumen->contrato, 0, -3);
+                    }
+                    $cliente = $resumen->clientenombre;
+                    $rendimiento = number_format($resumen->pago, 2);
+                    if ($resumen->serie == 13){
+                        $pago = "CONTRATO COMPUESTO";
+                    }else{
+                        $pago = str_pad($resumen->serie, 2, "0", STR_PAD_LEFT).'/12';
+                    }
+                    $fecha = $resumen->fecha;
+                @endphp
                 <tr>
                     <td>
-                        @if (strlen($resumen->contrato) == 11)
-                            {{ substr($resumen->contrato, 0, -2); }}
-                        @else
-                            {{ substr($resumen->contrato, 0, -3); }}
-                        @endif
+                        {{ $contrato }}
                     </td>
-                    <td>{{ $resumen->clientenombre }}</td>
-                    <td>${{ number_format($resumen->pago, 2) }}</td>
+                    <td>{{ $cliente }}</td>
+                    <td>${{ $rendimiento }}</td>
                     <td>
-                        @if ($resumen->serie == 13)
-                            CONTRATO COMPUESTO
-                        @else
-                            {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
-                        @endif
+                        {{ $pago }}
+                    </td>
+                    <td>
+                        <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                     </td>
                 </tr>
             @endforeach        
