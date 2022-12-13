@@ -317,6 +317,7 @@
                             <i class="bi bi-circle"></i><span>Pagos a clientes (compuesto y mensual)</span>
                         </a>
                     </li>
+                    <li class="nav-heading">Rendimiento mensual</li>
                     <li>
                         <a href="{{ URL::to('admin/reportePagosCliente') }}">
                             <i class="bi bi-circle"></i><span>Reporte de pagos a clientes</span>
