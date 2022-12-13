@@ -69,15 +69,15 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         $("#alertMessage").text("");
         enviarDatos(this);
-        // Swal.fire({
-        //     title: '<h2 style="font-family: Poppins;">Enviando correo, por favor espere...</h2>',
-        //     allowEscapeKey: false,
-        //     allowOutsideClick: false,
-        //     timerProgressBar: true,
-        //     didOpen: () => {
-        //         Swal.showLoading();
-        //     },
-        // });
+        Swal.fire({
+            title: '<h2 style="font-family: Poppins;">Enviando correo, por favor espere...</h2>',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
     });
 
     const actualizarCita = () => {
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 $("#formModal").modal("hide");
                 $("#agendaForm")[0].reset();
                 calendar.refetchEvents();
-                // Swal.close();
+                Swal.close();
                 if (acc == "new") {
                     Swal.fire({
                         icon: "success",
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         $("#horaInput").val(data.hour);
                         $("#colorInput").val(data.color);
                         $("#asignadoAInput").val(data.asignado_a);
+                        $("#asignadoA2Input").val(data.asignado_a2);
                         $("#fechaInput").val(fecha);
 
                         let form = document.getElementById("agendaForm");
@@ -213,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         $("#horaInput").val(data.hour);
                         $("#colorInput").val(data.color);
                         $("#asignadoAInput").val(data.asignado_a);
+                        $("#asignadoA2Input").val(data.asignado_a2);
                     },
                     error: function (error) {
                         console.log(error.response.data);

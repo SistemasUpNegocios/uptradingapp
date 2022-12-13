@@ -118,6 +118,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-floating">
+                                    <select name="asignado_a2" class="form-control" id="asignadoA2Input" style="text-transform: none !important;">
+                                        <option value="" disabled selected>Selecciona..</option>
+                                        @foreach($users as $user)
+                                        <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="asignadoAInput">Asignar también a</label>
+                                </div>
+                            </div>
+                        </div>
 
                         <div style="display:block !important" id="alertMessage" class="invalid-feedback"></div>
                         <div class="modal-footer">
