@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Oficina;
+use App\Models\TipoCambio;
 use App\Exports\PagosClienteExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -106,12 +107,19 @@ class ReportePagoClienteController extends Controller
             "letra" => $request->letra,
         );
 
+        $tipo_cambio = new TipoCambio;
+        $tipo_cambio->valor = $request->dolar;
+        $tipo_cambio->contrato_id = $request->contratoid;
+        $tipo_cambio->memo = "Pago de rendimiento mensual ($request->pago)";
+        $tipo_cambio->save();
+
         $pdf = PDF::loadView('reportepagocliente.reporte', $data);
         $nombreDescarga = "Reporte del pago de $request->cliente numero $request->pago con fecha de $fecha";
         return $pdf->stream($nombreDescarga);
     }
 
-    public function export(Request $request){
+    public function export(Request $request)
+    {
         return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin), 'pagos a clientes.xlsx');
     }
 

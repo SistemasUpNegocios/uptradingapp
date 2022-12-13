@@ -169,6 +169,7 @@ $(document).ready(function () {
         let cliente = $(this).data("cliente");
         let fecha = $(this).data("fecha");
         let contrato = $(this).data("contrato");
+        let contratoid = $(this).data("contratoid");
         let dolar = $("#dolarInput").val();
         let rendimiento = String($(this).data("rendimientoini"))
             .replace("$", "")
@@ -182,7 +183,7 @@ $(document).ready(function () {
         let letra = numeroALetrasMXN(rendimiento);
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}`,
             "_blank"
         );
     });

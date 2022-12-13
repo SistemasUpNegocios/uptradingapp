@@ -250,6 +250,7 @@ class ContratoController extends Controller
             $tipo_cambio = new TipoCambio;
             $tipo_cambio->valor = $request->tipo_cambio;
             $tipo_cambio->contrato_id = $contrato->id;
+            $tipo_cambio->memo = "Creación de contrato";
             $tipo_cambio->save();
 
             $contrato_id = $contrato->id;
