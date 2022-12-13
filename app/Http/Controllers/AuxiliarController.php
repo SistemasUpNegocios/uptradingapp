@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 
 class AuxiliarController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.admin');
+    }
+    
     public function actualizarPagos()
     {
         $contratos = Contrato::with('tipo_contrato')->get();

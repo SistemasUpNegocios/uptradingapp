@@ -11,6 +11,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportePagoClienteController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.admin');
+    }
+
     public function index()
     {
         if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){        
@@ -26,13 +31,14 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
         $data = array(
+            "dolar" => $request->dolar,
             "resumenes_contrato" => $resumenContrato,
         );
 
@@ -45,7 +51,7 @@ class ReportePagoClienteController extends Controller
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
         ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
         ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
         ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
         ->distinct("clientenombre")
         ->orderBy('contrato.id', 'DESC')
@@ -71,13 +77,14 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie, amortizacion.fecha"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->where('amortizacion.fecha', $request->fecha)
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
         $data = array(
+            "dolar" => $request->dolar,
             "resumenes_contrato" => $resumenContrato,
         );
 

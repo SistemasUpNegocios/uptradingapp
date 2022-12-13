@@ -1,15 +1,19 @@
 @if (sizeof($resumenes_contrato) > 0)
+    <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="dolarInput" value="{{ $dolar }}">
+        <label for="dolarInput">Valor del dolar actual</label>
+    </div>
     <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumen">
         <thead>
             <tr>
                 <th data-priority="0" scope="col">Contrato</th>
                 <th data-priority="0" scope="col">Cliente</th>
-                <th data-priority="0" scope="col">Rendimiento (USD)</th>
+                <th data-priority="0" scope="col">Rendimiento (MXN)</th>
                 <th data-priority="0" scope="col">Pago</th>
                 <th data-priority="0" scope="col">Reporte</th>
             </tr>
         </thead>
-        <tbody id="resuemnBody" style="vertical-align: middle">
+        <tbody id="resumenBody" style="vertical-align: middle">
             @foreach ($resumenes_contrato as $resumen)
                 @php
                     if (strlen($resumen->contrato) == 11){
@@ -18,28 +22,30 @@
                         $contrato = substr($resumen->contrato, 0, -3);
                     }
                     $cliente = $resumen->clientenombre;
-                    $rendimiento = number_format($resumen->pago, 2);
-                    if ($resumen->serie == 13){
-                        $pago = "CONTRATO COMPUESTO";
-                    }else{
-                        $pago = str_pad($resumen->serie, 2, "0", STR_PAD_LEFT).'/12';
+                    $rendimiento = number_format($resumen->pago * $dolar, 2);
+                    if ($resumen->tipo_id == 1){
+                        $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
                     }
                     $fecha = $resumen->fecha;
                 @endphp
-                <tr>
-                    <td>
-                        {{ $contrato }}
-                    </td>
-                    <td>{{ $cliente }}</td>
-                    <td>${{ $rendimiento }}</td>
-                    <td>
-                        {{ $pago }}
-                    </td>
-                    <td>
-                        <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
-                    </td>
-                </tr>
-            @endforeach        
+                @if ($resumen->tipo_id == 1)                                    
+                    <tr>
+                        <td>
+                            {{ $contrato }}
+                        </td>
+                        <td>{{ $cliente }}</td>
+                        <td>${{ $rendimiento }}</td>
+                        <td>
+                            {{ $pago }}
+                        </td>
+                        <td>
+                            <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
+
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
         </tbody>
     </table>
 @else
@@ -68,3 +74,60 @@
         </div>
     </div>
 @endif
+
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Editar rendimiento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el nombre" id="clienteInput" readonly>
+                            <label for="clienteInput">Cliente</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el rendimiento" id="rendimientoInput">
+                            <label for="rendimientoInput">Rendimiento (MXN)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none">
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el pago" id="pagoInput" readonly>
+                            <label for="pagoInput">Pago</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el fecha" id="fechaInput" readonly>
+                            <label for="fechaInput">Fecha</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el contrato" id="contratoInput" readonly>
+                            <label for="contratoInput">Contrato</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el letra" id="letraInput" readonly>
+                            <label for="letraInput">Letra</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn principal-button" id="imprimirReporteModal">Generar reporte</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

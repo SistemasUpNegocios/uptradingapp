@@ -10,6 +10,11 @@ use Carbon\Carbon;
 
 class ReportePagoClienteOficinaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.admin');
+    }
+    
     public function index()
     {
         if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){                   
