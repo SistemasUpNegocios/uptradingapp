@@ -383,6 +383,11 @@
                             <i class="bi bi-circle"></i><span>Resumen de PS</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ URL::to('admin/psmovil') }}">
+                            <i class="bi bi-circle"></i><span>PS Móvil</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif
