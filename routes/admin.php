@@ -314,3 +314,10 @@ Route::get('/admin/showCita', [App\Http\Controllers\AgendaController::class, 'ge
 Route::post('/admin/addAgenda', [App\Http\Controllers\AgendaController::class, 'addAgenda']);
 Route::post('/admin/editAgenda', [App\Http\Controllers\AgendaController::class, 'editAgenda']);
 Route::post('/admin/deleteAgenda', [App\Http\Controllers\AgendaController::class, 'deleteAgenda']);
+
+//Rutas de gestión de PS Móvil
+Route::get('/admin/psmovil', [App\Http\Controllers\PSMovilController::class, 'index'])->name('psmovil');
+Route::get('/admin/showPSMovil', [App\Http\Controllers\PSMovilController::class, 'getPsMovil']);
+Route::post('/admin/editPSMovil', [App\Http\Controllers\PSMovilController::class, 'editPSMovil']);
+Route::post('/admin/addPSMovil', [App\Http\Controllers\PSMovilController::class, 'addPSMovil']);
+Route::post('/admin/deletePSMovil', [App\Http\Controllers\PSMovilController::class, 'deletePSMovil']);
