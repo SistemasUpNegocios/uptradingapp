@@ -24,6 +24,7 @@
   <link id="pagestyle" href="{{ asset('css/login.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/preloader.css') }}" rel="stylesheet">
   @yield('g-recaptcha')
+  @laravelPWA
 </head>
 
 <body class="">

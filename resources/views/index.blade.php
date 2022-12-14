@@ -22,6 +22,7 @@
     <link href="{{ asset('css/preloader.css') }}" rel="stylesheet">
     <link href="{{ asset('css/chat.css') }}" rel="stylesheet">
     @yield('css')
+    @laravelPWA
     <style>
         :root {
             touch-action: pan-x pan-y;
