@@ -34,24 +34,12 @@ class ContratoEscaneadoController extends Controller
                 $time = time();
                 $timestamp = date("Y-m-d", $time);
 
-                $filename = "Anverso " . $contrato . ' ' . $timestamp . '.png';
+                $filename = $contrato . ' ' . $timestamp . '.png';
 
                 $anverso->move(public_path('documentos/contrato_escaneado'), $filename);
                 $contrato_escaneado->img_anverso = $filename;
                 
-            } 
-
-            if ($request->hasFile('reverso')) {
-                $reverso = $request->file('reverso');
-
-                $time = time();
-                $timestamp = date("Y-m-d", $time);
-
-                $filename_reverso = "Reverso " . $contrato . ' ' . $timestamp . '.png';
-
-                $reverso->move(public_path('documentos/contrato_escaneado'), $filename_reverso);
-                $contrato_escaneado->img_reverso = $filename_reverso;
-            } 
+            }
 
             $contrato_escaneado->contrato_id = $contrato_id;
             $contrato_escaneado->save();

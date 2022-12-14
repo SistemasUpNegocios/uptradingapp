@@ -525,7 +525,7 @@
     </div>
 
     <div class="modal fade" id="scannerModal" tabindex="-1" aria-labelledby="modalTitleScanner" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-lg-down">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleScanner">Añadir contrato</h5>
@@ -537,10 +537,10 @@
                         <input type="hidden" name="id" id="idInputScanner">
                         <input type="hidden" name="contrato" id="contratoInputScanner">
 
-                        <div class="row">
+                        <div class="row justify-content-center">
                             <div class="col-md-6 col-12">
                                 <div class="file-uploadScanner1 mb-3">
-                                    <label for="pictureInputScanner1">Contrato escaneado (anverso)</label>
+                                    <label for="pictureInputScanner1">Contrato escaneado</label>
                                     <div class="image-upload-wrapScanner1">
                                         <input class="file-upload-inputScanner1" type='file' name="anverso"
                                             onchange="readURL(this);" accept="image/*" />
@@ -554,26 +554,6 @@
                                             <button type="button" onclick="removeUpload()"
                                                 class="remove-imageScanner1">Eliminar <span
                                                     class="image-titleScanner1">Imagen seleccionada</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="file-uploadScanner2 mb-3">
-                                    <label for="pictureInputScanner2">Contrato escaneado (reverso)</label>
-                                    <div class="image-upload-wrapScanner2">
-                                        <input class="file-upload-inputScanner2" type='file' name="reverso"
-                                            onchange="readURL2(this);" accept="image/*" />
-                                        <div class="drag-textScanner2">
-                                            <h3>Arrastra una imagen o haz clic aquí</h3>
-                                        </div>
-                                    </div>
-                                    <div class="file-upload-contentScanner2">
-                                        <img class="file-upload-imageScanner2" src="#" alt="Imagen subida" />
-                                        <div class="image-title-wrapScanner2">
-                                            <button type="button" onclick="removeUpload2()"
-                                                class="remove-imageScanner2">Eliminar <span
-                                                    class="image-titleScanner2">Imagen seleccionada</span></button>
                                         </div>
                                     </div>
                                 </div>
