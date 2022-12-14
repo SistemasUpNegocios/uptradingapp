@@ -3,7 +3,13 @@ $(document).ready(function () {
 
     var table = $("#psmovil").DataTable({
         ajax: "/admin/showPSMovil",
-        columns: [{ data: "ps_encargado"},{data: "imei"},{ data: "mac_wifi"}, { data: "no_serie"},{ data: "btn" }],
+        columns: [
+            { data: "ps_encargado" },
+            { data: "imei" },
+            { data: "mac_wifi" },
+            { data: "no_serie" },
+            { data: "btn" },
+        ],
         responsive: {
             breakpoints: [
                 {
@@ -29,7 +35,8 @@ $(document).ready(function () {
             lengthMenu: "Mostrar _MENU_ Ps Móvil",
             zeroRecords: "No se encontraron resultados",
             emptyTable: "No se ha registrado ningún PS Móvil",
-            infoEmpty: "Mostrando PS Móvil del 0 al 0 de un total de 0 PS Móvil",
+            infoEmpty:
+                "Mostrando PS Móvil del 0 al 0 de un total de 0 PS Móvil",
             infoFiltered: "(filtrado de un total de _MAX_ PS Móvil)",
             search: "Buscar:",
             infoThousands: ",",
@@ -268,7 +275,10 @@ $(document).ready(function () {
         $("#psmovilForm").attr("action", "/admin/addPSMovil");
         $("#idInput").val("");
 
-        $("#nombreInput").prop("readonly", false);
+        $("#psInput").prop("readonly", false);
+        $("#imeiInput").prop("readonly", false);
+        $("#macInput").prop("readonly", false);
+        $("#serieInput").prop("readonly", false);
 
         $("#modalTitle").text("Añadir PS Móvil");
         $("#btnSubmit").text("Añadir PS Móvil");
@@ -283,11 +293,8 @@ $(document).ready(function () {
         e.preventDefault();
 
         var ps_movil = $(this).data("ps_encargado");
-
         var imei = $(this).data("imei");
-
         var mac_wifi = $(this).data("mac_wifi");
-
         var serie = $(this).data("serie");
 
         $("#modalTitle").text(`Vista previa PS Móvil de: ${ps_movil}`);
@@ -297,7 +304,6 @@ $(document).ready(function () {
         $("#psInput").val(ps_movil);
         $("#psInput").prop("readonly", true);
 
-        
         $("#imeiInput").val(imei);
         $("#imeiInput").prop("readonly", true);
 
@@ -306,10 +312,9 @@ $(document).ready(function () {
 
         $("#serieInput").val(serie);
         $("#serieInput").prop("readonly", true);
-        
+
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
-       
     });
 
     $(document).on("click", ".edit", function (e) {
@@ -319,13 +324,10 @@ $(document).ready(function () {
         var id = $(this).data("id");
 
         var ps_movil = $(this).data("ps_encargado");
-
         var imei = $(this).data("imei");
-
         var mac_wifi = $(this).data("mac_wifi");
-
         var serie = $(this).data("serie");
-        
+
         $("#formModal").modal("show");
         $("#psmovilForm").attr("action", "/admin/editPSMovil");
 
@@ -333,7 +335,7 @@ $(document).ready(function () {
 
         $("#psInput").val(ps_movil);
         $("#psInput").prop("readonly", false);
-        
+
         $("#imeiInput").val(imei);
         $("#imeiInput").prop("readonly", false);
 
