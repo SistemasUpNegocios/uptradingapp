@@ -1,6 +1,14 @@
 $(document).ready(function () {
-    let acc = "";
+    const config = {
+        search: true,
+    };
 
+    dselect(document.querySelector("#psInput"), config);
+
+    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
+    $(".dselect-no-results").text("No se encontraron resultados...");
+
+    let acc = "";
     var table = $("#psmovil").DataTable({
         ajax: "/admin/showPSMovil",
         columns: [

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\PSMovil;
+use App\Models\User;
 use App\Models\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PSMovilController extends Controller
 {
@@ -16,8 +18,9 @@ class PSMovilController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){        
-            return view('psmovil.show');
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){    
+            $lista_ps = User::where('privilegio', 'ps_encargado')->get();
+            return view('psmovil.show', compact('lista_ps'));
         }else{
             return redirect()->to('/admin/dashboard');
         }
@@ -25,7 +28,9 @@ class PSMovilController extends Controller
 
     public function getPsMovil()
     {
-        $psmovil = PSMovil::all();
+        $psmovil = PSMovil::join('users', 'users.id', '=', 'psmovil.ps_encargado')
+            ->select(DB::raw("CONCAT(users.nombre, ' ', users.apellido_p) AS ps_encargado, psmovil.id, psmovil.imei, psmovil.mac_wifi, psmovil.no_serie"))
+            ->get();
 
         return datatables()->of($psmovil)->addColumn('btn', 'psmovil.buttons')->rawColumns(['btn'])->toJson();
     }
@@ -42,7 +47,7 @@ class PSMovilController extends Controller
             ]);
 
             $psmovil = new PSMovil;
-            $psmovil->ps_encargado = ucwords($request->input('ps_encargado'));
+            $psmovil->ps_encargado = $request->ps_encargado;
             $psmovil->imei = $request->input('imei');
             $psmovil->mac_wifi = strtoupper($request->input('mac_wifi'));
             $psmovil->no_serie = strtoupper($request->input('serie'));
@@ -77,7 +82,7 @@ class PSMovilController extends Controller
             ]);
 
             $psmovil = PSMovil::find($request->id);
-            $psmovil->ps_encargado = ucwords($request->input('ps_encargado'));
+            $psmovil->ps_encargado = $request->ps_encargado;
             $psmovil->imei = $request->input('imei');
             $psmovil->mac_wifi = strtoupper($request->input('mac_wifi'));
             $psmovil->no_serie = strtoupper($request->input('serie'));
