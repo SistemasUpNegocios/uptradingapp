@@ -28,7 +28,7 @@
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)                    
                         <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir una nueva tableta</a>
                     @endif
-                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="psmovil">
+                    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="psmovil">
                         <thead>
                             <tr>
                                 <th data-priority="0" scope="col">PS encargado</th>

@@ -13,9 +13,13 @@ class CreatePSMovilsTable extends Migration
      */
     public function up()
     {
-        Schema::create('p_s_movils', function (Blueprint $table) {
+        Schema::create('psmovil', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('ps_encargado');
+            $table->foreign('ps_encargado')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('imei');
+            $table->string('mac_wifi', 50);
+            $table->string('no_serie', 50);
         });
     }
 
@@ -26,6 +30,6 @@ class CreatePSMovilsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_s_movils');
+        Schema::dropIfExists('psmovil');
     }
 }

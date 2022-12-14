@@ -283,7 +283,12 @@ $(document).ready(function () {
         $("#psmovilForm").attr("action", "/admin/addPSMovil");
         $("#idInput").val("");
 
-        $("#psInput").prop("readonly", false);
+        $("#psInput").next().children().first().empty();
+        $("#psInput").next().children().first().text("Selecciona...");
+        $("#psInput").next().children().first().attr("data-dselect-text", "");
+        $("#psInput").next().children().first().attr("disabled", false);
+
+        $("#psInput").prop("disabled", false);
         $("#imeiInput").prop("readonly", false);
         $("#macInput").prop("readonly", false);
         $("#serieInput").prop("readonly", false);
@@ -308,6 +313,15 @@ $(document).ready(function () {
         $("#modalTitle").text(`Vista previa PS Móvil de: ${ps_movil}`);
 
         $("#formModal").modal("show");
+
+        $("#psInput").next().children().first().empty();
+        $("#psInput").next().children().first().text(ps_movil);
+        $("#psInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", ps_movil);
+        $("#psInput").next().children().first().attr("disabled", true);
 
         $("#psInput").val(ps_movil);
         $("#psInput").prop("readonly", true);
@@ -340,6 +354,15 @@ $(document).ready(function () {
         $("#psmovilForm").attr("action", "/admin/editPSMovil");
 
         $("#idInput").val(id);
+
+        $("#psInput").next().children().first().empty();
+        $("#psInput").next().children().first().text(ps_movil);
+        $("#psInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", ps_movil);
+        $("#psInput").next().children().first().attr("disabled", false);
 
         $("#psInput").val(ps_movil);
         $("#psInput").prop("readonly", false);
