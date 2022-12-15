@@ -6,7 +6,7 @@ return [
         'name' => env('APP_NAME', 'Admin Up Trading Experts'),
         'short_name' => 'UP',
         'start_url' => '/',
-        'background_color' => '#2fb5cc',
+        'background_color' => '#ffffff',
         'theme_color' => '#54565a',
         'display' => 'standalone',
         'orientation'=> 'any',
