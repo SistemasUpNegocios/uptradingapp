@@ -300,7 +300,6 @@ class ClienteController extends Controller
 
             $codigo_cliente_sql = Cliente::where('codigoCliente', 'like', "%$codigo_cliente%")->get();
             
-            if(sizeof($codigo_cliente_sql) <= 0){
                 $cliente->codigoCliente = $request->input('codigocliente');
                 $cliente->nombre = strtoupper($request->input('nombre'));
                 $cliente->apellido_p = strtoupper($request->input('apellidop'));
@@ -416,16 +415,7 @@ class ClienteController extends Controller
                     ]);
 
                 return response($cliente);
-            }else{
-                return response()->json(
-                    [
-                        'errors' => [
-                            "codigocliente" => ["El código de cliente ya está en uso."]
-                        ]
-                    ], 
-                    422
-                );
-            }            
+                       
         }
     }
 
