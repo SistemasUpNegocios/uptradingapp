@@ -103,7 +103,7 @@ class TipoContratoController extends Controller
             
             $tipoContrato = TipoContrato::find($request->id);
             $tipoContrato->tipo = $request->input('tipo');
-            $tipoContrato->redaccion = strtoupper($request->input('redaccion'));
+            $tipoContrato->redaccion = $request->input('redaccion');
             $tipoContrato->capertura = $request->input('capertura');
             $tipoContrato->cmensual = $request->input('cmensual');
             $tipoContrato->rendimiento = $request->input('rendimiento');

@@ -72,6 +72,7 @@ class ResumenPSController extends Controller
             ->select(DB::raw("contrato.id as contratoid, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps.pago, pago_ps.memo, pago_ps.serie"))
             ->where("contrato.ps_id", "=", $request->id)
             ->where("pago_ps.fecha_limite", 'like', "$anio-$mes%")
+            ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
@@ -95,6 +96,7 @@ class ResumenPSController extends Controller
             ->select(DB::raw("convenio.id as convenioid, convenio.folio, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps_convenio.pago, pago_ps_convenio.memo, pago_ps_convenio.serie"))
             ->where("convenio.ps_id", "=", $request->id)
             ->where("pago_ps_convenio.fecha_limite", 'like', "$anio-$mes%")
+            ->where("convenio.status", "Activado")
             ->orderBy('convenio.id', 'DESC')
             ->get();
 
@@ -135,6 +137,7 @@ class ResumenPSController extends Controller
             ->select(DB::raw("contrato.id as contratoid, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps.pago, pago_ps.memo, pago_ps.serie"))
             ->where("contrato.ps_id", "=", $request->id)
             ->where("pago_ps.fecha_limite", 'like', "$request->fecha%")
+            ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
@@ -158,6 +161,7 @@ class ResumenPSController extends Controller
             ->select(DB::raw("convenio.id as convenioid, convenio.folio, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps_convenio.pago, pago_ps_convenio.memo, pago_ps_convenio.serie"))
             ->where("convenio.ps_id", "=", $request->id)
             ->where("pago_ps_convenio.fecha_limite", 'like', "$request->fecha%")
+            ->where("convenio.status", "Activado")
             ->orderBy('convenio.id', 'DESC')
             ->get();
 

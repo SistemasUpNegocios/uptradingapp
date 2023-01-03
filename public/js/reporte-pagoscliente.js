@@ -10,6 +10,7 @@ $(document).ready(function () {
                 var serie = series[i];
 
                 dolar = serie.datos[0].dato;
+                $("#dolarInput").val(dolar);
             }
         },
     });
@@ -32,6 +33,7 @@ $(document).ready(function () {
                 });
             } else {
                 $("#generarResumenClientes").prop("disabled", false);
+                $("#botonActualizar").removeClass("d-none");
 
                 $.ajax({
                     type: "GET",
@@ -81,6 +83,7 @@ $(document).ready(function () {
                 });
             } else {
                 $("#generarResumenClientes").prop("disabled", false);
+                $("#botonActualizar").removeClass("d-none");
 
                 $.ajax({
                     type: "GET",
@@ -134,6 +137,7 @@ $(document).ready(function () {
     $("#reporteDia").on("click", function () {
         let fecha = formatDate(new Date());
         fecha = fecha.split("/").reverse().join("-");
+        $("#botonActualizar").removeClass("d-none");
 
         $.ajax({
             type: "GET",
@@ -225,5 +229,34 @@ $(document).ready(function () {
             `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}`,
             "_blank"
         );
+    });
+
+    $(document).on("change", "#dolarInput", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let dolar = $("#dolarInput").val();
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                dolar: dolar,
+            },
+            url: "/admin/getResumenPagoCliente",
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
     });
 });

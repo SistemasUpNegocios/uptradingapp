@@ -212,37 +212,37 @@
     @if ($contratos[0]->tabla == true)      
       @if ($contratos[0]->tipocontrato == 'Rendimiento mensual')
         <div class="contenedor_tabla">
-          <table class="tabla_reverso table table-sm">
+          <table class="tabla_reverso table table-sm" style="background: #ffffff27">
             <thead>
-              <tr>
-                <th style="color: #85586F">FECHA DE CORTE</th>
-                <th style="background: #e4ffdf">CAPITAL (USD)</th>
-                <th style="color: #85586F">INTERÉS</th>
+              <tr style="background: #66cbdc !important; color: #fff;">
+                <th>FECHA DE CORTE</th>
+                <th>CAPITAL (USD)</th>
+                <th>INTERÉS</th>
               </tr>
             </thead>
             <tbody>
               @php
                   $cobrado_sum = 0;
               @endphp
-              @foreach ($amortizaciones as $amortizacion)
+              @foreach ($amortizaciones as $amortizacion)    
               <tr>
-                <td style="color: #85586F">{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
-                <td style="background: #e4ffdf">$@convert($amortizacion->monto)</td>
-                <td style="color: #85586F">$@convert($amortizacion->redito)</td>
+                <td>{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
+                <td style="background: #00b0f02f !important">$@convert($amortizacion->monto)</td>
+                <td>$@convert($amortizacion->redito)</td>
               </tr>
               @php
                   $cobrado_sum += $amortizacion->redito;
               @endphp
               @endforeach
-              <tr style="background: #4CACBC; color: #fff">
+              <tr style="background: #00b0f0 !important; color: #fff;">
                 <th colspan="2">COBRADO</th>
                 <th>$@convert($cobrado_sum)</td>
               </tr>
-              <tr style="background: #1363DF; color: #fff">
+              <tr style="background: #0070c0 !important; color: #fff;">
                 <th colspan="2">CAPITAL</th>
                 <th>$@convert($contratos[0]->inversion_us)</th>
               </tr>
-              <tr style="background: #06283D; color: #fff">
+              <tr style="background: #175c67 !important; color: #fff;">
                 <th colspan="2">BENEFICIO TOTAL</th>
                 <th>$@convert(($cobrado_sum + $contratos[0]->inversion_us))</th>
               </tr>

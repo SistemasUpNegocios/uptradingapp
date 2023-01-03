@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Contrato;
+use App\Models\Amortizacion;
+use App\Models\PagoCliente;
 use App\Models\Log;
 use App\Models\Ps;
 use App\Models\TipoContrato;
@@ -63,10 +65,38 @@ class PorcentajeController extends Controller
     {
         if ($request->ajax()) {
             $contrato = Contrato::find($request->id);
-            $contrato->capertura = $request->input('capertura');
-            $contrato->cmensual = $request->input('cmensual');
-            $contrato->porcentaje = $request->input('porcentaje');
+            $contrato->porcentaje = $request->porcentaje;
             $contrato->update();
+
+            $rendimiento = $contrato->porcentaje * .01;
+            $monto = $contrato->inversion_us;
+
+            if ($contrato->tipo_id == 1) {
+                for ($i = 0; $i < $contrato->periodo; $i++) {
+
+                    $redito = $monto * $rendimiento;
+                    $pago = $monto + $redito;
+
+                    Amortizacion::where('contrato_id', $contrato->id)->update(["saldo_con_redito" => $pago, "redito" => $redito, "monto" => $monto]);
+                    PagoCliente::where('contrato_id', $contrato->id)->update(["pago" => $pago]);
+                    
+                }
+
+            }else if($contrato->tipo_id == 2){
+                for ($i = 0; $i < $contrato->periodo; $i++) {
+
+                    $redito = $monto * $rendimiento;
+                    $pago = $monto + $redito;
+
+                    Amortizacion::where('contrato_id', $contrato->id)
+                    ->where('serie', $i+1)
+                    ->update(["saldo_con_redito" => $pago, "redito" => $redito, "monto" => $monto]);
+
+                    $monto = $monto + $redito;
+                }
+
+                PagoCliente::where('contrato_id', $contrato->id)->update(["pago" => $pago]);
+            }
 
             $contrato_id = $contrato->id;
             $bitacora_id = session('bitacora_id');

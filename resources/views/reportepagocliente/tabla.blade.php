@@ -1,8 +1,4 @@
-@if (sizeof($resumenes_contrato) > 0)
-    <div class="form-floating mb-3">
-        <input type="number" class="form-control" id="dolarInput" value="{{ $dolar }}">
-        <label for="dolarInput">Valor del dolar actual</label>
-    </div>
+@if (sizeof($resumenes_contrato) > 0)    
     <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumen">
         <thead>
             <tr>

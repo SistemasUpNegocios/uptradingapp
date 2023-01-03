@@ -45,7 +45,7 @@
 
             <div class="card">
                 <div class="card-body mt-3">
-                    <table class="table table-striped table-bordered nowrap" id="porcentaje">
+                    <table class="table table-striped table-bordered nowrap text-center" id="porcentaje">
                         <thead>
                             <tr>
                                 <th data-priority="0" scope="col">Contrato</th>
@@ -91,6 +91,14 @@
                         <div class="col-md-4 col-12">
                             <div class="form-floating mb-3">
                                 <input type="number" class="form-control" title="Campo obligatorio / Solo números"
+                                    placeholder="Ingresa el rendimiento" id="porcentajeInput" name="porcentaje" step="0.1"
+                                    required>
+                                <label for="porcentajeInput">Rendimiento del contrato (%)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" title="Campo obligatorio / Solo números"
                                     placeholder="Ingresa la comisión por apertura" id="cAperturaInput" name="capertura" step="0.1"
                                     required>
                                 <label for="cAperturaInput">Comisión por apertura PS (%)</label>
@@ -103,15 +111,7 @@
                                     required>
                                 <label for="cMensualInput">Comisión mensual PS (%)</label>
                             </div>
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" title="Campo obligatorio / Solo números"
-                                    placeholder="Ingresa el rendimiento" id="porcentajeInput" name="porcentaje" step="0.1"
-                                    required>
-                                <label for="porcentajeInput">Rendimiento del contrato (%)</label>
-                            </div>
-                        </div>
+                        </div>                        
                     </div>
                     <div class="col-12">
                         <div class="alert alert-primary d-flex align-items-center" role="alert">
@@ -120,25 +120,6 @@
                             </svg>
                             <div>
                                 Datos generales:
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" title="Campo obligatorio / Solo letras"
-                                    minlength="3" maxlength="75" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                    placeholder="Ingresa el operador" id="operadorInput" name="operador"
-                                    value="Hilario Hamilton Herrera Cossain" required>
-                                <label for="operadorInput">Operador</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="number" minlength="5" maxlength="30" class="form-control"
-                                    placeholder="Ingresa la INE" id="operadorINEInput" name="operador_ine" required
-                                    value="0228061546388">
-                                <label for="floatingInput">INE del Operador</label>
                             </div>
                         </div>
                     </div>
@@ -164,20 +145,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30"
-                                    class="form-control" placeholder="Ingresa el lugar de firma" id="lugarFirmaInput"
-                                    name="lugar_firma" value="Durango, Dgo. México" required>
-                                <label for="lugarFirmaInput">Lugar de firma</label>
-                            </div>
-                        </div>
+                    <div class="row">                        
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <input type="date" class="form-control" placeholder="Ingresa la fecha de inicio"
                                     id="fechaInicioInput" name="fechainicio" required>
                                 <label for="fechaInicioInput">Fecha de inicio</label>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" placeholder="Ingresa la fecha de renovación"
+                                    id="fechaRenInput" name="fecha_renovacion" required>
+                                <label for="fechaRenInput">Fecha de renovación</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control"
+                                    placeholder="Ingresa la fecha de termino de contrato" id="fechaPagInput"
+                                    name="fecha_pago" required>
+                                <label for="fechaPagInput">Fecha termino de contrato</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control"
+                                    placeholder="Ingresa la fecha limite de liquidación" id="fechaLimiteInput"
+                                    name="fecha_limite" required>
+                                <label for="fechaLimiteInput">Fecha limite de liquidación</label>
                             </div>
                         </div>
                     </div>
@@ -200,47 +200,6 @@
                                     <option value="12" selected>12 meses</option>
                                 </select>
                                 <label for="periodoInput">Periodo del contrato</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="date" class="form-control" placeholder="Ingresa la fecha de renovación"
-                                    id="fechaRenInput" name="fecha_renovacion" required>
-                                <label for="fechaRenInput">Fecha de renovación</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="date" class="form-control"
-                                    placeholder="Ingresa la fecha de termino de contrato" id="fechaPagInput"
-                                    name="fecha_pago" required>
-                                <label for="fechaPagInput">Fecha termino de contrato</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="date" class="form-control"
-                                    placeholder="Ingresa la fecha limite de liquidación" id="fechaLimiteInput"
-                                    name="fecha_limite" required>
-                                <label for="fechaLimiteInput">Fecha limite de liquidación</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-12" id="colSelectPendiente">
-                            <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    <select id="pendienteIdInput" name="pendiente_id" minlength="3" maxlength="120"
-                                        pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control">
-                                        <option value="" disabled selected>Selecciona...</option>
-                                        @foreach($lista_pendientes as $pendiente)
-                                        <option value="{{ $pendiente->id }}">{{ $pendiente->memo_nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="pendienteIdInput">Pendientes en checklist</label>
-                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -295,9 +254,9 @@
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <input type="number" step="any" pattern="[0-9.]+" class="form-control"
-                                    placeholder="Ingresa el porcentaje" id="porcentajeInput" name="porcentaje2" required
+                                    placeholder="Ingresa el porcentaje" id="porcentajeRenInput" name="porcentaje2" required
                                     readonly>
-                                <label for="porcentajeInput">Porcentaje del rendimiento de contrato (%)</label>
+                                <label for="porcentajeRenInput">Porcentaje del rendimiento de contrato (%)</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -345,237 +304,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="display: none">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="hidden" class="form-control" placeholder="Ingresa el pago de la comision"
-                                    id="PagoComisionSerie1Input" name="serie1" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="hidden" class="form-control" placeholder="Ingresa el pago de la comision"
-                                    id="PagoComisionSerieNInput" name="serieN" required>
-                            </div>
-                        </div>
-                    </div>
-                    @if (auth()->user()->is_root || auth()->user()->is_admin)
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <select name="status" class="form-control" id="statusInput" required>
-                                    <option value="" disabled>Selecciona...</option>
-                                    <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                    <option value="Activado">Activado</option>
-                                    <option value="Finiquitado">Finiquitado</option>
-                                    <option value="Refrendado">Refrendado</option>
-                                    <option value="Cancelado">Cancelado</option>
-                                </select>
-                                <label for="statusInput">Status del contrato</label>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-6 col-12">
-                            <select class="selectpicker w-100" multiple aria-label="select example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                                <option value="4">Four</option>
-                            </select>
-                        </div> --}}
-                    </div>
-                    <div class="row d-none" id="contMemoCan">
-                        <div class="col-12">
-                            <div class="form-floating mb-3">
-                                <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
-                                    id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
-                                <label for="memoCanInput">Memo de cancelacion</label>
-                            </div>
-                        </div>
-                    </div>
-                    @else
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-floating mb-3">
-                                <select name="status" class="form-control" id="statusInput" required>
-                                    <option value="" disabled>Selecciona...</option>
-                                    <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                </select>
-                                <label for="statusInput">Status del contrato</label>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                    {{-- <div class="col-md-6 col-12">
-                        <div class="form-floating mb-3">
-                            <select name="tipo_pago" class="form-control" id="tipoPagoInput" required>
-                                <option value="" disabled>Selecciona...</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Transferencia bancaria">Transferencia bancaria</option>
-                            </select>
-                            <label for="tipoPagoInput">¿Cómo se realizó la inversión?</label>
-                        </div>
-                    </div> --}}
                     <div class="row cont-tabla"></div>
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <input type="date" class="form-control" placeholder="Ingresa la fecha de reintegro"
-                                    id="fechaReinInput" name="fecha_reintegro" required>
-                                <label for="fechaReinInput">Fecha de reintegro</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-floating mb-3">
-                                <select name="status_reintegro" class="form-control" id="statusReinInput">
-                                    <option value="" disabled>Selecciona..</option>
-                                    <option value="pendiente" selected>Pendiente</option>
-                                    <option value="pagado">Pagado</option>
-                                    <option value="cancelado">Cancelado</option>
-                                </select>
-                                <label for="statusReinInput">Status del reintegro</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-floating mb-3">
-                                <textarea class="form-control" placeholder="Ingresa el memo de reintegro"
-                                    id="memoReinInput" name="memo_reintegro" style="height: 100px"></textarea>
-                                <label for="memoReinInput">Memo de reintegro</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                                <select class="form-control" id="beneficiariosInput">
-                                    <option value="1" selected>1 beneficiario</option>
-                                    <option value="2">2 beneficiarios</option>
-                                    <option value="3">3 beneficiarios</option>
-                                </select>
-                                <label for="invitadoInput">Número de beneficiarios</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" id="contBeneficiarios"></div>
-                    <div class="col-12 d-none">
-                        <div class="alert alert-primary d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                                <use xlink:href="#info-fill" />
-                            </svg>
-                            <div>
-                                Información del pago
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-none">
-                        <div class="col-12 mb-3">
-                            <div class="mb-1">
-                                <label class="fs-5"><strong>Tipo de pago</strong></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="efectivoInput" name="tipo_pago[]"
-                                    value="efectivo">
-                                <label class="form-check-label" for="efectivoInput">Efectivo</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="transferenciaSwissInput"
-                                    name="tipo_pago[]" value="transferencia swissquote a POOL">
-                                <label class="form-check-label" for="transferenciaSwissInput">Transferencia de
-                                    Swissquote a POOL</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="transferenciaMXInput"
-                                    name="tipo_pago[]" value="transferencia MX a POOL">
-                                <label class="form-check-label" for="transferenciaMXInput">Transferencia directa MX a
-                                    POOL</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="ciBankInput" name="tipo_pago[]"
-                                    value="CI Bank">
-                                <label class="form-check-label" for="ciBankInput">CI BANK</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]"
-                                    value="HSBC">
-                                <label class="form-check-label" for="hsbcInput">HSBC</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="renovacionInput" name="tipo_pago[]"
-                                    value="renovacion">
-                                <label class="form-check-label" for="renovacionInput">Renovación</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="rendimientosInput"
-                                    name="tipo_pago[]" value="rendimientos">
-                                <label class="form-check-label" for="rendimientosInput">Rendimientos</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-none">
-                        <div class="col-md-6 col-12" id="montoEfectivoCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" placeholder="Ingresa el monto en efectivo"
-                                    id="montoEfectivoInput" name="monto_">
-                                <label for="montoEfectivoInput">Monto en efectivo</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoTransSwissPOOLCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control"
-                                    placeholder="Ingresa el monto de transferencia Swiss a POOL"
-                                    id="montoTransSwissPOOLInput" name="monto_">
-                                <label for="montoTransSwissPOOLInput">Monto de transferencia Swiss a POOL</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoTransMXPOOLCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control"
-                                    placeholder="Ingresa el monto de transferencia MX a POOL" id="montoTransMXPOOLInput"
-                                    name="monto_">
-                                <label for="montoTransMXPOOLInput">Monto de transferencia MX a POOL</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoBankCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" placeholder="Ingresa el monto en CI BANK"
-                                    id="montoBankInput" name="monto_">
-                                <label for="montoBankInput">Monto en CI BANK</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoHSBCCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" placeholder="Ingresa el monto en HSBC"
-                                    id="montoHSBCInput" name="monto_">
-                                <label for="montoHSBCInput">Monto en HSBC</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoRenovacionCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" placeholder="Ingresa el monto en renovación"
-                                    id="montoRenovacionInput" name="monto_">
-                                <label for="montoRenovacionInput">Monto en renovación</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12" id="montoRendimientosCont">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" placeholder="Ingresa el monto en rendimientos"
-                                    id="montoRendimientosInput" name="monto_">
-                                <label for="montoRendimientosInput">Monto en rendimientos</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row d-none">
-                        <div class="col-12 mb-3">
-                            <div class="d-flex justify-content-between">
-                                <label for="comprobantePagoInput" class="form-label">Comprobante(s) de pago</label>
-                                <a id="comprobantePagoDesc" class="d-none fs-5 text-secondary"><i
-                                        class="bi bi-download"></i></a>
-                            </div>
-                            <input type="file" id="comprobantePagoInput" class="form-control" name="comprobante_pago[]"
-                                multiple>
-                        </div>
-                    </div>
                     <div id="alertMessage"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnCancel"
