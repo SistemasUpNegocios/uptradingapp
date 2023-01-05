@@ -349,7 +349,13 @@
                         <a href="{{ URL::to('admin/pagoPSConvenio') }}">
                             <i class="bi bi-circle"></i><span>Pagos a PS</span>
                         </a>
-                    </li>                
+                    </li>
+                    <li class="nav-heading">Reporte de pagos</li>
+                    <li>
+                        <a href="{{ URL::to('admin/resumenPS') }}">
+                            <i class="bi bi-circle"></i><span>Resumen de PS</span>
+                        </a>
+                    </li>         
                 </ul>
             </li>
         @endif
@@ -376,11 +382,6 @@
                     <li>
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/resumenPS') }}">
-                            <i class="bi bi-circle"></i><span>Resumen de PS</span>
                         </a>
                     </li>
                     <li>
