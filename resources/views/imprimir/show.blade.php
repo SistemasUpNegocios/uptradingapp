@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Vista de contrato ' . $contratos[0]->contrato)
+@section('title', 'Vista de contrato ' . $contratos->contrato)
 
 @section('css')
     
@@ -8,12 +8,12 @@
 
 @section('content')
 <div class="pagetitle">
-    <h1>Vista de contrato {{ $contratos[0]->contrato }}</h1>
+    <h1>Vista de contrato {{ $contratos->contrato }}</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
             <li class="breadcrumb-item"><a href="{{ url('/admin/contrato') }}">Gestión de contratos</a></li>
-            <li class="breadcrumb-item active">Vista de contrato {{ $contratos[0]->contrato }}</li>
+            <li class="breadcrumb-item active">Vista de contrato {{ $contratos->contrato }}</li>
         </ol>
     </nav>
 </div>
@@ -23,7 +23,7 @@
         <div class="col-lg-12">
             <div class="card p-0 rounded">
                 <div class="card-body p-0 rounded" style="height: 100vh">
-                    <iframe id="imprimirPdf" src="/admin/imprimirAnverso?id={{ $contratos[0]->id }}
+                    <iframe id="imprimirPdf" src="/admin/imprimir?id={{ $contratos->id }}
                         @if (auth()->user()->is_cliente || auth()->user()->is_ps_asistente || auth()->user()->is_cliente_ps_asistente)
                             #toolbar=0
                         @endif" 

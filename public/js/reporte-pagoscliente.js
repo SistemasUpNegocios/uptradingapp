@@ -118,9 +118,10 @@ $(document).ready(function () {
     $("#imprimirResumenClientes").on("click", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        let dolar = $("#dolarInput").val();
 
         window.open(
-            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`,
             "_blank"
         );
     });
@@ -128,9 +129,10 @@ $(document).ready(function () {
     $("#exportarResumenClientes").on("click", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        let dolar = $("#dolarInput").val();
 
         window.open(
-            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`
+            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`
         );
     });
 
@@ -175,14 +177,14 @@ $(document).ready(function () {
         let contrato = $(this).data("contrato");
         let contratoid = $(this).data("contratoid");
         let dolar = $("#dolarInput").val();
-        let rendimiento = String($(this).data("rendimientoini"))
-            .replace("$", "")
-            .replace(",", "");
+        let rendimiento = $(this).data("rendimientoini");
 
         rendimiento = formatearCantidad
             .format(parseFloat(rendimiento) * parseFloat(dolar))
             .replace("$", "")
             .replace(",", "");
+
+        rendimiento = rendimiento.replace(",", "");
 
         let letra = numeroALetrasMXN(rendimiento);
 
@@ -199,6 +201,7 @@ $(document).ready(function () {
             minimumFractionDigits: 2,
         });
 
+        let id = $(this).data("contratoid");
         let pago = $(this).data("pago");
         let fecha = $(this).data("fecha");
         let cliente = $(this).data("cliente");
@@ -214,6 +217,7 @@ $(document).ready(function () {
         $("#rendimientoInput").val(formatearCantidad.format(rendimiento));
         $("#contratoInput").val(contrato);
         $("#letraInput").val(letra);
+        $("#contratoIdInput").val(id);
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {
@@ -224,9 +228,11 @@ $(document).ready(function () {
         let fecha = $("#fechaInput").val();
         let contrato = $("#contratoInput").val();
         let letra = numeroALetrasMXN(rendimiento);
+        let dolar = $("#dolarInput").val();
+        let contratoid = $("#contratoIdInput").val();
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}`,
             "_blank"
         );
     });

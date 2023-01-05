@@ -174,8 +174,7 @@ Route::post('/admin/editPerfil', [App\Http\Controllers\PerfilController::class, 
 
 //Ruta para imprimir los contratos
 Route::get('/admin/contrato/vercontrato', [App\Http\Controllers\ImprimirController::class, 'index'])->name('vercontrato');
-Route::get('/admin/imprimirAnverso', [App\Http\Controllers\ImprimirController::class, 'imprimirAnverso']);
-Route::get('/admin/imprimirReverso', [App\Http\Controllers\ImprimirController::class, 'imprimirReverso']);
+Route::get('/admin/imprimir', [App\Http\Controllers\ImprimirController::class, 'imprimir']);
 
 //Ruta para imprimir los convenios
 Route::get('/admin/convenio/verConvenio', [App\Http\Controllers\ConvenioController::class, 'getPreview']);

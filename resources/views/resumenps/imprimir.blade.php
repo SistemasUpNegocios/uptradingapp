@@ -32,21 +32,21 @@
     <p style="font-size: 16px; text-transform: uppercase;"><b>MES DE {{ \Carbon\Carbon::parse("$fecha-10")->formatLocalized('%B') }}</b></p>
   </div>
 
-  <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 3rem !important; padding-bottom: 3rem !important;">
-    <thead>
+  <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100% !important; padding-top: 3rem !important; padding-bottom: 3rem !important; vertical-align: middle !important;">
+    <thead style="vertical-align: middle !important;">
       <tr>
-        <th data-priority="0" colspan="3"scope="col" style="font-size: 16px !important;">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</th>
-        <th data-priority="0" colspan="2" scope="col">Total: <span style="font-weight: 500; font-size: 15px !important;">${{ $total }}</span></th>
+        <th data-priority="0" colspan="3"scope="col" style="font-size: 15px !important;">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</th>
+        <th data-priority="0" colspan="2" scope="col" style="font-size: 15px !important;">Total: <span style="font-weight: 500;">${{ $total }}</span></th>
       </tr>
       <tr>
-        <th data-priority="0" scope="col">Tipo</th>
-        <th data-priority="0" scope="col">Cliente</th>
-        <th data-priority="0" scope="col">Comisión</th>
-        <th data-priority="0" scope="col">Tipo de comisión</th>
-        <th data-priority="0" scope="col">Pago</th>
+        <th data-priority="0" scope="col" style="font-size: 15px !important;">Tipo</th>
+        <th data-priority="0" scope="col" style="font-size: 15px !important;">Cliente</th>
+        <th data-priority="0" scope="col" style="font-size: 15px !important;">Comisión</th>
+        <th data-priority="0" scope="col" style="font-size: 15px !important;">Tipo de comisión</th>
+        <th data-priority="0" scope="col" style="font-size: 15px !important;">Pago</th>
       </tr>
     </thead>
-    <tbody id="resuemnBody">
+    <tbody id="resuemnBody" style="vertical-align: middle !important;">
       @foreach ($resumenes_contrato as $resumen)                                
         <tr>
           <td style="font-size: 15px !important;">

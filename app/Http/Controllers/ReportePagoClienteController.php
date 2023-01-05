@@ -62,6 +62,7 @@ class ReportePagoClienteController extends Controller
             "resumenes_contrato" => $resumenContrato,
             "fecha_inicio" => $request->fecha_inicio,
             "fecha_fin" => $request->fecha_fin,
+            "dolar" => $request->dolar,
         );
 
         $inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
@@ -93,9 +94,8 @@ class ReportePagoClienteController extends Controller
     }
 
     public function getReportePago(Request $request)
-    {        
-        
-        $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');        
+    {
+        $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');
         $rendimiento = number_format($request->rendimiento, 2);
         
         $data = array(
@@ -120,7 +120,10 @@ class ReportePagoClienteController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin), 'pagos a clientes.xlsx');
+        $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
+        $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
+
+        return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin, $request->dolar), "pagos a clientes del día $fecha_inicio a $fecha_fin.xlsx");
     }
 
 }

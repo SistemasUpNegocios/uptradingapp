@@ -64,7 +64,6 @@ class ResumenPSController extends Controller
 
         $ps = Ps::find($request->id);
 
-        $resumenContratoPS = new \ArrayObject(array());
         $resumenContrato = DB::table('contrato')
             ->join('ps', 'ps.id', '=', 'contrato.ps_id')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -76,19 +75,10 @@ class ResumenPSController extends Controller
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
-        foreach ($resumenContrato as $resum) {
-            $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            if (sizeof($psContrato) <= 0) {
-                $resumenContratoPS->append($resum);
-            }
-
-        }
-        
-        foreach ($resumenContratoPS as $pago) {
+        foreach ($resumenContrato as $pago) {
             $pago_total += $pago->pago;
         }
 
-        $resumenConvenioPS = new \ArrayObject(array());
         $resumenConvenio = DB::table('convenio')
             ->join('ps', 'ps.id', '=', 'convenio.ps_id')
             ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
@@ -100,20 +90,13 @@ class ResumenPSController extends Controller
             ->orderBy('convenio.id', 'DESC')
             ->get();
 
-        foreach ($resumenConvenio as $resum) {
-            $psConvenio = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            if (sizeof($psConvenio) <= 0) {
-                $resumenConvenioPS->append($resum);
-            }
+        foreach ($resumenConvenio as $pago) {
+            $pago_total += $pago->pago;
         }
 
-        foreach ($resumenConvenioPS as $pago) {
-            $pago_total += $pago->pago;
-        }        
-
         $data = array(
-            "resumenes_contrato" => $resumenContratoPS,
-            "resumenes_convenio" => $resumenConvenioPS,
+            "resumenes_contrato" => $resumenContrato,
+            "resumenes_convenio" => $resumenConvenio,
             "total" => number_format($pago_total, 2),
             "fecha" => $anio.'-'.$mes,
             "ps" => $ps
@@ -129,7 +112,6 @@ class ResumenPSController extends Controller
 
         $ps = Ps::find($request->id);
         
-        $resumenContratoPS = new \ArrayObject(array());
         $resumenContrato = DB::table('contrato')
             ->join('ps', 'ps.id', '=', 'contrato.ps_id')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -140,20 +122,11 @@ class ResumenPSController extends Controller
             ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->get();
-
-        foreach ($resumenContrato as $resum) {
-            $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            if (sizeof($psContrato) <= 0) {
-                $resumenContratoPS->append($resum);
-            }
-
-        }
         
-        foreach ($resumenContratoPS as $pago) {
+        foreach ($resumenContrato as $pago) {
             $pago_total += $pago->pago;
         }
 
-        $resumenConvenioPS = new \ArrayObject(array());
         $resumenConvenio = DB::table('convenio')
             ->join('ps', 'ps.id', '=', 'convenio.ps_id')
             ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
@@ -165,20 +138,13 @@ class ResumenPSController extends Controller
             ->orderBy('convenio.id', 'DESC')
             ->get();
 
-        foreach ($resumenConvenio as $resum) {
-            $psConvenio = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            if (sizeof($psConvenio) <= 0) {
-                $resumenConvenioPS->append($resum);
-            }
-        }
-
-        foreach ($resumenConvenioPS as $pago) {
+        foreach ($resumenConvenio as $pago) {
             $pago_total += $pago->pago;
         }       
 
         $data = array(
-            "resumenes_contrato" => $resumenContratoPS,
-            "resumenes_convenio" => $resumenConvenioPS,
+            "resumenes_contrato" => $resumenContrato,
+            "resumenes_convenio" => $resumenConvenio,
             "total" => number_format($pago_total, 2),
             "fecha" => $request->fecha,
             "ps" => $ps

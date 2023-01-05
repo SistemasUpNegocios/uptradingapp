@@ -32,17 +32,17 @@
     <p style="font-size: 18px; text-transform: uppercase;"><b>Resumen de la oficina de {{ $oficina->ciudad }}</b></p>
   </div>
 
-    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important; vertical-align: center !important; line-height: 18px;">
+    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important; vertical-align: middle !important; line-height: 18px;">
       <thead>
         <tr>
           <th data-priority="0" scope="col" colspan="2" style="font-size: 16px; text-transform: uppercase;">{{ \Carbon\Carbon::parse("$fecha-10")->formatLocalized('%B') }}</th>
         </tr>
-        <tr style="vertical-align: center !important;">
+        <tr style="vertical-align: middle !important;">
           <th data-priority="0" scope="col">PS</th>
           <th data-priority="0" scope="col">Pago</th>
         </tr>
       </thead>
-      <tbody id="resuemnBody" class="text-center" style="vertical-align: center !important;">
+      <tbody id="resuemnBody" class="text-center" style="vertical-align: middle !important;">
         @foreach ($lista_ps as $ps)
           @php
 

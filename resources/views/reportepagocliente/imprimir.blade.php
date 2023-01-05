@@ -40,30 +40,46 @@
       <tr>
         <th data-priority="0" scope="col">Contrato</th>
         <th data-priority="0" scope="col">Cliente</th>
-        <th data-priority="0" scope="col">Rendimiento (USD)</th>
+        <th data-priority="0" scope="col">Rendimiento (MXN)</th>
         <th data-priority="0" scope="col">Pago</th>
       </tr>
     </thead>
     <tbody id="resuemnBody">
-      @foreach ($resumenes_contrato as $resumen)                                
-        <tr>
-          <td style="font-size: 15px !important;">
-            @if (strlen($resumen->contrato) == 11)
-              {{ substr($resumen->contrato, 0, -2); }}
-            @else
-              {{ substr($resumen->contrato, 0, -3); }}
-            @endif
-          </td>
-          <td style="font-size: 15px !important;">{{ $resumen->clientenombre }}</td>
-          <td style="font-size: 15px !important;">${{ number_format($resumen->pago, 2) }}</td>
-          <td style="font-size: 15px !important;">
-            @if ($resumen->serie == 13)
-              CONTRATO COMPUESTO
-            @else
-              {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
-            @endif
-          </td>
-        </tr>
+      @foreach ($resumenes_contrato as $resumen)
+        @php
+          if (strlen($resumen->contrato) == 11){
+            $contrato = substr($resumen->contrato, 0, -2);
+          }else{
+            $contrato = substr($resumen->contrato, 0, -3);
+          }
+          $cliente = $resumen->clientenombre;
+          $rendimiento = number_format($resumen->pago * $dolar, 2);
+          if ($resumen->tipo_id == 1){
+            $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
+          }
+          $fecha = $resumen->fecha;
+        @endphp
+        @if ($resumen->tipo_id == 1)                                    
+          <tr>
+            <td style="font-size: 15px !important;">
+              {{ $contrato }}
+            </td>
+            <td style="font-size: 15px !important;">{{ $cliente }}</td>
+            <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
+            <td style="font-size: 15px !important;">
+              {{ $pago }}
+            </td>
+          </tr>
+        @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
+          <tr>
+            <td style="font-size: 15px !important;">
+              {{ $contrato }}
+            </td>
+            <td style="font-size: 15px !important;">{{ $cliente }}</td>
+            <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
+            <td style="font-size: 15px !important;">Compuesto</td>
+          </tr>
+        @endif
       @endforeach
     </tbody>
   </table>

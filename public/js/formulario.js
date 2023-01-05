@@ -3,10 +3,14 @@ $(document).ready(function () {
         search: true,
     };
 
-    dselect(document.querySelector("#psInput"), config);
+    let pscompleto = $("#psInput").val();
 
-    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-    $(".dselect-no-results").text("No se encontraron resultados...");
+    if (pscompleto.length <= 0) {
+        dselect(document.querySelector("#psInput"), config);
+
+        $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
+        $(".dselect-no-results").text("No se encontraron resultados...");
+    }
 
     let acc = "";
 
@@ -1078,6 +1082,7 @@ $(document).ready(function () {
         let montoFacturado = $("#montoFacturadoInput").val();
         montoFacturado = montoFacturado.replace("$", "");
         montoFacturado = montoFacturado.replace(",", "");
+        montoFacturado = montoFacturado.replace(",", "");
         $("#montoFacturadoInput").val(formatearCantidad.format(montoFacturado));
     });
 
@@ -1085,12 +1090,14 @@ $(document).ready(function () {
         let montoMensual = $("#montoMensualInput").val();
         montoMensual = montoMensual.replace("$", "");
         montoMensual = montoMensual.replace(",", "");
+        montoMensual = montoMensual.replace(",", "");
         $("#montoMensualInput").val(formatearCantidad.format(montoMensual));
     });
 
     $(document).on("change", "#depositoInput", function (e) {
         let depositoInput = $("#depositoInput").val();
         depositoInput = depositoInput.replace("$", "");
+        depositoInput = depositoInput.replace(",", "");
         depositoInput = depositoInput.replace(",", "");
         $("#depositoInput").val(formatearCantidad.format(depositoInput));
     });

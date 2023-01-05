@@ -2107,9 +2107,9 @@ pre {
 
 .tabla_reverso {
     text-align: center;
-    line-height: 9px;
+    line-height: 12px;
     border-collapse: separate;
-    border-spacing: 0px 1px !important;
+    border-spacing: 0px 0px !important;
 }
 
 .tabla_reverso,
@@ -2119,12 +2119,13 @@ pre {
 .tabla_reverso tbody,
 .tabla_reverso td {
     border: none !important;
+    padding: 0px !important;
 }
 
 .tabla_reverso th,
 .tabla_reverso td {
     font-family: "Open Sans", sans-serif;
-    padding: 2px !important;
+    padding: 0px !important;
     font-size: 11px;
 }
 

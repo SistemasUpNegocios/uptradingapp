@@ -70,6 +70,11 @@ return [
             'root'   => public_path() . '/documentos/contratos',
         ],
 
+        'intencion' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/documentos/intencion',
+        ],
+
     ],
 
     /*

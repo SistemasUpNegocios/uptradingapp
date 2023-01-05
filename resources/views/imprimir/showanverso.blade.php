@@ -212,7 +212,7 @@
     @if ($contratos[0]->tabla == true)      
       @if ($contratos[0]->tipocontrato == 'Rendimiento mensual')
         <div class="contenedor_tabla">
-          <table class="tabla_reverso table table-sm" style="background: #ffffff27">
+          <table class="tabla_reverso table table-sm">
             <thead>
               <tr style="background: #66cbdc !important; color: #fff;">
                 <th>FECHA DE CORTE</th>
@@ -253,33 +253,33 @@
         <div class="contenedor_tabla">
           <table class="tabla_reverso table table-sm">
             <thead>
-              <tr>
-                <th style="color: #85586F">FECHA</th>
-                <th style="background: #d9e1f2">CAPITAL (USD)</th>
-                <th style="color: #85586F">INTERÉS</th>
+              <tr style="background: #66cbdc !important; color: #fff;">
+                <th>FECHA</th>
+                <th>CAPITAL (USD)</th>
+                <th>INTERÉS</th>
               </tr>
             </thead>
             <tbody>
               @php $acumulado = 0; @endphp
               @foreach ($amortizaciones as $amortizacion)
               <tr>
-                <td style="color: #85586F">{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
+                <td>{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
                 @php
-                  echo '<td style="background: #d9e1f2">$'.number_format($amortizacion->monto, 2).'</td>';                  
+                  echo '<td style="background: #00b0f02f !important">$'.number_format($amortizacion->monto, 2).'</td>';                  
                   $acumulado += $amortizacion->redito;
                 @endphp
-                <td style="color: #85586F">$@convert($amortizacion->redito)</td>
+                <td>$@convert($amortizacion->redito)</td>
               </tr>
               @endforeach
-              <tr style="background: #4CACBC; color: #fff">
+              <tr style="background: #00b0f0 !important; color: #fff;">
                 <th colspan="2">ACUMULADO</th>
                 <th>$@convert($acumulado)</th>
               </tr>
-              <tr style="background: #1363DF; color: #fff">
+              <tr style="background: #0070c0 !important; color: #fff;">
                 <th colspan="2">CAPITAL</th>
                 <th>$@convert($amortizaciones[0]->monto)</th>
               </tr>
-              <tr style="background: #06283D; color: #fff">
+              <tr style="background: #175c67 !important; color: #fff;">
                 <th colspan="2">BENEFICIO TOTAL</th>
                 <th>$@convert($amortizaciones[0]->monto + $acumulado)</th>
               </tr>

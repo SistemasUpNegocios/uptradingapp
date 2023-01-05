@@ -19,39 +19,35 @@
                     }
                     $cliente = $resumen->clientenombre;
                     $rendimiento = number_format($resumen->pago * $dolar, 2);
-                    if ($resumen->tipo_id == 1){
-                        $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
-                    }
+                    $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
                     $fecha = $resumen->fecha;
                 @endphp
                 @if ($resumen->tipo_id == 1)                                    
                     <tr>
-                        <td>
+                        <td style="font-size: 15px">
                             {{ $contrato }}
                         </td>
-                        <td>{{ $cliente }}</td>
-                        <td>${{ $rendimiento }}</td>
-                        <td>
+                        <td style="font-size: 15px">{{ $cliente }}</td>
+                        <td style="font-size: 15px">${{ $rendimiento }}</td>
+                        <td style="font-size: 15px">
                             {{ $pago }}
                         </td>
-                        <td>
+                        <td style="font-size: 15px">
                             <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
-
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
                         </td>
                     </tr>
                 @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
                     <tr>
-                        <td>
+                        <td style="font-size: 15px">
                             {{ $contrato }}
                         </td>
-                        <td>{{ $cliente }}</td>
-                        <td>${{ $rendimiento }}</td>
-                        <td>Compuesto</td>
+                        <td style="font-size: 15px">{{ $cliente }}</td>
+                        <td style="font-size: 15px">${{ $rendimiento }}</td>
+                        <td style="font-size: 15px">COMPUESTO ({{$pago}})</td>
                         <td>
                             <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
-
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
                         </td>
                     </tr>
                 @endif
@@ -93,6 +89,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="contratoIdInput">
                 <div class="row">
                     <div class="col-md-6 col-12">
                         <div class="form-floating mb-3">

@@ -85,177 +85,178 @@ $inversionUSD2 = $inversionUSD2 * ($porcentaje2 * 0.01);
     @endif
 
     @if ($tipo_contrato == "Rendimiento mensual")
-    <div class="contenedor_tabla">
-      <table class="tabla_reverso table table-sm">
-        <thead>
-          <tr>
-            <th style="color: #85586F">FECHA DE CORTE</th>
-            <th style="background: #e4ffdf">CAPITAL (USD)</th>
-            <th style="color: #85586F">INTERÉS</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php
-          $cobrado = 0;
-          @endphp
-          @for ($i = 1; $i < 13; $i++) <tr>
-            <td style="color: #85586F">{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
-            <td style="background: #e4ffdf">$@convert($inversionUSD1)</td>
-            <td style="color: #85586F">$@convert($inversionUSD1 * ($rendimiento * .01))</td>
+      <div class="contenedor_tabla">
+        <table class="tabla_reverso table table-sm">
+          <thead>
+            <tr style="background: #66cbdc !important; color: #fff;">
+              <th>FECHA</th>
+              <th>CAPITAL (USD)</th>
+              <th>INTERÉS</th>
             </tr>
+          </thead>
+          <tbody>
             @php
-            $cobrado += ($inversionUSD1 * ($rendimiento * .01));
+              $cobrado = 0;
             @endphp
+            @for ($i = 1; $i < 13; $i++) 
+              <tr>
+                <td>{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
+                <td style="background: #00b0f02f !important">$@convert($inversionUSD1)</td>
+                <td>$@convert($inversionUSD1 * ($rendimiento * .01))</td>
+              </tr>
+              @php
+                $cobrado += ($inversionUSD1 * ($rendimiento * .01));
+              @endphp
             @endfor
-            <tr style="background: #4CACBC; color: #fff">
+            <tr style="background: #00b0f0 !important; color: #fff;">
               <th colspan="2">COBRADO</th>
               <th>$@convert($cobrado)</td>
             </tr>
-            <tr style="background: #1363DF; color: #fff">
+            <tr style="background: #0070c0 !important; color: #fff;">
               <th colspan="2">CAPITAL</th>
               <th>$@convert($inversionUSD1)</th>
             </tr>
-            <tr style="background: #06283D; color: #fff">
+            <tr style="background: #175c67 !important; color: #fff;">
               <th colspan="2">BENEFICIO TOTAL</th>
               <th>$@convert($cobrado + $inversionUSD1)</th>
             </tr>
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
     @elseif ($tipo_contrato == "Rendimiento compuesto")
-    <div class="contenedor_tabla">
-      <table class="tabla_reverso table table-sm">
-        <thead>
-          <tr>
-            <th style="color: #85586F">FECHA</th>
-            <th style="background: #d9e1f2">CAPITAL (USD)</th>
-            <th style="color: #85586F">INTERÉS</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php
-          $acumulado = 0;
-          $acumulado_capital = $inversionUSD1;
-          $acumulado_interes = $inversionUSD1 * ($rendimiento * .01);
-          @endphp
-          @for ($i = 1; $i < 13; $i++) <tr>
-            <td style="color: #85586F">{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
-            <td style="background: #d9e1f2">$@convert($acumulado_capital += $acumulado_interes)</td>
-            @if ($i == 1)
-            <td style="color: #85586F">$@convert($inversionUSD1 * ($rendimiento * .01))</td>
-            @else
-            <td style="color: #85586F">$@convert($acumulado_interes += ($acumulado_interes * ($rendimiento * .01)))</td>
-            @endif
+      <div class="contenedor_tabla">
+        <table class="tabla_reverso table table-sm">
+          <thead>
+            <tr style="background: #66cbdc !important; color: #fff;">
+              <th>FECHA</th>
+              <th>CAPITAL (USD)</th>
+              <th>INTERÉS</th>
             </tr>
+          </thead>
+          <tbody>
             @php
-            $acumulado += ($acumulado_interes)
+            $acumulado = 0;
+            $acumulado_capital = $inversionUSD1;
+            $acumulado_interes = $inversionUSD1 * ($rendimiento * .01);
             @endphp
+            @for ($i = 1; $i < 13; $i++) 
+              <tr>
+                <td>{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
+                <td style="background: #00b0f02f !important">$@convert($acumulado_capital += $acumulado_interes)</td>
+                @if ($i == 1)
+                  <td>$@convert($inversionUSD1 * ($rendimiento * .01))</td>
+                @else
+                  <td>$@convert($acumulado_interes += ($acumulado_interes * ($rendimiento * .01)))</td>
+                @endif
+              </tr>
+              @php
+                $acumulado += ($acumulado_interes)
+              @endphp
             @endfor
-            <tr style="background: #4CACBC; color: #fff">
+            <tr style="background: #00b0f0 !important; color: #fff;">
               <th colspan="2">ACUMULADO</th>
               <th>$@convert($acumulado)</th>
             </tr>
-            <tr style="background: #1363DF; color: #fff">
+            <tr style="background: #0070c0 !important; color: #fff;">
               <th colspan="2">CAPITAL</th>
               <th>$@convert($inversionUSD1)</th>
             </tr>
-            <tr style="background: #06283D; color: #fff">
+            <tr style="background: #175c67 !important; color: #fff;">
               <th colspan="2">BENEFICIO TOTAL</th>
               <th>$@convert($acumulado + $inversionUSD1)</th>
             </tr>
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
     @endif
 
     @if ($tipo_contrato2 != null)
-    <p class="mb-3 contrato_parrafo text-center text-uppercase" style="font-weight: bold">INTENCIÓN DE INVERSIÓN {{
-      $tipo_contrato2 }} con el {{ $porcentaje2 }}% de la inversión total ($@convert($inversionUSD2) USD)</p>
-    @if ($tipo_contrato2 == "Rendimiento mensual")
-    <div class="contenedor_tabla mb-0">
-      <table class="tabla_reverso table table-sm">
-        <thead>
-          <tr>
-            <th style="color: #85586F">FECHA DE CORTE</th>
-            <th style="background: #e4ffdf">CAPITAL (USD)</th>
-            <th style="color: #85586F">INTERÉS</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php
-          $cobrado = 0;
-          @endphp
-          @for ($i = 1; $i < 13; $i++) <tr>
-            <td style="color: #85586F">{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
-            <td style="background: #e4ffdf">$@convert($inversionUSD2 + ($inversionUSD2 * ($rendimiento2 * .01)))</td>
-            <td style="color: #85586F">$@convert($inversionUSD2 * ($rendimiento2 * .01))</td>
+      <p class="mb-3 contrato_parrafo text-center text-uppercase" style="font-weight: bold">INTENCIÓN DE INVERSIÓN {{ $tipo_contrato2 }} con el {{ $porcentaje2 }}% de la inversión total ($@convert($inversionUSD2) USD)</p>
+      @if ($tipo_contrato2 == "Rendimiento mensual")
+        <div class="contenedor_tabla mb-0">
+          <table class="tabla_reverso table table-sm">
+            <thead>
+              <tr style="background: #66cbdc !important; color: #fff;">
+                <th>FECHA</th>
+                <th>CAPITAL (USD)</th>
+                <th>INTERÉS</th>
+              </tr>
+            </thead>
+            <tbody>
+              @php
+                $cobrado = 0;
+              @endphp
+              @for ($i = 1; $i < 13; $i++) 
+                <tr>
+                  <td>{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
+                  <td style="background: #00b0f02f !important">$@convert($inversionUSD2 + ($inversionUSD2 * ($rendimiento2 * .01)))</td>
+                  <td>$@convert($inversionUSD2 * ($rendimiento2 * .01))</td>
+                </tr>
+                @php
+                  $cobrado += ($inversionUSD2 * ($rendimiento2 * .01));
+                @endphp
+              @endfor
+              <tr style="background: #00b0f0 !important; color: #fff;">
+                <th colspan="2">COBRADO</th>
+                <th>$@convert($cobrado)</td>
+              </tr>
+              <tr style="background: #0070c0 !important; color: #fff;">
+                <th colspan="2">CAPITAL</th>
+                <th>$@convert($inversionUSD2)</th>
+              </tr>
+              <tr style="background: #175c67 !important; color: #fff;">
+                <th colspan="2">BENEFICIO TOTAL</th>
+                <th>$@convert($cobrado + $inversionUSD2)</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      @elseif ($tipo_contrato2 == "Rendimiento compuesto")
+      <div class="contenedor_tabla mb-0">
+        <table class="tabla_reverso table table-sm">
+          <thead>
+            <tr style="background: #66cbdc !important; color: #fff;">
+              <th>FECHA</th>
+              <th>CAPITAL (USD)</th>
+              <th>INTERÉS</th>
             </tr>
+          </thead>
+          <tbody>
             @php
-            $cobrado += ($inversionUSD2 * ($rendimiento2 * .01));
+            $acumulado = 0;
+            $acumulado_capital = $inversionUSD2;
+            $acumulado_interes = $inversionUSD2 * ($rendimiento2 * .01);
             @endphp
+            @for ($i = 1; $i < 13; $i++) 
+              <tr>
+                <td>{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
+                <td style="background: #00b0f02f !important">$@convert($acumulado_capital += $acumulado_interes)</td>
+                @if ($i == 1)
+                  <td>$@convert($inversionUSD2 * ($rendimiento2 * .01))</td>
+                @else
+                  <td>$@convert($acumulado_interes += ($acumulado_interes * ($rendimiento2 * .01)))</td>
+                @endif
+              </tr>
+              @php
+                $acumulado += ($acumulado_interes)
+              @endphp
             @endfor
-            <tr style="background: #4CACBC; color: #fff">
-              <th colspan="2">COBRADO</th>
-              <th>$@convert($cobrado)</td>
-            </tr>
-            <tr style="background: #1363DF; color: #fff">
-              <th colspan="2">CAPITAL</th>
-              <th>$@convert($inversionUSD2)</th>
-            </tr>
-            <tr style="background: #06283D; color: #fff">
-              <th colspan="2">BENEFICIO TOTAL</th>
-              <th>$@convert($cobrado + $inversionUSD2)</th>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-    @elseif ($tipo_contrato2 == "Rendimiento compuesto")
-    <div class="contenedor_tabla mb-0">
-      <table class="tabla_reverso table table-sm">
-        <thead>
-          <tr>
-            <th style="color: #85586F">FECHA</th>
-            <th style="background: #d9e1f2">CAPITAL (USD)</th>
-            <th style="color: #85586F">INTERÉS</th>
-          </tr>
-        </thead>
-        <tbody>
-          @php
-          $acumulado = 0;
-          $acumulado_capital = $inversionUSD2;
-          $acumulado_interes = $inversionUSD2 * ($rendimiento2 * .01);
-          @endphp
-          @for ($i = 1; $i < 13; $i++) <tr>
-            <td style="color: #85586F">{{\Carbon\Carbon::parse($fecha_inicio)->addMonths($i)->format('d/m/Y') }}</td>
-            <td style="background: #d9e1f2">$@convert($acumulado_capital += $acumulado_interes)</td>
-            @if ($i == 1)
-            <td style="color: #85586F">$@convert($inversionUSD2 * ($rendimiento2 * .01))</td>
-            @else
-            <td style="color: #85586F">$@convert($acumulado_interes += ($acumulado_interes * ($rendimiento2 * .01)))
-            </td>
-            @endif
-            </tr>
-            @php
-            $acumulado += ($acumulado_interes)
-            @endphp
-            @endfor
-            <tr style="background: #4CACBC; color: #fff">
+            <tr style="background: #00b0f0 !important; color: #fff;">
               <th colspan="2">ACUMULADO</th>
               <th>$@convert($acumulado)</th>
             </tr>
-            <tr style="background: #1363DF; color: #fff">
+            <tr style="background: #0070c0 !important; color: #fff;">
               <th colspan="2">CAPITAL</th>
               <th>$@convert($inversionUSD2)</th>
             </tr>
-            <tr style="background: #06283D; color: #fff">
+            <tr style="background: #175c67 !important; color: #fff;">
               <th colspan="2">BENEFICIO TOTAL</th>
               <th>$@convert($acumulado + $inversionUSD2)</th>
             </tr>
-        </tbody>
-      </table>
-    </div>
-    @endif
-
+          </tbody>
+        </table>
+      </div>
+      @endif
     @endif
 
     <p class="mt-0 mb-0 contrato_parrafo" style="font-weight: bold">Esta proyección de intención de inversión se realiza
