@@ -17,7 +17,7 @@ class ReportePagoClienteOficinaController extends Controller
     
     public function index()
     {
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){                   
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond){                   
             return response()->view('reportepagoclienteoficina.show');
         }else{
             return redirect()->to('/admin/dashboard');
@@ -26,6 +26,9 @@ class ReportePagoClienteOficinaController extends Controller
 
     public function getResumenClienteOficina(Request $request)
     {
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
 
         $resumenContrato = DB::table('contrato')
             ->join('ps', 'ps.id', '=', 'contrato.ps_id')
@@ -34,6 +37,13 @@ class ReportePagoClienteOficinaController extends Controller
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
             ->select(DB::raw("oficina.id, oficina.ciudad, oficina.codigo_oficina"))
             ->whereBetween('pago_cliente.fecha_pago', [$request->fecha_inicio, $request->fecha_fin])
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where("contrato.status", "!=", "Cancelado")
+            ->where("contrato.status", "!=", "Finiquitado")
             ->distinct('oficina.ciudad')
             ->get();
 

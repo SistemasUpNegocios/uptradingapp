@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Apertura de cuenta Forex</a>
-                        <table class="table table-striped table-bordered nowrap" id="formulario">
+                        <table class="table table-striped table-bordered nowrap text-center" id="formulario">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Código cliente</th>
@@ -295,11 +295,11 @@
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="sector_empresa" id="publicoAjenaInput" value="PUBLICO">
-                                    <label class="form-check-label" for="publicoajenaInput">Público</label>
+                                    <label class="form-check-label" for="publicoAjenaInput">Público</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="sector_empresa" id="privadoAjenaInput" value="PRIVADO">
-                                    <label class="form-check-label" for="privadoajenaInput">Privado</label>
+                                    <label class="form-check-label" for="privadoAjenaInput">Privado</label>
                                 </div>
                             </div>
                         </div>
@@ -539,19 +539,26 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    @if (auth()->user()->is_ps_encargado || auth()->user()->is_ps_asistente)
-                                        <input type="text" class="form-control" placeholder="Ingresa el nombre del ps" id="psInput" name="ps_nombre" value="{{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}">
-                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                                        <select name="ps_nombre" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psInput">
+                                    @if (auth()->user()->is_ps_gold)
+                                        @php 
+                                            $ps = \App\Models\Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                                        @endphp
+                                        
+                                        <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psInput">
+                                            <option value="" disabled>Selecciona..</option>
+                                            <option value="{{ $ps->id }}" selected>
+                                                {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
+                                            </option>
+                                        </select>
+                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                                        <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psInput">
                                             <option value="" disabled selected>Selecciona..</option>
                                             @foreach($lista_ps as $ps)
-                                                <option value="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}">
+                                                <option value="{{ $ps->id }}">
                                                     {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
                                                 </option>
                                             @endforeach
                                         </select>
-                                    @else
-                                        <input type="text" class="form-control" placeholder="Ingresa el nombre del ps" id="psInput" name="ps_nombre">
                                     @endif
                                     <label for="psInput">Nombre completo</label>
                                 </div>
@@ -593,8 +600,8 @@
     <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
     <script src="{{ asset('js/formulario.js') }}"></script>
 @endsection

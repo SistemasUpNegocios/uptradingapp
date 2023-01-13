@@ -23,7 +23,7 @@
                 <div class="row">
             
                     {{-- agenda --}}
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
                         <div class="col-md-12">
                             <div class="card info-card machines-card">
                                 <div class="card-body pb-0">
@@ -60,167 +60,167 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
 
-                    {{-- hora --}}
-                    <div class="col-md-6">
-                        <div class="card info-card hour-card">
-    
-                            <div class="card-body">
-                                <h5 class="card-title" id="day"></h5>
-    
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-clock"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6 id="hour"></h6>
-                                        <span class="text-muted small pt-1" id="date"></span>
-                                    </div>
-                                </div>
-                            </div>
-    
-                        </div>
-                    </div>
-
-                    {{-- contratos --}}
-                    <div class="col-md-6">
-                        <div class="card info-card machines-card">
-    
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Opciones</h6>
-                                    </li>
-                                    <li><a class="dropdown-item" href="{{ url('/admin/contrato') }}">Gestionar contratos</a></li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Contratos <span>| Total</span></h5>
-    
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-file-earmark-text"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <p class="num-card">{{ $contratos }}</p>
-                                        <a href="{{ url('/admin/contrato') }}"><span class="text-success small pt-1 fw-bold">Gestionar</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
-
-                    {{-- compuestos --}}
-                    <div class="col-md-4">
-                        <div class="card info-card machines-card">
-                            <div class="card-body pb-0">
-                                <h5 class="card-title mb-0">Contratos <span>| Compuestos</span></h5>
-    
-                                <div class="d-flex align-items-center">
-                                    <div class="ps-0">
-                                        <p class="num-card">{{ $contratos_compuestos }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- mensuales --}}
-                    <div class="col-md-4">
-                        <div class="card info-card machines-card">
-                            <div class="card-body pb-0">
-                                <h5 class="card-title mb-0">Contratos <span>| Mensuales</span></h5>
-    
-                                <div class="d-flex align-items-center">
-                                    <div class="ps-0">
-                                        <p class="num-card">{{ $contratos_mensuales }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- convenios --}}
-                    <div class="col-md-4">
-                        <div class="card info-card machines-card">
-                            <div class="card-body pb-0">
-                                <h5 class="card-title mb-0">Convenios MAM <span>| Total</span></h5>
-    
-                                <div class="d-flex align-items-center">
-                                    <div class="ps-0">
-                                        <p class="num-card">{{ $convenios }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    @if (!auth()->user()->is_cliente && !auth()->user()->is_ps_asistente && !auth()->user()->is_cliente_ps_asistente)
+                        {{-- hora --}}
                         <div class="col-md-6">
-                            <div class="card info-card associates-card">
+                            <div class="card info-card hour-card">
         
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Opciones</h6>
-                                        </li>
-        
-                                        <li><a class="dropdown-item" href="{{ url('/admin/ps') }}">Gestionar PS</a></li>
-                                    </ul>
-                                </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">PS <span>| Total</span></h5>
+                                    <h5 class="card-title" id="day"></h5>
         
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-people"></i>
-                                        </div>
-                                        <div class="ps-3">                                        
-                                            <p>{{ $ps }}</p>
-                                            <a href="{{ url('/admin/ps') }}"><span class="text-danger small pt-1 fw-bold">Gestionar</span></a>
-                                        </div>
-                                    </div>
-        
-                                </div>
-        
-                            </div>
-                        </div>
-        
-                        <div class="col-md-6">
-                            <div class="card info-card locations-card">
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Opciones</h6>
-                                        </li>
-        
-                                        <li><a class="dropdown-item" href="{{ url('/admin/cliente') }}">Gestionar clientes</a></li>
-                                    </ul>
-                                </div>
-        
-                                <div class="card-body">
-                                    <h5 class="card-title">Clientes <span>| Total</span></h5>
-        
-                                    <div class="d-flex align-items-center">
-                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-person-video2"></i>
+                                            <i class="bi bi-clock"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <p>{{ $clientesCount }}</p>
-                                            <a href="{{ url('/admin/cliente') }}"><span class="text-yellow small pt-1 fw-bold">Gestionar</span></a>
+                                            <h6 id="hour"></h6>
+                                            <span class="text-muted small pt-1" id="date"></span>
                                         </div>
                                     </div>
+                                </div>
         
+                            </div>
+                        </div>
+
+                        {{-- contratos --}}
+                        <div class="col-md-6">
+                            <div class="card info-card machines-card">
+        
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Opciones</h6>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ url('/admin/contrato') }}">Gestionar contratos</a></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Contratos <span>| Total</span></h5>
+        
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <p class="num-card">{{ $contratos }}</p>
+                                            <a href="{{ url('/admin/contrato') }}"><span class="text-success small pt-1 fw-bold">Gestionar</span></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>                    
+
+                        {{-- compuestos --}}
+                        <div class="col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">Contratos <span>| Compuestos</span></h5>
         
-                        </div>                                         
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $contratos_compuestos }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- mensuales --}}
+                        <div class="col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">Contratos <span>| Mensuales</span></h5>
+        
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $contratos_mensuales }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- convenios --}}
+                        <div class="col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">Convenios MAM <span>| Total</span></h5>
+        
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $convenios }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- gestion de PS y Clientes --}}
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                            <div class="col-md-6">
+                                <div class="card info-card associates-card">
+            
+                                    <div class="filter">
+                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li class="dropdown-header text-start">
+                                                <h6>Opciones</h6>
+                                            </li>
+            
+                                            <li><a class="dropdown-item" href="{{ url('/admin/ps') }}">Gestionar PS</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">PS <span>| Total</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-people"></i>
+                                            </div>
+                                            <div class="ps-3">                                        
+                                                <p>{{ $ps }}</p>
+                                                <a href="{{ url('/admin/ps') }}"><span class="text-danger small pt-1 fw-bold">Gestionar</span></a>
+                                            </div>
+                                        </div>
+            
+                                    </div>
+            
+                                </div>
+                            </div>
+            
+                            <div class="col-md-6">
+                                <div class="card info-card locations-card">
+                                    <div class="filter">
+                                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                            <li class="dropdown-header text-start">
+                                                <h6>Opciones</h6>
+                                            </li>
+            
+                                            <li><a class="dropdown-item" href="{{ url('/admin/cliente') }}">Gestionar clientes</a></li>
+                                        </ul>
+                                    </div>
+            
+                                    <div class="card-body">
+                                        <h5 class="card-title">Clientes <span>| Total</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-person-video2"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <p>{{ $clientesCount }}</p>
+                                                <a href="{{ url('/admin/cliente') }}"><span class="text-yellow small pt-1 fw-bold">Gestionar</span></a>
+                                            </div>
+                                        </div>
+            
+                                    </div>
+                                </div>
+            
+                            </div>
+                        @endif
                     @endif
-    
                 </div>
             </div>
         
@@ -279,4 +279,9 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)        
+        <script src="{{ asset('js/dashboard.js') }}"></script>        
+    @endif
+
 @endsection

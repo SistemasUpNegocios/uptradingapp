@@ -34,10 +34,10 @@
                                         <div class="ps-2 d-flex justify-content-between align-items-center">
                                             <div><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
                                             <div>
-                                                    {{-- <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a> --}}
-                                                    <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
-                                                    <a href="" data-id="{{ $documento->id }}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
-                                                    <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
+                                                {{-- <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a> --}}
+                                                <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
+                                                <a href="" data-id="{{ $documento->id }}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
+                                                <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
                                             </div>
                                         </div>
                                     </li>
@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                @elseif (auth()->user()->is_ps_encargado)
+                                @elseif (auth()->user()->is_ps_gold || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                     <li>
                                         <div class="ps-2 d-flex justify-content-between align-items-center">
                                             <div><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>

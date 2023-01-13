@@ -26,17 +26,18 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_encargado || auth()->user()->is_egresos)
-                            <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center">
+                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                 <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo cliente</a>
+                            @endif
+                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                                 <div class="form-check form-switch mb-3">
                                     <input class="form-check-input" type="checkbox" role="switch" id="lpoaSwitch">
                                     <label class="form-check-label" for="lpoaSwitch">Imprimir LPOA</label>
                                 </div>
-                            </div>
-                        @endif
-                        <table class="table table-striped table-bordered nowrap" id="cliente">
-
+                            @endif
+                        </div>
+                        <table class="table table-striped table-bordered nowrap text-center" id="cliente">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Código cliente</th>

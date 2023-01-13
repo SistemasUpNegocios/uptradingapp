@@ -8,6 +8,22 @@ $(document).ready(function () {
         },
     });
 
+    let dolar = 0;
+    $.ajax({
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp",
+        success: function (response) {
+            var series = response.bmx.series;
+            for (var i in series) {
+                var serie = series[i];
+
+                dolar = parseFloat(serie.datos[0].dato);
+                $("#dolarInput").val(dolar);
+            }
+        },
+    });
+
     function getOficinas() {
         $.ajax({
             type: "POST",
@@ -98,7 +114,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            data: { id: id, fecha: fecha },
+            data: { id: id, fecha: fecha, dolar: dolar },
             url: "/admin/getResumen",
             success: function (response) {
                 $("#contOficinas").empty();
@@ -167,7 +183,7 @@ $(document).ready(function () {
             });
         } else {
             window.open(
-                `/admin/imprimirResumenOficina?id=${oficinaID}&fecha=${fecha}`,
+                `/admin/imprimirResumenOficina?id=${oficinaID}&fecha=${fecha}&dolar=${dolar}`,
                 "_blank"
             );
         }

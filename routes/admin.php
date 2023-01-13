@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 //Ruta principal
 Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/admin/getAlerta', [App\Http\Controllers\DashboardController::class, 'getAlerta']);
 
 // Rutas para gestión de admin
 Route::get('/admin/usuario', [App\Http\Controllers\UsuarioController::class, 'index'])->name('usuario');
@@ -143,6 +144,7 @@ Route::post('/admin/editPagosPS', [App\Http\Controllers\PagoPsController::class,
 
 // Rutas para gestión de menú para pagos a ps (convenio)
 Route::get('/admin/pagoPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'index'])->name('pagopsconvenio');
+Route::get('/admin/showPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getPSConvenio']);
 Route::get('/admin/showContratosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getConvenios']);
 Route::post('/admin/existPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'ifExists']);
 Route::get('/admin/showPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getPagosPS']);
@@ -320,3 +322,9 @@ Route::get('/admin/showPSMovil', [App\Http\Controllers\PSMovilController::class,
 Route::post('/admin/editPSMovil', [App\Http\Controllers\PSMovilController::class, 'editPSMovil']);
 Route::post('/admin/addPSMovil', [App\Http\Controllers\PSMovilController::class, 'addPSMovil']);
 Route::post('/admin/deletePSMovil', [App\Http\Controllers\PSMovilController::class, 'deletePSMovil']);
+
+//Rutas de flujo de dinero
+Route::get('/admin/flujodinero', [App\Http\Controllers\FlujoDineroController::class, 'index'])->name('flujodinero');
+Route::get('/admin/showFlujoDinero', [App\Http\Controllers\FlujoDineroController::class, 'getFlujoDinero']);
+Route::get('/admin/getTotalMes', [App\Http\Controllers\FlujoDineroController::class, 'getTotalMes']);
+Route::get('/admin/imprimirReporte', [App\Http\Controllers\FlujoDineroController::class, 'imprimirReporte']);

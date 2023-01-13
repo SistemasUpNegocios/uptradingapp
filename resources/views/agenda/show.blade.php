@@ -104,9 +104,13 @@
                                 <div class="form-floating">
                                     <select name="asignado_a" class="form-control" id="asignadoAInput" required style="text-transform: none !important;">
                                         <option value="" disabled selected>Selecciona..</option>
-                                        @foreach($users as $user)
-                                        <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
-                                        @endforeach
+                                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                                            @foreach($users as $user)
+                                            <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
+                                            @endforeach                                            
+                                        @elseif(auth()->user()->is_ps_gold)
+                                            <option value="{{ auth()->user()->id }}"> {{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}</option>
+                                        @endif
                                     </select>
                                     <label for="asignadoAInput">Asignar a</label>
                                 </div>
@@ -118,20 +122,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <div class="form-floating">
-                                    <select name="asignado_a2" class="form-control" id="asignadoA2Input" style="text-transform: none !important;">
-                                        <option value="" disabled selected>Selecciona..</option>
-                                        @foreach($users as $user)
-                                        <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="asignadoAInput">Asignar también a</label>
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <div class="form-floating">
+                                        <select name="asignado_a2" class="form-control" id="asignadoA2Input" style="text-transform: none !important;">
+                                            <option value="" disabled selected>Selecciona..</option>
+                                            @foreach($users as $user)
+                                            <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
+                                            @endforeach
+                                        </select>
+                                        <label for="asignadoAInput">Asignar también a</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
+                        @endif
                         <div style="display:block !important" id="alertMessage" class="invalid-feedback"></div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>

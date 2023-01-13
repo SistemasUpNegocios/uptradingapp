@@ -24,7 +24,7 @@
             <div class="card p-0 rounded">
                 <div class="card-body p-0 rounded" style="height: 100vh">
                     <iframe id="imprimirPdf" src="/admin/imprimir?id={{ $contratos->id }}
-                        @if (auth()->user()->is_cliente || auth()->user()->is_ps_asistente || auth()->user()->is_cliente_ps_asistente)
+                        @if (auth()->user()->is_cliente || auth()->user()->is_ps_silver || auth()->user()->is_cliente_ps_silver)
                             #toolbar=0
                         @endif" 
                     download="prueba.pdf" class="rounded" title="Ficha" style="width: 100%; height: 100%;">

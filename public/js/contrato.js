@@ -825,9 +825,6 @@ $(document).ready(function () {
         $("#contratoInput").val(contrato);
         $("#contratoInput").prop("readonly", true);
 
-        $("#psIdInput").val(psid);
-        $("#psIdInput").prop("disabled", true);
-
         $("#clienteIdInput").val(clienteid);
         $("#clienteIdInput").prop("disabled", true);
 
@@ -1451,9 +1448,6 @@ $(document).ready(function () {
 
         $("#contratoInput").val(contrato);
         $("#contratoInput").prop("readonly", false);
-
-        $("#psIdInput").val(psid);
-        $("#psIdInput").prop("disabled", false);
 
         $("#clienteIdInput").val(clienteid);
         // $("#clienteIdInput").prop("disabled", true);
@@ -3325,27 +3319,29 @@ $(document).ready(function () {
         ];
 
         let montopago = $(thiss).data("montopago");
-        montopago = montopago.split(",");
-
         let tipopago = $(thiss).data("tipopago");
-        tipopago = tipopago.split(",");
 
-        let j = 0;
-        tipopago.map((tipo) => {
-            let i = 0;
-            checkbox.map((input) => {
-                if (tipo == $(input).val()) {
-                    $(input).prop("checked", true);
-                    let checked = $(input).is(":checked");
-                    if (checked) {
-                        $(conts[i]).show();
-                        $(inputs[i]).val(montopago[j]);
+        if (typeof montopago !== "undefined") {
+            montopago = montopago.split(",");
+
+            tipopago = tipopago.split(",");
+            let j = 0;
+            tipopago.map((tipo) => {
+                let i = 0;
+                checkbox.map((input) => {
+                    if (tipo == $(input).val()) {
+                        $(input).prop("checked", true);
+                        let checked = $(input).is(":checked");
+                        if (checked) {
+                            $(conts[i]).show();
+                            $(inputs[i]).val(montopago[j]);
+                        }
+                        j++;
                     }
-                    j++;
-                }
-                i++;
+                    i++;
+                });
             });
-        });
+        }
     };
 
     const containerHide = () => {

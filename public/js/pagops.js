@@ -1332,7 +1332,7 @@ $(document).ready(function () {
                 $("#btnVolver").css("display", "inline-block");
                 $("#btnVolver").empty();
                 $("#btnVolver").append(
-                    '<i class="bi-chevron-left me-1"></i>Volver a ver a los clientes'
+                    '<i class="bi-chevron-left me-1"></i>Volver a ver los contratos'
                 );
 
                 $(document).on("click", "#btnVolver", function (e) {

@@ -24,7 +24,7 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        <table class="table table-striped table-bordered nowrap" id="contratoTerminado">
+                        <table class="table table-striped table-bordered nowrap text-center" id="contratoTerminado">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Contrato</th>

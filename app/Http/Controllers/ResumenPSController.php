@@ -18,7 +18,11 @@ class ResumenPSController extends Controller
 
     public function index()
     {
-        return response()->view('resumenps.show');
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond){
+            return response()->view('resumenps.show');
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function getOficinas()
@@ -99,7 +103,8 @@ class ResumenPSController extends Controller
             "resumenes_convenio" => $resumenConvenio,
             "total" => number_format($pago_total, 2),
             "fecha" => $anio.'-'.$mes,
-            "ps" => $ps
+            "ps" => $ps,
+            "dolar" => $request->dolar
         );
     
         return response()->view('resumenps.resumen', $data, 200);
@@ -167,6 +172,7 @@ class ResumenPSController extends Controller
             "lista_ps" => $ps,
             "oficina" => $oficina,
             "fecha" => $request->fecha,
+            "dolar" => $request->dolar,
             "total" => 0
         );
         

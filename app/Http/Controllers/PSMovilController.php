@@ -18,8 +18,8 @@ class PSMovilController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){    
-            $lista_ps = User::where('privilegio', 'ps_encargado')->get();
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+            $lista_ps = User::where('privilegio', 'ps_diamond')->get();
             return view('psmovil.show', compact('lista_ps'));
         }else{
             return redirect()->to('/admin/dashboard');

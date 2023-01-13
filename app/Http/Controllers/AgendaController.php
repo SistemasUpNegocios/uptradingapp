@@ -24,7 +24,7 @@ class AgendaController extends Controller
     
     public function index()
     {
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){        
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
             $users = User::where('privilegio', 'root')
                     ->orWhere('privilegio', 'admin')
                     ->orWhere('privilegio', 'procesos')
@@ -662,15 +662,30 @@ class AgendaController extends Controller
 
     public function getAgenda(Request $request)
     {
-
         if ($request->citas == "all") {
-            $cita = Agenda::join('users', 'users.id', 'agenda.asignado_a')
-            ->select("agenda.id", "agenda.title", "agenda.description", "agenda.start", "agenda.color", "agenda.asignado_a", "agenda.generado_por")
-            ->where('agenda.generado_por','=', auth()->user()->id)
-            ->orWhere('users.privilegio', 'root')
-            ->orWhere('users.privilegio', 'admin')
-            ->orWhere('users.privilegio', 'procesos')
-            ->get();
+            if(auth()->user()->is_admin || auth()->user()->is_procesos){
+                $cita = Agenda::join('users', 'users.id', 'agenda.asignado_a')
+                ->select("agenda.id", "agenda.title", "agenda.description", "agenda.start", "agenda.color", "agenda.asignado_a", "agenda.generado_por")
+                ->where(function ($query) {
+                    $query->where('users.privilegio', 'root')
+                    ->orWhere('users.privilegio', 'admin')
+                    ->orWhere('users.privilegio', 'procesos')
+                    ->orWhere('users.privilegio', 'egresos')
+                    ->orWhere('users.privilegio', 'ps_gold')
+                    ->orWhere('users.privilegio', 'ps_diamond');
+                })->get();
+            }else{
+                $cita = Agenda::join('users', 'users.id', 'agenda.asignado_a')
+                ->select("agenda.id", "agenda.title", "agenda.description", "agenda.start", "agenda.color", "agenda.asignado_a", "agenda.generado_por")
+                ->where(function ($query) {
+                    $query->where('users.privilegio', 'root')
+                    ->orWhere('users.privilegio', 'admin')
+                    ->orWhere('users.privilegio', 'procesos')
+                    ->orWhere('users.privilegio', 'egresos')
+                    ->orWhere('users.privilegio', 'ps_gold')
+                    ->orWhere('users.privilegio', 'ps_diamond');
+                })->where('agenda.generado_por','=', auth()->user()->id)->get();
+            }
         }else if ($request->citas == "asignada_a") {
             $cita = Agenda::where('agenda.asignado_a','=', auth()->user()->id)->get();
         }else if ($request->citas == "generado_por") {

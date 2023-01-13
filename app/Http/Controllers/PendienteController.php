@@ -21,7 +21,7 @@ class PendienteController extends Controller
 
     public function index()
     {
-        if(!auth()->user()->is_cliente){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond){
             $codigo = session('codigo_oficina');
 
             $pendientes = DB::table('pendiente')
@@ -49,10 +49,6 @@ class PendienteController extends Controller
     public function addPendiente(Request $request)
     {
         if ($request->ajax()) {
-            // $request->validate([
-            //     'memo_nombre' => 'required | unique:pendiente',
-            // ]);
-
             $pendiente = new Pendiente;
             $pendiente->ps_id = $request->input('ps_id');
             $pendiente->memo_nombre = strtoupper($request->input('nombre'));
@@ -254,7 +250,7 @@ class PendienteController extends Controller
 
     public function generateList(Request $request)
     {
-        if(auth()->user()->is_ps_asistente || auth()->user()->is_ps_encargado){
+        if(auth()->user()->is_ps_silver || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
             $codigo = session('codigo_oficina');
         }else{
             $codigo = "%";

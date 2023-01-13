@@ -26,10 +26,10 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_encargado || auth()->user()->is_egresos)
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo convenio</a>
                         @endif
-                        <table class="table table-striped table-bordered nowrap" id="convenio">
+                        <table class="table table-striped table-bordered nowrap text-center" id="convenio">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Folio</th>
@@ -196,22 +196,35 @@
                             </div>
                         </div>
                         <div class="row">
-                            {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                            --}}
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select name="status" class="form-control" id="statusInput" required>
-                                        <option value="" disabled>Selecciona...</option>
-                                        <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                        <option value="Activado">Activado</option>
-                                        <option value="Finiquitado">Finiquitado</option>
-                                        <option value="Refrendado">Refrendado</option>
-                                        <option value="Cancelado">Cancelado</option>
-                                    </select>
-                                    <label for="statusInput">Status del convenio</label>
+                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado">Activado</option>
+                                            <option value="Finiquitado">Finiquitado</option>
+                                            <option value="Refrendado">Refrendado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Status del convenio</label>
+                                    </div>
                                 </div>
-                            </div>
-                            {{-- @endif --}}
+                            @else
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado" disabled>Activado</option>
+                                            <option value="Finiquitado" disabled>Finiquitado</option>
+                                            <option value="Refrendado" disabled>Refrendado</option>
+                                            <option value="Cancelado" disabled>Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Status del convenio</label>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="banco_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"

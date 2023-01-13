@@ -41,6 +41,7 @@
         <th data-priority="0" scope="col">Contrato</th>
         <th data-priority="0" scope="col">Cliente</th>
         <th data-priority="0" scope="col">Rendimiento (MXN)</th>
+        <th data-priority="0" scope="col">Rendimiento (USD)</th>
         <th data-priority="0" scope="col">Pago</th>
       </tr>
     </thead>
@@ -66,6 +67,7 @@
             </td>
             <td style="font-size: 15px !important;">{{ $cliente }}</td>
             <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
+            <td style="font-size: 15px !important;">${{ number_format($resumen->pago, 2) }}</td>
             <td style="font-size: 15px !important;">
               {{ $pago }}
             </td>
@@ -77,6 +79,7 @@
             </td>
             <td style="font-size: 15px !important;">{{ $cliente }}</td>
             <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
+            <td style="font-size: 15px !important;">${{ number_format($resumen->pago, 2) }}</td>
             <td style="font-size: 15px !important;">Compuesto</td>
           </tr>
         @endif

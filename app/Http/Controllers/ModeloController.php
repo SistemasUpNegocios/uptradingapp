@@ -15,7 +15,7 @@ class ModeloController extends Controller
 
     public function index()
     {
-        if(auth()->user()->is_root){
+        if (auth()->user()->is_root){
             return view('modelo.show');
         }else{
             return redirect()->to('/admin/dashboard');

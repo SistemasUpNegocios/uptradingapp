@@ -25,7 +25,7 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_encargado || auth()->user()->is_egresos)
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo contrato</a>
                         @endif
                         <table class="table table-striped table-bordered nowrap text-center" id="contrato">
@@ -138,9 +138,9 @@
                                 <div class="form-floating mb-3">
                                     <select name="periodo" class="form-control" id="periodoInput" required disabled>
                                         <option value="" disabled>Selecciona...</option>
-                                        <option value="3">3 meses</option>
-                                        <option value="6">6 meses</option>
-                                        <option value="9">9 meses</option>
+                                        <option value="3" disabled>3 meses</option>
+                                        <option value="6" disabled>6 meses</option>
+                                        <option value="9" disabled>9 meses</option>
                                         <option value="12" selected>12 meses</option>
                                     </select>
                                     <label for="periodoInput">Periodo del contrato</label>
@@ -335,6 +335,10 @@
                                         <select name="status" class="form-control" id="statusInput" required>
                                             <option value="" disabled>Selecciona...</option>
                                             <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado" disabled>Activado</option>
+                                            <option value="Finiquitado" disabled>Finiquitado</option>
+                                            <option value="Refrendado" disabled>Refrendado</option>
+                                            <option value="Cancelado" disabled>Cancelado</option>
                                         </select>
                                         <label for="statusInput">Status del contrato</label>
                                     </div>

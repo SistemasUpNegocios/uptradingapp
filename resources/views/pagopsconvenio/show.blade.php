@@ -8,6 +8,13 @@
 @endsection
 
 @section('content')
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+    </svg>
+
     <div class="pagetitle">
         <h1 class="titlePage">Gestión de pagos a PS de convenios MAM</h1>
         <nav>
@@ -25,10 +32,11 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <a class="btn principal-button mb-3 new" id="btnVolver"> <i class="bi-chevron-left me-1"></i>Ver todos los convenios</a>
-                        <table class="text-center mb-3 mt-5 pt-5 table table-bordered nowrap" style="width: 100%; text-transform: uppercase;" id="pagopsconvenio">
+                        <table class="text-center mb-3 pt-2 table table-bordered nowrap" style="width: 100%; text-transform: uppercase;" id="pagopsconvenio">
                             <thead>
                                 <tr>
-                                    <th data-priority="0" scope="col">Convenio (folio)</th>
+                                    <th data-priority="0" scope="col">Código PS</th>
+                                    <th data-priority="0" scope="col">Nombre completo</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -166,13 +174,6 @@
         </div>
     </div>
 
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">
-            <path
-                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-        </symbol>
-    </svg>
-    
     <div class="modal fade" id="convenioModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
@@ -303,31 +304,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)                       
-                                <div class="col-md-6 col-12">
-                                    <div class="form-floating mb-3">
-                                        <select name="status" class="form-control" id="statusInput" required>
-                                            <option value="" disabled>Selecciona...</option>
-                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                            <option value="Activado">Activado</option>
-                                            <option value="Finiquitado">Finiquitado</option>
-                                            <option value="Refrendado">Refrendado</option>
-                                            <option value="Cancelado">Cancelado</option>
-                                        </select>
-                                        <label for="statusInput">Status del convenio</label>
-                                    </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select name="status" class="form-control" id="statusInputModal" required>
+                                        <option value="" disabled>Selecciona...</option>
+                                        <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                        <option value="Activado">Activado</option>
+                                        <option value="Finiquitado">Finiquitado</option>
+                                        <option value="Refrendado">Refrendado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                    </select>
+                                    <label for="statusInputModal">Status del convenio</label>
                                 </div>
-                            @else
-                                <div class="col-md-6 col-12">
-                                    <div class="form-floating mb-3">
-                                        <select name="status" class="form-control" id="statusInput" required>
-                                            <option value="" disabled>Selecciona...</option>
-                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                        </select>
-                                        <label for="statusInput">Status del convenio</label>
-                                    </div>
-                                </div>
-                            @endif
+                            </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="banco_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"

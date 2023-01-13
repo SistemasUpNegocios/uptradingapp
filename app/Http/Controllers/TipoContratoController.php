@@ -16,7 +16,7 @@ class TipoContratoController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root){
+        if (auth()->user()->is_root){
             $modelos = Modelo::all();
             $data = array(
                 "lista_modelos" => $modelos

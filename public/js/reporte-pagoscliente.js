@@ -181,10 +181,8 @@ $(document).ready(function () {
 
         rendimiento = formatearCantidad
             .format(parseFloat(rendimiento) * parseFloat(dolar))
-            .replace("$", "")
-            .replace(",", "");
-
-        rendimiento = rendimiento.replace(",", "");
+            .replaceAll("$", "")
+            .replaceAll(",", "");
 
         let letra = numeroALetrasMXN(rendimiento);
 
@@ -207,8 +205,8 @@ $(document).ready(function () {
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
         let rendimiento = String($(this).data("rendimiento"))
-            .replace("$", "")
-            .replace(",", "");
+            .replaceAll("$", "")
+            .replaceAll(",", "");
 
         let letra = numeroALetrasMXN(rendimiento);
         $("#pagoInput").val(pago);
@@ -223,8 +221,10 @@ $(document).ready(function () {
     $(document).on("click", "#imprimirReporteModal", function () {
         let pago = $("#pagoInput").val();
         let cliente = $("#clienteInput").val();
-        let rendimiento = $("#rendimientoInput").val();
-        rendimiento = rendimiento.replace("$", "").replace(",", "");
+        let rendimiento = $("#rendimientoInput")
+            .val()
+            .replaceAll("$", "")
+            .replaceAll(",", "");
         let fecha = $("#fechaInput").val();
         let contrato = $("#contratoInput").val();
         let letra = numeroALetrasMXN(rendimiento);

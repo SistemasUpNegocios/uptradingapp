@@ -43,7 +43,7 @@
                     <form action="{{ url('/admin/reporteIntencion') }}" method="post">
                         @csrf
                         <div id="contForm">
-                            @if (auth()->user()->is_ps_encargado || auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <div class="form-check form-switch">

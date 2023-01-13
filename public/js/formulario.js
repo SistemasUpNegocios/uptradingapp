@@ -3,14 +3,10 @@ $(document).ready(function () {
         search: true,
     };
 
-    let pscompleto = $("#psInput").val();
+    dselect(document.querySelector("#psInput"), config);
 
-    if (pscompleto.length <= 0) {
-        dselect(document.querySelector("#psInput"), config);
-
-        $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-        $(".dselect-no-results").text("No se encontraron resultados...");
-    }
+    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
+    $(".dselect-no-results").text("No se encontraron resultados...");
 
     let acc = "";
 
@@ -384,7 +380,6 @@ $(document).ready(function () {
         $("#rfcInput").prop("readonly", false);
         $("#depositoInput").prop("readonly", false);
         $("#origenDinero").prop("disabled", false);
-        $("#psInput").prop("disabled", false);
 
         $("#modalTitle").text("Formulario de cuenta Forex");
         $("#btnSubmit").text("Agregar cuenta Forex");
@@ -395,10 +390,23 @@ $(document).ready(function () {
 
     $(document).on("click", ".view", function (e) {
         $("#formularioForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "view";
         e.preventDefault();
         var id = $(this).data("id");
+
+        $("#personasCargo0Input").prop("disabled", true);
+        $("#personasCargo1Input").prop("disabled", true);
+        $("#personasCargo2Input").prop("disabled", true);
+        $("#personasCargo3Input").prop("disabled", true);
+        $("#personasCargo4Input").prop("disabled", true);
+        $("#personasCargo5Input").prop("disabled", true);
+        $("#personasCargo6Input").prop("disabled", true);
+        $("#personasCargo7Input").prop("disabled", true);
+        $("#personasCargo8Input").prop("disabled", true);
+        $("#personasCargo9Input").prop("disabled", true);
+        $("#personasCargo10Input").prop("disabled", true);
 
         var codigocliente = $(this).data("codigocliente");
         var nombre = $(this).data("nombre");
@@ -446,6 +454,7 @@ $(document).ready(function () {
         var depositoinicial = $(this).data("depositoinicial");
         depositoinicial = formatearCantidad.format(depositoinicial);
         var origendinero = $(this).data("origendinero");
+        var psid = $(this).data("psid");
         var psnombre = $(this).data("psnombre");
 
         $("#psInput").next().children().first().empty();
@@ -658,9 +667,6 @@ $(document).ready(function () {
         $("#origenDinero").val(origendinero);
         $("#origenDinero").prop("disabled", true);
 
-        $("#psInput").val(psnombre);
-        $("#psInput").prop("disabled", true);
-
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
     });
@@ -668,9 +674,22 @@ $(document).ready(function () {
     $(document).on("click", ".edit", function (e) {
         e.preventDefault();
         $("#formularioForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "edit";
         var id = $(this).data("id");
+
+        $("#personasCargo0Input").prop("disabled", false);
+        $("#personasCargo1Input").prop("disabled", false);
+        $("#personasCargo2Input").prop("disabled", false);
+        $("#personasCargo3Input").prop("disabled", false);
+        $("#personasCargo4Input").prop("disabled", false);
+        $("#personasCargo5Input").prop("disabled", false);
+        $("#personasCargo6Input").prop("disabled", false);
+        $("#personasCargo7Input").prop("disabled", false);
+        $("#personasCargo8Input").prop("disabled", false);
+        $("#personasCargo9Input").prop("disabled", false);
+        $("#personasCargo10Input").prop("disabled", false);
 
         var codigocliente = $(this).data("codigocliente");
         var nombre = $(this).data("nombre");
@@ -718,6 +737,7 @@ $(document).ready(function () {
         var depositoinicial = $(this).data("depositoinicial");
         depositoinicial = formatearCantidad.format(depositoinicial);
         var origendinero = $(this).data("origendinero");
+        var psid = $(this).data("psid");
         var psnombre = $(this).data("psnombre");
 
         $("#psInput").next().children().first().empty();
@@ -928,9 +948,6 @@ $(document).ready(function () {
         $("#origenDinero").val(origendinero);
         $("#origenDinero").prop("disabled", false);
 
-        $("#psInput").val(psnombre);
-        $("#psInput").prop("disabled", false);
-
         $("#modalTitle").text("Cuenta forex");
         $("#btnSubmit").show();
         $("#btnSubmit").text("Editar cuenta");
@@ -1080,25 +1097,19 @@ $(document).ready(function () {
 
     $(document).on("change", "#montoFacturadoInput", function (e) {
         let montoFacturado = $("#montoFacturadoInput").val();
-        montoFacturado = montoFacturado.replace("$", "");
-        montoFacturado = montoFacturado.replace(",", "");
-        montoFacturado = montoFacturado.replace(",", "");
+        montoFacturado = montoFacturado.replaceAll("$", "").replaceAll(",", "");
         $("#montoFacturadoInput").val(formatearCantidad.format(montoFacturado));
     });
 
     $(document).on("change", "#montoMensualInput", function (e) {
         let montoMensual = $("#montoMensualInput").val();
-        montoMensual = montoMensual.replace("$", "");
-        montoMensual = montoMensual.replace(",", "");
-        montoMensual = montoMensual.replace(",", "");
+        montoMensual = montoMensual.replaceAll("$", "").replaceAll(",", "");
         $("#montoMensualInput").val(formatearCantidad.format(montoMensual));
     });
 
     $(document).on("change", "#depositoInput", function (e) {
         let depositoInput = $("#depositoInput").val();
-        depositoInput = depositoInput.replace("$", "");
-        depositoInput = depositoInput.replace(",", "");
-        depositoInput = depositoInput.replace(",", "");
+        depositoInput = depositoInput.replaceAll("$", "").replaceAll(",", "");
         $("#depositoInput").val(formatearCantidad.format(depositoInput));
     });
 

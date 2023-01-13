@@ -180,7 +180,7 @@
     var year = date.getFullYear();
     document.getElementById(
         "copyright"
-    ).innerHTML = `&copy; ${year} <strong><span>Up Trading</span></strong>.`;
+    ).innerHTML = `&copy; ${year} <strong><span>Up Trading Experts</span></strong>.`;
 
     function hourLive() {
         var date = new Date();
@@ -353,29 +353,29 @@ var numeroALetrasMXN = (function () {
                     default:
                         return "dieci" + Unidades(unidad);
                 }
-                case 2:
-                    switch (unidad) {
-                        case 0:
-                            return "veinte";
-                        default:
-                            return "veinti" + Unidades(unidad);
-                    }
-                    case 3:
-                        return DecenasY("treinta", unidad);
-                    case 4:
-                        return DecenasY("cuarenta", unidad);
-                    case 5:
-                        return DecenasY("cincuenta", unidad);
-                    case 6:
-                        return DecenasY("sesenta", unidad);
-                    case 7:
-                        return DecenasY("setenta", unidad);
-                    case 8:
-                        return DecenasY("ochenta", unidad);
-                    case 9:
-                        return DecenasY("noventa", unidad);
+            case 2:
+                switch (unidad) {
                     case 0:
-                        return Unidades(unidad);
+                        return "veinte";
+                    default:
+                        return "veinti" + Unidades(unidad);
+                }
+            case 3:
+                return DecenasY("treinta", unidad);
+            case 4:
+                return DecenasY("cuarenta", unidad);
+            case 5:
+                return DecenasY("cincuenta", unidad);
+            case 6:
+                return DecenasY("sesenta", unidad);
+            case 7:
+                return DecenasY("setenta", unidad);
+            case 8:
+                return DecenasY("ochenta", unidad);
+            case 9:
+                return DecenasY("noventa", unidad);
+            case 0:
+                return Unidades(unidad);
         }
     } //Unidades()
 
@@ -558,29 +558,29 @@ var numeroALetrasUSD = (function () {
                     default:
                         return "dieci" + Unidades(unidad);
                 }
-                case 2:
-                    switch (unidad) {
-                        case 0:
-                            return "veinte";
-                        default:
-                            return "veinti" + Unidades(unidad);
-                    }
-                    case 3:
-                        return DecenasY("treinta", unidad);
-                    case 4:
-                        return DecenasY("cuarenta", unidad);
-                    case 5:
-                        return DecenasY("cincuenta", unidad);
-                    case 6:
-                        return DecenasY("sesenta", unidad);
-                    case 7:
-                        return DecenasY("setenta", unidad);
-                    case 8:
-                        return DecenasY("ochenta", unidad);
-                    case 9:
-                        return DecenasY("noventa", unidad);
+            case 2:
+                switch (unidad) {
                     case 0:
-                        return Unidades(unidad);
+                        return "veinte";
+                    default:
+                        return "veinti" + Unidades(unidad);
+                }
+            case 3:
+                return DecenasY("treinta", unidad);
+            case 4:
+                return DecenasY("cuarenta", unidad);
+            case 5:
+                return DecenasY("cincuenta", unidad);
+            case 6:
+                return DecenasY("sesenta", unidad);
+            case 7:
+                return DecenasY("setenta", unidad);
+            case 8:
+                return DecenasY("ochenta", unidad);
+            case 9:
+                return DecenasY("noventa", unidad);
+            case 0:
+                return Unidades(unidad);
         }
     } //Unidades()
 
@@ -722,9 +722,9 @@ function unsecuredCopyToClipboard(text) {
     textArea.focus();
     textArea.select();
     try {
-      document.execCommand('copy');
+        document.execCommand("copy");
     } catch (err) {
-      console.error('Unable to copy to clipboard', err);
+        console.error("Unable to copy to clipboard", err);
     }
     document.body.removeChild(textArea);
 }
@@ -790,7 +790,6 @@ $(document).ready(function () {
                 );
 
                 $(".copiar").click(function () {
-
                     var tagID = $(this).data("id");
 
                     var tag = $(`#${tagID}`).text();
@@ -805,18 +804,18 @@ $(document).ready(function () {
                         icon: "success",
                         title: "Copiado al portapapeles",
                     });
-
                 });
-
             },
             error: function (res) {
                 Swal.fire({
                     icon: "error",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Sin resultados</h1>',
-                    html: '<p style="font-family: Poppins">No hay coincidencias para tu búsqueda: <span class="fw-bolder">' +
+                    html:
+                        '<p style="font-family: Poppins">No hay coincidencias para tu búsqueda: <span class="fw-bolder">' +
                         res.responseText +
                         "</span>. Por favor, intenta de nuevo</p>",
-                    confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",
                 });
             },

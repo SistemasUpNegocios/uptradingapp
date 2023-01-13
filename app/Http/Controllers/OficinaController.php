@@ -16,8 +16,7 @@ class OficinaController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos ||
-        auth()->user()->is_ps_encargado){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
             return view('oficina.show');
         }else{
             return redirect()->to('/admin/dashboard');

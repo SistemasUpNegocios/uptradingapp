@@ -20,26 +20,31 @@ class PsController extends Controller
 
     public function index()
     {
-        $codigo = session('codigo_oficina');
 
-        $oficinas = Oficina::select()->where("codigo_oficina", "like", $codigo)->get();
-        $ps = DB::table("ps")
-            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-            ->where("tipo_ps", "=", "Encargado")
-            ->where("oficina.codigo_oficina", "like", $codigo)
-            ->get();
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+            $codigo = session('codigo_oficina');
 
-        $data = array(
-            "lista_oficinas" => $oficinas,
-            "lista_ps" => $ps
-        );
-        return response()->view('ps.show', $data, 200);
+            $oficinas = Oficina::select()->where("codigo_oficina", "like", $codigo)->get();
+            $ps = DB::table("ps")
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->where("tipo_ps", "=", "Encargado")
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->get();
+
+            $data = array(
+                "lista_oficinas" => $oficinas,
+                "lista_ps" => $ps
+            );
+            return response()->view('ps.show', $data, 200);
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function getPs()
     {
         if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos ||
-        auth()->user()->is_ps_encargado){
+        auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
         $codigo = session('codigo_oficina');
         $ps = DB::table('ps')
             ->join('oficina', 'oficina.id', '=', 'ps.oficina_id')
@@ -129,15 +134,15 @@ class PsController extends Controller
 
                 if (!empty($cliente)) {
                     // if ($oficina->id == $ps->oficina_id) {
-                        // $user->privilegio = 'cliente_ps_encargado';
+                        // $user->privilegio = 'cliente_ps_gold';
                     // } else {
-                        $user->privilegio = 'cliente_ps_asistente';
+                        $user->privilegio = 'cliente_ps_silver';
                     // }
                 } else {
                     // if ($oficina->id == $ps->oficina_id) {
-                        // $user->privilegio = 'ps_encargado';
+                        // $user->privilegio = 'ps_gold';
                     // } else {
-                        $user->privilegio = 'ps_asistente';
+                        $user->privilegio = 'ps_silver';
                     // }
                 }
                 $user->save();
@@ -147,15 +152,15 @@ class PsController extends Controller
 
                 if (!empty($cliente)) {
                     // if ($oficina->id == $ps->oficina_id) {
-                        // $privilegio = 'cliente_ps_encargado';
+                        // $privilegio = 'cliente_ps_gold';
                     // } else {
-                        $privilegio = 'cliente_ps_asistente';
+                        $privilegio = 'cliente_ps_silver';
                     // }
                 } else {
                     // if ($oficina->id == $ps->oficina_id) {
-                        // $privilegio = 'ps_encargado';
+                        // $privilegio = 'ps_gold';
                     // } else {
-                        $privilegio = 'ps_asistente';
+                        $privilegio = 'ps_silver';
                     // }
                 }
 

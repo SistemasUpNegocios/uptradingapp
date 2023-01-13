@@ -83,22 +83,23 @@
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="{{ asset('js/login.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
 @endsection
 
 @section('g-recaptcha')
-<script type="text/javascript">
-    function callbackThen(response) { 
-        // read HTTP status console.log(response.status);
-        // read Promise object 
-        response.json().then(function(data){ 
-            console.log(data); 
-        });  
-        function callbackCatch(error){ 
-            console.error('Error:', error) 
-        }
-} 
-</script>
-{!! htmlScriptTagJsApi([ 'callback_then' => 'callbackThen', 'callback_catch' => 'callbackCatch' ]) !!}
+    <script type="text/javascript">
+        function callbackThen(response) { 
+            // read HTTP status console.log(response.status);
+            // read Promise object 
+            response.json().then(function(data){ 
+                console.log(data); 
+            });  
+            function callbackCatch(error){ 
+                console.error('Error:', error) 
+            }
+        } 
+        localStorage.setItem("Contratos", "Contratos a vencer");
+    </script>
+    {!! htmlScriptTagJsApi([ 'callback_then' => 'callbackThen', 'callback_catch' => 'callbackCatch' ]) !!}
 @endsection

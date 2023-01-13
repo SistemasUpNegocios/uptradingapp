@@ -29,14 +29,23 @@ class DashboardController extends Controller
         $psid = session("psid");
         $codigo = session("codigo_oficina");
 
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+            $clienteid = $cliente_con->id;
+        }
+
         $ps = Ps::where('codigoPS', 'like', "$codigo%")->count();
         $clientesCount = Cliente::where("codigoCliente", "like", "MXN-$codigo%")->count();
 
         $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
         ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("contrato.ps_id", "like", $psid)
-        ->where("contrato.cliente_id", "like", $clienteid)
+        ->where(function ($query) use ($psid, $clienteid) {
+            $query->where("contrato.ps_id", "like", $psid)
+            ->orWhere("contrato.cliente_id", "like", $clienteid);
+        })        
         ->where("oficina.codigo_oficina", "like", $codigo)
         ->where('status', 'Activado')
         ->where('tipo_id', 2)
@@ -45,8 +54,10 @@ class DashboardController extends Controller
         $contratos_mensuales = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
         ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("contrato.ps_id", "like", $psid)
-        ->where("contrato.cliente_id", "like", $clienteid)
+        ->where(function ($query) use ($psid, $clienteid) {
+            $query->where("contrato.ps_id", "like", $psid)
+            ->orWhere("contrato.cliente_id", "like", $clienteid);
+        })        
         ->where("oficina.codigo_oficina", "like", $codigo)        
         ->where('status', 'Activado')
         ->where('tipo_id', 1)
@@ -55,8 +66,10 @@ class DashboardController extends Controller
         $contratos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
         ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("contrato.ps_id", "like", $psid)
-        ->where("contrato.cliente_id", "like", $clienteid)
+        ->where(function ($query) use ($psid, $clienteid) {
+            $query->where("contrato.ps_id", "like", $psid)
+            ->orWhere("contrato.cliente_id", "like", $clienteid);
+        })
         ->where("oficina.codigo_oficina", "like", $codigo)
         ->where('status', 'Activado')
         ->count();
@@ -64,8 +77,10 @@ class DashboardController extends Controller
         $convenios = Convenio::join('ps', 'ps.id', '=', 'convenio.ps_id')
         ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
         ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("convenio.ps_id", "like", $psid)
-        ->where("convenio.cliente_id", "like", $clienteid)
+        ->where(function ($query) use ($psid, $clienteid) {
+            $query->where("convenio.ps_id", "like", $psid)
+            ->orWhere("convenio.cliente_id", "like", $clienteid);
+        })
         ->where("oficina.codigo_oficina", "like", $codigo)
         ->where('status', 'Activado')
         ->count();
@@ -78,6 +93,7 @@ class DashboardController extends Controller
         ->where("contrato.cliente_id", "like", $clienteid)
         ->where("oficina.codigo_oficina", "like", $codigo)
         ->count();
+
         $pagospsConvenios = PagoPSConvenio::join("convenio", "convenio.id", "=", "pago_ps_convenio.convenio_id")
         ->join('ps', 'ps.id', '=', 'convenio.ps_id')
         ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
@@ -86,6 +102,7 @@ class DashboardController extends Controller
         ->where("convenio.cliente_id", "like", $clienteid)
         ->where("oficina.codigo_oficina", "like", $codigo)
         ->count();
+        
         $pagosCliente = PagoCliente::join("contrato", "contrato.id", "=", "pago_cliente.contrato_id")
         ->join('ps', 'ps.id', '=', 'contrato.ps_id')
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -130,4 +147,10 @@ class DashboardController extends Controller
         
     }
 
+    public function getAlerta(Request $request)
+    {
+        $contrato = Contrato::where("fecha_pago", $request->fecha)->get();
+
+        return response($contrato);
+    }
 }

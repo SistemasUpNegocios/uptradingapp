@@ -18,7 +18,7 @@ class PsOficinaController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
             $oficinas = Oficina::all();
             $ps = DB::table("ps")
                 ->where("tipo_ps", "=", "Encargado")

@@ -15,8 +15,12 @@ class DocumentoController extends Controller
 
     public function index()
     {
-        $documentos = Documento::orderByDesc("tipo_documento")->get();
-        return response()->view('documento.show', compact("documentos"));
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+            $documentos = Documento::orderByDesc("tipo_documento")->get();
+            return response()->view('documento.show', compact("documentos"));
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function addDocumento(Request $request)

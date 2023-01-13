@@ -22,10 +22,7 @@ class PorcentajeController extends Controller
 
     public function index()
     {
-        if (Auth::user()->privilegio != 'root') {
-            return redirect()->to('/admin/dashboard');
-        } else {
-
+        if(auth()->user()->is_root){
             $ps = Ps::all();
             $clientes = Cliente::select()->orderBy("apellido_p")->get();
             $tipos = TipoContrato::all();
@@ -43,6 +40,8 @@ class PorcentajeController extends Controller
             );
     
             return response()->view('porcentaje.show', $data, 200);
+        } else {
+            return redirect()->to('/admin/dashboard');        
         }
     }
 

@@ -1009,11 +1009,9 @@ $(document).ready(function () {
 
     $("#ineDocumentoInput").change(function (event) {
         let datatarget = $(`.${acc}`).data("inedocumento");
-        // let ext = "";
         if ($("#ineDocumentoInput")[0].files[0]?.name) {
             $("#ineDocumentoInput").removeClass("is-invalid");
             $("#ineDocumentoInput").addClass("is-valid");
-            // ext =
             validarExtension(
                 $("#ineDocumentoInput").val(),
                 "#ineDocumentoInput"
@@ -1024,24 +1022,15 @@ $(document).ready(function () {
                 $("#ineDocumentoInput").addClass("is-invalid");
             }
         }
-
-        // let srcPath = event.target.files[0];
-        // let objectURL = URL.createObjectURL(srcPath);
-        // if (ext == "pdf" || ext == "PDF") {
-        //     validarDocumento(objectURL, "INE", "#ineDocumentoInput");
-        // } else {
-        //     validarImagen(objectURL, "INE", "#ineDocumentoInput");
-        // }
     });
 
     $("#pasaporteDocumentoInput").change(function (event) {
         let datatarget = $(`.${acc}`).data("pasaportedocumento");
-        let ext = "";
 
         if ($("#pasaporteDocumentoInput")[0].files[0]?.name) {
             $("#pasaporteDocumentoInput").removeClass("is-invalid");
             $("#pasaporteDocumentoInput").addClass("is-valid");
-            ext = validarExtension(
+            validarExtension(
                 $("#pasaporteDocumentoInput").val(),
                 "#pasaporteDocumentoInput"
             );
@@ -1050,22 +1039,6 @@ $(document).ready(function () {
                 $("#pasaporteDocumentoInput").removeClass("is-valid");
                 $("#pasaporteDocumentoInput").addClass("is-invalid");
             }
-        }
-
-        let srcPath = event.target.files[0];
-        let objectURL = URL.createObjectURL(srcPath);
-        if (ext == "pdf" || ext == "PDF") {
-            validarDocumento(
-                objectURL,
-                "Estados Unidos Mexicanos",
-                "#pasaporteDocumentoInput"
-            );
-        } else {
-            validarImagen(
-                objectURL,
-                "Estados Unidos Mexicanos",
-                "#pasaporteDocumentoInput"
-            );
         }
     });
 

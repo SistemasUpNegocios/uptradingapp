@@ -47,7 +47,7 @@ class TicketController extends Controller
             }
         }
 
-        $users = User::whereIn('privilegio', ['root', 'admin', 'procesos', 'ps_encargado'])
+        $users = User::whereIn('privilegio', ['root', 'admin', 'procesos', 'ps_gold', 'ps_diamond'])
         ->orderBy('apellido_p')
         ->get();
 

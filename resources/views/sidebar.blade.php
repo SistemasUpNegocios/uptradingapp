@@ -64,18 +64,20 @@
                             }}
                         </h6>
                         <span>
-                            @if (auth()->user()->is_ps_encargado)
-                            PS ENCARGADO
-                            @elseif(auth()->user()->is_ps_asistente)
-                            PS ASISTENTE
+                            @if (auth()->user()->is_ps_diamond)
+                                PS DIAMOND
+                            @elseif(auth()->user()->is_ps_gold)
+                                PS GOLD
+                            @elseif(auth()->user()->is_ps_silver)
+                                PS SILVER
                             @elseif(auth()->user()->is_cliente)
-                            CLIENTE
-                            @elseif (auth()->user()->is_cliente_ps_encargado)
-                            CLIENTE & PS ENCARGADO
-                            @elseif(auth()->user()->is_cliente_ps_asistente)
-                            CLIENTE & PS ASISTENTE
+                                CLIENTE
+                            @elseif(auth()->user()->is_cliente_ps_gold)
+                                CLIENTE & PS GOLD
+                            @elseif(auth()->user()->is_cliente_ps_silver)
+                                CLIENTE & PS SILVER
                             @else
-                            Usuario <span style="text-transform: uppercase">{{ auth()->user()->privilegio }}</span>
+                                Usuario de <span style="text-transform: uppercase">{{ auth()->user()->privilegio }}</span>
                             @endif
                         </span>
                     </li>
@@ -111,7 +113,7 @@
 
 @php
     use App\Models\User;
-    $ps_encargados = User::where('privilegio', 'ps_encargado')->get();
+    $ps_golds = User::where('privilegio', 'ps_gold')->orWhere('privilegio', 'ps_diamond')->get();
 @endphp
 
 <div class="sidebar-nav sidebar offcanvas offcanvas-start" tabindex="-1" id="sidebar">
@@ -135,21 +137,20 @@
             </a>
         </li>
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_encargado)
-            <li class="nav-item">
-                <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/tickets') }}">
-                    <i class="bi bi-send"></i>
-                    <span>Tickets</span>
-                </a>
-            </li>
+        {{-- <li class="nav-item">
+            <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
+                href="{{ URL::to('admin/tickets') }}">
+                <i class="bi bi-send"></i>
+                <span>Tickets</span>
+            </a>
+        </li> --}}
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#chat-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#chat-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)                    
                     @if (auth()->user()->id != 1)
                         <li>
                             <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
@@ -164,6 +165,8 @@
                             </a>
                         </li>
                     @endif
+                @endif
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)                    
                     <li class="nav-heading">Departamento de administración</li>
                     @if (auth()->user()->id != 234)
                         <li>
@@ -179,6 +182,9 @@
                             </a>
                         </li>
                     @endif
+                @endif
+
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                     <li class="nav-heading">Departamento de contabilidad</li>
                     @if (auth()->user()->id != 236)
                         <li>
@@ -195,9 +201,9 @@
                         </li>
                     @endif
 
-                    @if (!auth()->user()->is_ps_encargado)
+                    @if (!auth()->user()->is_ps_gold)
                         <li class="nav-heading">PS encargados</li>
-                        @foreach ($ps_encargados as $ps)
+                        @foreach ($ps_golds as $ps)
                             @if (auth()->user()->id != $ps->id)
                                 <li>
                                     <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
@@ -207,12 +213,12 @@
                             @endif
                         @endforeach
                     @endif
-                </ul>
-            </li>
-        @endif
+                @endif
+            </ul>
+        </li>
 
         <li class="nav-heading">Opciones de administrador</li>
-        @if (!auth()->user()->is_cliente)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/cliente')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/cliente') }}">
@@ -222,42 +228,54 @@
             </li>
         @endif
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#herramientas-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-tools"></i><span>Herramientas</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="herramientas-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)            
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/formulario')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/formulario') }}">
+                    <i class="bi bi-ui-checks"></i>
+                    <span>Formulario cuenta Forex</span>
+                </a>
+            </li>
+        @endif
+        
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#herramientas-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-tools"></i><span>Herramientas</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="herramientas-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">                    
                     <li>
                         <a href="{{ URL::to('admin/agenda') }}">
                             <i class="bi bi-circle"></i><span>Agenda</span>
                         </a>
                     </li>
-                @endif
-                @if (!auth()->user()->is_cliente)
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/flujodinero') }}">
+                                <i class="bi bi-circle"></i><span>Flujo de dinero</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ URL::to('admin/intencionInversion') }}">
                             <i class="bi bi-circle"></i><span>Intención de inversión</span>
                         </a>
                     </li>
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                        <li>
+                            <a href="{{ URL::to('admin/checklist') }}">
+                                <i class="bi bi-circle"></i><span>Checklist de nuevos clientes</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
-                        <a href="{{ URL::to('admin/formulario') }}">
-                            <i class="bi bi-circle"></i><span>Formulario cuenta Forex</span>
+                        <a href="{{ URL::to('admin/documentos') }}">
+                            <i class="bi bi-circle"></i><span>Documentos</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('admin/checklist') }}">
-                            <i class="bi bi-circle"></i><span>Checklist de nuevos clientes</span>
-                        </a>
-                    </li>
-                @endif
-                <li>
-                    <a href="{{ URL::to('admin/documentos') }}">
-                        <i class="bi bi-circle"></i><span>Documentos</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                </ul>
+            </li>
+        @endif
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#contratos-nav" data-bs-toggle="collapse" href="#">
@@ -306,17 +324,19 @@
             </ul>
         </li>
 
-        @if (!auth()->user()->is_ps_asistente)
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#pagosCliente-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-cash"></i><span>Pagos a clientes</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="pagosCliente-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#pagosCliente-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-cash"></i><span>Pagos a clientes</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="pagosCliente-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
                     <li>
                         <a href="{{ URL::to('admin/pagosCliente') }}">
                             <i class="bi bi-circle"></i><span>Pagos a clientes (compuesto y mensual)</span>
                         </a>
                     </li>
+                @endif
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                     <li class="nav-heading">Rendimiento mensual</li>
                     <li>
                         <a href="{{ URL::to('admin/reportePagosCliente') }}">
@@ -328,60 +348,54 @@
                             <i class="bi bi-circle"></i><span>Reporte de pagos a clientes por oficina</span>
                         </a>
                     </li>
-                </ul>
-            </li>
-        @endif
+                @endif
+            </ul>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#pagos-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-cash-stack"></i><span>Pagos a PS</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="pagos-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
+                <li class="nav-heading">Rendimiento compuesto y mensual</li>
+                <li>
+                    <a href="{{ URL::to('admin/pagoPS') }}">
+                        <i class="bi bi-circle"></i><span>Pago a PS</span>
+                    </a>
+                </li>
+            @endif
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+                <li class="nav-heading">Convenios</li>
+                <li>
+                    <a href="{{ URL::to('admin/pagoPSConvenio') }}">
+                        <i class="bi bi-circle"></i><span>Pagos a PS</span>
+                    </a>
+                </li>
+                <li class="nav-heading">Reporte de pagos</li>
+                <li>
+                    <a href="{{ URL::to('admin/resumenPS') }}">
+                        <i class="bi bi-circle"></i><span>Resumen de PS</span>
+                    </a>
+                </li>
+            @endif
+            </ul>
+        </li>
 
-        @if (!auth()->user()->is_cliente)
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#pagos-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-cash"></i><span>Pagos a PS</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="pagos-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li class="nav-heading">Rendimiento compuesto y mensual</li>
-                    <li>
-                        <a href="{{ URL::to('admin/pagoPS') }}">
-                            <i class="bi bi-circle"></i><span>Pago a PS</span>
-                        </a>
-                    </li>                    
-                    <li class="nav-heading">Convenios</li>
-                    <li>
-                        <a href="{{ URL::to('admin/pagoPSConvenio') }}">
-                            <i class="bi bi-circle"></i><span>Pagos a PS</span>
-                        </a>
-                    </li>
-                    <li class="nav-heading">Reporte de pagos</li>
-                    <li>
-                        <a href="{{ URL::to('admin/resumenPS') }}">
-                            <i class="bi bi-circle"></i><span>Resumen de PS</span>
-                        </a>
-                    </li>         
-                </ul>
-            </li>
-        @endif
-
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos ||
-        auth()->user()->is_ps_encargado)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#ps-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-person-workspace"></i><span>PS</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="ps-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    @if (!auth()->user()->is_ps_encargado && !auth()->user()->is_ps_asistente)
-                        <li>
-                            <a href="{{ URL::to('admin/oficina') }}">
-                                <i class="bi bi-circle"></i><span>Oficinas</span>
-                            </a>
-                        </li>                        
-                        <li>
-                            <a href="{{ URL::to('admin/psOficina') }}">
-                                <i class="bi bi-circle"></i><span>PS de oficina</span>
-                            </a>
-                        </li>
-                    @endif
                     <li>
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/psOficina') }}">
+                            <i class="bi bi-circle"></i><span>PS de oficina</span>
                         </a>
                     </li>
                     <li>
@@ -389,58 +403,61 @@
                             <i class="bi bi-circle"></i><span>PS Móvil</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ URL::to('admin/oficina') }}">
+                            <i class="bi bi-circle"></i><span>Oficinas</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif
-
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+        
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#contenidositio-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-window-split"></i><span>Gestión</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="contenidositio-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ URL::to('admin/banco') }}">
-                            <i class="bi bi-circle"></i><span>Bancos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/bitacora') }}">
-                            <i class="bi bi-circle"></i><span>Bitacora</span>
-                        </a>
-                    </li>                
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/banco') }}">
+                                <i class="bi bi-circle"></i><span>Bancos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/bitacora') }}">
+                                <i class="bi bi-circle"></i><span>Bitacora</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/preguntas') }}">
+                                <i class="bi bi-circle"></i><span>Preguntas</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ URL::to('admin/tipocambio') }}">
                             <i class="bi bi-circle"></i><span>Tipo de cambio</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('admin/preguntas') }}">
-                            <i class="bi bi-circle"></i><span>Preguntas</span>
-                        </a>
-                    </li>
                 </ul>
-            </li>
+            </li>            
         @endif
 
         @if (auth()->user()->is_root)
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#porcentajes-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-percent"></i><span>Porcentajes</span><i class="bi bi-chevron-down ms-auto"></i>
+                <a class="@if (request()->is('admin/porcentaje')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/porcentaje') }}">                
+                    <i class="bi bi-percent"></i>
+                    <span>Porcentajes</span>
                 </a>
-                <ul id="porcentajes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ URL::to('admin/porcentaje') }}">
-                            <i class="bi bi-circle"></i><span>Cambiar porcentaje de contratos</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
         @endif
 
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ URL::to('admin/cuentasGoogle') }}">
+                <a class="@if (request()->is('admin/cuentasGoogle')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/cuentasGoogle') }}">
                     <i class="bi bi-google"></i>
                     <span>Cuentas Google</span>
                 </a>
@@ -488,6 +505,5 @@
                 <span>Cerrar sesión</span>
             </a>
         </li>
-
     </ul>
 </div>

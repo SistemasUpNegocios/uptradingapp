@@ -16,7 +16,7 @@ class BancoController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){        
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
             return view('banco.show');
         }else{
             return redirect()->to('/admin/dashboard');

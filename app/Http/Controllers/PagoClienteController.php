@@ -11,6 +11,7 @@ use App\Models\TipoContrato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Account;
 
 class PagoClienteController extends Controller
 {
@@ -20,29 +21,51 @@ class PagoClienteController extends Controller
 
     public function index()
     {
-        $contratos = Contrato::all();
-        $ps = Ps::all();
-        $clientes = Cliente::all();
-        $tipos = TipoContrato::all();
-        $modelos = Modelo::all();
-        $data = array(
-            "lista_contratos" => $contratos,
-            "lista_ps" => $ps,
-            "lista_clientes" => $clientes,
-            "lista_tipos" => $tipos,
-            "lista_modelos" => $modelos
-        );
-        return response()->view('pagocliente.show', $data, 200);
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+            $contratos = Contrato::all();
+            $ps = Ps::all();
+            $clientes = Cliente::all();
+            $tipos = TipoContrato::all();
+            $modelos = Modelo::all();
+            $data = array(
+                "lista_contratos" => $contratos,
+                "lista_ps" => $ps,
+                "lista_clientes" => $clientes,
+                "lista_tipos" => $tipos,
+                "lista_modelos" => $modelos
+            );
+            return response()->view('pagocliente.show', $data, 200);
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function getCliente()
     {
 
+        $psid = session('psid');
+        $clienteid = session('clienteid');
         $codigo = session('codigo_oficina');
 
-        $cliente = DB::table('cliente')            
-            ->select(DB::raw("codigoCliente, id AS clienteid, CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS clientenombre"))
-            ->where('codigoCliente', 'like', "MXN-$codigo%")
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+            $clienteid = $cliente_con->id;
+        }
+
+        $cliente = DB::table('contrato')
+            ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->select(DB::raw("cliente.codigoCliente, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre"))
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })->where("contrato.status", "!=", "Cancelado")
+            ->where("contrato.status", "!=", "Finiquitado")
+            ->distinct("cliente.clientenombre")
             ->get();
 
         return datatables()->of($cliente)->addColumn('enlace', 'pagocliente.enlace')->rawColumns(['enlace'])->toJson();
@@ -61,7 +84,7 @@ class PagoClienteController extends Controller
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("contrato.id AS contratoid, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.fecha_renovacion, contrato.fecha_pago, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, tipo_contrato.id AS tipoid, tipo_contrato.tipo AS tipoContrato, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, contrato.porcentaje, modelo_contrato.id AS modeloid, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status"))
             ->where("cliente.id", "=", $clienteid)
-            ->where("oficina.codigo_oficina", "like", $codigo)
+            // ->where("oficina.codigo_oficina", "like", $codigo)
             ->get();
 
         return datatables()->of($contratos)->addColumn('buttons', 'pagocliente.buttons')->rawColumns(['buttons'])->toJson();

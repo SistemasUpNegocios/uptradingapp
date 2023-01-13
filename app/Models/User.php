@@ -64,14 +64,19 @@ class User extends Authenticatable
         return $this->privilegio == 'procesos';
     }
 
-    public function getIsPsEncargadoAttribute()
+    public function getIsPsDiamondAttribute()
     {
-        return $this->privilegio == "ps_encargado";
+        return $this->privilegio == "ps_diamond";
     }
 
-    public function getIsPsAsistenteAttribute()
+    public function getIsPsGoldAttribute()
     {
-        return $this->privilegio == "ps_asistente";
+        return $this->privilegio == "ps_gold";
+    }
+
+    public function getIsPsSolverAttribute()
+    {
+        return $this->privilegio == "ps_silver";
     }
 
     public function getIsClienteAttribute()
@@ -94,14 +99,14 @@ class User extends Authenticatable
         return $this->privilegio == "estandar";
     }
 
-    public function getIsClientePsAsistenteAttribute()
+    public function getIsClientePsSilverAttribute()
     {
-        return $this->privilegio == "cliente_ps_asistente";
+        return $this->privilegio == "cliente_ps_silver";
     }
 
-    public function getIsClientePsEncargadoAttribute()
+    public function getIsClientePsGoldAttribute()
     {
-        return $this->privilegio == "cliente_ps_encargado";
+        return $this->privilegio == "cliente_ps_gold";
     }
 
     public function chats()

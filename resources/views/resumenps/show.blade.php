@@ -23,9 +23,7 @@
 
                 <div class="card">
                     <div class="card-body p-3">
-                        <div id="contOficinas">
-
-                        </div>
+                        <div id="contOficinas"></div>
                     </div>
                 </div>
 

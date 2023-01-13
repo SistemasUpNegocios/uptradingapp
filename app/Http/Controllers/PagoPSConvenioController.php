@@ -19,36 +19,61 @@ class PagoPSConvenioController extends Controller
 
     public function index()
     {
-        $convenios = Convenio::all();
-        $ps = Ps::all();
-        $clientes = Cliente::all();
-        $bancos = Banco::all();
-        $data = array(
-            "convenios" => $convenios,
-            "lista_ps" => $ps,
-            "clientes" => $clientes,
-            "bancos" => $bancos
-        );
-        return response()->view('pagopsconvenio.show', $data, 200);
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+            $convenios = Convenio::all();
+            $ps = Ps::all();
+            $clientes = Cliente::all();
+            $bancos = Banco::all();
+            $data = array(
+                "convenios" => $convenios,
+                "lista_ps" => $ps,
+                "clientes" => $clientes,
+                "bancos" => $bancos
+            );
+            return response()->view('pagopsconvenio.show', $data, 200);
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
-
-    public function getConvenios()
+    
+    public function getPSConvenio()
     {
 
         $psid = session('psid');
         $codigo = session('codigo_oficina');
+
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+        }
+
+        $ps = DB::table('ps')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->select(DB::raw("ps.codigoPs, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))
+            ->where("ps.id", "like", $psid)
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->get();
+
+        return datatables()->of($ps)->addColumn('enlace', 'pagopsconvenio.enlace')->rawColumns(['enlace'])->toJson();
+    }
+
+    public function getConvenios(Request $request)
+    {
+
+        $psid = $request->psid;
+        $codigo = session('codigo_oficina'); 
 
         $convenios = DB::table('convenio')
             ->join('ps', 'ps.id', '=', 'convenio.ps_id')
             ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
             ->join('banco', 'banco.id', '=', 'convenio.banco_id')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-            ->select(DB::raw("convenio.id AS convenioid, convenio.folio, convenio.folio AS convenio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))
-            ->where("ps.id", "like", $psid)
+            ->select(DB::raw("convenio.id AS convenioid, ps.id AS psid, convenio.folio AS convenio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS cliente_nombre, banco.id AS banco_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))
+            ->where("ps.id", "=", $psid)
             ->where("oficina.codigo_oficina", "like", $codigo)
             ->get();
             
-        return datatables()->of($convenios)->addColumn('enlace', 'pagopsconvenio.enlace')->rawColumns(['enlace'])->toJson();
+        return datatables()->of($convenios)->addColumn('buttons', 'pagopsconvenio.buttons')->rawColumns(['buttons'])->toJson();
     }
 
     public function ifExists(Request $request)
@@ -73,8 +98,6 @@ class PagoPSConvenioController extends Controller
     {
         if ($request->convenioid) {
             $id = $request->convenioid;
-            $psid = session('psid');
-            $codigo = session('codigo_oficina');
 
             $pagosps = DB::table('pago_ps_convenio')
                 ->join('convenio', 'convenio.id', '=', 'pago_ps_convenio.convenio_id')
@@ -83,12 +106,10 @@ class PagoPSConvenioController extends Controller
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->select(DB::raw("convenio.folio AS convenio, pago_ps_convenio.id, pago_ps_convenio.convenio_id AS convenioid, pago_ps_convenio.serie, pago_ps_convenio.fecha_pago, pago_ps_convenio.fecha_limite, pago_ps_convenio.fecha_pagado, pago_ps_convenio.pago, pago_ps_convenio.status, pago_ps_convenio.tipo_pago, pago_ps_convenio.memo, pago_ps_convenio.comprobante, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))
                 ->where("convenio_id", "=", $id)
-                ->where("ps.id", "like", $psid)
-                ->where("oficina.codigo_oficina", "like", $codigo)
                 ->get();
 
                 if ($pagosps) {
-                    return datatables()->of($pagosps)->addColumn('btn', 'pagopsconvenio.buttons')->rawColumns(['btn'])->toJson();
+                    return datatables()->of($pagosps)->addColumn('acciones', 'pagopsconvenio.acciones')->rawColumns(['acciones'])->toJson();
                 }
         }
     }

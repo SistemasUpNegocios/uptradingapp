@@ -31,7 +31,7 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <a class="btn principal-button mb-3 new" id="btnVolver"> <i class="bi-chevron-left me-1"></i>Ver todos los PS</a>
-                        <table class="text-center mb-3 mt-5 pt-2 table table-bordered nowrap" style="width: 100%; text-transform: uppercase;" id="pagops">
+                        <table class="text-center mb-3 pt-2 table table-bordered nowrap" style="width: 100%; text-transform: uppercase;" id="pagops">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Código PS</th>

@@ -20,19 +20,24 @@ class PagoPsController extends Controller
 
     public function index()
     {
-        $contratos = Contrato::all();
-        $ps = Ps::all();
-        $clientes = Cliente::all();
-        $tipos = TipoContrato::all();
-        $modelos = Modelo::all();
-        $data = array(
-            "lista_contratos" => $contratos,
-            "lista_ps" => $ps,
-            "lista_clientes" => $clientes,
-            "lista_tipos" => $tipos,
-            "lista_modelos" => $modelos
-        );
-        return response()->view('pagops.show', $data, 200);
+
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+            $contratos = Contrato::all();
+            $ps = Ps::all();
+            $clientes = Cliente::all();
+            $tipos = TipoContrato::all();
+            $modelos = Modelo::all();
+            $data = array(
+                "lista_contratos" => $contratos,
+                "lista_ps" => $ps,
+                "lista_clientes" => $clientes,
+                "lista_tipos" => $tipos,
+                "lista_modelos" => $modelos
+            );
+            return response()->view('pagops.show', $data, 200);
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function getPS()
@@ -40,6 +45,12 @@ class PagoPsController extends Controller
 
         $psid = session('psid');
         $codigo = session('codigo_oficina');
+
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+        }
+
         $ps = DB::table('ps')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("ps.codigoPs, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))
@@ -53,7 +64,7 @@ class PagoPsController extends Controller
     public function getContratos(Request $request)
     {
         $psid = $request->psid;
-        $codigo = session('codigo_oficina');
+        $codigo = session('codigo_oficina');        
 
         $contratos = DB::table('contrato')
             ->join('ps', 'ps.id', '=', 'contrato.ps_id')

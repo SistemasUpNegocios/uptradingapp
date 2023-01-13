@@ -5,6 +5,7 @@
                 <th data-priority="0" scope="col">Contrato</th>
                 <th data-priority="0" scope="col">Cliente</th>
                 <th data-priority="0" scope="col">Rendimiento (MXN)</th>
+                <th data-priority="0" scope="col">Rendimiento (USD)</th>
                 <th data-priority="0" scope="col">Pago</th>
                 <th data-priority="0" scope="col">Reporte</th>
             </tr>
@@ -29,9 +30,8 @@
                         </td>
                         <td style="font-size: 15px">{{ $cliente }}</td>
                         <td style="font-size: 15px">${{ $rendimiento }}</td>
-                        <td style="font-size: 15px">
-                            {{ $pago }}
-                        </td>
+                        <td style="font-size: 15px">${{ number_format($resumen->pago, 2) }}</td>
+                        <td style="font-size: 15px">{{ $pago }}</td>
                         <td style="font-size: 15px">
                             <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
@@ -44,6 +44,7 @@
                         </td>
                         <td style="font-size: 15px">{{ $cliente }}</td>
                         <td style="font-size: 15px">${{ $rendimiento }}</td>
+                        <td style="font-size: 15px">${{ number_format($resumen->pago, 2) }}</td>
                         <td style="font-size: 15px">COMPUESTO ({{$pago}})</td>
                         <td>
                             <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
