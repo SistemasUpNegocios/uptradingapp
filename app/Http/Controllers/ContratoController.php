@@ -123,10 +123,13 @@ class ContratoController extends Controller
 
             $contrato = new Contrato;
 
+            $lugar = mb_convert_encoding(ucwords(strtolower($request->lugar_firma)), 'UTF-8', 'UTF-8');
+            $lugar = str_replace('?', 'é', $lugar);
+
             $contrato->folio = $request->input('folio');
             $contrato->operador = strtoupper($request->input('operador'));
             $contrato->operador_ine = $request->input('operador_ine');
-            $contrato->lugar_firma = strtoupper($request->input('lugar_firma'));
+            $contrato->lugar_firma =  $lugar;
             $contrato->periodo = strtoupper($request->input('periodo'));
             $contrato->fecha = $request->input('fechainicio');
             $contrato->fecha_renovacion = $request->input('fecha_renovacion');
@@ -579,11 +582,14 @@ class ContratoController extends Controller
             ]);
 
             $contrato = Contrato::find($request->id);
+            
+            $lugar = mb_convert_encoding(ucwords(strtolower($request->lugar_firma)), 'UTF-8', 'UTF-8');
+            $lugar = str_replace('?', 'é', $lugar);
 
             $contrato->folio = $request->input('folio');
             $contrato->operador = strtoupper($request->input('operador'));
             $contrato->operador_ine = $request->input('operador_ine');
-            $contrato->lugar_firma = strtoupper($request->input('lugar_firma'));
+            $contrato->lugar_firma =  $lugar;
             $contrato->fecha = $request->input('fechainicio');
             $contrato->fecha_renovacion = $request->input('fecha_renovacion');
             $contrato->fecha_pago = $request->input('fecha_pago');

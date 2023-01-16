@@ -97,7 +97,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12" id="clienteIdCont">
                                 <div class="form-floating mb-3">
-                                    <select name="cliente_id" class="form-select selectSearch" id="clienteIdInput" required>
+                                    <select name="cliente_id" class="form-select selectSearch" id="clienteIdInput">
                                         <option value="" disabled selected>Selecciona...</option>
                                         @foreach($lista_clientes as $cliente)
                                         <option value="{{ $cliente->id }}">{{ $cliente->apellido_p }}
@@ -190,7 +190,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                        class="form-select selectSearch" id="psIdInput" required>
+                                        class="form-select selectSearch" id="psIdInput">
                                         <option value="" disabled selected>Selecciona..</option>
                                         @foreach($lista_ps as $ps)
                                         <option value="{{ $ps->id }}">{{ $ps->nombre }} {{ $ps->apellido_p }}

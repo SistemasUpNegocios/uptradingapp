@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-10">
                                 <div class="form-floating mb-3">
-                                    <select class="form-select selectSearch" id="mesInput" required>
+                                    <select class="form-select selectSearch" id="mesInput">
                                         <option value="" disabled selected>Selecciona..</option>
                                         @while ($primer_fecha != $ultima_fecha)
                                         @php

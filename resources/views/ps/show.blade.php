@@ -213,7 +213,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="oficina_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                        class="form-select selectSearch" id="oficinaIdInput" required>
+                                        class="form-select selectSearch" id="oficinaIdInput">
                                         <option value="" disabled selected>Selecciona..</option>
                                         @foreach($lista_oficinas as $oficina)
                                         <option value="{{ $oficina->id }}">{{ $oficina->ciudad }} ({{

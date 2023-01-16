@@ -83,7 +83,7 @@
                             <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                        class="form-select selectSearch" id="psIdInput" required>
+                                        class="form-select selectSearch" id="psIdInput">
                                         <option value="" disabled selected>Selecciona..</option>
                                         @foreach($lista_ps as $ps)
                                         <option value="{{ $ps->id }}">{{ $ps->nombre }} {{ $ps->apellido_p }} {{

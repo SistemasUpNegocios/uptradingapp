@@ -1,60 +1,62 @@
-@if (sizeof($resumenes_contrato) > 0)    
-    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumen">
-        <thead>
-            <tr>
-                <th data-priority="0" scope="col">Contrato</th>
-                <th data-priority="0" scope="col">Cliente</th>
-                <th data-priority="0" scope="col">Rendimiento (MXN)</th>
-                <th data-priority="0" scope="col">Rendimiento (USD)</th>
-                <th data-priority="0" scope="col">Pago</th>
-                <th data-priority="0" scope="col">Reporte</th>
-            </tr>
-        </thead>
-        <tbody id="resumenBody" style="vertical-align: middle">
-            @foreach ($resumenes_contrato as $resumen)
-                @php
-                    if (strlen($resumen->contrato) == 11){
-                        $contrato = substr($resumen->contrato, 0, -2);
-                    }else{
-                        $contrato = substr($resumen->contrato, 0, -3);
-                    }
-                    $cliente = $resumen->clientenombre;
-                    $rendimiento = number_format($resumen->pago * $dolar, 2);
-                    $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
-                    $fecha = $resumen->fecha;
-                @endphp
-                @if ($resumen->tipo_id == 1)                                    
-                    <tr>
-                        <td style="font-size: 15px">
-                            {{ $contrato }}
-                        </td>
-                        <td style="font-size: 15px">{{ $cliente }}</td>
-                        <td style="font-size: 15px">${{ $rendimiento }}</td>
-                        <td style="font-size: 15px">${{ number_format($resumen->pago, 2) }}</td>
-                        <td style="font-size: 15px">{{ $pago }}</td>
-                        <td style="font-size: 15px">
-                            <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                        </td>
-                    </tr>
-                @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
-                    <tr>
-                        <td style="font-size: 15px">
-                            {{ $contrato }}
-                        </td>
-                        <td style="font-size: 15px">{{ $cliente }}</td>
-                        <td style="font-size: 15px">${{ $rendimiento }}</td>
-                        <td style="font-size: 15px">${{ number_format($resumen->pago, 2) }}</td>
-                        <td style="font-size: 15px">COMPUESTO ({{$pago}})</td>
-                        <td>
-                            <button class="btn btn-warning" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                        </td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
+@if (sizeof($resumenes_contrato) > 0)
+    <div class="mt-4" style="overflow-x: auto;">
+        <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumenPagoCliente">
+            <thead>
+                <tr>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Contrato</th>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Cliente</th>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Rendimiento (MXN)</th>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Rendimiento (USD)</th>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Pago</th>
+                    <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Reporte</th>
+                </tr>
+            </thead>
+            <tbody id="resumenBody" style="vertical-align: middle">
+                @foreach ($resumenes_contrato as $resumen)
+                    @php
+                        if (strlen($resumen->contrato) == 11){
+                            $contrato = substr($resumen->contrato, 0, -2);
+                        }else{
+                            $contrato = substr($resumen->contrato, 0, -3);
+                        }
+                        $cliente = $resumen->clientenombre;
+                        $rendimiento = number_format($resumen->pago * $dolar, 2);
+                        $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
+                        $fecha = $resumen->fecha;
+                    @endphp
+                    @if ($resumen->tipo_id == 1)                                    
+                        <tr>
+                            <td style="font-size: 14px">
+                                {{ $contrato }}
+                            </td>
+                            <td style="font-size: 14px">{{ $cliente }}</td>
+                            <td style="font-size: 14px">${{ $rendimiento }}</td>
+                            <td style="font-size: 14px">${{ number_format($resumen->pago, 2) }}</td>
+                            <td style="font-size: 14px">{{ $pago }}</td>
+                            <td>
+                                <button class="btn btn-warning" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
+                                <button class="btn btn-success" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
+                            </td>
+                        </tr>
+                    @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
+                        <tr>
+                            <td style="font-size: 14px">
+                                {{ $contrato }}
+                            </td>
+                            <td style="font-size: 14px">{{ $cliente }}</td>
+                            <td style="font-size: 14px">${{ $rendimiento }}</td>
+                            <td style="font-size: 14px">${{ number_format($resumen->pago, 2) }}</td>
+                            <td style="font-size: 14px">COMPUESTO ({{$pago}})</td>
+                            <td>
+                                <button class="btn btn-warning" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
+                                <button class="btn btn-success" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @else
     <div class="row" id="contVacio">
         <input type="hidden" value="vacio" id="vacioInput">

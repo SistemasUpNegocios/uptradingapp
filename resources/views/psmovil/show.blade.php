@@ -61,7 +61,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-floating mb-3">
-                                <select name="ps_encargado" class="form-select selectSearch" id="psInput" required>
+                                <select name="ps_encargado" class="form-select selectSearch" id="psInput">
                                     <option value="" disabled selected>Selecciona...</option>
                                     @foreach($lista_ps as $ps)
                                         <option value="{{ $ps->id }}">
