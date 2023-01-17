@@ -828,6 +828,9 @@ $(document).ready(function () {
         $("#clienteIdInput").val(clienteid);
         $("#clienteIdInput").prop("disabled", true);
 
+        $("#psIdInput").val(psid);
+        $("#psIdInput").prop("disabled", true);
+
         $("#pendienteIdInput").val(pendienteid);
         $("#pendienteIdInput").prop("disabled", true);
 
@@ -1451,6 +1454,9 @@ $(document).ready(function () {
 
         $("#clienteIdInput").val(clienteid);
         // $("#clienteIdInput").prop("disabled", true);
+
+        $("#psIdInput").val(psid);
+        $("#psIdInput").prop("disabled", false);
 
         $("#pendienteIdInput").val(pendienteid);
         $("#pendienteIdInput").prop("disabled", false);

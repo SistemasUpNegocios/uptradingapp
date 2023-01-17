@@ -749,6 +749,9 @@ $(document).ready(function () {
             .attr("data-dselect-text", psnombre);
         $("#psInput").next().children().first().attr("disabled", false);
 
+        $("#psInput").val(psid);
+        $("#psInput").prop("disabled", false);
+
         $("#idInput").val(id);
 
         $("#codigoClienteInput").val(codigocliente);

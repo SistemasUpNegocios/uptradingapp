@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Historial de accesos')
+@section('title', 'Historial de cambios')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -17,11 +17,11 @@
     </svg>
 
     <div class="pagetitle">
-        <h1>Historial de accesos</h1>
+        <h1>Historial de cambios</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Historial de accesos</li>
+                <li class="breadcrumb-item active">Historial de cambios</li>
             </ol>
         </nav>
     </div>
@@ -34,9 +34,7 @@
                         <use xlink:href="#info-fill" />
                     </svg>
                     <div>
-                        Registro de cambios en todos los módulos del sistema, presiona <b>Ver más detalles</b> para
-                        consultar la
-                        información completa
+                        Registro de cambios en todos los módulos del sistema, presiona <b>Ver más detalles</b> para consultar la información completa
                     </div>
                 </div>
             </div>
