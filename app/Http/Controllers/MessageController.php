@@ -27,10 +27,12 @@ class MessageController extends Controller
 		$enviado_a = Message::join('chat_user', 'chat_user.chat_id', 'messages.chat_id')
 					->select("chat_user.user_id")
 					->where("chat_user.user_id", "!=", auth()->user()->id)
+					->orderBy('messages.id', 'DESC')
 					->first();
 					
 		$enviado_por = ucwords(strtolower( auth()->user()->nombre . " " . auth()->user()->apellido_p . " " . auth()->user()->apellido_m));
 
+		$id_user = $enviado_a->user_id;
 		$mensaje = "Tienes un nuevo mensaje de $enviado_por: $request->message";
 
 		$notificacion = new Notificacion;
@@ -43,7 +45,7 @@ class MessageController extends Controller
 		broadcast(new MessageSent($message))->toOthers();
 
 		$imagen = auth()->user()->foto_perfil;
-		event(new Chat($mensaje, $imagen));
+		event(new Chat($mensaje, $imagen, $enviado_a->user_id));
 
 		return $message;
 

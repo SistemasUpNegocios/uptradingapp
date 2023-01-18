@@ -30,88 +30,104 @@ class DashboardController extends Controller
         $codigo = session("codigo_oficina");
 
         if (auth()->user()->is_ps_gold) {
-            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
-            $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
-            $psid = $ps_cons->id;
-            $clienteid = $cliente_con->id;
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
+            $psid = $ps_cons->id;            
         }
 
         $ps = Ps::where('codigoPS', 'like', "$codigo%")->count();
         $clientesCount = Cliente::where("codigoCliente", "like", "MXN-$codigo%")->count();
 
-        $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where(function ($query) use ($psid, $clienteid) {
-            $query->where("contrato.ps_id", "like", $psid)
-            ->orWhere("contrato.cliente_id", "like", $clienteid);
-        })        
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->where('status', 'Activado')
-        ->where('tipo_id', 2)
-        ->count();
+        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+        if (strlen($cliente_con) > 0) {
+            $clienteid = $cliente_con->id;
 
-        $contratos_mensuales = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where(function ($query) use ($psid, $clienteid) {
-            $query->where("contrato.ps_id", "like", $psid)
-            ->orWhere("contrato.cliente_id", "like", $clienteid);
-        })        
-        ->where("oficina.codigo_oficina", "like", $codigo)        
-        ->where('status', 'Activado')
-        ->where('tipo_id', 1)
-        ->count();
+            $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })        
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->where('tipo_id', 2)
+            ->count();
 
-        $contratos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where(function ($query) use ($psid, $clienteid) {
-            $query->where("contrato.ps_id", "like", $psid)
-            ->orWhere("contrato.cliente_id", "like", $clienteid);
-        })
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->where('status', 'Activado')
-        ->count();
+            $contratos_mensuales = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })        
+            ->where("oficina.codigo_oficina", "like", $codigo)        
+            ->where('status', 'Activado')
+            ->where('tipo_id', 1)
+            ->count();
+
+            $contratos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->count();
+            
+            $convenios = Convenio::join('ps', 'ps.id', '=', 'convenio.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("convenio.ps_id", "like", $psid)
+                ->orWhere("convenio.cliente_id", "like", $clienteid);
+            })
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->count();
+        }else{
+            $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where("contrato.ps_id", "like", $psid)
+            ->where("contrato.cliente_id", "like", $clienteid)
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->where('tipo_id', 2)
+            ->count();
+
+            $contratos_mensuales = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where("contrato.ps_id", "like", $psid)
+            ->where("contrato.cliente_id", "like", $clienteid)
+            ->where("oficina.codigo_oficina", "like", $codigo)        
+            ->where('status', 'Activado')
+            ->where('tipo_id', 1)
+            ->count();
+
+            $contratos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where("contrato.ps_id", "like", $psid)
+            ->where("contrato.cliente_id", "like", $clienteid)
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->count();
+            
+            $convenios = Convenio::join('ps', 'ps.id', '=', 'convenio.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where("convenio.ps_id", "like", $psid)
+            ->where("convenio.cliente_id", "like", $clienteid)
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('status', 'Activado')
+            ->count();
+        }
+
         
-        $convenios = Convenio::join('ps', 'ps.id', '=', 'convenio.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where(function ($query) use ($psid, $clienteid) {
-            $query->where("convenio.ps_id", "like", $psid)
-            ->orWhere("convenio.cliente_id", "like", $clienteid);
-        })
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->where('status', 'Activado')
-        ->count();
-
-        $pagospsContratos = PagoPS::join("contrato", "contrato.id", "=", "pago_ps.contrato_id")
-        ->join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("contrato.ps_id", "like", $psid)
-        ->where("contrato.cliente_id", "like", $clienteid)
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->count();
-
-        $pagospsConvenios = PagoPSConvenio::join("convenio", "convenio.id", "=", "pago_ps_convenio.convenio_id")
-        ->join('ps', 'ps.id', '=', 'convenio.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("convenio.ps_id", "like", $psid)
-        ->where("convenio.cliente_id", "like", $clienteid)
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->count();
         
-        $pagosCliente = PagoCliente::join("contrato", "contrato.id", "=", "pago_cliente.contrato_id")
-        ->join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-        ->where("contrato.ps_id", "like", $psid)
-        ->where("contrato.cliente_id", "like", $clienteid)
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->count();
-
         $fecha = Carbon::now()->format('Y-m-d');
 
         if(auth()->user()->is_admin || auth()->user()->is_procesos){
@@ -136,10 +152,6 @@ class DashboardController extends Controller
             "contratos" => $contratos,
             "convenios" => $convenios,
             
-            "pagospsContratos" => $pagospsContratos,
-            "pagospsConvenios" => $pagospsConvenios,
-            "pagosCliente" => $pagosCliente,
-
             "agenda" => $agenda
         );
 

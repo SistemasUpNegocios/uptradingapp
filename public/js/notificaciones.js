@@ -34,17 +34,33 @@ $(document).ready(function () {
                     let notif = data.message.split(": ");
                     let titulo = notif[0];
                     let mensaje = notif[1];
+                    let imagen = "../../img/usuarios/" + data.image;
+                    let id = response.notificaciones[0].user_id;
 
-                    Push.create(titulo, {
-                        body: mensaje,
-                        icon: "../../img/usuarios/" + data.image,
-                        timeout: 10000,
-                        vibrate: [200, 100],
-                        onClick: function () {
-                            window.focus();
-                            this.close();
-                        },
-                    });
+                    console.log(data);
+                    if (id == data.id) {
+                        if (
+                            window.Notification &&
+                            Notification.permission === "granted"
+                        ) {
+                            new Notification(titulo, {
+                                body: mensaje,
+                                icon: imagen,
+                            });
+                        } else if (
+                            window.Notification &&
+                            Notification.permission !== "denied"
+                        ) {
+                            Notification.requestPermission(function (status) {
+                                if (status === "granted") {
+                                    new Notification(titulo, {
+                                        body: mensaje,
+                                        icon: imagen,
+                                    });
+                                }
+                            });
+                        }
+                    }
                 });
 
                 var contNotif = `
@@ -63,7 +79,6 @@ $(document).ready(function () {
                 var i = 0;
                 response.notificaciones.map(function (notificacion) {
                     id = notificacion.user_id;
-
                     contNotif += `
                             <div class="d-flex">
                                 <div>
@@ -195,7 +210,8 @@ $(document).ready(function () {
         $.get({
             url: "/admin/showNotificaciones",
             success: function (response) {
-                var contNotif = `
+                if (response.notificaciones.length > 0) {
+                    var contNotif = `
                         <li class="dropdown-header">
                             <span id="numeroNotif"></span>
                             <a href="/admin/notificacion">
@@ -209,12 +225,12 @@ $(document).ready(function () {
                         <li class="message-item">
                             <div class="text-center">
                     `;
-                var i = 0;
-                response.notificaciones.map(function (notificacion) {
-                    id = notificacion.user_id;
+                    var i = 0;
+                    response.notificaciones.map(function (notificacion) {
+                        id = notificacion.user_id;
 
-                    contNotif += `
-                                <div class="d-flex mt-3">
+                        contNotif += `
+                                <div class="d-flex">
                                     <div>
                                         <i class="bi bi-bell-fill pe-2 text-muted" style="font-size: 14px"></i>
                                     </div>
@@ -232,9 +248,9 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                     `;
-                    i++;
-                });
-                contNotif += `
+                        i++;
+                    });
+                    contNotif += `
                             </div>
                         </li>
                         <li>
@@ -244,18 +260,43 @@ $(document).ready(function () {
                             <a href="/admin/notificacion">Ver todas las notificaciones</a>
                         </li>
                     `;
-                $("#contNotificaciones").empty();
-                $("#contNotificaciones").append(contNotif);
-                if (response.notificacionesCount == 1) {
-                    $("#numeroNotif").text(
-                        `Tienes ${response.notificacionesCount} notificacion nueva`
-                    );
+                    $("#contNotificaciones").empty();
+                    $("#contNotificaciones").append(contNotif);
+                    if (response.notificacionesCount == 1) {
+                        $("#numeroNotif").text(
+                            `Tienes ${response.notificacionesCount} notificacion nueva`
+                        );
+                    } else {
+                        $("#numeroNotif").text(
+                            `Tienes ${response.notificacionesCount} notificaciones nuevas`
+                        );
+                    }
+                    $("#numeroNotifBadge").text(response.notificacionesCount);
                 } else {
-                    $("#numeroNotif").text(
-                        `Tienes ${response.notificacionesCount} notificaciones nuevas`
-                    );
+                    $("#contNotificaciones").empty();
+                    $("#contNotificaciones").append(`
+                        <li class="dropdown-header">
+                            <span id="numeroNotif">Tienes 0 notificaciones nuevas</span>
+                            <a href="/admin/notificacion"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todo</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <div class="text-center">
+                                <p>No tienes ninguna notificación pendiente</p>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="/admin/notificacion">Ver todas las notificaciones</a>
+                        </li>
+                    `);
+                    $("#numeroNotifBadge").text(0);
                 }
-                $("#numeroNotifBadge").text(response.notificacionesCount);
             },
             error: function (error) {
                 console.log(error);
@@ -269,7 +310,6 @@ $(document).ready(function () {
             data: { id: id, status: "Leida" },
             url: "/admin/editNotificaciones",
             success: function (response) {
-                $("#numeroNotif").text("Tienes 0 notificaciones nuevas");
                 $("#numeroNotifBadge").text(0);
             },
             error: function (error) {

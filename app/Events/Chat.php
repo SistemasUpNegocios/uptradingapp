@@ -13,11 +13,13 @@ class Chat implements ShouldBroadcast
 
   public $message;
   public $image;
+  public $id;
 
-  public function __construct($message, $image)
+  public function __construct($message, $image, $id)
   {
       $this->message = $message;
       $this->image = $image;
+      $this->id = $id;
   }
 
   public function broadcastOn()

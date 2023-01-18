@@ -22,8 +22,8 @@
             <div class="col-lg-12">
                 <div class="row">
             
-                    {{-- agenda --}}
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
+                        {{-- agenda --}}
                         <div class="col-md-12">
                             <div class="card info-card machines-card">
                                 <div class="card-body pb-0">
@@ -157,7 +157,7 @@
                         </div>
 
                         {{-- gestion de PS y Clientes --}}
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                             <div class="col-md-6">
                                 <div class="card info-card associates-card">
             

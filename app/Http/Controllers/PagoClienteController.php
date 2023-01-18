@@ -48,25 +48,40 @@ class PagoClienteController extends Controller
         $codigo = session('codigo_oficina');
 
         if (auth()->user()->is_ps_gold) {
-            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
-            $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
             $psid = $ps_cons->id;
-            $clienteid = $cliente_con->id;
         }
 
-        $cliente = DB::table('contrato')
-            ->join('ps', 'ps.id', '=', 'contrato.ps_id')
-            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-            ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
-            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-            ->select(DB::raw("cliente.codigoCliente, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre"))
-            ->where(function ($query) use ($psid, $clienteid) {
-                $query->where("contrato.ps_id", "like", $psid)
-                ->orWhere("contrato.cliente_id", "like", $clienteid);
-            })->where("contrato.status", "!=", "Cancelado")
-            ->where("contrato.status", "!=", "Finiquitado")
-            ->distinct("cliente.clientenombre")
-            ->get();
+        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+        if (strlen($cliente_con) > 0) {
+            $clienteid = $cliente_con->id;
+            $cliente = DB::table('contrato')
+                ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+                ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("cliente.codigoCliente, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre"))
+                ->where(function ($query) use ($psid, $clienteid) {
+                    $query->where("contrato.ps_id", "like", $psid)
+                    ->orWhere("contrato.cliente_id", "like", $clienteid);
+                })->where("contrato.status", "!=", "Cancelado")
+                ->where("contrato.status", "!=", "Finiquitado")
+                ->distinct("cliente.clientenombre")
+                ->get();
+        }else{
+            $cliente = DB::table('contrato')
+                ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+                ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("cliente.codigoCliente, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre"))            
+                ->where("contrato.ps_id", "like", $psid)
+                ->where("contrato.cliente_id", "like", $clienteid)
+                ->where("contrato.status", "!=", "Cancelado")
+                ->where("contrato.status", "!=", "Finiquitado")
+                ->distinct("cliente.clientenombre")
+                ->get();
+        }
 
         return datatables()->of($cliente)->addColumn('enlace', 'pagocliente.enlace')->rawColumns(['enlace'])->toJson();
     }

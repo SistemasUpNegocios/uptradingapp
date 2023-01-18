@@ -150,7 +150,7 @@
                 <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)                    
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                     @if (auth()->user()->id != 1)
                         <li>
                             <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
@@ -228,7 +228,7 @@
             </li>
         @endif
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond|| auth()->user()->is_ps_gold)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/formulario')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/formulario') }}">

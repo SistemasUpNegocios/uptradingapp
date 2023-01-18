@@ -7,7 +7,9 @@
     <form method="POST" action="" class="login">
         @csrf
 
-        <img class="imgSubtitle" src="{{ asset('img/logo.png') }}" alt="Logo">
+        <div class="img_up">
+            <img class="imgSubtitle" src="{{ asset('img/logo.png') }}" alt="Logo">
+        </div>
 
         @error('message')
             <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

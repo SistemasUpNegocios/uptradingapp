@@ -27228,6 +27228,31 @@ a {
     color: #fff !important;
 }
 
+@media (max-width: 485px) {
+    .login {
+        width: 300px;
+    }
+    .img_up {
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .login {
+        width: 250px;
+    }
+
+    .login > button {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 340px) {
+    .login {
+        width: 200px;
+    }
+}
+
 /* 
 .imgSubtitle {
     width: 200px;

@@ -450,6 +450,7 @@ $(document).ready(function () {
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
+                tablaResumen();
                 let vacio = $("#vacioInput").val();
                 if (vacio == "vacio") {
                     $("#contImprimirResum").addClass("d-none");
