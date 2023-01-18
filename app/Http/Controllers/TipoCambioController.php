@@ -26,7 +26,8 @@ class TipoCambioController extends Controller
     {
 
         $tipo_cambio = TipoCambio::join('contrato', 'contrato.id', 'tipo_cambio.contrato_id')
-            ->select("tipo_cambio.id", "tipo_cambio.fecha", "tipo_cambio.valor", "contrato.contrato")
+            ->select("tipo_cambio.id", "tipo_cambio.fecha", "tipo_cambio.valor", "contrato.contrato", "tipo_cambio.memo")
+            ->orderBy('tipo_cambio.fecha', 'desc')
             ->get();
 
         return datatables()->of($tipo_cambio)->addColumn('btn', 'tipo-cambio.buttons')->rawColumns(['btn'])->toJson();
