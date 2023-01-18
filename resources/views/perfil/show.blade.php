@@ -69,18 +69,22 @@
                             </div>
                             <div class="col-sm-8">
                                 <p class="text-muted mb-0" id="perfilPrivilegio">
-                                    @if (auth()->user()->is_ps_gold)
+                                    @if(auth()->user()->is_root)
+                                        SUPERUSUARIO
+                                    @elseif(auth()->user()->is_admin || auth()->user()->is_procesos)
+                                        ADMINISTRADORA
+                                    @elseif(auth()->user()->is_admin || auth()->user()->is_procesos)
+                                        CONTADORA
+                                    @elseif (auth()->user()->is_ps_diamond)
+                                        PS DIAMOND
+                                    @elseif(auth()->user()->is_ps_gold)
                                         PS GOLD
                                     @elseif(auth()->user()->is_ps_silver)
                                         PS SILVER
                                     @elseif(auth()->user()->is_cliente)
-                                        CLIENTE
-                                    @elseif (auth()->user()->is_cliente_ps_gold)
-                                        CLIENTE & PS GOLD
-                                    @elseif(auth()->user()->is_cliente_ps_silver)
-                                        CLIENTE & PS SILVER
+                                        CLIENTE                                                      
                                     @else
-                                        <span style="text-transform: uppercase">{{ auth()->user()->privilegio }}</span>
+                                        Usuario de <span style="text-transform: uppercase">{{ auth()->user()->privilegio }}</span>
                                     @endif
                                 </p>
                             </div>

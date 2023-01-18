@@ -32,7 +32,7 @@
 
   <div style="padding-top: 6rem;" class="text-right">
     <p style="font-size: 12px; margin-bottom: 0 !important; color: #000">
-      <b>Victoria de Durango, Durango a {{ \Carbon\Carbon::now()->formatLocalized('%d de %B de %Y') }}.</b>
+      <b>Victoria de Durango, Durango a {{ \Carbon\Carbon::parse($fecha_imprimir)->formatLocalized('%d de %B de %Y') }}.</b>
     </p>
     <p style="font-size: 13px; color: #000">
       <u>Pago: {{ $pago }}</u>

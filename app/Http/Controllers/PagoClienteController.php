@@ -21,7 +21,7 @@ class PagoClienteController extends Controller
 
     public function index()
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
             $contratos = Contrato::all();
             $ps = Ps::all();
             $clientes = Cliente::all();
@@ -69,6 +69,22 @@ class PagoClienteController extends Controller
                 ->distinct("cliente.clientenombre")
                 ->get();
         }else{
+            $cliente = DB::table('contrato')
+                ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+                ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("cliente.codigoCliente, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre"))            
+                ->where("contrato.ps_id", "like", $psid)
+                ->where("contrato.cliente_id", "like", $clienteid)
+                ->where("contrato.status", "!=", "Cancelado")
+                ->where("contrato.status", "!=", "Finiquitado")
+                ->distinct("cliente.clientenombre")
+                ->get();
+        }
+
+        if (auth()->user()->is_cliente) {
+            $clienteid = $cliente_con->id;
             $cliente = DB::table('contrato')
                 ->join('ps', 'ps.id', '=', 'contrato.ps_id')
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')

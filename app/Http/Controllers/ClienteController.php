@@ -212,40 +212,16 @@ class ClienteController extends Controller
                     $userId = intval($userId->id) + 1;
                     $pass = explode("@", $request->correo_institucional);
                     $user->password = $userId . $pass[0];
+                    $user->privilegio = 'cliente';
 
-                    $ps = Ps::select()->where("correo_institucional", strtolower($request->correo_institucional))->first();
-                    $oficina = Oficina::select()->where("codigo_oficina", "007")->first();
-
-                    if (!empty($ps)) {
-                        if ($oficina->id == $ps->oficina_id) {
-                            $user->privilegio = 'cliente_ps_gold';
-                        } else {
-                            $user->privilegio = 'cliente_ps_silver';
-                        }
-                    } else {
-                        $user->privilegio = 'cliente';
-                    }
                     $user->save();
                 } else {
-                    $ps = Ps::select()->where("correo_institucional", strtolower($request->correo_institucional))->first();
-                    $oficina = Oficina::select()->where("codigo_oficina", "007")->first();
-
-                    if (!empty($ps)) {
-                        if ($oficina->id == $ps->oficina_id) {
-                            $privilegio = 'cliente_ps_gold';
-                        } else {
-                            $privilegio = 'cliente_ps_silver';
-                        }
-                    } else {
-                        $privilegio = 'cliente';
-                    }
-
                     User::where('correo', strtolower($request->input('correo_institucional')))
                         ->update([
                             'nombre' => strtoupper($request->nombre),
                             "apellido_p" => strtoupper($request->apellidop),
                             "apellido_m" => strtoupper($request->apellidom),
-                            "privilegio" => $privilegio
+                            "privilegio" => "ps_silver"
                         ]);
                 }
                 return response($cliente);

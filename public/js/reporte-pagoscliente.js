@@ -15,6 +15,11 @@ $(document).ready(function () {
         },
     });
 
+    let date = formatDate(new Date());
+    date = date.split("/").reverse().join("-");
+
+    $("#dateInput").val(date);
+
     const tablaResumen = () => {
         var table = $("#resumenPagoCliente").DataTable({
             language: {
@@ -362,31 +367,43 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#imprimirReporte", function () {
-        var formatearCantidad = new Intl.NumberFormat("es-MX", {
-            style: "currency",
-            currency: "MXN",
-            minimumFractionDigits: 2,
-        });
+        let date_valor = $("#dateInput").val();
+        if (date_valor.length > 0) {
+            var formatearCantidad = new Intl.NumberFormat("es-MX", {
+                style: "currency",
+                currency: "MXN",
+                minimumFractionDigits: 2,
+            });
 
-        let pago = $(this).data("pago");
-        let cliente = $(this).data("cliente");
-        let fecha = $(this).data("fecha");
-        let contrato = $(this).data("contrato");
-        let contratoid = $(this).data("contratoid");
-        let dolar = $("#dolarInput").val();
-        let rendimiento = $(this).data("rendimientoini");
+            let pago = $(this).data("pago");
+            let cliente = $(this).data("cliente");
+            let fecha = $(this).data("fecha");
+            let contrato = $(this).data("contrato");
+            let contratoid = $(this).data("contratoid");
+            let dolar = $("#dolarInput").val();
+            let rendimiento = $(this).data("rendimientoini");
 
-        rendimiento = formatearCantidad
-            .format(parseFloat(rendimiento) * parseFloat(dolar))
-            .replaceAll("$", "")
-            .replaceAll(",", "");
+            rendimiento = formatearCantidad
+                .format(parseFloat(rendimiento) * parseFloat(dolar))
+                .replaceAll("$", "")
+                .replaceAll(",", "");
 
-        let letra = numeroALetrasMXN(rendimiento);
+            let letra = numeroALetrasMXN(rendimiento);
 
-        window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}`,
-            "_blank"
-        );
+            window.open(
+                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}`,
+                "_blank"
+            );
+        } else {
+            Swal.fire({
+                icon: "warning",
+                title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fecha</h1>',
+                html: '<p style="font-family: Poppins">La fecha a imprimir no puede estar vacía.</p>',
+                confirmButtonText:
+                    '<a style="font-family: Poppins">Aceptar</a>',
+                confirmButtonColor: "#01bbcc",
+            });
+        }
     });
 
     $(document).on("click", "#editarInput", function () {

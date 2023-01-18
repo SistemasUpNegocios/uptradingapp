@@ -64,6 +64,16 @@ class User extends Authenticatable
         return $this->privilegio == 'procesos';
     }
 
+    public function getIsEgresosAttribute()
+    {
+        return $this->privilegio == "egresos";
+    }
+
+    public function getIsContabilidadAttribute()
+    {
+        return $this->privilegio == "contabilidad";
+    }    
+
     public function getIsPsDiamondAttribute()
     {
         return $this->privilegio == "ps_diamond";
@@ -82,32 +92,7 @@ class User extends Authenticatable
     public function getIsClienteAttribute()
     {
         return $this->privilegio == "cliente";
-    }
-
-    public function getIsContabilidadAttribute()
-    {
-        return $this->privilegio == "contabilidad";
-    }
-
-    public function getIsEgresosAttribute()
-    {
-        return $this->privilegio == "egresos";
-    }
-
-    public function getIsEstandarAttribute()
-    {
-        return $this->privilegio == "estandar";
-    }
-
-    public function getIsClientePsSilverAttribute()
-    {
-        return $this->privilegio == "cliente_ps_silver";
-    }
-
-    public function getIsClientePsGoldAttribute()
-    {
-        return $this->privilegio == "cliente_ps_gold";
-    }
+    }    
 
     public function chats()
     {

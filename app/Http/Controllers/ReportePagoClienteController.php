@@ -142,6 +142,7 @@ class ReportePagoClienteController extends Controller
             "contrato" => $request->contrato,
             "fecha" => $fecha,
             "letra" => $request->letra,
+            "fecha_imprimir" => $request->fecha_imprimir,
         );
 
         $tipo_cambio = new TipoCambio;

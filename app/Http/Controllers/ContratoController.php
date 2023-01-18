@@ -33,7 +33,7 @@ class ContratoController extends Controller
     public function index()
     {
 
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
 
@@ -71,8 +71,8 @@ class ContratoController extends Controller
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
             $psid = $ps_cons->id;
         }
-        
-        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+
+        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();        
         if (strlen($cliente_con) > 0) {
             $clienteid = $cliente_con->id;
             $contrato = DB::table('contrato')
@@ -90,6 +90,22 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Finiquitado")
                 ->get();
         }else{
+            $contrato = DB::table('contrato')
+                ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+                ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.pendiente_id AS pendienteid, contrato.tipo_pago, contrato.monto_pago, contrato.comprobante_pago"))
+                ->where("contrato.ps_id", "like", $psid)
+                ->where("contrato.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where("contrato.status", "!=", "Cancelado")
+                ->where("contrato.status", "!=", "Finiquitado")
+                ->get();
+        }
+
+        if (auth()->user()->is_cliente) {
+            $clienteid = $cliente_con->id;
             $contrato = DB::table('contrato')
                 ->join('ps', 'ps.id', '=', 'contrato.ps_id')
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')

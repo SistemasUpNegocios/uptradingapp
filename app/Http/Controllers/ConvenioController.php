@@ -24,7 +24,7 @@ class ConvenioController extends Controller
     public function index()
     {
 
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
 
@@ -73,6 +73,20 @@ class ConvenioController extends Controller
                 ->where("oficina.codigo_oficina", "like", $codigo)
                 ->get();
         }else{
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where("convenio.ps_id", "like", $psid)
+                ->where("convenio.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->get();
+        }
+
+        if (auth()->user()->is_cliente) {
+            $clienteid = $cliente_con->id;
             $convenio = DB::table('convenio')
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
