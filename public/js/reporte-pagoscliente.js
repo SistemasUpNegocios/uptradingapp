@@ -480,4 +480,65 @@ $(document).ready(function () {
             },
         });
     });
+
+    $(document).on("click", ".abrirWhats", function () {
+        let cliente = $(this).data("cliente");
+        let contrato = $(this).data("contrato");
+        let pago = $(this).data("pago");
+        let rendimiento = $(this).data("rendimiento");
+        let clientenumero = $(this).data("clientenumero");
+        let fecha = $(this).data("fecha");
+
+        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\nAtte: Ma. Elena.\nDepartamento de pagos.`;
+
+        $("#nombreClienteInput").val(cliente);
+        $("#numeroClienteInput").val(clientenumero);
+        $("#mensajeInput").val(mensaje);
+
+        $("#formModalWhats").modal("show");
+    });
+
+    $(document).on("click", "#enviarWhats", function () {
+        let cliente = $("#nombreClienteInput").val();
+        let numero = $("#numeroClienteInput").val();
+        let mensaje = $("#mensajeInput").val();
+
+        $.ajax({
+            type: "GET",
+            data: { cliente: cliente, numero: numero, mensaje: mensaje },
+            url: "/admin/enviarWhatsPagoCliente",
+            success: function (response) {
+                if (response == "hecho") {
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
+                        html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${cliente}</b>, con número de telefono <b>${numero}</b>.</p>`,
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                    $("#formModalWhats").modal("hide");
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
+                        html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                }
+            },
+            error: function (response) {
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
+                    html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+        });
+    });
 });

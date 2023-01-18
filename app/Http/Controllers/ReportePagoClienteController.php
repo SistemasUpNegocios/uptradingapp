@@ -38,7 +38,7 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
             ->where(function ($query) use ($psid, $clienteid) {
                 $query->where("contrato.ps_id", "like", $psid)
@@ -110,7 +110,7 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->where('amortizacion.fecha', $request->fecha)
             ->where(function ($query) use ($psid, $clienteid) {
                 $query->where("contrato.ps_id", "like", $psid)
@@ -162,6 +162,23 @@ class ReportePagoClienteController extends Controller
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
 
         return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin, $request->dolar), "pagos a clientes del día $fecha_inicio a $fecha_fin.xlsx");
+    }
+    
+    public function enviarWhats(Request $request)
+    {
+        //aquí recibes los datos del formulario
+        $nombre = $request->cliente;
+        $numero = $request->numero;
+        $mensaje = $request->mensaje;
+        
+        //aquí va tu código para enviar el mensaje
+
+
+        //si salió bien pones este return
+        return response("hecho");
+
+        //si salió mal pones este return
+        return response("error");
     }
 
 }

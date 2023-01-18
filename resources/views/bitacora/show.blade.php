@@ -83,7 +83,7 @@
                                     <label for="floatingInput">Nota</label>
                                 </div>
                             </div>
-                        </div>         
+                        </div>
                         <div id="alertMessage"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
