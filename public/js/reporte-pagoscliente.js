@@ -489,7 +489,7 @@ $(document).ready(function () {
         let clientenumero = $(this).data("clientenumero");
         let fecha = $(this).data("fecha");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\nAtte: Ma. Elena.\nDepartamento de pagos.`;
+        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
 
         $("#nombreClienteInput").val(cliente);
         $("#numeroClienteInput").val(clientenumero);
