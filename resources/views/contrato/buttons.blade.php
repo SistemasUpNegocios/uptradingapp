@@ -57,7 +57,7 @@
         @endif
         @endif
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)    
+        @if (auth()->user()->is_root)    
             <input id="convenioStatusInput" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-status="{{ $status }}" @if ($status=="Activado" ) {{"checked"}} @endif>
             <label class="form-check-label ms-1" for="contratoStatusInput">@if ($status == "Activado") Desactivar contrato @else Activar contrato @endif</label>
         @endif

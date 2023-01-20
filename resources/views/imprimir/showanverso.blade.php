@@ -328,8 +328,8 @@
     @if (!empty($holograma))
       <p class="holo_inferior"><small>{{ $holograma }}</small></p>
       <img class="imgUP_inferior_izq" src="{{ public_path('img/qr.png') }}" alt="Logo uptrading">
-      
     @endif
+    
     <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
     <img class="imgUP_centro" src="{{ public_path('img/logo_centro.png') }}" alt="Logo uptrading">
     <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">

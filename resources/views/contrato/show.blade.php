@@ -289,20 +289,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="display: none">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="hidden" class="form-control" placeholder="Ingresa el pago de la comision"
-                                        id="PagoComisionSerie1Input" name="serie1" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="hidden" class="form-control" placeholder="Ingresa el pago de la comision"
-                                        id="PagoComisionSerieNInput" name="serieN" required>
-                                </div>
-                            </div>
-                        </div>
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                             <div class="row">
                                 <div class="col-md-6 col-12">

@@ -104,45 +104,6 @@ $(document).ready(function () {
         var tipo = $(this).data("tipo");
         var documento = $(this).data("documento");
 
-        // let nombre = $("#nombreInput").val();
-        // $("#nombreInput").prop("readonly", true);
-
-        // let tipo = $("#tipoInput").val();
-        // $("#tipoInput").prop("disabled", true);
-
-        // var documento = $(this).data("documento");
-        // $("#documentoInput").prop("disabled", true);
-
-        // if (documento.length > 0) {
-        //     $("#documentoInput").addClass("is-valid");
-        //     $("#documentoInput").removeClass("is-invalid");
-
-        //     $("#documentoDescModal").attr("download", `${documento}`);
-        //     $("#documentoDescModal").attr(
-        //         "href",
-        //         `../documentos/${tipo}/${documento}`
-        //     );
-        //     $("#documentoDescModal").removeClass("d-none");
-
-        //     $("#documentoDes").attr("download", `${documento}`);
-        //     $("#documentoDes").attr(
-        //         "href",
-        //         `../documentos/${tipo}/${documento}`
-        //     );
-        // } else {
-        //     $("#documentoInput").addClass("is-invalid");
-        //     $("#documentoInput").removeClass("is-valid");
-
-        //     $("#documentoDescModal").addClass("d-none");
-        // }
-
-        // $("#modalTitle").text(`Vista previa del documento: ${nombre}`);
-
-        // $("#formModal").modal("show");
-
-        // $("#btnCancel").text("Cerrar vista previa");
-        // $("#btnSubmit").hide();
-
         window.open(`../documentos/${tipo}/${documento}`, "_blank");
         console.log(documento);
     });
