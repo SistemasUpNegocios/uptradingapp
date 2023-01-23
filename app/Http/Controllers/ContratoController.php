@@ -1071,8 +1071,26 @@ class ContratoController extends Controller
     public function getClave(Request $request)
     {
         $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+        $id_user = auth()->user()->id;
 
             if (\Hash::check($request->clave, $clave->password)) {
+                if($request->status == "Activado"){
+                    $contrato = Contrato::find($request->id);
+                    $contrato->memo_status = "Contrato activado por id:$id_user";
+                    $contrato->save();
+                }elseif($request->status == "Pendiente de activación"){
+                    $contrato = Contrato::find($request->id);
+                    $contrato->memo_status = "Contrato desactivado por id:$id_user";
+                    $contrato->save();
+                }elseif($request->status == "Finiquitado"){
+                    $contrato = Contrato::find($request->id);
+                    $contrato->memo_status = "Contrato finiquitado por id:$id_user";
+                    $contrato->save();
+                }elseif($request->status == "Refrendado"){
+                    $contrato = Contrato::find($request->id);
+                    $contrato->memo_status = "Contrato refrendado por id:$id_user";
+                    $contrato->save();
+                }
                 return response("success");
             }else{
                 return response("error");

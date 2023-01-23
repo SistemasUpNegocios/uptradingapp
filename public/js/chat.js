@@ -20,7 +20,7 @@ $(document).ready(function () {
             `
             <div class="text-center" style="margin-top: 5rem">
                 <div class="spinner-border text-primary" role="status"></div>
-                <p class="text-primary">Cargando mensajes<span class = "dotting"> </span></p>
+                <p class="text-primary">Cargando mensajes<span class="dotting"> </span></p>
             </div>
             `
         );

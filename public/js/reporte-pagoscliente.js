@@ -509,10 +509,14 @@ $(document).ready(function () {
             url: "/admin/enviarWhatsPagoCliente",
             success: function (response) {
                 if (response == "hecho") {
-                    d = "https://web.whatsapp.com/send",
-                    f = "&text=" + mensaje;
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-                    var d = "whatsapp://send";
+                    (d = "https://web.whatsapp.com/send"),
+                        (f = "&text=" + mensaje);
+                    if (
+                        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                            navigator.userAgent
+                        )
+                    )
+                        var d = "whatsapp://send";
                     var g = d + "?phone=" + numero + f;
                     window.open(g, "_blank");
                     Swal.fire({

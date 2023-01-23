@@ -367,6 +367,8 @@ $(document).ready(function () {
                     url: "/admin/showClave",
                     data: {
                         clave: clave,
+                        id: id,
+                        status: statusValor,
                     },
                     success: function (result) {
                         if (result == "success") {
@@ -435,6 +437,7 @@ $(document).ready(function () {
         e.preventDefault();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
+        $("option:selected", "#statusInput").prop("disabled", false);
 
         $.ajax({
             type: "POST",
@@ -445,10 +448,17 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
+                let contrato_numero = $("#contratoInput").val();
+                $("option:selected", "#statusInput").prop("disabled", true);
                 $("#formModal").modal("hide");
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
+                    window.open(
+                        `https://web.whatsapp.com/send?phone=6188397278&text=Se ha generado un nuevo contrato con número: ${contrato_numero}, por favor actívalo.`,
+                        "_blank"
+                    );
+
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato añadido</h1>',

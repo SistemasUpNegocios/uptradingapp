@@ -35,7 +35,7 @@ class imprimirController extends Controller
             ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
             ->join('modelo_contrato', 'modelo_contrato.id', '=', 'tipo_contrato.modelo_id')
             ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id, contrato.folio, contrato.operador, contrato.operador_ine, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.fecha_renovacion, contrato.fecha_pago, contrato.contrato, ps.id AS psid, contrato.porcentaje, contrato.inversion_us, contrato.inversion_letra_us, contrato.inversion, contrato.inversion_letra, cliente.id AS clienteid,  CONCAT(cliente.nombre,' ',cliente.apellido_p,' ',cliente.apellido_m) AS clientenombre, CONCAT(cliente.nombre,' ',cliente.apellido_p,' ',cliente.apellido_m) AS clientenombrePDF, CONCAT(cliente.direccion, ' ', cliente.colonia) AS clientedomicilio, cliente.cp AS codigopostal, cliente.ine AS clienteine, cliente.pasaporte AS clientepasaporte, cliente.celular AS clientecelular, cliente.correo_personal AS clientecorreo, tipo_contrato.id AS tipoid, tipo_contrato.tipo AS tipocontrato, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, modelo_contrato.id AS modeloid, contrato.inversion, contrato.tipo_cambio, tipo_contrato.tabla, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, pago_ps.fecha_pago AS fecha_pago_ps, pago_ps.pago AS pago_ps, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, contrato.fecha_carga"))
+            ->select(DB::raw("contrato.id, contrato.folio, contrato.operador, contrato.operador_ine, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.fecha_renovacion, contrato.fecha_pago, contrato.contrato, ps.id AS psid, contrato.porcentaje, contrato.inversion_us, contrato.inversion_letra_us, contrato.inversion, contrato.inversion_letra, contrato.memo_status, cliente.id AS clienteid,  CONCAT(cliente.nombre,' ',cliente.apellido_p,' ',cliente.apellido_m) AS clientenombre, CONCAT(cliente.nombre,' ',cliente.apellido_p,' ',cliente.apellido_m) AS clientenombrePDF, CONCAT(cliente.direccion, ' ', cliente.colonia) AS clientedomicilio, cliente.cp AS codigopostal, cliente.ine AS clienteine, cliente.pasaporte AS clientepasaporte, cliente.celular AS clientecelular, cliente.correo_personal AS clientecorreo, tipo_contrato.id AS tipoid, tipo_contrato.tipo AS tipocontrato, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, modelo_contrato.id AS modeloid, contrato.inversion, contrato.tipo_cambio, tipo_contrato.tabla, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, pago_ps.fecha_pago AS fecha_pago_ps, pago_ps.pago AS pago_ps, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, contrato.fecha_carga"))
             ->where('contrato.id', '=', $request->id)
             ->get();
 
@@ -66,13 +66,30 @@ class imprimirController extends Controller
             ->get();
 
         if(!empty($contratos[0]->fecha_carga)){
-            $holograma_fecha = strtotime($contratos[0]->fecha_carga);
-            $holograma = $holograma_fecha."U".$contratos[0]->inversion_us;
+            $holograma_fecha = strtotime($contratos[0]->fecha_carga);            
+            $holograma = $holograma_fecha."U".$contratos[0]->inversion_us;            
         }else{
             $holograma = "";
         }
 
-        $pdf = PDF::loadView('imprimir.showanverso', ['contratos' => $contratos, 'pagos_ps' => $pagos_ps, 'beneficiarios' => $beneficiarios, 'clausulas' => $clausulas, 'amortizaciones' => $amortizaciones, "holograma" => $holograma]);
+        if(!empty($contratos[0]->fecha_carga)){
+            if(!empty($contratos[0]->memo_status)){
+                $memo = explode(":", $contratos[0]->memo_status);
+
+                if (isset($memo[1])) {
+                    $holograma2 = $holograma_fecha."U".$contratos[0]->inversion_us."P".$memo[1];
+                }else{
+                    $holograma2 = "";
+                }
+
+            }else{
+                $holograma2 = "";
+            }
+        }else{
+            $holograma2 = "";
+        }
+
+        $pdf = PDF::loadView('imprimir.showanverso', ['contratos' => $contratos, 'pagos_ps' => $pagos_ps, 'beneficiarios' => $beneficiarios, 'clausulas' => $clausulas, 'amortizaciones' => $amortizaciones, "holograma" => $holograma, "holograma2" => $holograma2]);
 
         $fecha_hoy = Carbon::now();
         $nombreDescarga = $contratos[0]->contrato.'_'.$contratos[0]->clientenombrePDF.'_'.$fecha_hoy->format('d-m-Y').'.pdf';
@@ -80,6 +97,6 @@ class imprimirController extends Controller
         $visualizacion = $pdf->stream($nombreDescarga);
         Storage::disk('contratos')->put($nombreDescarga, $visualizacion);
 
-        return $visualizacion;        
+        return $visualizacion;
     }
 }

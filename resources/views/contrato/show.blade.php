@@ -214,9 +214,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" step="any" class="form-control"
-                                        placeholder="Ingresa el folio del contrato" id="folioInput" name="folio" value="0"
-                                        required>
+                                    <input type="text" step="any" class="form-control" placeholder="Ingresa el folio del contrato" id="folioInput" name="folio" value="0" required>
                                     <label for="folioInput">Ingresa el folio del contrato</label>
                                 </div>
                             </div>
@@ -238,17 +236,13 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"
-                                        placeholder="Ingresa el porcentaje" id="porcentajeInput" name="porcentaje" required
-                                        readonly>
+                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa el porcentaje" id="porcentajeInput" name="porcentaje" required readonly>
                                     <label for="porcentajeInput">Porcentaje del rendimiento de contrato (%)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa el tipo de cambio" id="tipoCambioInput" name="tipo_cambio"
-                                        required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio" id="tipoCambioInput" name="tipo_cambio" required>
                                     <label for="tipoCambioInput">Tipo de cambio MXN - USD</label>
                                 </div>
                             </div>
@@ -256,17 +250,13 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión" id="inversionInput" name="inversion"
-                                        required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión" id="inversionInput" name="inversion" required>
                                     <label for="inversionInput">Cantidad de inversión (MXN)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión en USD" id="inversionUsInput"
-                                        name="inversion_us" required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en USD" id="inversionUsInput" name="inversion_us" required>
                                     <label for="inversionUsInput">Cantidad de inversión (USD)</label>
                                 </div>
                             </div>
@@ -274,29 +264,50 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetInput"
-                                        name="inversion_letra" style="height: 100px" required></textarea>
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetInput" name="inversion_letra" style="height: 100px" required></textarea>
                                     <label for="inversionLetInput">Cantidad de inversión en letra (MXN)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetUsInput"
-                                        name="inversion_letra_us" style="height: 100px" required></textarea>
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetUsInput" name="inversion_letra_us" style="height: 100px" required></textarea>
                                     <label for="inversionLetUsInput">Cantidad de inversión en letra (USD)</label>
                                 </div>
                             </div>
                         </div>
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                        @if (auth()->user()->is_root)
                             <div class="row">
-                                <div class="col-md-6 col-12">
+                                <div class="col-12">
                                     <div class="form-floating mb-3">
                                         <select name="status" class="form-control" id="statusInput" required>
                                             <option value="" disabled>Selecciona...</option>
                                             <option value="Pendiente de activación" selected>Pendiente de activación</option>
                                             <option value="Activado">Activado</option>
+                                            <option value="Finiquitado">Finiquitado</option>
+                                            <option value="Refrendado">Refrendado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Status del contrato</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-none" id="contMemoCan">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
+                                            id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
+                                        <label for="memoCanInput">Memo de cancelacion</label>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif(auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación">Pendiente de activación</option>
+                                            <option value="Activado" disabled>Activado</option>
                                             <option value="Finiquitado">Finiquitado</option>
                                             <option value="Refrendado">Refrendado</option>
                                             <option value="Cancelado">Cancelado</option>
@@ -335,8 +346,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de reintegro"
-                                        id="fechaReinInput" name="fecha_reintegro" required>
+                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de reintegro" id="fechaReinInput" name="fecha_reintegro" required>
                                     <label for="fechaReinInput">Fecha de reintegro</label>
                                 </div>
                             </div>
@@ -355,8 +365,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="Ingresa el memo de reintegro"
-                                        id="memoReinInput" name="memo_reintegro" style="height: 100px"></textarea>
+                                    <textarea class="form-control" placeholder="Ingresa el memo de reintegro" id="memoReinInput" name="memo_reintegro" style="height: 100px"></textarea>
                                     <label for="memoReinInput">Memo de reintegro</label>
                                 </div>
                             </div>
@@ -390,45 +399,35 @@
                                     <label class="fs-5"><strong>Tipo de pago</strong></label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="efectivoInput" name="tipo_pago[]"
-                                        value="efectivo">
+                                    <input class="form-check-input" type="checkbox" id="efectivoInput" name="tipo_pago[]" value="efectivo">
                                     <label class="form-check-label" for="efectivoInput">Efectivo</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="transferenciaSwissInput"
-                                        name="tipo_pago[]" value="transferencia_swiss_pool">
-                                    <label class="form-check-label" for="transferenciaSwissInput">Transferencia de
-                                        Swissquote a POOL</label>
+                                    <input class="form-check-input" type="checkbox" id="transferenciaSwissInput" name="tipo_pago[]" value="transferencia_swiss_pool">
+                                    <label class="form-check-label" for="transferenciaSwissInput">Transferencia de Swissquote a POOL</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="transferenciaMXInput"
-                                        name="tipo_pago[]" value="transferencia_mx_pool">
-                                    <label class="form-check-label" for="transferenciaMXInput">Transferencia directa MX a
-                                        POOL</label>
+                                    <input class="form-check-input" type="checkbox" id="transferenciaMXInput" name="tipo_pago[]" value="transferencia_mx_pool">
+                                    <label class="form-check-label" for="transferenciaMXInput">Transferencia directa MX a POOL</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ciBankInput" name="tipo_pago[]"
-                                        value="ci_bank">
+                                    <input class="form-check-input" type="checkbox" id="ciBankInput" name="tipo_pago[]" value="ci_bank">
                                     <label class="form-check-label" for="ciBankInput">CI BANK</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]"
-                                        value="HSBC">
+                                    <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]" value="HSBC">
                                     <label class="form-check-label" for="hsbcInput">HSBC</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="renovacionInput" name="tipo_pago[]"
-                                        value="renovacion">
+                                    <input class="form-check-input" type="checkbox" id="renovacionInput" name="tipo_pago[]" value="renovacion">
                                     <label class="form-check-label" for="renovacionInput">Renovación</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="rendimientosInput"
-                                        name="tipo_pago[]" value="rendimientos">
+                                    <input class="form-check-input" type="checkbox" id="rendimientosInput" name="tipo_pago[]" value="rendimientos">
                                     <label class="form-check-label" for="rendimientosInput">Rendimientos</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="comisionesInput"
-                                        name="tipo_pago[]" value="comisiones">
+                                    <input class="form-check-input" type="checkbox" id="comisionesInput" name="tipo_pago[]" value="comisiones">
                                     <label class="form-check-label" for="comisionesInput">Comisiones</label>
                                 </div>
                             </div>
@@ -436,59 +435,49 @@
                         <div class="row">
                             <div class="col-md-6 col-12" id="montoEfectivoCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en efectivo"
-                                        id="montoEfectivoInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en efectivo" id="montoEfectivoInput" name="monto_pago[]">
                                     <label for="montoEfectivoInput">Monto en efectivo</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoTransSwissPOOLCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa el monto de transferencia Swiss a POOL"
-                                        id="montoTransSwissPOOLInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto de transferencia Swiss a POOL" id="montoTransSwissPOOLInput" name="monto_pago[]">
                                     <label for="montoTransSwissPOOLInput">Monto de transferencia Swiss a POOL</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoTransMXPOOLCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa el monto de transferencia MX a POOL" id="montoTransMXPOOLInput"
-                                        name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto de transferencia MX a POOL" id="montoTransMXPOOLInput" name="monto_pago[]">
                                     <label for="montoTransMXPOOLInput">Monto de transferencia MX a POOL</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoBankCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en CI BANK"
-                                        id="montoBankInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en CI BANK" id="montoBankInput" name="monto_pago[]">
                                     <label for="montoBankInput">Monto en CI BANK</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoHSBCCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en HSBC"
-                                        id="montoHSBCInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en HSBC" id="montoHSBCInput" name="monto_pago[]">
                                     <label for="montoHSBCInput">Monto en HSBC</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoRenovacionCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en renovación"
-                                        id="montoRenovacionInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en renovación" id="montoRenovacionInput" name="monto_pago[]">
                                     <label for="montoRenovacionInput">Monto en renovación</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoRendimientosCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en rendimientos"
-                                        id="montoRendimientosInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en rendimientos" id="montoRendimientosInput" name="monto_pago[]">
                                     <label for="montoRendimientosInput">Monto en rendimientos</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoComisionesCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en comisiones"
-                                        id="montoComisionesInput" name="monto_pago[]">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en comisiones" id="montoComisionesInput" name="monto_pago[]">
                                     <label for="montoComisionesInput">Monto en comisiones</label>
                                 </div>
                             </div>
@@ -532,8 +521,7 @@
                                 <div class="file-uploadScanner1 mb-3">
                                     <label for="pictureInputScanner1">Contrato escaneado</label>
                                     <div class="image-upload-wrapScanner1">
-                                        <input class="file-upload-inputScanner1" type='file' name="anverso"
-                                            onchange="readURL(this);" accept="image/*" />
+                                        <input class="file-upload-inputScanner1" type='file' name="anverso" onchange="readURL(this);" accept="image/*" />
                                         <div class="drag-textScanner1">
                                             <h3>Arrastra una imagen o haz clic aquí</h3>
                                         </div>
@@ -541,9 +529,7 @@
                                     <div class="file-upload-contentScanner1">
                                         <img class="file-upload-imageScanner1" src="#" alt="Imagen subida" />
                                         <div class="image-title-wrapScanner1">
-                                            <button type="button" onclick="removeUpload()"
-                                                class="remove-imageScanner1">Eliminar <span
-                                                    class="image-titleScanner1">Imagen seleccionada</span></button>
+                                            <button type="button" onclick="removeUpload()" class="remove-imageScanner1">Eliminar <span class="image-titleScanner1">Imagen seleccionada</span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -551,10 +537,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="btnCancelScanner"
-                                data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn principal-button" id="btnSubmitScanner">Añadir
-                                contrato</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancelScanner" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn principal-button" id="btnSubmitScanner">Añadir contrato</button>
                         </div>
                     </form>
                 </div>
