@@ -192,7 +192,7 @@ class IntencionController extends Controller
             $fecha = Carbon::parse($fecha_inicio)->formatLocalized('%d de %B de %Y');
             $correo = $query[0]->email;
 
-            $nombreDescarga = "Intención de inversión " . $fecha_inicio . " $nombre.pdf";
+            $nombreDescarga = "Intención de inversión ".$fecha_inicio." ".$nombre."_".$request->id.".pdf";
             $visualizacion = $pdf->stream($nombreDescarga);
             
             Storage::disk('intencion')->put($nombreDescarga, $visualizacion);
@@ -508,5 +508,45 @@ class IntencionController extends Controller
         // $telefono = $query[0]->celular;
 
         return response($query);
+    }
+
+    public function intencion(Request $request)
+    {
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){
+            return view('intencioninversion.tabla');
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
+    }
+
+    public function getIntencion(Request $request)
+    {
+        $intencion = IntencionInversion::all();
+
+        return datatables()->of($intencion)->addColumn('btn', 'intencioninversion.buttons')->rawColumns(['btn'])->toJson();
+    }
+
+    public function deleteIntencion(Request $request)
+    {
+        if ($request->ajax()) {
+            $intencion = $request->id;
+            $bitacora_id = session('bitacora_id');
+
+            $log = new Log;
+
+            $log->tipo_accion = "Eliminación";
+            $log->tabla = "Intención de Inversión";
+            $log->id_tabla = $intencion;
+            $log->bitacora_id = $bitacora_id;
+
+            if ($log->save()) {
+
+                $intencion = IntencionInversion::find($request->id);
+                $nombre = "Intención de inversión ".$intencion->fecha_inicio." ".$intencion->nombre."_".$request->id.".pdf";
+                Storage::disk('intencion')->delete($nombre);
+
+                IntencionInversion::destroy($request->id);
+            }
+        }
     }
 }

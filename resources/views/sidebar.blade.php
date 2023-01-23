@@ -440,10 +440,15 @@
                                 <i class="bi bi-circle"></i><span>Preguntas</span>
                             </a>
                         </li>
-                    @endif
+                    @endif                    
                     <li>
                         <a href="{{ URL::to('admin/tipocambio') }}">
                             <i class="bi bi-circle"></i><span>Tipo de cambio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/intencion') }}">
+                            <i class="bi bi-circle"></i><span>Total de intenciones de inversión</span>
                         </a>
                     </li>
                 </ul>

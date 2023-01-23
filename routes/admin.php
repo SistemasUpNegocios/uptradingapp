@@ -86,7 +86,6 @@ Route::get('/admin/checkScanner', [App\Http\Controllers\ContratoEscaneadoControl
 Route::post('/admin/addScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'addScanner']);
 Route::post('/admin/editScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'editScanner']);
 
-
 // Rutas para gestión de contrato terminado
 Route::get('/admin/contratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'index'])->name('contratoTerminado');
 Route::get('/admin/showContratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'getContrato']);
@@ -207,6 +206,9 @@ Route::post('/admin/reporteIntencion', [App\Http\Controllers\IntencionController
 Route::get('/admin/pdfIntencion', [App\Http\Controllers\IntencionController::class, 'pdfIntencion']);
 Route::post('/admin/getClientes', [App\Http\Controllers\IntencionController::class, 'getClientes']);
 Route::post('/admin/getDatosCliente', [App\Http\Controllers\IntencionController::class, 'getDatosCliente']);
+Route::get('/admin/intencion', [App\Http\Controllers\IntencionController::class, 'intencion']);
+Route::get('/admin/showIntencion', [App\Http\Controllers\IntencionController::class, 'getIntencion']);
+Route::post('/admin/deleteIntencion', [App\Http\Controllers\IntencionController::class, 'deleteIntencion']);
 
 //Rutas para resumen de PS
 Route::get('/admin/resumenPS', [App\Http\Controllers\ResumenPSController::class, 'index'])->name('resumenps');
