@@ -33,7 +33,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             //PENDIENTES
-
             $pendientes = Pendiente::all();
             $pendientesCheck = Pendiente::select("primer_pago")->get();
             $fecha = \Carbon\Carbon::parse(date('d-m-Y'))->formatLocalized('%d de %B de %Y');
@@ -580,6 +579,8 @@ class Kernel extends ConsoleKernel
         ->weekdays()
         ->dailyAt("08:00")
         ->timezone('America/Mexico_City');
+
+        $schedule->command("backup:run")->weekdays()->dailyAt("14:41")->timezone('America/Mexico_City');
     }
 
     /**
