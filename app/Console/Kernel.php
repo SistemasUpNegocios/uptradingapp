@@ -577,10 +577,10 @@ class Kernel extends ConsoleKernel
 
         })
         ->weekdays()
-        ->dailyAt("08:00")
+        ->dailyAt("08:40")
         ->timezone('America/Mexico_City');
 
-        $schedule->command("backup:run")->weekdays()->dailyAt("14:41")->timezone('America/Mexico_City');
+        $schedule->command("backup:run --only-db")->weekdays()->dailyAt("08:30")->timezone('America/Mexico_City');
     }
 
     /**

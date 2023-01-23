@@ -328,6 +328,8 @@ $(document).ready(function () {
 
     table.on("change", ".status", function () {
         var checked = $(this).is(":checked");
+        let celular = $(this).data("celular");
+        let contrato = $(this).data("contrato");
 
         if (checked) {
             $(this).val("Activado");
@@ -383,6 +385,12 @@ $(document).ready(function () {
                                         icon: "success",
                                         title: "Estatus actualizado",
                                     });
+                                    if (statusValor == "Activado") {
+                                        window.open(
+                                            `https://web.whatsapp.com/send?phone=${celular}&text=Su contrato: ${contrato}, se ha activado con exito, lo esperamos en la oficina.`,
+                                            "_blank"
+                                        );
+                                    }
 
                                     table.ajax.reload(function () {
                                         if (statusValor == "Activado") {

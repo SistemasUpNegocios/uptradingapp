@@ -81,7 +81,7 @@
                                     <input type="text" class="form-control" title="Campo obligatorio / Solo letras"
                                         minlength="3" maxlength="75" pattern="[a-zA-Zá-úÁ-Ú ]+"
                                         placeholder="Ingresa el operador" id="operadorInput" name="operador"
-                                        value="Hilario Hamilton Herrera Cossain" required>
+                                        value="MARIA EUGENIA RINCON ACEVAL" required>
                                     <label for="operadorInput">Operador</label>
                                 </div>
                             </div>
