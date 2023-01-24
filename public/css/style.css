@@ -2089,12 +2089,12 @@ pre {
 
 .contrato_imprimir p {
     font-family: "Open Sans", sans-serif;
-    font-size: 10px;
+    font-size: 9.7px;
 }
 
 .contrato_parrafo {
     text-align: justify;
-    line-height: 11px;
+    line-height: 10.8px;
     color: #000;
     page-break-inside: avoid;
     word-break: break-all;
