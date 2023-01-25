@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Contrato;
 use App\Models\Convenio;
+use App\Models\Formulario;
 use App\Models\Amortizacion;
 use App\Models\Ps;
+use App\Models\PSMovil;
 use App\Models\PagoPS;
 use App\Models\Agenda;
 use App\Models\PagoPSConvenio;
@@ -152,11 +154,10 @@ class DashboardController extends Controller
             "contratos" => $contratos,
             "convenios" => $convenios,
             
-            "agenda" => $agenda
+            "agenda" => $agenda,
         );
 
         return response()->view('dashboard.show', $data, 200);
-        
     }
 
     public function getAlerta(Request $request)
@@ -164,5 +165,69 @@ class DashboardController extends Controller
         $contrato = Contrato::where("fecha_pago", $request->fecha)->get();
 
         return response($contrato);
+    }
+
+    public function getContConvCount()
+    {
+
+        $inicio = Carbon::parse("2022-01-01");
+        $fin = Carbon::parse("2023-12-31");
+
+        for ($i = $inicio; $i <= $fin; $i->addMonth()) {
+            $fecha = Carbon::parse($i)->format("Y-m-d");
+            $fecha = explode("-", $fecha);
+            $convenios = Convenio::where("fecha_inicio", "like", "$fecha[0]-$fecha[1]-%")->count();
+            $contratosCount = Contrato::where("fecha", "like", "$fecha[0]-$fecha[1]-%")->count();
+
+            $cont[] = array(
+                "total" => $contratosCount,
+            );
+
+            $conv[] = array(
+                "total" => $convenios,
+            );
+        }
+
+        return response(compact("cont", "conv"));
+
+    }
+
+    public function getContMensCompCount()
+    {
+        $inicio = Carbon::parse("2022-01-01");
+        $fin = Carbon::parse("2023-12-31");
+
+        for ($i = $inicio; $i <= $fin; $i->addMonth()) {
+            $fecha = Carbon::parse($i)->format("Y-m-d");
+            $fecha = explode("-", $fecha);
+            $contratosMens = Contrato::where("fecha", "like", "$fecha[0]-$fecha[1]-%")->where("tipo_id", 1)->count();
+            $contratosComp = Contrato::where("fecha", "like", "$fecha[0]-$fecha[1]-%")->where("tipo_id", 2)->count();
+
+            $mens[] = array(
+                "total" => $contratosMens,
+            );
+
+            $comp[] = array(
+                "total" => $contratosComp,
+            );
+        }
+
+        return response(compact("mens", "comp"));
+    }
+
+    public function getFormClientCount()
+    {
+        $clientes = Cliente::count();
+        $formulario = Formulario::count();
+
+        return response(compact("clientes", "formulario"));
+    }
+
+    public function getPsPmCount()
+    {
+        $ps = Ps::count();
+        $ps_movil = PSMovil::count();
+
+        return response(compact("ps", "ps_movil"));
     }
 }

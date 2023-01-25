@@ -9,10 +9,6 @@ $(document).ready(function () {
         return fecha.split(" ")[0].split("-").reverse().join("/");
     };
 
-    // let fecha = new Date();
-    // let mes = formatDate(
-    //     new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate())
-    // );
     let mes = formatDate(new Date());
     mes = mes.split("/").reverse().join("-");
     mes = mes.split("-");

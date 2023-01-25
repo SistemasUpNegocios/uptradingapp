@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 //Ruta principal
 Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 Route::get('/admin/getAlerta', [App\Http\Controllers\DashboardController::class, 'getAlerta']);
+Route::get('/admin/getContConvCount', [App\Http\Controllers\DashboardController::class, 'getContConvCount']);
+Route::get('/admin/getContMensCompCount', [App\Http\Controllers\DashboardController::class, 'getContMensCompCount']);
+Route::get('/admin/getFormClientCount', [App\Http\Controllers\DashboardController::class, 'getFormClientCount']);
+Route::get('/admin/getPsPmCount', [App\Http\Controllers\DashboardController::class, 'getPsPmCount']);
 
 // Rutas para gestión de admin
 Route::get('/admin/usuario', [App\Http\Controllers\UsuarioController::class, 'index'])->name('usuario');
