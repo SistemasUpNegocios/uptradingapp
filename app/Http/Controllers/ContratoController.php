@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\Contrato;
 use App\Models\Log;
 use App\Models\Modelo;
+use App\Models\Folio;
 use App\Models\TipoCambio;
 use App\Models\PagoCliente;
 use App\Models\PagoPS;
@@ -136,7 +137,7 @@ class ContratoController extends Controller
                 'operador' => 'required',
                 'operador_ine' => 'required',
                 'contrato' => 'required|unique:contrato',
-                'curp' => 'required|max:18',
+                'curp' => 'max:18',
                 'lugar_firma' => 'required',
                 'fechainicio' => 'required|date',
                 'periodo' => 'required',
@@ -273,6 +274,13 @@ class ContratoController extends Controller
             }
 
             $contrato->save();
+
+            $folio = new Folio;
+            $folio->folio = $contrato->folio;
+            $folio->contrato_id = $contrato->id;
+            $folio->estatus = "En uso";
+            $folio->fecha = $contrato->fecha;
+            $folio->save();
 
             $tipo_cambio = new TipoCambio;
             $tipo_cambio->valor = $request->tipo_cambio;
@@ -620,6 +628,19 @@ class ContratoController extends Controller
             ]);
 
             $contrato = Contrato::find($request->id);
+            
+            if ($contrato->folio != $request->folio) {
+                Folio::where('contrato_id', $request->id)
+                ->where('folio', $contrato->folio)
+                ->update(["estatus" => "Cancelado"]);
+
+                $folio = new Folio;
+                $folio->folio = $request->folio;
+                $folio->contrato_id = $request->id;
+                $folio->estatus = "En uso";
+                $folio->fecha = $request->fechainicio;
+                $folio->save();
+            }
             
             $lugar = mb_convert_encoding(ucwords(strtolower($request->lugar_firma)), 'UTF-8', 'UTF-8');
             $lugar = str_replace('?', 'é', $lugar);
@@ -1148,6 +1169,14 @@ class ContratoController extends Controller
         }
 
         return response($numeroContratos);
+    }
+
+    public function getFolio()
+    {
+        $folio = Folio::orderBy("folio", "DESC")->first();
+        $folio = $folio->folio + 1;
+
+        return response($folio);
     }
 
     public function editStatus(Request $request)

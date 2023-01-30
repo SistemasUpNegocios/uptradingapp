@@ -755,6 +755,17 @@ $(document).ready(function () {
             },
         });
 
+        $.ajax({
+            type: "GET",
+            url: "/admin/getFolio",
+            success: function (data) {
+                $("#folioInput").val(data);
+            },
+            error: function (data) {
+                console.log(data);
+            },
+        });
+
         containerHide();
     });
 

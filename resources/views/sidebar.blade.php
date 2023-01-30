@@ -299,6 +299,13 @@
                         </a>
                     </li>
                 @endif
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                    <li>
+                        <a href="{{ URL::to('admin/folio') }}">
+                            <i class="bi bi-circle"></i><span>Folios</span>
+                        </a>
+                    </li>
+                @endif
                 @if (auth()->user()->is_root)
                     <li>
                         <a href="{{ URL::to('admin/modelo') }}">

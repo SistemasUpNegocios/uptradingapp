@@ -214,7 +214,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" step="any" class="form-control" placeholder="Ingresa el folio del contrato" id="folioInput" name="folio" value="0" required>
+                                    <input type="text" step="any" class="form-control" placeholder="Ingresa el folio del contrato" id="folioInput" name="folio" required>
                                     <label for="folioInput">Ingresa el folio del contrato</label>
                                 </div>
                             </div>

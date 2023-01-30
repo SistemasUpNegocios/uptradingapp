@@ -86,6 +86,7 @@ Route::get('/admin/showListaPendientes', [App\Http\Controllers\ContratoControlle
 Route::get('/admin/showPendiente', [App\Http\Controllers\ContratoController::class, 'getPendiente']);
 Route::get('/admin/showNumeroCliente', [App\Http\Controllers\ContratoController::class, 'getNumCliente']);
 Route::get('/admin/editStatus', [App\Http\Controllers\ContratoController::class, 'editStatus']);
+Route::get('/admin/getFolio', [App\Http\Controllers\ContratoController::class, 'getFolio']);
 Route::get('/admin/checkScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'checkScanner']);
 Route::post('/admin/addScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'addScanner']);
 Route::post('/admin/editScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'editScanner']);
@@ -335,3 +336,11 @@ Route::get('/admin/flujodinero', [App\Http\Controllers\FlujoDineroController::cl
 Route::get('/admin/showFlujoDinero', [App\Http\Controllers\FlujoDineroController::class, 'getFlujoDinero']);
 Route::get('/admin/getTotalMes', [App\Http\Controllers\FlujoDineroController::class, 'getTotalMes']);
 Route::get('/admin/imprimirReporte', [App\Http\Controllers\FlujoDineroController::class, 'imprimirReporte']);
+
+// Rutas para gestión de folios
+Route::get('/admin/folio', [App\Http\Controllers\FolioController::class, 'index'])->name('folio');
+Route::get('/admin/showFolioCancelado', [App\Http\Controllers\FolioController::class, 'getFolioCancelado']);
+Route::get('/admin/showFolio', [App\Http\Controllers\FolioController::class, 'getFolio']);
+Route::post('/admin/addFolio', [App\Http\Controllers\FolioController::class, 'addFolio']);
+Route::post('/admin/editFolio', [App\Http\Controllers\FolioController::class, 'editFolio']);
+Route::post('/admin/deleteFolio', [App\Http\Controllers\FolioController::class, 'deleteFolio']);
