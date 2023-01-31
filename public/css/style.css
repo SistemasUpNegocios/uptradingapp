@@ -2754,3 +2754,19 @@ input[type="radio"] {
         display: none !important;
     }
 }
+
+.whats_tabla {
+    font-size: 13px;
+    padding: 7px;
+    background: #25d366 !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.whatsTrans_tabla {
+    font-size: 13px;
+    padding: 7px;
+    background: #f2921d !important;
+    color: #fff !important;
+    border: none !important;
+}

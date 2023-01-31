@@ -19,12 +19,40 @@
         </nav>
     </div>
 
+    <div id="contenedor_filtros" class="contenedor_filtros">    
+        <div class="card info-card machines-card">
+            <div class="card-body pb-0">
+                <h5 class="card-title mb-0 text-center">Contratos</h5>
+                <div class="col-12 mb-2 px-2">
+                    <a class="btn btn-primary" id="todos">Todos</a>
+                    <a class="btn btn-outline-primary" id="contratosActivados">Activados</a>
+                    <a class="btn btn-outline-primary" id="contratosPendientes">Pendientes</a>
+                    <a class="btn btn-outline-primary" id="contratosMensuales">Mensuales</a>
+                    <a class="btn btn-outline-primary" id="contratosCompuestos">Compuestos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+    </svg>
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="card-body mt-3">
+                        <div class="alert alert-primary d-flex align-items-center l-bg-primary mt-2" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                <use xlink:href="#info-fill"></use>
+                            </svg>
+                            <div id="titulo_filtro">Mostrando todos los contratos</div>
+                        </div>
+
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo contrato</a>
                         @endif
@@ -48,8 +76,7 @@
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">
-            <path
-                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
         </symbol>
     </svg>
 
@@ -545,6 +572,10 @@
             </div>
         </div>
     </div>
+
+    <a href="#" id="filtros" class="d-flex align-items-center justify-content-center">
+        <i class="bi bi-funnel-fill text-white"></i>
+    </a>
 @endsection
 
 @section('preloader')

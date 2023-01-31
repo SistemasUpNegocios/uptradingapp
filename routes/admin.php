@@ -76,7 +76,6 @@ Route::get('/admin/imprimirResumenClienteOficina', [App\Http\Controllers\Reporte
 
 // Rutas para gestión de contrato
 Route::get('/admin/contrato', [App\Http\Controllers\ContratoController::class, 'index'])->name('contrato');
-Route::get('/admin/showContrato', [App\Http\Controllers\ContratoController::class, 'getContrato']);
 Route::post('/admin/addContrato', [App\Http\Controllers\ContratoController::class, 'addContrato']);
 Route::post('/admin/editContrato', [App\Http\Controllers\ContratoController::class, 'editContrato']);
 Route::post('/admin/deleteContrato', [App\Http\Controllers\ContratoController::class, 'deleteContrato']);
@@ -90,6 +89,14 @@ Route::get('/admin/getFolio', [App\Http\Controllers\ContratoController::class, '
 Route::get('/admin/checkScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'checkScanner']);
 Route::post('/admin/addScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'addScanner']);
 Route::post('/admin/editScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'editScanner']);
+
+// Contratos filtrados
+Route::get('/admin/showContrato', [App\Http\Controllers\ContratoController::class, 'getContrato']);
+Route::get('/admin/showContratoMensuales', [App\Http\Controllers\ContratoController::class, 'getContratoMensual']);
+Route::get('/admin/showContratoCompuestos', [App\Http\Controllers\ContratoController::class, 'getContratoCompuesto']);
+Route::get('/admin/showContratoActivados', [App\Http\Controllers\ContratoController::class, 'getContratoActivado']);
+Route::get('/admin/showContratoPendientes', [App\Http\Controllers\ContratoController::class, 'getContratoPendiente']);
+
 
 // Rutas para gestión de contrato terminado
 Route::get('/admin/contratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'index'])->name('contratoTerminado');

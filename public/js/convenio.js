@@ -1069,27 +1069,38 @@ $(document).ready(function () {
             monto = parseFloat(monto);
 
             var fecha = $("#fechaInicioInput").val();
-            fecha = new Date(fecha);
-            fecha = fecha.addDays(1);
+            var fechaFeb = $("#fechaInicioInput").val();
+            fechaFeb = fechaFeb.split("-");
 
             for (var i = 1; i < 13; i++) {
                 monto = $("#montoInput").val();
                 var monto2 = monto;
 
-                var fechaPago = fecha;
-                fechaPago.setMonth(fechaPago.getMonth() + 1);
-                var añoPago = fechaPago.getFullYear();
-                var mesPago = fechaPago.getMonth();
-
-                fechaPago = lastDay(añoPago, mesPago);
-                fechaPago = formatDate(fechaPago);
-                fechaPago = fechaPago.split("/").reverse().join("-");
-
-                var fechaLimite = fecha;
-                fechaLimite.setMonth(fechaLimite.getMonth() + 1);
-                fechaLimite.setDate(10);
+                fecha = fecha.split("-");
+                var fechaLimite = new Date(
+                    fecha[0],
+                    parseInt(fecha[1]) + 1,
+                    10
+                );
                 fechaLimite = formatDate(fechaLimite);
                 fechaLimite = fechaLimite.split("/").reverse().join("-");
+
+                if (
+                    fecha[1] == 3 ||
+                    fecha[1] == 5 ||
+                    fecha[1] == 8 ||
+                    fecha[1] == 10
+                ) {
+                    fecha = new Date(fecha[0], fecha[1], 30);
+                    fecha = formatDate(fecha);
+                } else if (parseInt(fecha[1]) + 1 == 2) {
+                    fecha = `28/02/${fecha[0]}`;
+                } else {
+                    fecha = new Date(fecha[0], fecha[1], 31);
+                    fecha = formatDate(fecha);
+                }
+
+                var fechaPago = fecha.split("/").reverse().join("-");
 
                 if (i == 1) {
                     monto = monto * capertura;
@@ -1151,7 +1162,7 @@ $(document).ready(function () {
                     );
                 }
 
-                fecha = new Date(fechaPago);
+                fecha = fecha.split("/").reverse().join("-");
             }
         }
 

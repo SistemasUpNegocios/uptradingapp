@@ -67,53 +67,7 @@ $(".image-upload-wrapScanner2").bind("dragleave", function () {
 });
 
 $(document).ready(function () {
-    const config = {
-        search: true,
-    };
-
-    dselect(document.querySelector("#clienteIdInput"), config);
-    dselect(document.querySelector("#psIdInput"), config);
-
-    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-    $(".dselect-no-results").text("No se encontraron resultados...");
-
-    $("#clienteIdInput")
-        .next()
-        .children()
-        .next()
-        .children()
-        .children()
-        .next()
-        .addClass("d-none");
-
-    $(".dropdown-menu .form-control").on("keyup", function () {
-        let input = $(".dropdown-menu .form-control").val();
-
-        if (input.length > 0) {
-            $("#clienteIdInput")
-                .next()
-                .children()
-                .next()
-                .children()
-                .children()
-                .next()
-                .removeClass("d-none");
-        } else {
-            $("#clienteIdInput")
-                .next()
-                .children()
-                .next()
-                .children()
-                .children()
-                .next()
-                .addClass("d-none");
-        }
-    });
-
     let acc = "";
-    let dataInversionUS = 0;
-    let dataInversionMXN = 0;
-    let dataFechaInicio = "";
 
     var table = $("#contrato").DataTable({
         ajax: "/admin/showContrato",
@@ -326,10 +280,1228 @@ $(document).ready(function () {
         },
     });
 
+    $("#contenedor_filtros").hide();
+    $(document).on("click", "#filtros", function (e) {
+        e.preventDefault();
+        $("#contenedor_filtros").toggle();
+    });
+
+    $(document).on("click", "#todos", function () {
+        table.destroy();
+
+        $("#titulo_filtro").text("Mostrando todos los contratos");
+
+        table = $("#contrato").DataTable({
+            ajax: "/admin/showContrato",
+            columns: [
+                { data: "contrato" },
+                { data: "tipo" },
+                { data: "status" },
+                { data: "btn" },
+            ],
+            responsive: {
+                breakpoints: [
+                    {
+                        name: "desktop",
+                        width: Infinity,
+                    },
+                    {
+                        name: "tablet",
+                        width: 1024,
+                    },
+                    {
+                        name: "fablet",
+                        width: 768,
+                    },
+                    {
+                        name: "phone",
+                        width: 480,
+                    },
+                ],
+            },
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ contratos",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "No se ha registrado ningún contrato",
+                infoEmpty:
+                    "Mostrando contratos del 0 al 0 de un total de 0 contratos",
+                infoFiltered: "(filtrado de un total de _MAX_ contratos)",
+                search: "Buscar:",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    sortAscending:
+                        ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending:
+                        ": Activar para ordenar la columna de manera descendente",
+                },
+                buttons: {
+                    copy: "Copiar",
+                    colvis: "Visibilidad",
+                    collection: "Colección",
+                    colvisRestore: "Restaurar visibilidad",
+                    copyKeys:
+                        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
+                    copySuccess: {
+                        1: "Copiada 1 fila al portapapeles",
+                        _: "Copiadas %d fila al portapapeles",
+                    },
+                    copyTitle: "Copiar al portapapeles",
+                    csv: "CSV",
+                    excel: "Excel",
+                    pageLength: {
+                        "-1": "Mostrar todas las filas",
+                        1: "Mostrar 1 fila",
+                        _: "Mostrar %d filas",
+                    },
+                    pdf: "PDF",
+                    print: "Imprimir",
+                },
+                autoFill: {
+                    cancel: "Cancelar",
+                    fill: "Rellene todas las celdas con <i>%d</i>",
+                    fillHorizontal: "Rellenar celdas horizontalmente",
+                    fillVertical: "Rellenar celdas verticalmentemente",
+                },
+                decimal: ",",
+                searchBuilder: {
+                    add: "Añadir condición",
+                    button: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    clearAll: "Borrar todo",
+                    condition: "Condición",
+                    conditions: {
+                        date: {
+                            after: "Despues",
+                            before: "Antes",
+                            between: "Entre",
+                            empty: "Vacío",
+                            equals: "Igual a",
+                            notBetween: "No entre",
+                            notEmpty: "No Vacio",
+                            not: "Diferente de",
+                        },
+                        number: {
+                            between: "Entre",
+                            empty: "Vacio",
+                            equals: "Igual a",
+                            gt: "Mayor a",
+                            gte: "Mayor o igual a",
+                            lt: "Menor que",
+                            lte: "Menor o igual que",
+                            notBetween: "No entre",
+                            notEmpty: "No vacío",
+                            not: "Diferente de",
+                        },
+                        string: {
+                            contains: "Contiene",
+                            empty: "Vacío",
+                            endsWith: "Termina en",
+                            equals: "Igual a",
+                            notEmpty: "No Vacio",
+                            startsWith: "Empieza con",
+                            not: "Diferente de",
+                        },
+                        array: {
+                            not: "Diferente de",
+                            equals: "Igual",
+                            empty: "Vacío",
+                            contains: "Contiene",
+                            notEmpty: "No Vacío",
+                            without: "Sin",
+                        },
+                    },
+                    data: "Data",
+                    deleteTitle: "Eliminar regla de filtrado",
+                    leftTitle: "Criterios anulados",
+                    logicAnd: "Y",
+                    logicOr: "O",
+                    rightTitle: "Criterios de sangría",
+                    title: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    value: "Valor",
+                },
+                searchPanes: {
+                    clearMessage: "Borrar todo",
+                    collacontratoe: {
+                        0: "Paneles de búsqueda",
+                        _: "Paneles de búsqueda (%d)",
+                    },
+                    count: "{total}",
+                    countFiltered: "{shown} ({total})",
+                    emptyPanes: "Sin paneles de búsqueda",
+                    loadMessage: "Cargando paneles de búsqueda",
+                    title: "Filtros Activos - %d",
+                },
+                select: {
+                    1: "%d fila seleccionada",
+                    _: "%d filas seleccionadas",
+                    cells: {
+                        1: "1 celda seleccionada",
+                        _: "$d celdas seleccionadas",
+                    },
+                    columns: {
+                        1: "1 columna seleccionada",
+                        _: "%d columnas seleccionadas",
+                    },
+                },
+                thousands: ".",
+                datetime: {
+                    previous: "Anterior",
+                    next: "Proximo",
+                    hours: "Horas",
+                    minutes: "Minutos",
+                    seconds: "Segundos",
+                    unknown: "-",
+                    amPm: ["am", "pm"],
+                },
+                editor: {
+                    close: "Cerrar",
+                    create: {
+                        button: "Nuevo",
+                        title: "Crear Nuevo Registro",
+                        submit: "Crear",
+                    },
+                    edit: {
+                        button: "Editar",
+                        title: "Editar Registro",
+                        submit: "Actualizar",
+                    },
+                    remove: {
+                        button: "Eliminar",
+                        title: "Eliminar Registro",
+                        submit: "Eliminar",
+                        confirm: {
+                            _: "¿Está seguro que desea eliminar %d filas?",
+                            1: "¿Está seguro que desea eliminar 1 fila?",
+                        },
+                    },
+                    error: {
+                        system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                    },
+                    multi: {
+                        title: "Múltiples Valores",
+                        info: "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        restore: "Deshacer Cambios",
+                        noMulti:
+                            "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
+                    },
+                },
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos",
+            },
+        });
+
+        estilos(
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary"
+        );
+
+        $("#contenedor_filtros").toggle();
+    });
+
+    $(document).on("click", "#contratosMensuales", function () {
+        table.destroy();
+
+        $("#titulo_filtro").text("Mostrando contratos mensuales");
+
+        table = $("#contrato").DataTable({
+            ajax: "/admin/showContratoMensuales",
+            columns: [
+                { data: "contrato" },
+                { data: "tipo" },
+                { data: "status" },
+                { data: "btn" },
+            ],
+            responsive: {
+                breakpoints: [
+                    {
+                        name: "desktop",
+                        width: Infinity,
+                    },
+                    {
+                        name: "tablet",
+                        width: 1024,
+                    },
+                    {
+                        name: "fablet",
+                        width: 768,
+                    },
+                    {
+                        name: "phone",
+                        width: 480,
+                    },
+                ],
+            },
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ contratos mensuales",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "No se ha registrado ningún contrato mensual",
+                infoEmpty:
+                    "Mostrando contratos del 0 al 0 de un total de 0 contratos mensuales",
+                infoFiltered:
+                    "(filtrado de un total de _MAX_ contratos mensuales)",
+                search: "Buscar:",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    sortAscending:
+                        ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending:
+                        ": Activar para ordenar la columna de manera descendente",
+                },
+                buttons: {
+                    copy: "Copiar",
+                    colvis: "Visibilidad",
+                    collection: "Colección",
+                    colvisRestore: "Restaurar visibilidad",
+                    copyKeys:
+                        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
+                    copySuccess: {
+                        1: "Copiada 1 fila al portapapeles",
+                        _: "Copiadas %d fila al portapapeles",
+                    },
+                    copyTitle: "Copiar al portapapeles",
+                    csv: "CSV",
+                    excel: "Excel",
+                    pageLength: {
+                        "-1": "Mostrar todas las filas",
+                        1: "Mostrar 1 fila",
+                        _: "Mostrar %d filas",
+                    },
+                    pdf: "PDF",
+                    print: "Imprimir",
+                },
+                autoFill: {
+                    cancel: "Cancelar",
+                    fill: "Rellene todas las celdas con <i>%d</i>",
+                    fillHorizontal: "Rellenar celdas horizontalmente",
+                    fillVertical: "Rellenar celdas verticalmentemente",
+                },
+                decimal: ",",
+                searchBuilder: {
+                    add: "Añadir condición",
+                    button: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    clearAll: "Borrar todo",
+                    condition: "Condición",
+                    conditions: {
+                        date: {
+                            after: "Despues",
+                            before: "Antes",
+                            between: "Entre",
+                            empty: "Vacío",
+                            equals: "Igual a",
+                            notBetween: "No entre",
+                            notEmpty: "No Vacio",
+                            not: "Diferente de",
+                        },
+                        number: {
+                            between: "Entre",
+                            empty: "Vacio",
+                            equals: "Igual a",
+                            gt: "Mayor a",
+                            gte: "Mayor o igual a",
+                            lt: "Menor que",
+                            lte: "Menor o igual que",
+                            notBetween: "No entre",
+                            notEmpty: "No vacío",
+                            not: "Diferente de",
+                        },
+                        string: {
+                            contains: "Contiene",
+                            empty: "Vacío",
+                            endsWith: "Termina en",
+                            equals: "Igual a",
+                            notEmpty: "No Vacio",
+                            startsWith: "Empieza con",
+                            not: "Diferente de",
+                        },
+                        array: {
+                            not: "Diferente de",
+                            equals: "Igual",
+                            empty: "Vacío",
+                            contains: "Contiene",
+                            notEmpty: "No Vacío",
+                            without: "Sin",
+                        },
+                    },
+                    data: "Data",
+                    deleteTitle: "Eliminar regla de filtrado",
+                    leftTitle: "Criterios anulados",
+                    logicAnd: "Y",
+                    logicOr: "O",
+                    rightTitle: "Criterios de sangría",
+                    title: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    value: "Valor",
+                },
+                searchPanes: {
+                    clearMessage: "Borrar todo",
+                    collacontratoe: {
+                        0: "Paneles de búsqueda",
+                        _: "Paneles de búsqueda (%d)",
+                    },
+                    count: "{total}",
+                    countFiltered: "{shown} ({total})",
+                    emptyPanes: "Sin paneles de búsqueda",
+                    loadMessage: "Cargando paneles de búsqueda",
+                    title: "Filtros Activos - %d",
+                },
+                select: {
+                    1: "%d fila seleccionada",
+                    _: "%d filas seleccionadas",
+                    cells: {
+                        1: "1 celda seleccionada",
+                        _: "$d celdas seleccionadas",
+                    },
+                    columns: {
+                        1: "1 columna seleccionada",
+                        _: "%d columnas seleccionadas",
+                    },
+                },
+                thousands: ".",
+                datetime: {
+                    previous: "Anterior",
+                    next: "Proximo",
+                    hours: "Horas",
+                    minutes: "Minutos",
+                    seconds: "Segundos",
+                    unknown: "-",
+                    amPm: ["am", "pm"],
+                },
+                editor: {
+                    close: "Cerrar",
+                    create: {
+                        button: "Nuevo",
+                        title: "Crear Nuevo Registro",
+                        submit: "Crear",
+                    },
+                    edit: {
+                        button: "Editar",
+                        title: "Editar Registro",
+                        submit: "Actualizar",
+                    },
+                    remove: {
+                        button: "Eliminar",
+                        title: "Eliminar Registro",
+                        submit: "Eliminar",
+                        confirm: {
+                            _: "¿Está seguro que desea eliminar %d filas?",
+                            1: "¿Está seguro que desea eliminar 1 fila?",
+                        },
+                    },
+                    error: {
+                        system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                    },
+                    multi: {
+                        title: "Múltiples Valores",
+                        info: "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        restore: "Deshacer Cambios",
+                        noMulti:
+                            "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
+                    },
+                },
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos mensuales",
+            },
+        });
+
+        estilos(
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary"
+        );
+
+        $("#contenedor_filtros").toggle();
+    });
+
+    $(document).on("click", "#contratosCompuestos", function () {
+        table.destroy();
+
+        $("#titulo_filtro").text("Mostrando contratos compuestos");
+
+        table = $("#contrato").DataTable({
+            ajax: "/admin/showContratoCompuestos",
+            columns: [
+                { data: "contrato" },
+                { data: "tipo" },
+                { data: "status" },
+                { data: "btn" },
+            ],
+            responsive: {
+                breakpoints: [
+                    {
+                        name: "desktop",
+                        width: Infinity,
+                    },
+                    {
+                        name: "tablet",
+                        width: 1024,
+                    },
+                    {
+                        name: "fablet",
+                        width: 768,
+                    },
+                    {
+                        name: "phone",
+                        width: 480,
+                    },
+                ],
+            },
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ contratos compuestos",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "No se ha registrado ningún contrato compuestos",
+                infoEmpty:
+                    "Mostrando contratos del 0 al 0 de un total de 0 contratos compuestos",
+                infoFiltered:
+                    "(filtrado de un total de _MAX_ contratos compuestos)",
+                search: "Buscar:",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    sortAscending:
+                        ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending:
+                        ": Activar para ordenar la columna de manera descendente",
+                },
+                buttons: {
+                    copy: "Copiar",
+                    colvis: "Visibilidad",
+                    collection: "Colección",
+                    colvisRestore: "Restaurar visibilidad",
+                    copyKeys:
+                        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
+                    copySuccess: {
+                        1: "Copiada 1 fila al portapapeles",
+                        _: "Copiadas %d fila al portapapeles",
+                    },
+                    copyTitle: "Copiar al portapapeles",
+                    csv: "CSV",
+                    excel: "Excel",
+                    pageLength: {
+                        "-1": "Mostrar todas las filas",
+                        1: "Mostrar 1 fila",
+                        _: "Mostrar %d filas",
+                    },
+                    pdf: "PDF",
+                    print: "Imprimir",
+                },
+                autoFill: {
+                    cancel: "Cancelar",
+                    fill: "Rellene todas las celdas con <i>%d</i>",
+                    fillHorizontal: "Rellenar celdas horizontalmente",
+                    fillVertical: "Rellenar celdas verticalmentemente",
+                },
+                decimal: ",",
+                searchBuilder: {
+                    add: "Añadir condición",
+                    button: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    clearAll: "Borrar todo",
+                    condition: "Condición",
+                    conditions: {
+                        date: {
+                            after: "Despues",
+                            before: "Antes",
+                            between: "Entre",
+                            empty: "Vacío",
+                            equals: "Igual a",
+                            notBetween: "No entre",
+                            notEmpty: "No Vacio",
+                            not: "Diferente de",
+                        },
+                        number: {
+                            between: "Entre",
+                            empty: "Vacio",
+                            equals: "Igual a",
+                            gt: "Mayor a",
+                            gte: "Mayor o igual a",
+                            lt: "Menor que",
+                            lte: "Menor o igual que",
+                            notBetween: "No entre",
+                            notEmpty: "No vacío",
+                            not: "Diferente de",
+                        },
+                        string: {
+                            contains: "Contiene",
+                            empty: "Vacío",
+                            endsWith: "Termina en",
+                            equals: "Igual a",
+                            notEmpty: "No Vacio",
+                            startsWith: "Empieza con",
+                            not: "Diferente de",
+                        },
+                        array: {
+                            not: "Diferente de",
+                            equals: "Igual",
+                            empty: "Vacío",
+                            contains: "Contiene",
+                            notEmpty: "No Vacío",
+                            without: "Sin",
+                        },
+                    },
+                    data: "Data",
+                    deleteTitle: "Eliminar regla de filtrado",
+                    leftTitle: "Criterios anulados",
+                    logicAnd: "Y",
+                    logicOr: "O",
+                    rightTitle: "Criterios de sangría",
+                    title: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    value: "Valor",
+                },
+                searchPanes: {
+                    clearMessage: "Borrar todo",
+                    collacontratoe: {
+                        0: "Paneles de búsqueda",
+                        _: "Paneles de búsqueda (%d)",
+                    },
+                    count: "{total}",
+                    countFiltered: "{shown} ({total})",
+                    emptyPanes: "Sin paneles de búsqueda",
+                    loadMessage: "Cargando paneles de búsqueda",
+                    title: "Filtros Activos - %d",
+                },
+                select: {
+                    1: "%d fila seleccionada",
+                    _: "%d filas seleccionadas",
+                    cells: {
+                        1: "1 celda seleccionada",
+                        _: "$d celdas seleccionadas",
+                    },
+                    columns: {
+                        1: "1 columna seleccionada",
+                        _: "%d columnas seleccionadas",
+                    },
+                },
+                thousands: ".",
+                datetime: {
+                    previous: "Anterior",
+                    next: "Proximo",
+                    hours: "Horas",
+                    minutes: "Minutos",
+                    seconds: "Segundos",
+                    unknown: "-",
+                    amPm: ["am", "pm"],
+                },
+                editor: {
+                    close: "Cerrar",
+                    create: {
+                        button: "Nuevo",
+                        title: "Crear Nuevo Registro",
+                        submit: "Crear",
+                    },
+                    edit: {
+                        button: "Editar",
+                        title: "Editar Registro",
+                        submit: "Actualizar",
+                    },
+                    remove: {
+                        button: "Eliminar",
+                        title: "Eliminar Registro",
+                        submit: "Eliminar",
+                        confirm: {
+                            _: "¿Está seguro que desea eliminar %d filas?",
+                            1: "¿Está seguro que desea eliminar 1 fila?",
+                        },
+                    },
+                    error: {
+                        system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                    },
+                    multi: {
+                        title: "Múltiples Valores",
+                        info: "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        restore: "Deshacer Cambios",
+                        noMulti:
+                            "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
+                    },
+                },
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos compuestos",
+            },
+        });
+
+        estilos(
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary"
+        );
+
+        $("#contenedor_filtros").toggle();
+    });
+
+    $(document).on("click", "#contratosActivados", function () {
+        table.destroy();
+
+        $("#titulo_filtro").text("Mostrando contratos activados");
+
+        table = $("#contrato").DataTable({
+            ajax: "/admin/showContratoActivados",
+            columns: [
+                { data: "contrato" },
+                { data: "tipo" },
+                { data: "status" },
+                { data: "btn" },
+            ],
+            responsive: {
+                breakpoints: [
+                    {
+                        name: "desktop",
+                        width: Infinity,
+                    },
+                    {
+                        name: "tablet",
+                        width: 1024,
+                    },
+                    {
+                        name: "fablet",
+                        width: 768,
+                    },
+                    {
+                        name: "phone",
+                        width: 480,
+                    },
+                ],
+            },
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ contratos activados",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "No se ha registrado ningún contrato activado",
+                infoEmpty:
+                    "Mostrando contratos del 0 al 0 de un total de 0 contratos activados",
+                infoFiltered:
+                    "(filtrado de un total de _MAX_ contratos activados)",
+                search: "Buscar:",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    sortAscending:
+                        ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending:
+                        ": Activar para ordenar la columna de manera descendente",
+                },
+                buttons: {
+                    copy: "Copiar",
+                    colvis: "Visibilidad",
+                    collection: "Colección",
+                    colvisRestore: "Restaurar visibilidad",
+                    copyKeys:
+                        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
+                    copySuccess: {
+                        1: "Copiada 1 fila al portapapeles",
+                        _: "Copiadas %d fila al portapapeles",
+                    },
+                    copyTitle: "Copiar al portapapeles",
+                    csv: "CSV",
+                    excel: "Excel",
+                    pageLength: {
+                        "-1": "Mostrar todas las filas",
+                        1: "Mostrar 1 fila",
+                        _: "Mostrar %d filas",
+                    },
+                    pdf: "PDF",
+                    print: "Imprimir",
+                },
+                autoFill: {
+                    cancel: "Cancelar",
+                    fill: "Rellene todas las celdas con <i>%d</i>",
+                    fillHorizontal: "Rellenar celdas horizontalmente",
+                    fillVertical: "Rellenar celdas verticalmentemente",
+                },
+                decimal: ",",
+                searchBuilder: {
+                    add: "Añadir condición",
+                    button: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    clearAll: "Borrar todo",
+                    condition: "Condición",
+                    conditions: {
+                        date: {
+                            after: "Despues",
+                            before: "Antes",
+                            between: "Entre",
+                            empty: "Vacío",
+                            equals: "Igual a",
+                            notBetween: "No entre",
+                            notEmpty: "No Vacio",
+                            not: "Diferente de",
+                        },
+                        number: {
+                            between: "Entre",
+                            empty: "Vacio",
+                            equals: "Igual a",
+                            gt: "Mayor a",
+                            gte: "Mayor o igual a",
+                            lt: "Menor que",
+                            lte: "Menor o igual que",
+                            notBetween: "No entre",
+                            notEmpty: "No vacío",
+                            not: "Diferente de",
+                        },
+                        string: {
+                            contains: "Contiene",
+                            empty: "Vacío",
+                            endsWith: "Termina en",
+                            equals: "Igual a",
+                            notEmpty: "No Vacio",
+                            startsWith: "Empieza con",
+                            not: "Diferente de",
+                        },
+                        array: {
+                            not: "Diferente de",
+                            equals: "Igual",
+                            empty: "Vacío",
+                            contains: "Contiene",
+                            notEmpty: "No Vacío",
+                            without: "Sin",
+                        },
+                    },
+                    data: "Data",
+                    deleteTitle: "Eliminar regla de filtrado",
+                    leftTitle: "Criterios anulados",
+                    logicAnd: "Y",
+                    logicOr: "O",
+                    rightTitle: "Criterios de sangría",
+                    title: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    value: "Valor",
+                },
+                searchPanes: {
+                    clearMessage: "Borrar todo",
+                    collacontratoe: {
+                        0: "Paneles de búsqueda",
+                        _: "Paneles de búsqueda (%d)",
+                    },
+                    count: "{total}",
+                    countFiltered: "{shown} ({total})",
+                    emptyPanes: "Sin paneles de búsqueda",
+                    loadMessage: "Cargando paneles de búsqueda",
+                    title: "Filtros Activos - %d",
+                },
+                select: {
+                    1: "%d fila seleccionada",
+                    _: "%d filas seleccionadas",
+                    cells: {
+                        1: "1 celda seleccionada",
+                        _: "$d celdas seleccionadas",
+                    },
+                    columns: {
+                        1: "1 columna seleccionada",
+                        _: "%d columnas seleccionadas",
+                    },
+                },
+                thousands: ".",
+                datetime: {
+                    previous: "Anterior",
+                    next: "Proximo",
+                    hours: "Horas",
+                    minutes: "Minutos",
+                    seconds: "Segundos",
+                    unknown: "-",
+                    amPm: ["am", "pm"],
+                },
+                editor: {
+                    close: "Cerrar",
+                    create: {
+                        button: "Nuevo",
+                        title: "Crear Nuevo Registro",
+                        submit: "Crear",
+                    },
+                    edit: {
+                        button: "Editar",
+                        title: "Editar Registro",
+                        submit: "Actualizar",
+                    },
+                    remove: {
+                        button: "Eliminar",
+                        title: "Eliminar Registro",
+                        submit: "Eliminar",
+                        confirm: {
+                            _: "¿Está seguro que desea eliminar %d filas?",
+                            1: "¿Está seguro que desea eliminar 1 fila?",
+                        },
+                    },
+                    error: {
+                        system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                    },
+                    multi: {
+                        title: "Múltiples Valores",
+                        info: "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        restore: "Deshacer Cambios",
+                        noMulti:
+                            "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
+                    },
+                },
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos activados",
+            },
+        });
+
+        estilos(
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-outline-primary",
+            "btn-primary"
+        );
+
+        $("#contenedor_filtros").toggle();
+    });
+
+    $(document).on("click", "#contratosPendientes", function () {
+        table.destroy();
+
+        $("#titulo_filtro").text(
+            "Mostrando contratos en pendientes de activación"
+        );
+
+        table = $("#contrato").DataTable({
+            ajax: "/admin/showContratoPendientes",
+            columns: [
+                { data: "contrato" },
+                { data: "tipo" },
+                { data: "status" },
+                { data: "btn" },
+            ],
+            responsive: {
+                breakpoints: [
+                    {
+                        name: "desktop",
+                        width: Infinity,
+                    },
+                    {
+                        name: "tablet",
+                        width: 1024,
+                    },
+                    {
+                        name: "fablet",
+                        width: 768,
+                    },
+                    {
+                        name: "phone",
+                        width: 480,
+                    },
+                ],
+            },
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar _MENU_ contratos pendientes de activación",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable:
+                    "No se ha registrado ningún contrato pendiente de activación",
+                infoEmpty:
+                    "Mostrando contratos del 0 al 0 de un total de 0 contratos pendientes de activación",
+                infoFiltered:
+                    "(filtrado de un total de _MAX_ contratos pendientes de activación)",
+                search: "Buscar:",
+                infoThousands: ",",
+                loadingRecords: "Cargando...",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    sortAscending:
+                        ": Activar para ordenar la columna de manera ascendente",
+                    sortDescending:
+                        ": Activar para ordenar la columna de manera descendente",
+                },
+                buttons: {
+                    copy: "Copiar",
+                    colvis: "Visibilidad",
+                    collection: "Colección",
+                    colvisRestore: "Restaurar visibilidad",
+                    copyKeys:
+                        "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.",
+                    copySuccess: {
+                        1: "Copiada 1 fila al portapapeles",
+                        _: "Copiadas %d fila al portapapeles",
+                    },
+                    copyTitle: "Copiar al portapapeles",
+                    csv: "CSV",
+                    excel: "Excel",
+                    pageLength: {
+                        "-1": "Mostrar todas las filas",
+                        1: "Mostrar 1 fila",
+                        _: "Mostrar %d filas",
+                    },
+                    pdf: "PDF",
+                    print: "Imprimir",
+                },
+                autoFill: {
+                    cancel: "Cancelar",
+                    fill: "Rellene todas las celdas con <i>%d</i>",
+                    fillHorizontal: "Rellenar celdas horizontalmente",
+                    fillVertical: "Rellenar celdas verticalmentemente",
+                },
+                decimal: ",",
+                searchBuilder: {
+                    add: "Añadir condición",
+                    button: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    clearAll: "Borrar todo",
+                    condition: "Condición",
+                    conditions: {
+                        date: {
+                            after: "Despues",
+                            before: "Antes",
+                            between: "Entre",
+                            empty: "Vacío",
+                            equals: "Igual a",
+                            notBetween: "No entre",
+                            notEmpty: "No Vacio",
+                            not: "Diferente de",
+                        },
+                        number: {
+                            between: "Entre",
+                            empty: "Vacio",
+                            equals: "Igual a",
+                            gt: "Mayor a",
+                            gte: "Mayor o igual a",
+                            lt: "Menor que",
+                            lte: "Menor o igual que",
+                            notBetween: "No entre",
+                            notEmpty: "No vacío",
+                            not: "Diferente de",
+                        },
+                        string: {
+                            contains: "Contiene",
+                            empty: "Vacío",
+                            endsWith: "Termina en",
+                            equals: "Igual a",
+                            notEmpty: "No Vacio",
+                            startsWith: "Empieza con",
+                            not: "Diferente de",
+                        },
+                        array: {
+                            not: "Diferente de",
+                            equals: "Igual",
+                            empty: "Vacío",
+                            contains: "Contiene",
+                            notEmpty: "No Vacío",
+                            without: "Sin",
+                        },
+                    },
+                    data: "Data",
+                    deleteTitle: "Eliminar regla de filtrado",
+                    leftTitle: "Criterios anulados",
+                    logicAnd: "Y",
+                    logicOr: "O",
+                    rightTitle: "Criterios de sangría",
+                    title: {
+                        0: "Constructor de búsqueda",
+                        _: "Constructor de búsqueda (%d)",
+                    },
+                    value: "Valor",
+                },
+                searchPanes: {
+                    clearMessage: "Borrar todo",
+                    collacontratoe: {
+                        0: "Paneles de búsqueda",
+                        _: "Paneles de búsqueda (%d)",
+                    },
+                    count: "{total}",
+                    countFiltered: "{shown} ({total})",
+                    emptyPanes: "Sin paneles de búsqueda",
+                    loadMessage: "Cargando paneles de búsqueda",
+                    title: "Filtros Activos - %d",
+                },
+                select: {
+                    1: "%d fila seleccionada",
+                    _: "%d filas seleccionadas",
+                    cells: {
+                        1: "1 celda seleccionada",
+                        _: "$d celdas seleccionadas",
+                    },
+                    columns: {
+                        1: "1 columna seleccionada",
+                        _: "%d columnas seleccionadas",
+                    },
+                },
+                thousands: ".",
+                datetime: {
+                    previous: "Anterior",
+                    next: "Proximo",
+                    hours: "Horas",
+                    minutes: "Minutos",
+                    seconds: "Segundos",
+                    unknown: "-",
+                    amPm: ["am", "pm"],
+                },
+                editor: {
+                    close: "Cerrar",
+                    create: {
+                        button: "Nuevo",
+                        title: "Crear Nuevo Registro",
+                        submit: "Crear",
+                    },
+                    edit: {
+                        button: "Editar",
+                        title: "Editar Registro",
+                        submit: "Actualizar",
+                    },
+                    remove: {
+                        button: "Eliminar",
+                        title: "Eliminar Registro",
+                        submit: "Eliminar",
+                        confirm: {
+                            _: "¿Está seguro que desea eliminar %d filas?",
+                            1: "¿Está seguro que desea eliminar 1 fila?",
+                        },
+                    },
+                    error: {
+                        system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                    },
+                    multi: {
+                        title: "Múltiples Valores",
+                        info: "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        restore: "Deshacer Cambios",
+                        noMulti:
+                            "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
+                    },
+                },
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos pendientes de activación",
+            },
+        });
+
+        estilos(
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-outline-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-primary",
+            "btn-outline-primary"
+        );
+
+        $("#contenedor_filtros").toggle();
+    });
+
+    const config = {
+        search: true,
+    };
+
+    dselect(document.querySelector("#clienteIdInput"), config);
+    dselect(document.querySelector("#psIdInput"), config);
+
+    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
+    $(".dselect-no-results").text("No se encontraron resultados...");
+
+    $("#clienteIdInput")
+        .next()
+        .children()
+        .next()
+        .children()
+        .children()
+        .next()
+        .addClass("d-none");
+
+    $(".dropdown-menu .form-control").on("keyup", function () {
+        let input = $(".dropdown-menu .form-control").val();
+
+        if (input.length > 0) {
+            $("#clienteIdInput")
+                .next()
+                .children()
+                .next()
+                .children()
+                .children()
+                .next()
+                .removeClass("d-none");
+        } else {
+            $("#clienteIdInput")
+                .next()
+                .children()
+                .next()
+                .children()
+                .children()
+                .next()
+                .addClass("d-none");
+        }
+    });
+
+    let dataInversionUS = 0;
+    let dataInversionMXN = 0;
+    let dataFechaInicio = "";
+
     table.on("change", ".status", function () {
         var checked = $(this).is(":checked");
-        let celular = $(this).data("celular");
-        let contrato = $(this).data("contrato");
 
         if (checked) {
             $(this).val("Activado");
@@ -385,12 +1557,6 @@ $(document).ready(function () {
                                         icon: "success",
                                         title: "Estatus actualizado",
                                     });
-                                    // if (statusValor == "Activado") {
-                                    //     window.open(
-                                    //         `https://web.whatsapp.com/send?phone=${celular}&text=Su contrato: ${contrato}, se ha activado con exito, lo esperamos en la oficina.`,
-                                    //         "_blank"
-                                    //     );
-                                    // }
 
                                     table.ajax.reload(function () {
                                         if (statusValor == "Activado") {
@@ -2258,7 +3424,6 @@ $(document).ready(function () {
 
             var inversionUSD = $("#inversionUsInput").val();
             inversionUSD = parseFloat(inversionUSD);
-            // var inversionInicialUSD = parseFloat(inversionUSD);
 
             var porcentaje = $("#porcentajeInput").val();
             porcentaje = parseFloat(porcentaje);
@@ -2268,14 +3433,10 @@ $(document).ready(function () {
             fechaFeb = fechaFeb.split("-");
 
             var porcentaje = $("#porcentajeInput").val();
-            // var usd = parseFloat($("#tipoCambioInput").val());
 
             var cmensual2 = `0.0${cmensual}`;
             cmensual2 = parseFloat(cmensual2);
 
-            var fechaFeb = $("#fechaInicioInput").val();
-            fechaFeb = fechaFeb.split("-");
-            // var rendimiento = 0;
             for (var i = 0; i < meses; i++) {
                 fecha = fecha.split("-");
 
@@ -2311,11 +3472,6 @@ $(document).ready(function () {
                 var formatterUSD = new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "USD",
-                });
-
-                var formatterMXN = new Intl.NumberFormat("es-MX", {
-                    style: "currency",
-                    currency: "MXN",
                 });
 
                 var fechaInput = fecha.split("/").reverse().join("-");
@@ -3388,6 +4544,31 @@ $(document).ready(function () {
         $("#montoRenovacionCont").hide();
         $("#montoRendimientosCont").hide();
         $("#montoComisionesCont").hide();
+    };
+
+    const estilos = (
+        todos_add,
+        contmen_add,
+        contcomp_add,
+        contact_add,
+        contpend_add,
+        todos_rem,
+        contmen_rem,
+        contcomp_rem,
+        contact_rem,
+        contpend_rem
+    ) => {
+        $("#todos").addClass(todos_add);
+        $("#contratosMensuales").addClass(contmen_add);
+        $("#contratosCompuestos").addClass(contcomp_add);
+        $("#contratosActivados").addClass(contact_add);
+        $("#contratosPendientes").addClass(contpend_add);
+
+        $("#todos").removeClass(todos_rem);
+        $("#contratosMensuales").removeClass(contmen_rem);
+        $("#contratosCompuestos").removeClass(contcomp_rem);
+        $("#contratosActivados").removeClass(contact_rem);
+        $("#contratosPendientes").removeClass(contpend_rem);
     };
 });
 

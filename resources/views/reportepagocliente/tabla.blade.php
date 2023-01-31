@@ -23,6 +23,7 @@
                         $rendimiento = number_format($resumen->pago * $dolar, 2);
                         $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
                         $fecha = $resumen->fecha;
+                        $pago_dolares = number_format($resumen->pago, 2);
                     @endphp
                     @if ($resumen->tipo_id == 1)                                    
                         <tr>
@@ -36,7 +37,8 @@
                             <td>
                                 <button class="btn btn-warning" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                 <button class="btn btn-success" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-outline-info abrirWhats" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats"><i class="bi bi-whatsapp"></i></button>
+                                <button class="btn btn-primary abrirWhats whats_tabla" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats para pago en efectivo"><i class="bi bi-whatsapp"></i></button>
+                                <button class="btn btn-primary abrirTrans whatsTrans_tabla" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
                             </td>
                         </tr>
                     @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
@@ -51,7 +53,8 @@
                             <td>
                                 <button class="btn btn-warning" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                 <button class="btn btn-success" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-outline-info abrirWhats" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats"><i class="bi bi-whatsapp"></i></button>
+                                <button class="btn btn-primary abrirWhats whats_tabla" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats para pago en efectivo"><i class="bi bi-whatsapp"></i></button>
+                                <button class="btn btn-primary abrirTrans whatsTrans_tabla" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
                             </td>
                         </tr>
                     @endif

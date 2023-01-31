@@ -498,6 +498,23 @@ $(document).ready(function () {
         $("#formModalWhats").modal("show");
     });
 
+    $(document).on("click", ".abrirTrans", function () {
+        let cliente = $(this).data("cliente");
+        let contrato = $(this).data("contrato");
+        let pago = $(this).data("pago");
+        let rendimiento = $(this).data("rendimiento");
+        let clientenumero = $(this).data("clientenumero");
+        let fecha = $(this).data("fecha");
+
+        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+
+        $("#nombreClienteInput").val(cliente);
+        $("#numeroClienteInput").val(clientenumero);
+        $("#mensajeInput").val(mensaje);
+
+        $("#formModalWhats").modal("show");
+    });
+
     $(document).on("click", "#enviarWhats", function () {
         let cliente = $("#nombreClienteInput").val();
         let numero = $("#numeroClienteInput").val();
