@@ -607,6 +607,7 @@ class ContratoController extends Controller
             $fecha_inicio = $contrato->fecha;
             $fecha_pago = Carbon::parse($fecha_inicio);
             $fecha_amortizacion = Carbon::parse($fecha_inicio);
+            $fecha_cond = Carbon::parse($fecha_inicio);
             $fecha_feb = Carbon::parse($fecha_inicio);
             $fecha_nueva = Carbon::parse($fecha_inicio);
             $fechaFeb = Carbon::parse($fecha_inicio);
@@ -690,7 +691,16 @@ class ContratoController extends Controller
                     $amortizacion->contrato_id = $contrato_id;
                     $amortizacion->serie = ($i + 1);
                     
-                    $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    $mes_cond = $fecha_cond->format('m');
+
+                    if($mes_cond == 1){
+                        $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                    }else{
+                        $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    }
+
+                    $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+
                     $fecha_dia = $fecha_nueva->format('d');
                     $fecha_mes = $fechaFeb->format('m');
                     $fecha_anio = $fechaFeb->format('Y');
@@ -803,7 +813,16 @@ class ContratoController extends Controller
                     $amortizacion->contrato_id = $contrato_id;
                     $amortizacion->serie = ($i + 1);
                     
-                    $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    $mes_cond = $fecha_cond->format('m');
+
+                    if($mes_cond == 1){
+                        $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                    }else{
+                        $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    }
+
+                    $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+
                     $fecha_dia = $fecha_nueva->format('d');
                     $fecha_mes = $fechaFeb->format('m');
                     $fecha_anio = $fechaFeb->format('Y');
@@ -1054,6 +1073,7 @@ class ContratoController extends Controller
             $fecha_inicio = $contrato->fecha;
             $fecha_pago = Carbon::parse($fecha_inicio);
             $fecha_amortizacion = Carbon::parse($fecha_inicio);
+            $fecha_cond = Carbon::parse($fecha_inicio);
             $fecha_feb = Carbon::parse($fecha_inicio);
             $fecha_nueva = Carbon::parse($fecha_inicio);
             $fechaFeb = Carbon::parse($fecha_inicio);
@@ -1137,7 +1157,16 @@ class ContratoController extends Controller
                     $amortizacion->contrato_id = $contrato->id;
                     $amortizacion->serie = ($i + 1);
                     
-                    $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    $mes_cond = $fecha_cond->format('m');
+
+                    if($mes_cond == 1){
+                        $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                    }else{
+                        $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    }
+
+                    $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+
                     $fecha_dia = $fecha_nueva->format('d');
                     $fecha_mes = $fechaFeb->format('m');
                     $fecha_anio = $fechaFeb->format('Y');            
@@ -1250,7 +1279,16 @@ class ContratoController extends Controller
                     $amortizacion->contrato_id = $contrato->id;
                     $amortizacion->serie = ($i + 1);
 
-                    $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    $mes_cond = $fecha_cond->format('m');
+
+                    if($mes_cond == 1){
+                        $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                    }else{
+                        $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                    }
+
+                    $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+
                     $fecha_dia = $fecha_nueva->format('d');
                     $fecha_mes = $fechaFeb->format('m');
                     $fecha_anio = $fechaFeb->format('Y');
