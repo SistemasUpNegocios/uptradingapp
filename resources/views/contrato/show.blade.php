@@ -24,11 +24,11 @@
             <div class="card-body pb-0">
                 <h5 class="card-title mb-0 text-center">Contratos</h5>
                 <div class="col-12 mb-2 px-2">
-                    <a class="btn btn-primary" id="todos">Todos</a>
-                    <a class="btn btn-outline-primary" id="contratosActivados">Activados</a>
-                    <a class="btn btn-outline-primary" id="contratosPendientes">Pendientes</a>
-                    <a class="btn btn-outline-primary" id="contratosMensuales">Mensuales</a>
-                    <a class="btn btn-outline-primary" id="contratosCompuestos">Compuestos</a>
+                    <a class="btn btn-primary mb-2" id="todos">Todos</a>
+                    <a class="btn btn-outline-primary mb-2" id="contratosActivados">Activados</a>
+                    <a class="btn btn-outline-primary mb-2" id="contratosPendientes">Pendientes</a>
+                    <a class="btn btn-outline-primary mb-2" id="contratosMensuales">Mensuales</a>
+                    <a class="btn btn-outline-primary mb-2" id="contratosCompuestos">Compuestos</a>
                 </div>
             </div>
         </div>
