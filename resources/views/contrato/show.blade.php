@@ -573,7 +573,7 @@
         </div>
     </div>
 
-    <a href="#" id="filtros" class="d-flex align-items-center justify-content-center">
+    <a href="#" id="filtros" title="Filtros de contratos" class="d-flex align-items-center justify-content-center">
         <i class="bi bi-funnel-fill text-white"></i>
     </a>
 @endsection

@@ -1,3 +1,71 @@
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $(".image-upload-wrapScanner1").hide();
+
+            $(".file-upload-imageScanner1").attr("src", e.target.result);
+            $(".file-upload-contentScanner1").show();
+
+            $(".image-titleScanner1").html(input.files[0].name);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        removeUpload();
+    }
+}
+
+function removeUpload() {
+    $(".file-upload-inputScanner1").replaceWith(
+        $(".file-upload-inputScanner1").clone()
+    );
+    $(".file-upload-contentScanner1").hide();
+    $(".image-upload-wrapScanner1").show();
+}
+
+$(".image-upload-wrapScanner1").bind("dragover", function () {
+    $(".image-upload-wrapScanner1").addClass("image-droppingScanner1");
+});
+$(".image-upload-wrapScanner1").bind("dragleave", function () {
+    $(".image-upload-wrapScanner1").removeClass("image-droppingScanner1");
+});
+
+function readURL2(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $(".image-upload-wrapScanner2").hide();
+
+            $(".file-upload-imageScanner2").attr("src", e.target.result);
+            $(".file-upload-contentScanner2").show();
+
+            $(".image-titleScanner2").html(input.files[0].name);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        removeUpload2();
+    }
+}
+
+function removeUpload2() {
+    $(".file-upload-inputScanner2").replaceWith(
+        $(".file-upload-inputScanner2").clone()
+    );
+    $(".file-upload-contentScanner2").hide();
+    $(".image-upload-wrapScanner2").show();
+}
+
+$(".image-upload-wrapScanner2").bind("dragover", function () {
+    $(".image-upload-wrapScanner2").addClass("image-droppingScanner2");
+});
+$(".image-upload-wrapScanner2").bind("dragleave", function () {
+    $(".image-upload-wrapScanner2").removeClass("image-droppingScanner2");
+});
+
 $(document).ready(function () {
     let acc = "";
 
@@ -460,7 +528,7 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
-                $("#formModal").modal("hide");
+                $("#folioModal").modal("show");
                 $("#folioForm")[0].reset();
                 table1.ajax.reload(null, false);
                 table2.ajax.reload(null, false);
@@ -529,42 +597,74 @@ $(document).ready(function () {
         $("#btnSubmit").hide();
     });
 
+    // $(document).on("click", ".edit", function (e) {
+    //     $("#alertMessage").text("");
+    //     acc = "edit";
+    //     e.preventDefault();
+    //     var id = $(this).data("id");
+
+    //     var folio = $(this).data("folio");
+    //     var contratoid = $(this).data("contratoid");
+    //     var estatus = $(this).data("estatus");
+    //     var fecha = $(this).data("fecha");
+    //     var fechacancelado = $(this).data("fechacancelado");
+
+    //     $("#formModal").modal("show");
+    //     $("#folioForm").attr("action", "/admin/editFolio");
+
+    //     $("#idInput").val(id);
+
+    //     $("#folioInput").val(folio);
+    //     $("#folioInput").prop("readonly", false);
+
+    //     $("#contratoIdInput").val(contratoid);
+    //     $("#contratoIdInput").prop("disabled", false);
+
+    //     $("#estatusInput").val(estatus);
+    //     $("#estatusInput").prop("disabled", false);
+
+    //     $("#fechaInput").val(fecha);
+    //     $("#fechaInput").prop("readonly", false);
+
+    //     $("#fechaCanceladoInput").val(fechacancelado);
+    //     $("#fechaCanceladoInput").prop("readonly", false);
+
+    //     $("#modalTitle").text(`Editar folio`);
+    //     $("#btnSubmit").show();
+    //     $("#btnSubmit").text("Editar folio");
+    //     $("#btnCancel").text("Cancelar");
+    // });
+
     $(document).on("click", ".edit", function (e) {
-        $("#alertMessage").text("");
+        $("#folioForm")[0].reset();
+
         acc = "edit";
         e.preventDefault();
-        var id = $(this).data("id");
 
-        var folio = $(this).data("folio");
-        var contratoid = $(this).data("contratoid");
-        var estatus = $(this).data("estatus");
-        var fecha = $(this).data("fecha");
-        var fechacancelado = $(this).data("fechacancelado");
-
-        $("#formModal").modal("show");
         $("#folioForm").attr("action", "/admin/editFolio");
+
+        var id = $(this).data("id");
+        var imagen = $(this).data("imagen");
 
         $("#idInput").val(id);
 
-        $("#folioInput").val(folio);
-        $("#folioInput").prop("readonly", false);
+        if (imagen != "default.png") {
+            $(".image-upload-wrapScanner1").hide();
+            $(".file-upload-imageScanner1").attr(
+                "src",
+                `../img/folios/${imagen}`
+            );
+            $(".file-upload-contentScanner1").show();
+            $("#pictureInputScanner1").text("Cambiar imagen");
+        } else {
+            $(".image-upload-wrapScanner1").show();
+            $(".file-upload-imageScanner1").attr("src", "");
+            $(".file-upload-contentScanner1").hide();
+            $("#pictureInputScanner1").text("Subir evidencia");
+        }
 
-        $("#contratoIdInput").val(contratoid);
-        $("#contratoIdInput").prop("disabled", false);
-
-        $("#estatusInput").val(estatus);
-        $("#estatusInput").prop("disabled", false);
-
-        $("#fechaInput").val(fecha);
-        $("#fechaInput").prop("readonly", false);
-
-        $("#fechaCanceladoInput").val(fechacancelado);
-        $("#fechaCanceladoInput").prop("readonly", false);
-
-        $("#modalTitle").text(`Editar folio`);
-        $("#btnSubmit").show();
-        $("#btnSubmit").text("Editar folio");
-        $("#btnCancel").text("Cancelar");
+        $("#btnSubmitScanner").text("Guardar cambios");
+        $("#folioModal").modal("show");
     });
 
     $(document).on("click", ".delete", function (e) {

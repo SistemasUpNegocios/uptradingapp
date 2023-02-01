@@ -29,7 +29,7 @@ class FolioController extends Controller
     public function getFolioCancelado()
     {
         $folio = Folio::join("contrato", "contrato.id", "=", "folio.contrato_id")
-            ->select("folio.id", "folio.folio", "contrato.contrato", "contrato.id AS contratoid", "folio.estatus", "folio.fecha")
+            ->select("folio.id", "folio.folio", "contrato.contrato", "contrato.id AS contratoid", "folio.estatus", "folio.fecha", "folio.fecha_cancelado", "folio.evidencia")
             ->where("folio.estatus", "Cancelado")
             ->get();
 
@@ -55,6 +55,8 @@ class FolioController extends Controller
             $folio->contrato = $request->contrato;
             $folio->estatus = $request->estatus;
             $folio->fecha = $request->fecha;
+            $folio->fecha_cancelado = $request->fecha;
+            $folio->evidencia = "default.png";
             $folio->save();
 
             $folio_id = $folio->id;
@@ -78,10 +80,22 @@ class FolioController extends Controller
         if ($request->ajax()) {
 
             $folio = Folio::find($request->id);
-            $folio->folio = $request->folio;
-            $folio->contrato = $request->contrato;
-            $folio->estatus = $request->estatus;
-            $folio->fecha = $request->fecha;
+            
+            if ($request->hasFile('evidencia')) {
+                $foto_anterior = $folio->evidencia;
+
+                if (is_file(public_path('img/folios') . $foto_anterior)) {
+                    chmod(public_path('img/folios') . $foto_anterior, 0777);
+                    unlink(public_path('img/folios') . $foto_anterior);
+                }
+
+                $file = $request->file('evidencia');
+                $filename = $file->getClientOriginalName();
+
+                $file->move(public_path('img/folios'), $filename);
+                $folio->evidencia = $filename;
+            }
+
             $folio->update();
 
             $folio_id = $folio->id;

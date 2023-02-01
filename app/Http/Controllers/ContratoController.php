@@ -547,6 +547,8 @@ class ContratoController extends Controller
             $folio->contrato_id = $contrato->id;
             $folio->estatus = "En uso";
             $folio->fecha = $contrato->fecha;
+            $folio->fecha_cancelado = $contrato->fecha;
+            $folio->evidencia = "default.png";
             $folio->save();
 
             $tipo_cambio = new TipoCambio;
@@ -918,13 +920,15 @@ class ContratoController extends Controller
             if ($contrato->folio != $request->folio) {
                 Folio::where('contrato_id', $request->id)
                 ->where('folio', $contrato->folio)
-                ->update(["estatus" => "Cancelado"]);
+                ->update(["estatus" => "Cancelado", "fecha_cancelado" => Carbon::now()->format('Y-m-d')]);
 
                 $folio = new Folio;
                 $folio->folio = $request->folio;
                 $folio->contrato_id = $request->id;
                 $folio->estatus = "En uso";
                 $folio->fecha = $request->fechainicio;
+                $folio->fecha_cancelado = $request->fechainicio;
+                $folio->evidencia = "default.png";
                 $folio->save();
             }
             

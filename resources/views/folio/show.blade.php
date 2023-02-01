@@ -46,7 +46,7 @@
                                     <th data-priority="0" scope="col">Número de folio</th>
                                     <th data-priority="0" scope="col">Contrato</th>
                                     <th data-priority="0" scope="col">Estatus del folio</th>
-                                    <th data-priority="0" scope="col">Fecha del folio</th>
+                                    <th data-priority="0" scope="col">Fecha de cancelación de folio</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -84,7 +84,7 @@
     </div>
 </section>
 
-<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+{{-- <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,6 +137,48 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn principal-button" id="btnSubmit">Añadir folio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+<div class="modal fade" id="folioModal" tabindex="-1" aria-labelledby="modalTitleScanner" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-lg-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleScanner">Evidencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="folioForm" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id" id="idInput">
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12">
+                            <div class="file-uploadScanner1 mb-3">
+                                <label for="pictureInputScanner1" id="pictureInputScanner1">Subir evidencia</label>
+                                <div class="image-upload-wrapScanner1" style="height: auto;">
+                                    <input class="file-upload-inputScanner1" type='file' name="evidencia" onchange="readURL(this);" accept="image/*" />
+                                    <div class="drag-textScanner1">
+                                        <h3>Arrastra una imagen o haz clic aquí</h3>
+                                    </div>
+                                </div>
+                                <div class="file-upload-contentScanner1">
+                                    <img class="file-upload-imageScanner1" src="#" alt="Imagen subida" />
+                                    <div class="image-title-wrapScanner1">
+                                        <button type="button" onclick="removeUpload()" class="remove-imageScanner1">Eliminar <span class="image-titleScanner1">Imagen seleccionada</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancelScanner" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn principal-button" id="btnSubmitScanner">Añadir contrato</button>
                     </div>
                 </form>
             </div>

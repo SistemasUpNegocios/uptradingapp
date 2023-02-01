@@ -97,7 +97,6 @@ Route::get('/admin/showContratoCompuestos', [App\Http\Controllers\ContratoContro
 Route::get('/admin/showContratoActivados', [App\Http\Controllers\ContratoController::class, 'getContratoActivado']);
 Route::get('/admin/showContratoPendientes', [App\Http\Controllers\ContratoController::class, 'getContratoPendiente']);
 
-
 // Rutas para gestión de contrato terminado
 Route::get('/admin/contratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'index'])->name('contratoTerminado');
 Route::get('/admin/showContratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'getContrato']);
