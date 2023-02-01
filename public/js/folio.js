@@ -297,7 +297,7 @@ $(document).ready(function () {
             { data: "contrato" },
             { data: "estatus" },
             {
-                data: "fecha",
+                data: "fecha_cancelado",
                 render: function (data) {
                     return formatearFecha(data);
                 },
