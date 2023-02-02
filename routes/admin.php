@@ -350,3 +350,7 @@ Route::get('/admin/showFolio', [App\Http\Controllers\FolioController::class, 'ge
 Route::post('/admin/addFolio', [App\Http\Controllers\FolioController::class, 'addFolio']);
 Route::post('/admin/editFolio', [App\Http\Controllers\FolioController::class, 'editFolio']);
 Route::post('/admin/deleteFolio', [App\Http\Controllers\FolioController::class, 'deleteFolio']);
+
+// Rutas para gestión de concentrados
+Route::get('/admin/concentrado', [App\Http\Controllers\ConcentradoController::class, 'index'])->name('concentrado');
+Route::get('/admin/showConcentrado', [App\Http\Controllers\ConcentradoController::class, 'getConcentrado']);

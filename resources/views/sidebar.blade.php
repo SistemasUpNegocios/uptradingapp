@@ -224,8 +224,7 @@
         <li class="nav-heading">Opciones de administrador</li>
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
             <li class="nav-item">
-                <a class="@if (request()->is('admin/cliente')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/cliente') }}">
+                <a class="@if (request()->is('admin/cliente')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/cliente') }}">
                     <i class="bi bi-people"></i>
                     <span>Clientes</span>
                 </a>
@@ -445,6 +444,11 @@
                         <li>
                             <a href="{{ URL::to('admin/preguntas') }}">
                                 <i class="bi bi-circle"></i><span>Preguntas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/concentrado') }}">
+                                <i class="bi bi-circle"></i><span>Concentrados</span>
                             </a>
                         </li>
                     @endif                    

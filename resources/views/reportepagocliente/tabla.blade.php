@@ -25,7 +25,7 @@
                         $fecha = $resumen->fecha;
                         $pago_dolares = number_format($resumen->pago, 2);
                     @endphp
-                    @if ($resumen->tipo_id == 1)                                    
+                    @if ($resumen->tipo_id == 1)
                         <tr>
                             <td style="font-size: 14px">
                                 {{ $contrato }}

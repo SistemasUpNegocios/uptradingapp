@@ -1629,7 +1629,7 @@ $(document).ready(function () {
                 table.ajax.reload(null, false);
                 if (acc == "new") {
                     window.open(
-                        `https://web.whatsapp.com/send?phone=6188397278&text=Se ha generado un nuevo contrato con número: ${contrato_numero}, por favor actívalo.`,
+                        `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0A%0A${contrato_numero}`,
                         "_blank"
                     );
 
