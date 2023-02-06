@@ -1,4 +1,18 @@
-let fechaDash = moment().add("days", 10).format("YYYY/MM/DD");
+const date = moment();
+const day = moment.weekdays(date.day());
+
+//Dias inhabiles
+const date2 = moment("06/02/2023", "DD/MM/YYYY");
+const day2 = moment.weekdays(date2.day());
+
+let fechaDash = "";
+if (day == "Saturday") {
+    fechaDash = moment().add("days", 12).format("YYYY/MM/DD");
+} else if (day == "Sunday" || day2 == "Monday") {
+    fechaDash = moment().add("days", 11).format("YYYY/MM/DD");
+} else {
+    fechaDash = moment().add("days", 10).format("YYYY/MM/DD");
+}
 
 $.ajax({
     type: "GET",
