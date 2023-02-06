@@ -142,7 +142,7 @@
         $sustituciones[5] = $contratos[0]->porcentaje;
 
         $moneyCentavos_us = strval($contratos[0]->inversion_us);
-        $resultCentavos_us = explode(".", $moneyCentavos_us);
+        $resultCentavos_us = explode(",", $moneyCentavos_us);
 
         if (next($resultCentavos_us)) {
           if (strlen($resultCentavos_us[1]) == 1) {
@@ -155,7 +155,7 @@
         }
 
         $moneyCentavos = strval($contratos[0]->inversion);
-        $resultCentavos = explode(".", $moneyCentavos);
+        $resultCentavos = explode(",", $moneyCentavos);
 
         if (next($resultCentavos)) {
           if (strlen($resultCentavos[1]) == 1) {

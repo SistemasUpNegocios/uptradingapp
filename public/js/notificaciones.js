@@ -164,13 +164,13 @@ $(document).ready(function () {
                     var i = 0;
                     response.notificaciones.map(function (notificacion) {
                         $("#contenedorNotificacion").append(`
-                            <div class="col-1 text-center"><i class="bi bi-chat-text-fill fs-1"></i></div>
+                            <div class="col-1"><i class="bi bi-chat-text-fill fs-1"></i></div>
                             <div class="col-6">
                                 <span class="text-muted">
                                     ${notificacion.mensaje}
                                 </span>
                             </div>
-                            <div class="col-3 text-center">
+                            <div class="col-3">
                                 <span class="text-muted">
                                     ${
                                         response.fecha[i][0].toUpperCase() +
@@ -178,7 +178,7 @@ $(document).ready(function () {
                                     }
                                 </span>
                             </div>
-                            <div class="col-2 text-center">
+                            <div class="col-2">
                                 <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="text-muted">
                                         <i class="bi bi-three-dots"></i>
@@ -223,7 +223,7 @@ $(document).ready(function () {
                         </li>
 
                         <li class="message-item">
-                            <div class="text-center">
+                            <div>
                     `;
                     var i = 0;
                     response.notificaciones.map(function (notificacion) {

@@ -10,6 +10,7 @@ use App\Models\Log;
 use App\Models\Modelo;
 use App\Models\Folio;
 use App\Models\TipoCambio;
+use App\Models\Notificacion;
 use App\Models\PagoCliente;
 use App\Models\PagoPS;
 use App\Models\Ps;
@@ -1408,30 +1409,11 @@ class ContratoController extends Controller
     public function getClave(Request $request)
     {
         $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
-        $id_user = auth()->user()->id;
-
-            if (\Hash::check($request->clave, $clave->password)) {
-                if($request->status == "Activado"){
-                    $contrato = Contrato::find($request->id);
-                    $contrato->memo_status = "Contrato activado por id:$id_user";
-                    $contrato->save();
-                }elseif($request->status == "Pendiente de activación"){
-                    $contrato = Contrato::find($request->id);
-                    $contrato->memo_status = "Contrato desactivado por id:$id_user";
-                    $contrato->save();
-                }elseif($request->status == "Finiquitado"){
-                    $contrato = Contrato::find($request->id);
-                    $contrato->memo_status = "Contrato finiquitado por id:$id_user";
-                    $contrato->save();
-                }elseif($request->status == "Refrendado"){
-                    $contrato = Contrato::find($request->id);
-                    $contrato->memo_status = "Contrato refrendado por id:$id_user";
-                    $contrato->save();
-                }
-                return response("success");
-            }else{
-                return response("error");
-            }
+        if (\Hash::check($request->clave, $clave->password)) {                
+            return response("success");
+        }else{
+            return response("error");
+        }
     }
 
     public function getPendientes(Request $request)
@@ -1491,9 +1473,41 @@ class ContratoController extends Controller
     public function editStatus(Request $request)
     {
         $contrato = Contrato::find($request->id);
+        $id_user = auth()->user()->id;
+
+        if($request->status == "Activado"){
+            $contrato->memo_status = "Contrato activado por id:$id_user";
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activo un nuevo contrato";
+            $notificacion->mensaje = "El contrato con número $contrato->contrato ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 1;
+            $notificacion->save();
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activo un nuevo contrato";
+            $notificacion->mensaje = "El contrato con número $contrato->contrato ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 234;
+            $notificacion->save();
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activo un nuevo contrato";
+            $notificacion->mensaje = "El contrato con número $contrato->contrato ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 235;
+            $notificacion->save();
+
+        }elseif($request->status == "Pendiente de activación"){
+            $contrato->memo_status = "Contrato desactivado por id:$id_user";
+        }elseif($request->status == "Finiquitado"){
+            $contrato->memo_status = "Contrato finiquitado por id:$id_user";
+        }elseif($request->status == "Refrendado"){
+            $contrato->memo_status = "Contrato refrendado por id:$id_user";
+        }
 
         $contrato->status = $request->status;
-
         $contrato->update();
 
         return response($contrato);

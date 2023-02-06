@@ -35,6 +35,7 @@
                     <input type="radio" id="datos" class="filtroInput" value="datos" checked>
                     <input type="radio" id="graficas" class="filtroInput" value="graficas">
                 
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                     <div id="contenedor_filtros" class="contenedor_filtros">    
                         <div class="card info-card machines-card">
                             <div class="card-body pb-0">
@@ -53,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                @endif
                     
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
                         {{-- agenda --}}

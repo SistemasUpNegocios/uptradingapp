@@ -137,14 +137,6 @@ Route::post('/admin/addOficina', [App\Http\Controllers\OficinaController::class,
 Route::post('/admin/editOficina', [App\Http\Controllers\OficinaController::class, 'editOficina']);
 Route::post('/admin/deleteOficina', [App\Http\Controllers\OficinaController::class, 'deleteOficina']);
 
-// Rutas para gestión de PS de oficina
-Route::get('/admin/psOficina', [App\Http\Controllers\PsOficinaController::class, 'index'])->name('psoficina');
-Route::get('/admin/showPsOficina', [App\Http\Controllers\PsOficinaController::class, 'getPs']);
-Route::post('/admin/addPsOficina', [App\Http\Controllers\PsOficinaController::class, 'addPs']);
-Route::post('/admin/editPsOficina', [App\Http\Controllers\PsOficinaController::class, 'editPs']);
-Route::post('/admin/deletePsOficina', [App\Http\Controllers\PsOficinaController::class, 'deletePs']);
-Route::post('/admin/getPsEncargado', [App\Http\Controllers\PsOficinaController::class, 'getPsEncargado']);
-
 // Rutas para gestión de menú para pagos a ps (rendimiento compuesto y mensual)
 Route::get('/admin/pagoPS', [App\Http\Controllers\PagoPsController::class, 'index'])->name('pagops');
 Route::get('/admin/showPS', [App\Http\Controllers\PagoPsController::class, 'getPS']);
@@ -301,7 +293,14 @@ Route::post('/admin/message/sent', [App\Http\Controllers\MessageController::clas
 
 // Rutas de gestión de tickets
 Route::get('/admin/tickets', [TicketController::class, 'index']);
+Route::get('/admin/showUsuariosTickets', [TicketController::class, 'getUsuariosTickets']);
+Route::get('/admin/showTabsTickets', [TicketController::class, 'getTabsTickets']);
+Route::get('/admin/showAsignadosTickets', [TicketController::class, 'getAsignadosTickets']);
 Route::post('/admin/addTicket', [TicketController::class, 'addTicket']);
+Route::post('/admin/editTicket', [TicketController::class, 'editTicket']);
+Route::post('/admin/editStatusTicket', [TicketController::class, 'editStatusTicket']);
+Route::post('/admin/traspasarTicket', [TicketController::class, 'traspasarTicket']);
+Route::get('/admin/getTicketsAlerta', [TicketController::class, 'getTicketsAlerta']);
 
 // Rutas de preguntas
 Route::get('/admin/showPreguntas', [App\Http\Controllers\PreguntaController::class, 'getPreguntas'])->name('preguntas');

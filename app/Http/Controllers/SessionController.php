@@ -59,8 +59,6 @@ class SessionController extends Controller
             if (auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond) {
                 session(["clienteid" => "%"]);
                 session(["psid" => "%"]);
-            }else if(auth()->user()->is_ps_silver){
-                session(["clienteid" => "%"]);
             }else if (auth()->user()->is_cliente) {
                 session(["codigo_oficina" => "%"]);
                 session(["psid" => "%"]);

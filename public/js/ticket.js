@@ -1,5 +1,6 @@
 $(document).ready(function () {
     let acc = "";
+    let estatus = "";
 
     $.ajaxSetup({
         headers: {
@@ -7,9 +8,242 @@ $(document).ready(function () {
         },
     });
 
+    const tabsTickets = () => {
+        $.ajax({
+            type: "GET",
+            url: "/admin/showTabsTickets",
+            success: function (response) {
+                $("#myTabContent").empty();
+                $("#myTabContent").append(response);
+                let count = $("#countInput").val();
+                $("#countTickets").text(count);
+                if (estatus == "Abierto") {
+                    $("#abiertos-tab-pane").addClass("active");
+                    $("#abiertos-tab-pane").addClass("show");
+                } else if (estatus == "En proceso") {
+                    $("#proceso-tab-pane").addClass("active");
+                    $("#proceso-tab-pane").addClass("show");
+                } else if (estatus == "Cancelado") {
+                    $("#cancelados-tab-pane").addClass("active");
+                    $("#cancelados-tab-pane").addClass("show");
+                } else if (estatus == "Terminado") {
+                    $("#terminados-tab-pane").addClass("active");
+                    $("#terminados-tab-pane").addClass("show");
+                }
+            },
+        });
+    };
+
+    $(document).on("click", ".new", function (e) {
+        $("#alertMessage").text("");
+        acc = "new";
+        $("#ticketForm")[0].reset();
+        $("#ticketForm").attr("action", "/admin/addTicket");
+        $("#idInput").val("");
+
+        $("#modalTitle").text("Abrir ticket");
+        $("#btnSubmit").text("Abrir ticket");
+
+        $("#btnSubmit").show();
+        $("#btnCancel").text("Cancelar");
+    });
+
+    $(document).on("click", ".edit", function (e) {
+        $("#alertMessage").text("");
+        acc = "edit";
+        e.preventDefault();
+        var id = $(this).data("id");
+        var departamento = $(this).data("departamento");
+        var asignado = $(this).data("asignado");
+        var fechalimite = $(this).data("fechalimite");
+        var asunto = $(this).data("asunto");
+        var descripcion = $(this).data("descripcion");
+
+        asignado = asignado.split(",");
+        let asignadoCount = asignado.length;
+        let user_id = asignado[asignadoCount - 2];
+
+        $("#idInput").val(id);
+
+        $("#departamentoInput").val(departamento);
+        $("#departamentoInput").prop("disabled", false);
+
+        $("#fechaLimiteInput").val(fechalimite);
+        $("#fechaLimiteInput").prop("readonly", false);
+
+        $("#asuntoInput").val(asunto);
+        $("#asuntoInput").prop("readonly", false);
+
+        $("#descripcionInput").val(descripcion);
+        $("#descripcionInput").prop("readonly", false);
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/showUsuariosTickets",
+            data: {
+                privilegio: "edit_user",
+                id: user_id,
+            },
+            success: function (user) {
+                $("#asignadoAInput").empty();
+                $("#asignadoAInput").append(`
+                    <option value="" disabled>Selecciona...</option>
+                `);
+
+                $("#asignadoAInput").append(`
+                    <option value="${user[0].id}" selected>${user[0].nombre} ${user[0].apellido_p}</option>
+                `);
+
+                $("#modalTitle").text("Editar ticket");
+                $("#btnSubmit").show();
+                $("#btnSubmit").text("Editar ticket");
+                $("#btnCancel").text("Cancelar");
+                $("#formModal").modal("show");
+                $("#ticketForm").attr("action", "/admin/editTicket");
+            },
+        });
+    });
+
+    $(document).on("click", ".detalles", function (e) {
+        e.preventDefault();
+        $("#detallesModal").modal("show");
+
+        var generado = $(this).data("generado");
+        var fechagenerado = moment($(this).data("fechagenerado")).format(
+            "DD/MM/YYYY hh:mm A"
+        );
+        var fechalimite = moment($(this).data("fechalimite")).format(
+            "DD/MM/YYYY hh:mm A"
+        );
+        var departamento = $(this).data("departamento");
+        var asunto = $(this).data("asunto");
+        var descripcion = $(this).data("descripcion");
+        var status = $(this).data("status");
+
+        $("#generado").text(generado);
+        $("#fecha_generado").text(fechagenerado);
+        $("#fecha_limite").text(fechalimite);
+        $("#departamento").text(departamento);
+        $("#asunto").text(asunto);
+        $("#descripcion").text(descripcion);
+        $("#estatus").text(status);
+
+        $("#historial").empty();
+        var id = $(this).data("id");
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/showAsignadosTickets",
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                response.nombre.map((nombre, i) => {
+                    let fecha = moment(response.fecha[i]).format("LL hh:mm A");
+                    if (i == 0) {
+                        $("#historial").append(`
+                            <div class="col-md-6 col-12 mb-2">
+                                <b>Asignado a:</b> ${nombre}
+                            </div>
+                        `);
+                    } else if (i + 1 == response.nombre.length) {
+                        $("#historial").append(`
+                            <div class="col-md-6 col-12 mb-2">
+                                <b>Último traspaso a:</b> ${nombre}
+                            </div>
+                        `);
+                    } else {
+                        $("#historial").append(`
+                            <div class="col-md-6 col-12 mb-2">
+                                <b>Traspaso ${i} a:</b> ${nombre}
+                            </div>
+                        `);
+                    }
+
+                    $("#historial").append(`
+                        <div class="col-md-6 col-12 mb-2">
+                            <b>Fecha:</b> ${fecha}
+                        </div>
+                    `);
+                });
+            },
+        });
+    });
+
+    $(document).on("click", ".status", function (e) {
+        e.preventDefault();
+        acc = "edit";
+        $("#statusModal").modal("show");
+        $("#ticketEstatusForm").attr("action", "/admin/editStatusTicket");
+
+        var id = $(this).data("id");
+        estatus = $(this).data("status");
+
+        $("#idEstatusInput").val(id);
+        $("#statusInput").val(estatus);
+    });
+
+    $(document).on("click", ".traspasar", function (e) {
+        e.preventDefault();
+        acc = "edit";
+        $("#traspasarModal").modal("show");
+        $("#traspasarForm").attr("action", "/admin/traspasarTicket");
+
+        var id = $(this).data("id");
+
+        $("#idTraspasarInput").val(id);
+    });
+
+    $("#departamentoInput").change(function () {
+        var privilegio = $("#departamentoInput").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/showUsuariosTickets",
+            data: {
+                privilegio: privilegio,
+            },
+            success: function (response) {
+                $("#asignadoAInput").empty();
+                $("#asignadoAInput").append(`
+                    <option value="" disabled selected>Selecciona...</option>
+                `);
+
+                response.map(function (user) {
+                    $("#asignadoAInput").append(`
+                        <option value="${user.id}">${user.nombre} ${user.apellido_p}</option>
+                    `);
+                });
+            },
+        });
+    });
+
+    $("#departamentoTrasInput").change(function () {
+        var privilegio = $("#departamentoTrasInput").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/showUsuariosTickets",
+            data: {
+                privilegio: privilegio,
+            },
+            success: function (response) {
+                $("#asignadoATrasInput").empty();
+                $("#asignadoATrasInput").append(`
+                    <option value="" disabled selected>Selecciona...</option>
+                `);
+
+                response.map(function (user) {
+                    $("#asignadoATrasInput").append(`
+                        <option value="${user.id}">${user.nombre} ${user.apellido_p}</option>
+                    `);
+                });
+            },
+        });
+    });
+
     $("#ticketForm").on("submit", function (e) {
         e.preventDefault();
-        var form = $(this).serialize();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
 
@@ -24,6 +258,7 @@ $(document).ready(function () {
             success: function () {
                 $("#formModal").modal("hide");
                 $("#ticketForm")[0].reset();
+                tabsTickets();
                 if (acc == "new") {
                     Swal.fire({
                         icon: "success",
@@ -55,59 +290,77 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("click", ".new", function (e) {
+    $("#ticketEstatusForm").on("submit", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("action");
         $("#alertMessage").text("");
-        acc = "new";
-        $("#ticketForm")[0].reset();
-        $("#ticketForm").attr("action", "/admin/addTicket");
-        $("#idInput").val("");
 
-        $("#nombreInput").prop("readonly", false);
-
-        $("#modalTitle").text("Abrir ticket");
-        $("#btnSubmit").text("Abrir ticket");
-
-        $("#btnSubmit").show();
-        $("#btnCancel").text("Cancelar");
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function () {
+                $("#statusModal").modal("hide");
+                $("#ticketEstatusForm")[0].reset();
+                tabsTickets();
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Estatus actualizado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus del ticket ha sido actualizado correctamente</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function (jqXHR, exception) {
+                var validacion = jqXHR.responseJSON.errors;
+                for (let clave in validacion) {
+                    $("#alertEstatusMessage").append(
+                        `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
+                    );
+                }
+            },
+        });
     });
 
-    $(document).on("click", ".view", function (e) {
-        $("#alertMessage").text("");
-        acc = "view";
+    $("#traspasarForm").on("submit", function (e) {
         e.preventDefault();
-
-        var nombre = $(this).data("nombre");
-
-        $("#modalTitle").text(`Vista previa del banco: ${nombre}`);
-
-        $("#formModal").modal("show");
-
-        $("#nombreInput").val(nombre);
-        $("#nombreInput").prop("readonly", true);
-
-        $("#btnCancel").text("Cerrar vista previa");
-        $("#btnSubmit").hide();
-    });
-
-    $(document).on("click", ".edit", function (e) {
+        var url = $(this).attr("action");
         $("#alertMessage").text("");
-        acc = "edit";
-        e.preventDefault();
-        var id = $(this).data("id");
 
-        var nombre = $(this).data("nombre");
-
-        $("#formModal").modal("show");
-        $("#ticketForm").attr("action", "/admin/editTicket");
-
-        $("#idInput").val(id);
-
-        $("#nombreInput").val(nombre);
-        $("#nombreInput").prop("readonly", false);
-
-        $("#modalTitle").text(`Editar ticket: ${nombre}`);
-        $("#btnSubmit").show();
-        $("#btnSubmit").text("Editar ticket");
-        $("#btnCancel").text("Cancelar");
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function () {
+                $("#traspasarModal").modal("hide");
+                $("#traspasarForm")[0].reset();
+                tabsTickets();
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Ticket traspasado</h1>',
+                    html: '<p style="font-family: Poppins">El ticket fue traspasado con exito</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function (jqXHR, exception) {
+                var validacion = jqXHR.responseJSON.errors;
+                for (let clave in validacion) {
+                    $("#alertTrasMessage").append(
+                        `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
+                    );
+                }
+            },
+        });
     });
 });

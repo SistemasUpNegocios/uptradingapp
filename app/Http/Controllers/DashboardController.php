@@ -162,7 +162,7 @@ class DashboardController extends Controller
 
     public function getAlerta(Request $request)
     {
-        $contrato = Contrato::where("fecha_pago", $request->fecha)->get();
+        $contrato = Contrato::where("fecha_renovacion", $request->fecha)->get();
 
         return response($contrato);
     }

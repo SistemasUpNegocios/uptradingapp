@@ -11,14 +11,16 @@
         </a>
     </div>
 
-    <div class="search-bar">
-        <form id="busquedaForm" class="search-form d-flex align-items-center" method="POST"
-            action="/admin/buscarCliente">
-            @csrf
-            <input type="text" name="query" placeholder="Buscar cliente" title="Ingresa el nombre del cliente" required>
-            <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
-        </form>
-    </div>
+    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+        <div class="search-bar">
+            <form id="busquedaForm" class="search-form d-flex align-items-center" method="POST"
+                action="/admin/buscarCliente">
+                @csrf
+                <input type="text" name="query" placeholder="Buscar cliente" title="Ingresa el nombre del cliente" required>
+                <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+    @endif
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
@@ -74,8 +76,6 @@
                                 PS DIAMOND
                             @elseif(auth()->user()->is_ps_gold)
                                 PS GOLD
-                            @elseif(auth()->user()->is_ps_silver)
-                                PS SILVER
                             @elseif(auth()->user()->is_cliente)
                                 CLIENTE                                                      
                             @else
@@ -140,13 +140,13 @@
         </li>
 
         @if (!auth()->user()->is_cliente)
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/tickets') }}">
                     <i class="bi bi-send"></i>
                     <span>Tickets</span>
                 </a>
-            </li> --}}
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#chat-nav" data-bs-toggle="collapse" href="#">
@@ -205,12 +205,12 @@
                         @endif
 
                         @if (!auth()->user()->is_ps_gold)
-                            <li class="nav-heading">PS encargados</li>
+                            <li class="nav-heading">PS GOLD</li>
                             @foreach ($ps_golds as $ps)
                                 @if (auth()->user()->id != $ps->id)
                                     <li>
                                         <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
-                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }}</span>
+                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }} {{ $ps->apellido_p }}</span>
                                         </a>
                                     </li>
                                 @endif
@@ -404,12 +404,7 @@
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
                         </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/psOficina') }}">
-                            <i class="bi bi-circle"></i><span>PS de oficina</span>
-                        </a>
-                    </li>
+                    </li>                   
                     <li>
                         <a href="{{ URL::to('admin/psmovil') }}">
                             <i class="bi bi-circle"></i><span>PS Móvil</span>
@@ -457,11 +452,13 @@
                             <i class="bi bi-circle"></i><span>Tipo de cambio</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('admin/intencion') }}">
-                            <i class="bi bi-circle"></i><span>Total de intenciones de inversión</span>
-                        </a>
-                    </li>
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/intencion') }}">
+                                <i class="bi bi-circle"></i><span>Total de intenciones de inversión</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>            
         @endif

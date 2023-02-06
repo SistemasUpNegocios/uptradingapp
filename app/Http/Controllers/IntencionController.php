@@ -512,7 +512,7 @@ class IntencionController extends Controller
 
     public function intencion(Request $request)
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
             return view('intencioninversion.tabla');
         }else{
             return redirect()->to('/admin/dashboard');

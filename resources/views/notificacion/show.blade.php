@@ -23,10 +23,10 @@
                 <div class="card pt-4" >
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-1 text-center"><p class="text-muted fw-bold"></div>
-                            <div class="col-6 text-center"><p class="text-muted fw-bold">NOTIFICACIÓN</div>
-                            <div class="col-3 text-center"><p class="text-muted fw-bold">HORA</p></div>
-                            <div class="col-2"><p class="text-muted fw-bold"></p></div>
+                            <div class="col-md-1 text-center"><p class="text-muted fw-bold"></div>
+                            <div class="col-md-6 text-center"><p class="text-muted fw-bold">NOTIFICACIÓN</div>
+                            <div class="col-md-3 text-center"><p class="text-muted fw-bold">HORA</p></div>
+                            <div class="col-md-2"><p class="text-muted fw-bold"></p></div>
                         </div>
                         <hr class="m-0">
                         <div class="row align-items-center mt-3" id="contenedorNotificacion">
@@ -35,16 +35,16 @@
                             @else
                                 @php $foto = auth()->user()->foto_perfil; @endphp
                                 @foreach ($notificacionesList as $notificacion)
-                                    <div class="col-1 text-center">
+                                    <div class="col-md-1 text-center">
                                         <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil" class="rounded-circle text-center" width="66px">
                                     </div>
                                     @if (strlen($notificacion->mensaje) > 50)
-                                        <div class="col-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>                                        
+                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>                                        
                                     @else
-                                        <div class="col-6" style="text-align: center;"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
+                                        <div class="col-md-6" style="text-align: center;"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
                                     @endif
-                                    <div class="col-3 text-center"><span class="text-muted">{{ str_replace('hace', 'Hace', \Carbon\Carbon::parse($notificacion->created_at)->diffForHumans()) }}</span></div>
-                                    <div class="col-2 text-center">
+                                    <div class="col-md-3 text-center"><span class="text-muted">{{ str_replace('hace', 'Hace', \Carbon\Carbon::parse($notificacion->created_at)->diffForHumans()) }}</span></div>
+                                    <div class="col-md-2 text-center">
                                         <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="text-muted">
                                                 <i class="bi bi-three-dots"></i>

@@ -5,4 +5,5 @@
 
 @elseif (auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
     <a href="" data-id="{{ $id }}" data-nombre="{{ $nombre }}" data-telefono="{{ $telefono }}" data-email="{{ $email }}" data-inversionmxn="{{ $inversion_mxn }}" data-inversionusd="{{ $inversion_usd }}" data-tipocambio="{{ $tipo_cambio }}" data-fechainicio="{{ $fecha_inicio }}" data-fecharenovacion="{{ $fecha_renovacion }}" data-fechapago="{{ $fecha_pago }}" data-tipo1="{{ $tipo_1 }}" data-porcentajetipo1="{{ $porcentaje_tipo_1 }}" data-porcentajeinversion1="{{ $porcentaje_inversion_1 }}" data-tipo2="{{ $tipo_2 }}" data-porcentajetipo2="{{ $porcentaje_tipo_2 }}" data-porcentajeinversion2="{{ $porcentaje_inversion_2 }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
+    <a href="{{ "../documentos/intencion/Intención de inversión $fecha_inicio $nombre" }}{{ "_$id.pdf" }}" target="_blank" type="button" title="Vista PDF" class="btn btn-outline-danger btn-sm btn-icon print"> <i class="bi bi-file-earmark-pdf-fill"></i></a>
 @endif

@@ -250,7 +250,7 @@ class PendienteController extends Controller
 
     public function generateList(Request $request)
     {
-        if(auth()->user()->is_ps_silver || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
             $codigo = session('codigo_oficina');
         }else{
             $codigo = "%";

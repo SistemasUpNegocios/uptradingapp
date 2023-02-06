@@ -41,8 +41,6 @@
 @section('g-recaptcha')
     <script type="text/javascript">
         function callbackThen(response) { 
-            // read HTTP status console.log(response.status);
-            // read Promise object 
             response.json().then(function(data){ 
                 console.log(data); 
             });  
@@ -51,6 +49,7 @@
             }
         } 
         localStorage.setItem("Contratos", "Contratos a vencer");
+        localStorage.setItem("Ticket", "Ticket a punto de vencer");
     </script>
     {!! htmlScriptTagJsApi([ 'callback_then' => 'callbackThen', 'callback_catch' => 'callbackCatch' ]) !!}
 @endsection

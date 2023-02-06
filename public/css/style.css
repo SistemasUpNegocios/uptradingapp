@@ -2107,7 +2107,7 @@ pre {
 
 .tabla_reverso {
     text-align: center;
-    line-height: 12px;
+    line-height: 11.5px;
     border-collapse: separate;
     border-spacing: 0px 0px !important;
 }
@@ -2126,7 +2126,7 @@ pre {
 .tabla_reverso td {
     font-family: "Open Sans", sans-serif;
     padding: 0px !important;
-    font-size: 11px;
+    font-size: 10.5px;
 }
 
 .contenedor_beneficiarios {

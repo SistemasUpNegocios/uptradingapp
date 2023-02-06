@@ -305,6 +305,7 @@ $(document).ready(function () {
 
         $("#preguntaInput").prop("readonly", false);
         $("#informacionInput").prop("readonly", false);
+        $("#pictureInput").prop("disabled", false);
 
         $("#modalTitle").text("Añadir pregunta");
         $("#btnSubmit").text("Añadir pregunta");
@@ -327,6 +328,8 @@ $(document).ready(function () {
 
         $("#preguntaInput").val(pregunta);
         $("#preguntaInput").prop("readonly", true);
+
+        $("#pictureInput").prop("disabled", true);
 
         $("#informacionInput").val(informacion);
         $("#informacionInput").prop("readonly", true);
@@ -354,6 +357,8 @@ $(document).ready(function () {
 
         $("#informacionInput").val(informacion);
         $("#informacionInput").prop("readonly", false);
+
+        $("#pictureInput").prop("disabled", false);
 
         $("#modalTitle").text(`Editar pregunta: ${pregunta}`);
         $("#btnSubmit").show();

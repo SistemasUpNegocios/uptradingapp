@@ -27,10 +27,8 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <div class="d-flex justify-content-between align-items-center">
-                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
-                                <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo cliente</a>
-                            @endif
                             @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                                <a class="btn principal-button mb-3 new me-1" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo cliente</a>
                                 <div class="form-check form-switch mb-3">
                                     <input class="form-check-input" type="checkbox" role="switch" id="lpoaSwitch">
                                     <label class="form-check-label" for="lpoaSwitch">Imprimir LPOA</label>

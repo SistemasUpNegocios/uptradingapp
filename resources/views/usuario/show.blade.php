@@ -105,8 +105,8 @@
                                         <option value="root">Root</option>
                                         <option value="admin">Admin</option>
                                         <option value="procesos">Procesos</option>
-                                        <option value="ps_gold">PS gold</option>
-                                        <option value="ps_silver">PS silver</option>
+                                        <option value="ps_gold">PS Gold</option>
+                                        <option value="ps_silver">PS Silver</option>
                                         <option value="contabilidad">Contabilidad</option>
                                         <option value="egresos">Egresos</option>
                                     </select>

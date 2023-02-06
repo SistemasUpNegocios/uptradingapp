@@ -31,6 +31,7 @@ $(".image-upload-wrap").bind("dragleave", function () {
 
 $(document).ready(function () {
     let acc = "";
+    let id;
 
     var table = $("#pagopsconvenio").DataTable({
         ajax: "/admin/showPSConvenio",
@@ -846,7 +847,13 @@ $(document).ready(function () {
                     `);
 
                     table = $("#pagopsconvenio").DataTable({
-                        ajax: "/admin/showContratosPSConvenio",
+                        ajax: {
+                            url: "/admin/showContratosPSConvenio",
+                            type: "GET",
+                            data: {
+                                psid: id,
+                            },
+                        },
                         columns: [
                             {
                                 data: "convenio",
@@ -882,7 +889,7 @@ $(document).ready(function () {
                             processing: "Procesando...",
                             lengthMenu: "Mostrar _MENU_ convenios",
                             zeroRecords: "No se encontraron resultados",
-                            emptyTable: "No se ha registrado ningún convenios",
+                            emptyTable: "No se ha registrado ningún convenio",
                             infoEmpty:
                                 "Mostrando convenios del 0 al 0 de un total de 0 convenios",
                             infoFiltered:
@@ -1116,7 +1123,7 @@ $(document).ready(function () {
             `
         );
 
-        let id = $(this).data("psid");
+        id = $(this).data("psid");
         let psnombre = $(this).data("psnombre");
 
         $(".titlePage").text(`Clientes del PS ${psnombre}`);
