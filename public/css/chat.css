@@ -211,3 +211,17 @@ span.chatStatus.offline {
         font-size: 0.9em;
     }
 }
+
+@media (max-width: 296px) {
+    .msger-inputarea * {
+        padding: 5px;
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width: 250px) {
+    .msger-inputarea * {
+        padding: 4px;
+        font-size: 0.6em;
+    }
+}

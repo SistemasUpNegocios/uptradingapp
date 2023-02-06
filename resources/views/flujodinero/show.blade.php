@@ -54,13 +54,13 @@
                                     <i class="bi bi-printer-fill me-1"></i> Imprimir reporte
                                 </a>
                             </div>
-                            <div class="col-md-10 col-6">
+                            <div class="col-md-10 col-sm-12 mt-2">
                                 <div class="form-floating">
                                     <input type="month" class="form-control" id="fechaInput" name="fecha">
                                     <label for="fechaInput">Fecha de pago</label>
                                 </div>                                
                             </div>
-                            <div class="col-md-2 col-6">
+                            <div class="col-md-2 col-sm-12 mt-2">
                                 <a class="btn principal-button ms-1" id="mostrarPagos"> 
                                     <i class="bi bi-search"></i> Buscar
                                 </a>

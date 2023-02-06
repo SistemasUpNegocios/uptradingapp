@@ -23,15 +23,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                        <a id="newTipo" class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i
-                                class="bi-plus-lg me-1"> </i>Añadir un nuevo tipo de contrato</a>
-                        @endif
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                        <a id="newClausula" class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModalClausula"> <i
-                            class="bi-plus-lg me-1"> </i>Añadir una nueva cláusula</a>
+                        <a id="newTipo" class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo tipo de contrato</a>
+                        <a id="newClausula" class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModalClausula"> <i class="bi-plus-lg me-1"> </i>Añadir una nueva cláusula</a>
                         <a class="btn principal-button mb-3 new" id="btnVolver"> <i class="bi-chevron-left me-1"></i>Volver</a>
-                        @endif
                         <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tipoContrato">
                             <thead>
                                 <tr>

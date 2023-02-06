@@ -3,8 +3,8 @@
 @section('title', 'Gestión de documentos')
 
 @section('css')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">    
 @endsection
 
 @section('content')
@@ -31,9 +31,9 @@
                                 @foreach ($documentos as $documento)
                                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                                         <li>
-                                            <div class="ps-2 d-flex justify-content-between align-items-center">
-                                                <div><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
-                                                <div>
+                                            <div class="ps-2 row align-items-center mb-2">
+                                                <div class="col-12 col-md-6 col-sm-6 col-xs-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
+                                                <div class="col-12 col-md-6 col-sm-6 col-xs-6 text-end accion_documentos">
                                                     <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
                                                     <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
                                                     <a href="" data-id="{{ $documento->id }}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
@@ -43,18 +43,18 @@
                                         </li>
                                     @elseif (auth()->user()->is_cliente && $documento->tipo_documento == "cliente")
                                         <li>
-                                            <div class="ps-2 d-flex justify-content-between align-items-center">
-                                                <div><p>{{ $documento->nombre }}</p></div>
-                                                <div>
+                                            <div class="ps-2 row align-items-center mb-2">
+                                                <div class="col-md-6"><p>{{ $documento->nombre }}</p></div>
+                                                <div class="col-md-6 text-end accion_documentos">
                                                     <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
                                                 </div>
                                             </div>
                                         </li>
                                     @elseif (auth()->user()->is_ps_gold || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                         <li>
-                                            <div class="ps-2 d-flex justify-content-between align-items-center">
-                                                <div><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
-                                                <div>
+                                            <div class="ps-2 row align-items-center mb-2">
+                                                <div class="col-md-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
+                                                <div class="col-md-6 text-end accion_documentos">
                                                     <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
                                                     <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
                                                 </div>

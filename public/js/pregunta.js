@@ -64,7 +64,7 @@ $(document).ready(function () {
             processing: "Procesando...",
             lengthMenu: "Mostrar _MENU_ preguntas",
             zeroRecords: "No se encontraron resultados",
-            emptyTable: "No se ha registrado ningún pregunta",
+            emptyTable: "No se ha registrado ninguna pregunta",
             infoEmpty:
                 "Mostrando preguntas del 0 al 0 de un total de 0 preguntas",
             infoFiltered: "(filtrado de un total de _MAX_ preguntas)",

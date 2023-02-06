@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-body mt-3">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a class="btn principal-button mb-3 new" data-id="{{ $ps->oficina_id }}" id="verPs"> <i class="bi-chevron-left me-1"></i>Volver a ver a los PS</a>
+                    <a class="btn principal-button mb-3 new me-1" data-id="{{ $ps->oficina_id }}" id="verPs"> <i class="bi-chevron-left me-1"></i>Volver a ver a los PS</a>
                     <a class="btn principal-button mb-3 new" data-id="{{ $ps->id }}" id="imprimirResumen"> <i class="bi bi-printer-fill me-1"></i>Imprimir resumen</a>
                 </div>
                 <div class="form-floating mb-3">
@@ -36,65 +36,67 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumen">
-                        <thead>
-                            <tr>
-                                <th data-priority="0" colspan="3"scope="col">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</th>
-                                <th data-priority="0" colspan="2" scope="col">Total: <span style="font-weight: 500">${{ $total }}</span></th>
-                            </tr>
-                            <tr>
-                                <th data-priority="0" scope="col">Tipo</th>
-                                <th data-priority="0" scope="col">Cliente</th>
-                                <th data-priority="0" scope="col">Comisión</th>
-                                <th data-priority="0" scope="col">Tipo de comisión</th>
-                                <th data-priority="0" scope="col">Pago</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resuemnBody">
-                            @foreach ($resumenes_contrato as $resumen)
+                    <div class="mt-4" style="overflow-x: auto;">
+                        <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumen">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @if (strlen($resumen->contrato) == 11)
-                                        {{ substr($resumen->contrato, 0, -2); }}
-                                      @else
-                                        {{ substr($resumen->contrato, 0, -3); }}
-                                      @endif
-                                    </td>
-                                    <td>{{ $resumen->clientenombre }}</td>
-                                    <td>${{ number_format($resumen->pago, 2) }}</td>
-                                    <td>{{ $resumen->memo }}</td>
-                                    <td>
-                                        @if ($resumen->memo == "Comisión por apertura")
-                                          {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/01
-                                        @else
-                                          {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
-                                        @endif
-                                    </td>
+                                    <th data-priority="0" colspan="3"scope="col">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</th>
+                                    <th data-priority="0" colspan="2" scope="col">Total: <span style="font-weight: 500">${{ $total }}</span></th>
                                 </tr>
-                            @endforeach
-                            @foreach ($resumenes_convenio as $resumen)
                                 <tr>
-                                    <td>
-                                        @php
-                                            $convenio = explode('-', $resumen->folio);
-                                            $convenio = "$convenio[1]-$convenio[2]-$convenio[3]";
-                                        @endphp
-                                        {{ $convenio }}
-                                    </td>
-                                    <td>{{ $resumen->clientenombre }}</td>
-                                    <td>${{ number_format($resumen->pago, 2) }}</td>
-                                    <td>{{ $resumen->memo }}</td>
-                                    <td>
-                                        @if ($resumen->memo == "Comisión por apertura")
-                                          {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/01
-                                        @else
-                                          {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
-                                        @endif
-                                    </td>
+                                    <th data-priority="0" scope="col">Tipo</th>
+                                    <th data-priority="0" scope="col">Cliente</th>
+                                    <th data-priority="0" scope="col">Comisión</th>
+                                    <th data-priority="0" scope="col">Tipo de comisión</th>
+                                    <th data-priority="0" scope="col">Pago</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>                
+                            </thead>
+                            <tbody id="resuemnBody">
+                                @foreach ($resumenes_contrato as $resumen)
+                                    <tr>
+                                        <td>
+                                            @if (strlen($resumen->contrato) == 11)
+                                            {{ substr($resumen->contrato, 0, -2); }}
+                                        @else
+                                            {{ substr($resumen->contrato, 0, -3); }}
+                                        @endif
+                                        </td>
+                                        <td>{{ $resumen->clientenombre }}</td>
+                                        <td>${{ number_format($resumen->pago, 2) }}</td>
+                                        <td>{{ $resumen->memo }}</td>
+                                        <td>
+                                            @if ($resumen->memo == "Comisión por apertura")
+                                            {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/01
+                                            @else
+                                            {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @foreach ($resumenes_convenio as $resumen)
+                                    <tr>
+                                        <td>
+                                            @php
+                                                $convenio = explode('-', $resumen->folio);
+                                                $convenio = "$convenio[1]-$convenio[2]-$convenio[3]";
+                                            @endphp
+                                            {{ $convenio }}
+                                        </td>
+                                        <td>{{ $resumen->clientenombre }}</td>
+                                        <td>${{ number_format($resumen->pago, 2) }}</td>
+                                        <td>{{ $resumen->memo }}</td>
+                                        <td>
+                                            @if ($resumen->memo == "Comisión por apertura")
+                                            {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/01
+                                            @else
+                                            {{ str_pad($resumen->serie, 2, "0", STR_PAD_LEFT) }}/12
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 @else
                     <div class="row">
                         <div class="col-12">

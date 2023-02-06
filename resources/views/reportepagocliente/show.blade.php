@@ -84,11 +84,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="input-group mb-3">
-                                    <div class="form-floating" style="width: 80% !important">
+                                    <div class="mt-2 form-floating" style="width: 80% !important">
                                         <input type="number" class="form-control" id="dolarInput" placeholder="Valor del dolar actual" aria-label="Valor del dolar actual" aria-describedby="botonActualizar">
                                         <label for="dolarInput">Valor del dolar actual</label>
                                     </div>
-                                    <button class="btn btn-outline-success d-none" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
+                                    <button class="mt-2 btn btn-outline-success d-none" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
                             </div>
                             </div>
                         </div>                        

@@ -549,7 +549,6 @@ $(document).ready(function () {
                 tabla.append(`
                     <thead>
                         <tr>
-                            <th data-priority="0" scope="col"></th>
                             <th data-priority="0" scope="col">Redacción</th>
                             <th data-priority="0" scope="col">Acciones</th>
                         </tr>
@@ -563,11 +562,7 @@ $(document).ready(function () {
                         url: "/admin/showClausulas",
                         data: { tipoid: tipoid },
                     },
-                    columns: [
-                        { data: "id" },
-                        { data: "redaccion" },
-                        { data: "btn" },
-                    ],
+                    columns: [{ data: "redaccion" }, { data: "btn" }],
                     responsive: {
                         breakpoints: [
                             {
@@ -775,6 +770,7 @@ $(document).ready(function () {
                         },
                         info: "Mostrando de _START_ a _END_ de _TOTAL_ cláusulas",
                     },
+                    aaSorting: [],
                 });
 
                 $("#btnVolver").css("display", "inline-block");

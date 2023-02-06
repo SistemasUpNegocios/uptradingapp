@@ -35,7 +35,7 @@
                                 <th data-priority="0" scope="col">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="preguntaBody">
+                        <tbody id="preguntaBody" style="vertical-align: middle;">
                         </tbody>
                     </table>
                     </div>
@@ -77,7 +77,7 @@
                                 <div class="file-upload mb-3">
                                     <label for="pictureInput">Imagen de ayuda</label>
                                     <div class="image-upload-wrap">
-                                        <input id="pictureInput" class="file-upload-input" type='file' name="img" onchange="readURL(this);" accept="image/*"/>
+                                        <input id="pictureInput" class="file-upload-input" type='file' name="img" onchange="readURL(this);" accept="image/*" />
                                         <div class="drag-text">
                                             <h3>Arrastra una imagen o haz clic aquí</h3>
                                         </div>

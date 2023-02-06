@@ -116,12 +116,6 @@
                             <b>Dirección IP</b>: <span id="ip"></span>
                         </div>
                         <div class="col-md-6 col-12 mb-2">
-                            <b>Fecha de entrada</b>: <span id="fe"></span>
-                        </div>
-                        <div class="col-md-6 col-12 mb-2">
-                            <b>Fecha de salida</b>: <span id="fs"></span>
-                        </div>
-                        <div class="col-md-6 col-12 mb-2">
                             <b>Tipo de dispositivo</b>: <span id="td"></span>
                         </div>
                         <div class="col-md-6 col-12 mb-2">
@@ -130,6 +124,12 @@
                         <div class="col-md-6 col-12 mb-2">
                             <b>Navegador</b>: <span id="br"></span>
                         </div>
+                        <div class="col-md-6 col-12 mb-2">
+                            <b>Fecha de entrada</b>: <span id="fe"></span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-2">
+                            <b>Fecha de salida</b>: <span id="fs"></span>
+                        </div>                        
 
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
@@ -199,5 +199,7 @@
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
     <script src="{{ asset('js/bitacoraAcceso.js') }}"></script>
 @endsection

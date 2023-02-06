@@ -124,7 +124,7 @@
                                     <label for="nacionalidadInput">Nacionalidad</label>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <div class="mb-1">
                                     <label><strong>Estado civil</strong></label>
                                 </div>

@@ -1739,7 +1739,21 @@ h6 {
 }
 
 #tipoContrato td,
-#tipoContrato th {
+#tipoContrato th,
+#pregunta td,
+#pregunta th,
+#pagoCliente td,
+#pagoCliente th,
+#pagops td,
+#pagops th,
+#pagopsconvenio td,
+#pagopsconvenio th,
+#cambios th,
+#cambios td,
+#usuario th,
+#usuario td,
+#porcentaje th,
+#porcentaje td {
     width: auto !important;
     white-space: normal !important;
     text-overflow: ellipsis !important;
@@ -2706,12 +2720,12 @@ pre {
     bottom: 25px;
 }
 
-input[type="radio"] {
+.filtroInput {
     position: absolute;
     left: -9999px;
 }
 
-.filters {
+.contenedor_filtros .filters {
     list-style: none;
     text-align: center;
     display: flex;
@@ -2719,7 +2733,7 @@ input[type="radio"] {
     padding: 0;
 }
 
-.filters label {
+.contenedor_filtros .filters label {
     padding: 0.5rem 0.7rem;
     margin: 0 0.2rem;
     border-radius: 2rem;
@@ -2769,4 +2783,10 @@ input[type="radio"] {
     background: #f2921d !important;
     color: #fff !important;
     border: none !important;
+}
+
+@media (max-width: 575px) {
+    .accion_documentos {
+        text-align: center !important;
+    }
 }

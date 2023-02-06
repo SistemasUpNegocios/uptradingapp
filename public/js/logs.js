@@ -223,6 +223,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ cambios",
         },
+        aaSorting: [],
     });
 
     $.ajaxSetup({

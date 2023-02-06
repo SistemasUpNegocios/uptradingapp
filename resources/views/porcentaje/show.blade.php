@@ -33,10 +33,7 @@
                     <use xlink:href="#info-fill" />
                 </svg>
                 <div>
-                    Aquí podrás modificar los porcentajes <b>(comisión por apertura PS, comisión mensual PS, rendimiento
-                        del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato
-                    interesado a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona que
-                    solicitó la modificación
+                    Aquí podrás modificar los porcentajes <b>(comisión por apertura PS, comisión mensual PS, rendimiento del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato interesado a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona que solicitó la modificación
                 </div>
             </div>
         </div>
