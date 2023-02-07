@@ -298,6 +298,8 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".new", function (e) {
+        $("#preguntaForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "new";
         $("#preguntaForm").attr("action", "/admin/addPregunta");
@@ -307,6 +309,11 @@ $(document).ready(function () {
         $("#informacionInput").prop("readonly", false);
         $("#pictureInput").prop("disabled", false);
 
+        $(".image-upload-wrap").show();
+        $(".file-upload-content").hide();
+        $("#botonEliminarImagen").prop("disabled", false);
+        $("#imgInput").prop("src", "");
+
         $("#modalTitle").text("Añadir pregunta");
         $("#btnSubmit").text("Añadir pregunta");
 
@@ -315,12 +322,15 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".view", function (e) {
+        $("#preguntaForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "view";
         e.preventDefault();
 
         var pregunta = $(this).data("pregunta");
         var informacion = $(this).data("informacion");
+        var imagen = $(this).data("imagen");
 
         $("#modalTitle").text(`Vista previa de la pregunta: ${pregunta}`);
 
@@ -329,16 +339,26 @@ $(document).ready(function () {
         $("#preguntaInput").val(pregunta);
         $("#preguntaInput").prop("readonly", true);
 
-        $("#pictureInput").prop("disabled", true);
-
         $("#informacionInput").val(informacion);
         $("#informacionInput").prop("readonly", true);
+
+        if (imagen.length == 0) {
+            $("#imgInput").prop("src", `../img/preguntas/default.png`);
+        } else {
+            $("#imgInput").prop("src", `../img/preguntas/${imagen}`);
+        }
+
+        $(".image-upload-wrap").hide();
+        $(".file-upload-content").show();
+        $("#botonEliminarImagen").prop("disabled", true);
 
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
     });
 
     $(document).on("click", ".edit", function (e) {
+        $("#preguntaForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "edit";
         e.preventDefault();
@@ -346,6 +366,7 @@ $(document).ready(function () {
 
         var pregunta = $(this).data("pregunta");
         var informacion = $(this).data("informacion");
+        var imagen = $(this).data("imagen");
 
         $("#formModal").modal("show");
         $("#preguntaForm").attr("action", "/admin/editPregunta");
@@ -358,7 +379,15 @@ $(document).ready(function () {
         $("#informacionInput").val(informacion);
         $("#informacionInput").prop("readonly", false);
 
-        $("#pictureInput").prop("disabled", false);
+        if (imagen.length == 0) {
+            $("#imgInput").prop("src", `../img/preguntas/default.png`);
+        } else {
+            $("#imgInput").prop("src", `../img/preguntas/${imagen}`);
+        }
+
+        $(".image-upload-wrap").hide();
+        $(".file-upload-content").show();
+        $("#botonEliminarImagen").prop("disabled", false);
 
         $("#modalTitle").text(`Editar pregunta: ${pregunta}`);
         $("#btnSubmit").show();

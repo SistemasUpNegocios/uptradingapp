@@ -83,9 +83,9 @@
                                         </div>
                                     </div>
                                     <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="Imagen subida" />
+                                        <img class="file-upload-image" id="imgInput" src="#" alt="Imagen subida" />
                                         <div class="image-title-wrap">
-                                            <button type="button" onclick="removeUpload()" class="remove-image">Eliminar <span class="image-title">Imagen seleccionada</span></button>
+                                            <button type="button" onclick="removeUpload()" class="remove-image" id="botonEliminarImagen">Eliminar <span class="image-title">Imagen seleccionada</span></button>
                                         </div>
                                     </div>
                                 </div>
