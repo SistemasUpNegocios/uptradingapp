@@ -2,13 +2,17 @@ const date = moment();
 const day = moment.weekdays(date.day());
 
 //Dias inhabiles
+//constitución mexicana
 const date2 = moment("06/02/2023", "DD/MM/YYYY");
 const day2 = moment.weekdays(date2.day());
+//día del trabajo
+const date3 = moment("01/05/2023", "DD/MM/YYYY");
+const day3 = moment.weekdays(date2.day());
 
 let fechaDash = "";
 if (day == "Saturday") {
     fechaDash = moment().add("days", 12).format("YYYY/MM/DD");
-} else if (day == "Sunday" || day2 == "Monday") {
+} else if (day == "Sunday" || day2 == "Monday" || day3 == "Monday") {
     fechaDash = moment().add("days", 11).format("YYYY/MM/DD");
 } else {
     fechaDash = moment().add("days", 10).format("YYYY/MM/DD");
