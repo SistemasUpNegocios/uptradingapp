@@ -1623,7 +1623,10 @@ $(document).ready(function () {
             processData: false,
             success: function () {
                 let contrato_numero = $("#contratoInput").val();
-                $("option:selected", "#statusInput").prop("disabled", true);
+                let estatus = $("#statusInput").val();
+                if (estatus == "Activado") {
+                    $("option:selected", "#statusInput").prop("disabled", true);
+                }
                 $("#formModal").modal("hide");
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
@@ -1642,6 +1645,13 @@ $(document).ready(function () {
                         confirmButtonColor: "#01bbcc",
                     });
                 } else if (acc == "edit") {
+                    if (estatus == "Refrendado") {
+                        window.open(
+                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0A%0A${contrato_numero}`,
+                            "_blank"
+                        );
+                    }
+
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato actualizado</h1>',
@@ -3570,6 +3580,17 @@ $(document).ready(function () {
         //condicional de refrendo con nuevas fechas
         if (target.is("#statusInput") && event.type == "change") {
             if ($("#statusInput").val() == "Refrendado") {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/getFolio",
+                    success: function (data) {
+                        $("#folioInput").val(data);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    },
+                });
+
                 if (acc == "new") {
                     dataInversionMXN = $("#inversionInput").val();
                     dataInversionMXN = parseFloat(dataInversionMXN);

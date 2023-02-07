@@ -221,6 +221,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ clientes",
         },
+        order: [[0, "desc"]],
     });
 
     $.ajaxSetup({
