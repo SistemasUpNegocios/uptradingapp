@@ -240,6 +240,16 @@
                 </a>
             </li>
         @endif
+
+        @if (auth()->user()->is_root)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/porcentaje')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/porcentaje') }}">                
+                    <i class="bi bi-percent"></i>
+                    <span>Porcentajes</span>
+                </a>
+            </li>
+        @endif
         
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
             <li class="nav-item">
@@ -256,6 +266,11 @@
                         <li>
                             <a href="{{ URL::to('admin/flujodinero') }}">
                                 <i class="bi bi-circle"></i><span>Flujo de dinero</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/concentrado') }}">
+                                <i class="bi bi-circle"></i><span>Concentrados</span>
                             </a>
                         </li>
                     @endif
@@ -340,6 +355,7 @@
             </a>
             <ul id="pagosCliente-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente)
+                    <li class="nav-heading">Tabla</li>
                     <li>
                         <a href="{{ URL::to('admin/pagosCliente') }}">
                             <i class="bi bi-circle"></i><span>Pagos a clientes (compuesto y mensual)</span>
@@ -440,12 +456,7 @@
                             <a href="{{ URL::to('admin/preguntas') }}">
                                 <i class="bi bi-circle"></i><span>Preguntas</span>
                             </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/concentrado') }}">
-                                <i class="bi bi-circle"></i><span>Concentrados</span>
-                            </a>
-                        </li>
+                        </li>                        
                     @endif                    
                     <li>
                         <a href="{{ URL::to('admin/tipocambio') }}">
@@ -461,27 +472,7 @@
                     @endif
                 </ul>
             </li>            
-        @endif
-
-        @if (auth()->user()->is_root)
-            <li class="nav-item">
-                <a class="@if (request()->is('admin/porcentaje')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/porcentaje') }}">                
-                    <i class="bi bi-percent"></i>
-                    <span>Porcentajes</span>
-                </a>
-            </li>
-        @endif
-
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-            <li class="nav-item">
-                <a class="@if (request()->is('admin/cuentasGoogle')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/cuentasGoogle') }}">
-                    <i class="bi bi-google"></i>
-                    <span>Cuentas Google</span>
-                </a>
-            </li>
-        @endif
+        @endif        
 
         @if (auth()->user()->is_root)
             <li class="nav-heading">Configuración</li>
@@ -492,6 +483,11 @@
                 </a>
                 <ul id="control-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
+                        <a href="{{ URL::to('admin/cuentasGoogle') }}">
+                            <i class="bi bi-circle"></i><span>Cuentas Google</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ URL::to('admin/bitacoraAcceso') }}">
                             <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
                         </a>
@@ -501,19 +497,11 @@
                             <i class="bi bi-circle"></i><span>Historial de cambios</span>
                         </a>
                     </li>
-                </ul>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#configuracion-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-gear"></i><span>Configuración</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="configuracion-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="{{ URL::to('admin/usuario') }}">
                             <i class="bi bi-circle"></i><span>Usuarios del sistema</span>
                         </a>
-                    </li>
+                    </li>                    
                 </ul>
             </li>
         @endif

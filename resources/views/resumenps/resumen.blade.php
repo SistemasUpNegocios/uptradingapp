@@ -56,10 +56,10 @@
                                     <tr>
                                         <td>
                                             @if (strlen($resumen->contrato) == 11)
-                                            {{ substr($resumen->contrato, 0, -2); }}
-                                        @else
-                                            {{ substr($resumen->contrato, 0, -3); }}
-                                        @endif
+                                                {{ substr($resumen->contrato, 0, -2); }}
+                                            @else
+                                                {{ substr($resumen->contrato, 0, -3); }}
+                                            @endif
                                         </td>
                                         <td>{{ $resumen->clientenombre }}</td>
                                         <td>${{ number_format($resumen->pago, 2) }}</td>

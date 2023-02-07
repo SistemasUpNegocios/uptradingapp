@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    @if (sizeof($contratos_men_tot) > 0 && sizeof($contratos_comp_tot) && sizeof($convenio_tot))            
+    @if (sizeof($contratos_men_tot) > 0 || sizeof($contratos_comp_tot) > 0 || sizeof($convenio_tot) > 0)
         @foreach ($contratos_men_tot as $contrato)
             @php
                 $pago = str_pad($contrato->serie, 2, "0", STR_PAD_LEFT).'/12';

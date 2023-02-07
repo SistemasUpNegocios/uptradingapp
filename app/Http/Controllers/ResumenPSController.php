@@ -74,7 +74,10 @@ class ResumenPSController extends Controller
             ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
             ->select(DB::raw("contrato.id as contratoid, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps.pago, pago_ps.memo, pago_ps.serie"))
             ->where("contrato.ps_id", "=", $request->id)
-            ->where("pago_ps.fecha_limite", 'like', "$anio-$mes%")
+            ->where(function ($query) use ($anio, $mes) {
+                $query->where("pago_ps.fecha_pago", 'like', "$anio-$mes%")
+                ->orWhere("pago_ps.fecha_limite", 'like', "$anio-$mes%");
+            })
             ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->get();
