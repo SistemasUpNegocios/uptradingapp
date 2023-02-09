@@ -20,6 +20,18 @@
 </div>
 
 <div class="row mt-2">
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <div class="d-flex">
+                <div class="horizontal-card-bg-img"></div>
+                <div class="card-body">
+                    <h5 class="card-title">Foraneos</h5>
+                    <p class="card-text">Presiona el botón para ver los PS foraneos.</p>
+                    <a href="#" id="foraneos" class="btn btn-sm principal-button">Ver foraneos</a>
+                </div>
+            </div>
+        </div>
+    </div>
     @foreach ($lista_oficinas as $oficina)
     <div class="col-md-6 col-12">
         <div class="card">

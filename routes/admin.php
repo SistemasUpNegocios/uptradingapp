@@ -217,6 +217,7 @@ Route::post('/admin/deleteIntencion', [App\Http\Controllers\IntencionController:
 Route::get('/admin/resumenPS', [App\Http\Controllers\ResumenPSController::class, 'index'])->name('resumenps');
 Route::post('/admin/getOficinas', [App\Http\Controllers\ResumenPSController::class, 'getOficinas']);
 Route::post('/admin/getListaPS', [App\Http\Controllers\ResumenPSController::class, 'getListaPS']);
+Route::post('/admin/getForaneos', [App\Http\Controllers\ResumenPSController::class, 'getForaneos']);
 Route::get('/admin/getResumen', [App\Http\Controllers\ResumenPSController::class, 'getResumen']);
 Route::get('/admin/imprimirResumen', [App\Http\Controllers\ResumenPSController::class, 'imprimirResumen']);
 Route::get('/admin/imprimirResumenOficina', [App\Http\Controllers\ResumenPSController::class, 'imprimirResumenOficina']);

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let oficinaID = "";
     let fechaInput = "";
+    let foraneos = false;
 
     $.ajaxSetup({
         headers: {
@@ -79,29 +80,53 @@ $(document).ready(function () {
     getOficinas();
 
     $(document).on("click", "#verPs", function () {
-        let id = $(this).data("id");
-        $.ajax({
-            type: "POST",
-            url: "/admin/getListaPS",
-            data: { id: id },
-            success: function (response) {
-                if (response == "vacío") {
-                    alert("vacío");
-                } else {
-                    $("#contOficinas").empty();
-                    $("#contOficinas").html(response);
-                    $("#fechaInputOficina").val(fechaInput);
+        if (foraneos) {
+            $.ajax({
+                type: "POST",
+                url: "/admin/getForaneos",
+                success: function (response) {
+                    if (response == "vacío") {
+                        alert("vacío");
+                    } else {
+                        $("#contOficinas").empty();
+                        $("#contOficinas").html(response);
+                        $("#fechaInputOficina").val(fechaInput);
 
-                    $("#btnVolverOficinas").click(function (e) {
-                        e.preventDefault();
-                        getOficinas();
-                    });
-                }
-            },
-            error: function (response) {
-                console.log(response);
-            },
-        });
+                        $("#btnVolverOficinas").click(function (e) {
+                            e.preventDefault();
+                            getOficinas();
+                        });
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                },
+            });
+        } else {
+            let id = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                url: "/admin/getListaPS",
+                data: { id: id },
+                success: function (response) {
+                    if (response == "vacío") {
+                        alert("vacío");
+                    } else {
+                        $("#contOficinas").empty();
+                        $("#contOficinas").html(response);
+                        $("#fechaInputOficina").val(fechaInput);
+
+                        $("#btnVolverOficinas").click(function (e) {
+                            e.preventDefault();
+                            getOficinas();
+                        });
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                },
+            });
+        }
     });
 
     $(document).on("click", ".showLista", function () {
@@ -168,6 +193,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".verOficina", function () {
         oficinaID = $(this).data("id");
+        foraneos = false;
     });
 
     $(document).on("click", "#imprimirResumenOficina", function () {
@@ -191,5 +217,30 @@ $(document).ready(function () {
 
     $(document).on("change", "#fechaInputOficina", function () {
         fechaInput = $("#fechaInputOficina").val();
+    });
+
+    $(document).on("click", "#foraneos", function () {
+        foraneos = true;
+        $.ajax({
+            type: "POST",
+            url: "/admin/getForaneos",
+            success: function (response) {
+                if (response == "vacío") {
+                    alert("vacío");
+                } else {
+                    $("#contOficinas").empty();
+                    $("#contOficinas").html(response);
+                    $("#fechaInputOficina").val(fechaInput);
+
+                    $("#btnVolverOficinas").click(function (e) {
+                        e.preventDefault();
+                        getOficinas();
+                    });
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
     });
 });

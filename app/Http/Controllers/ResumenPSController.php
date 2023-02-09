@@ -58,6 +58,19 @@ class ResumenPSController extends Controller
         }
     }
 
+    public function getForaneos()
+    {
+        $ps = DB::table("ps")->where("oficina_id", "!=", 1)->get();
+        $data = array(
+            "lista_ps" => $ps,
+        );
+        if (!$ps->isEmpty()) {
+            return response()->view('resumenps.listaps', $data, 200);
+        } else {
+            return response()->view('resumenps.listaps', ['status' => 'NoPS'], 200);
+        }
+    }
+
     public function getResumen(Request $request)
     {
         $fecha = $request->fecha;
