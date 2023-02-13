@@ -1627,6 +1627,7 @@ $(document).ready(function () {
                 if (estatus == "Activado") {
                     $("option:selected", "#statusInput").prop("disabled", true);
                 }
+
                 $("#formModal").modal("hide");
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
