@@ -1,5 +1,9 @@
 /node_modules
 /public/hot
+/public/documentos
+/public/img/comprobantes
+/public/img/preguntas
+/public/img/usuarios
 /public/storage
 /storage/*.key
 /vendor
