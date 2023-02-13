@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    // const config = {
-    //     search: true,
-    // };
+    const config = {
+        search: true,
+    };
 
-    // dselect(document.querySelector("#clienteIdInput"), config);
+    dselect(document.querySelector("#clienteIdInput"), config);
 
-    // $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-    // $(".dselect-no-results").text("No se encontraron resultados...");
+    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
+    $(".dselect-no-results").text("No se encontraron resultados...");
 
     $.ajaxSetup({
         headers: {
@@ -29,8 +29,8 @@ $(document).ready(function () {
         },
     });
 
-    $(document).on("change", "#clienteIdInput", function () {
-        let id = $(this).val();
+    $("#clienteIdInput").change(function () {
+        var id = $("#clienteIdInput").val();
 
         $.ajax({
             type: "GET",
