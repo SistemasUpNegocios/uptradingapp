@@ -68,6 +68,7 @@ $(".image-upload-wrapScanner2").bind("dragleave", function () {
 
 $(document).ready(function () {
     let acc = "";
+    let casilla = false;
 
     var table = $("#contrato").DataTable({
         ajax: "/admin/showContrato",
@@ -278,6 +279,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos",
         },
+        order: [[0, "desc"]],
     });
 
     $("#contenedor_filtros").hide();
@@ -1622,6 +1624,7 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
+                let rendimiento = $("#porcentajeRendimientoInput").val();
                 let contrato_numero = $("#contratoInput").val();
                 let estatus = $("#statusInput").val();
                 if (estatus == "Activado") {
@@ -1632,10 +1635,17 @@ $(document).ready(function () {
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
-                    window.open(
-                        `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0A%0A${contrato_numero}`,
-                        "_blank"
-                    );
+                    if (casilla && rendimiento > 0) {
+                        window.open(
+                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}%0A%0AEn%20este%20mismo%20contrato%20se%20pide%20cambiar%20el%20porcentaje%20del%20rendimiento%20al%20${rendimiento}%`,
+                            "_blank"
+                        );
+                    } else {
+                        window.open(
+                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}`,
+                            "_blank"
+                        );
+                    }
 
                     Swal.fire({
                         icon: "success",
@@ -1647,10 +1657,17 @@ $(document).ready(function () {
                     });
                 } else if (acc == "edit") {
                     if (estatus == "Refrendado") {
-                        window.open(
-                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0A%0A${contrato_numero}`,
-                            "_blank"
-                        );
+                        if (casilla && rendimiento > 0) {
+                            window.open(
+                                `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20refrendado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0AContrato:%0A${contrato_numero}%0A%0AEn%20este%20mismo%20contrato%20se%20pide%20cambiar%20el%20porcentaje%20del%20rendimiento%20al%20${rendimiento}%`,
+                                "_blank"
+                            );
+                        } else {
+                            window.open(
+                                `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20refrendado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}`,
+                                "_blank"
+                            );
+                        }
                     }
 
                     Swal.fire({
@@ -1716,6 +1733,7 @@ $(document).ready(function () {
                         </div>
                     </div>
                 `);
+                casilla = false;
             },
             error: function (err, exception) {
                 var validacion = err.responseJSON.errors;
@@ -4310,7 +4328,6 @@ $(document).ready(function () {
                 });
             }
         }
-
         var beneficiarios = $("#beneficiariosInput").val();
         if (beneficiarios == 1) {
             let nombreBeneficiario = $("#nombreBen1Input").val();
@@ -4322,6 +4339,7 @@ $(document).ready(function () {
             }
         }
 
+        //APARTADO SOBRE EL MONTO DE LA(S) TRANSFERENCIA(S)
         if (target.is("#efectivoInput")) {
             let efectivoChecked = $("#efectivoInput").is(":checked");
 
@@ -4331,7 +4349,6 @@ $(document).ready(function () {
                 $("#montoEfectivoCont").hide();
             }
         }
-
         if (target.is("#transferenciaSwissInput")) {
             let transferenciaSwissChecked = $("#transferenciaSwissInput").is(
                 ":checked"
@@ -4343,7 +4360,6 @@ $(document).ready(function () {
                 $("#montoTransSwissPOOLCont").hide();
             }
         }
-
         if (target.is("#transferenciaMXInput")) {
             let transferenciaMXChecked = $("#transferenciaMXInput").is(
                 ":checked"
@@ -4355,7 +4371,6 @@ $(document).ready(function () {
                 $("#montoTransMXPOOLCont").hide();
             }
         }
-
         if (target.is("#ciBankInput")) {
             let ciBankChecked = $("#ciBankInput").is(":checked");
 
@@ -4365,7 +4380,6 @@ $(document).ready(function () {
                 $("#montoBankCont").hide();
             }
         }
-
         if (target.is("#hsbcInput")) {
             let hsbcChecked = $("#hsbcInput").is(":checked");
 
@@ -4375,7 +4389,6 @@ $(document).ready(function () {
                 $("#montoHSBCCont").hide();
             }
         }
-
         if (target.is("#renovacionInput")) {
             let renovacionChecked = $("#renovacionInput").is(":checked");
 
@@ -4385,7 +4398,6 @@ $(document).ready(function () {
                 $("#montoRenovacionCont").hide();
             }
         }
-
         if (target.is("#rendimientosInput")) {
             let rendimientoChecked = $("#rendimientosInput").is(":checked");
 
@@ -4395,7 +4407,6 @@ $(document).ready(function () {
                 $("#montoRendimientosCont").hide();
             }
         }
-
         if (target.is("#comisionesInput")) {
             let comisionChecked = $("#comisionesInput").is(":checked");
 
@@ -4403,6 +4414,17 @@ $(document).ready(function () {
                 $("#montoComisionesCont").show();
             } else {
                 $("#montoComisionesCont").hide();
+            }
+        }
+
+        //APARTADO PARA CAMBIAR EL PORCENTAJE DE RENDIMIENTOS
+        if (target.is("#cambiarPorcentajeInput")) {
+            casilla = $("#cambiarPorcentajeInput").prop("checked");
+            if (casilla) {
+                $("#porcentajeRendimientoCont").show();
+            } else {
+                $("#porcentajeRendimientoCont").hide();
+                $("#porcentajeRendimientoInput").val(0);
             }
         }
     });
@@ -4566,6 +4588,7 @@ $(document).ready(function () {
         $("#montoRenovacionCont").hide();
         $("#montoRendimientosCont").hide();
         $("#montoComisionesCont").hide();
+        $("#porcentajeRendimientoCont").hide();
     };
 
     const estilos = (

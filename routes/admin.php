@@ -153,6 +153,14 @@ Route::post('/admin/existPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioC
 Route::get('/admin/showPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getPagosPS']);
 Route::post('/admin/editPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'editPagoPS']);
 
+// Rutas para gestión de menú para reporte de pagos a ps
+Route::get('/admin/reportePagosPs', [App\Http\Controllers\ReportePagoPsController::class, 'index'])->name('reportepagops');
+Route::get('/admin/getResumenPagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'getResumenPagoPs']);
+Route::get('/admin/getResumenPagoPsDia', [App\Http\Controllers\ReportePagoPsController::class, 'getResumenPagoPsDia']);
+Route::get('/admin/imprimirResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'imprimirResumenPs']);
+Route::get('/admin/imprimirReportePs', [App\Http\Controllers\ReportePagoPsController::class, 'getReportePagoPs']);
+Route::get('/admin/exportarResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'exportPs']);
+
 // Rutas para gestión de tipo de contrato
 Route::get('/admin/tipocontrato', [App\Http\Controllers\TipoContratoController::class, 'index'])->name('tipocontrato');
 Route::get('/admin/showTipoContratos', [App\Http\Controllers\TipoContratoController::class, 'getTipoContratos']);
@@ -160,10 +168,6 @@ Route::get('/admin/showTipoContrato', [App\Http\Controllers\TipoContratoControll
 Route::post('/admin/addTipoContrato', [App\Http\Controllers\TipoContratoController::class, 'addTipoContrato']);
 Route::post('/admin/editTipoContrato', [App\Http\Controllers\TipoContratoController::class, 'editTipoContrato']);
 Route::post('/admin/deleteTipoContrato', [App\Http\Controllers\TipoContratoController::class, 'deleteTipoContrato']);
-
-//Rutas para registrar al usuario
-Route::get('/registro', [App\Http\Controllers\RegisterController::class, 'create'])->name('registro');
-Route::post('/registro', [App\Http\Controllers\RegisterController::class, 'store']);
 
 //Rutas para iniciar sesión
 Route::get('/', [App\Http\Controllers\SessionController::class, 'create'])->name('login');
@@ -228,12 +232,6 @@ Route::get('/admin/showNotificaciones', [App\Http\Controllers\NotificacionContro
 Route::get('/admin/editNotificaciones', [App\Http\Controllers\NotificacionController::class, 'editNotificaciones']);
 Route::post('/admin/deleteNotificaciones', [App\Http\Controllers\NotificacionController::class, 'deleteNotificaciones']);
 
-//Rutas de reporteador de pagos
-Route::get('/admin/reporteMesPagoPS', [App\Http\Controllers\ReportePagoController::class, 'ReporteMesPagoPSView'])->name('reportepagops');
-Route::get('/admin/reporteFiltroPagoPS', [App\Http\Controllers\ReportePagoController::class, 'ReporteFiltroPagoPSView']);
-Route::get('/admin/pdfReporteMesPagoPS', [App\Http\Controllers\ReportePagoController::class, 'pdfReporteMesPagoPS']);
-Route::get('/admin/pdfReporteFiltroPagoPS', [App\Http\Controllers\ReportePagoController::class, 'pdfReporteFiltroPagoPS']);
-
 //Rutas de formulario
 Route::get('/admin/formulario', [App\Http\Controllers\FormularioController::class, 'index'])->name('formulario');
 Route::get('/admin/showFormulario', [App\Http\Controllers\FormularioController::class, 'getFormulario']);
@@ -259,7 +257,7 @@ Route::post('/admin/generarCuentas', [App\Http\Controllers\GoogleController::cla
 Route::get('/admin/bitacoraAcceso', [App\Http\Controllers\BitacoraAccesoController::class, 'index'])->name('bitacoraacceso');
 Route::get('/admin/getDetallesBitacora', [App\Http\Controllers\BitacoraAccesoController::class, 'getDetallesBitacora']);
 
-//Rutas de bitácora de acceso
+//Rutas de logs
 Route::get('/admin/historialCambios', [App\Http\Controllers\LogController::class, 'index'])->name('logs');
 Route::get('/admin/showCambios', [App\Http\Controllers\LogController::class, 'getLogs']);
 Route::post('/admin/deleteCambio', [App\Http\Controllers\LogController::class, 'deleteCambio']);
@@ -278,7 +276,7 @@ Route::post('/admin/addPregunta', [App\Http\Controllers\PreguntaController::clas
 Route::post('/admin/editPregunta', [App\Http\Controllers\PreguntaController::class, 'editPregunta']);
 Route::post('/admin/deletePregunta', [App\Http\Controllers\PreguntaController::class, 'deletePregunta']);
 
-// Ruta del chat
+// Rutas del chat
 Route::get('/admin/auth/user', function () {
 	if(auth()->check()){
 		return response()->json([ 'authUser' => auth()->user() ]);
@@ -302,13 +300,6 @@ Route::post('/admin/editTicket', [TicketController::class, 'editTicket']);
 Route::post('/admin/editStatusTicket', [TicketController::class, 'editStatusTicket']);
 Route::post('/admin/traspasarTicket', [TicketController::class, 'traspasarTicket']);
 Route::get('/admin/getTicketsAlerta', [TicketController::class, 'getTicketsAlerta']);
-
-// Rutas de preguntas
-Route::get('/admin/showPreguntas', [App\Http\Controllers\PreguntaController::class, 'getPreguntas'])->name('preguntas');
-Route::get('/admin/buscarPregunta', [App\Http\Controllers\PreguntaController::class, 'buscarPregunta']);
-Route::post('/admin/addPregunta', [App\Http\Controllers\PreguntaController::class, 'addPregunta']);
-Route::post('/admin/editPregunta', [App\Http\Controllers\PreguntaController::class, 'editPregunta']);
-Route::post('/admin/deletePregunta', [App\Http\Controllers\PreguntaController::class, 'deletePregunta']);
 
 //Rutas auxuliares (usar con cuidado)
 //Actualizar todos los pagos a PS, pagos a cliente y amortizaciones (Compuesto y mensual)

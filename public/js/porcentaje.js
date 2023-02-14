@@ -1,25 +1,10 @@
 $(document).ready(function () {
-    let acc = "";
-    let dataInversionUS = 0;
-    let dataInversionMXN = 0;
-    let dataFechaInicio = "";
-
     var table = $("#porcentaje").DataTable({
         ajax: "/admin/getContratosPorcentaje",
         columns: [
             {
                 data: function (data) {
                     return data.contrato;
-                },
-            },
-            {
-                data: function (data) {
-                    return `${data.capertura}%`;
-                },
-            },
-            {
-                data: function (data) {
-                    return `${data.cmensual}%`;
                 },
             },
             {
@@ -779,8 +764,8 @@ $(document).ready(function () {
         }
 
         Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar contrato</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para editar el contrato</p>',
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar porcentaje</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el porcentaje</p>',
             icon: "warning",
             showCancelButton: true,
             cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
@@ -826,7 +811,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: "error",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El contrato no se ha editado</p>',
+                    html: '<p style="font-family: Poppins">El porcentaje no se ha editado</p>',
                     confirmButtonText:
                         '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",

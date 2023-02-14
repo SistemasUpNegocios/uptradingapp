@@ -45,14 +45,33 @@
     </div>
 
     <div class="col-md-6 col-12 mb-1">
-        <div class="subtitle"><b>INE:</b> {{ $cliente->ine }}</div>
+        <div class="subtitle"><b>INE:</b>             
+            @if (strlen($cliente->ine) > 0)
+                {{ $cliente->ine }}
+            @else
+                <span class="badge bg-danger">No tiene INE</span>
+            @endif
+        </div>
     </div>
     <div class="col-md-6 col-12 mb-1">
-        <div class="subtitle"><b>¿Tiene tarjeta?:</b> {{ $cliente->tarjeta }}</div>
+        <div class="subtitle"><b>¿Tiene tarjeta?:</b> 
+            @if ($cliente->tarjeta == "SI")
+                <span class="badge bg-success">{{ $cliente->tarjeta }}</span>
+            @else
+                <span class="badge bg-danger">{{ $cliente->tarjeta }}</span>
+            @endif
+            
+        </div>
     </div>
     
     <div class="col-md-6 col-12 mb-1">
-        <div class="subtitle"><b>Pasaporte:</b> {{ $cliente->pasaporte }}</div>
+        <div class="subtitle"><b>Pasaporte:</b>
+            @if (strlen($cliente->pasaporte) > 0)
+                {{ $cliente->pasaporte }}
+            @else
+                <span class="badge bg-danger">No tiene pasaporte</span>
+            @endif
+        </div>
     </div>
     <div class="col-md-6 col-12 mb-1">
         <div class="subtitle"><b>Fecha de vencimiento:</b> {{ \Carbon\Carbon::parse($cliente->vencimiento_pasaporte)->formatLocalized('%d de %B de %Y') }}</div>
@@ -60,7 +79,7 @@
 
     <div class="col-md-6 col-12">
         <div class="subtitle"><b>Cuenta IBAN:</b> 
-            @if (strlen($cliente->iban) > 0)
+            @if (strlen($cliente->iban) > 2)
                 {{ $cliente->iban }}
             @else
                 <span class="badge bg-warning">No tiene cuenta IBAN</span>
@@ -147,7 +166,11 @@
     </div>                            
 
     <div class="col-md-12 mb-2 text-center">
-        <div class="subtitle"><b>Inversión total en contratos:</b> ${{ number_format($contratos_inv, 2) }} MXN. (${{ number_format($contratos_inv_dol, 2) }} dólares)</div>
+        <div class="subtitle"><b>Inversión total en contrato mensual:</b> ${{ number_format($contratos_inv_mens, 2) }} MXN. (${{ number_format($contratos_inv_dol_mens, 2) }} dólares)</div>
+    </div>
+
+    <div class="col-md-12 mb-2 text-center">
+        <div class="subtitle"><b>Inversión total en contrato compuesto:</b> ${{ number_format($contratos_inv_comp, 2) }} MXN. (${{ number_format($contratos_inv_dol_comp, 2) }} dólares)</div>
     </div>
 
     <div class="col-md-12 mb-2 text-center">

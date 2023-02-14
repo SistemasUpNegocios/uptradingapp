@@ -57,7 +57,7 @@
               ->where('pago_ps.fecha_limite', 'like', "$fecha%")
               ->where('ps.correo_institucional', '!=', "hamiltonherrera@uptradingexperts.com")
               ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
-            ->where("contrato.status", "Activado")
+              ->where("contrato.status", "Activado")
               ->get();
 
             foreach ($contratos as $resum) {

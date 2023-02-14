@@ -22,7 +22,7 @@ class ConcentradoController extends Controller
     {
 
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-            $lista_clientes = Cliente::all();
+            $lista_clientes = Cliente::select()->orderBy("apellido_p", "ASC")->get();
             return view('concentrado.show', compact("lista_clientes"));
         }else{
             return redirect()->to('/admin/dashboard');
@@ -37,13 +37,15 @@ class ConcentradoController extends Controller
         $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->count();
         $convenios = Convenio::where("cliente_id", $request->id)->count();
 
-        $contratos_inv = Contrato::where("cliente_id", $request->id)->sum('inversion');
-        $contratos_inv_dol = Contrato::where("cliente_id", $request->id)->sum('inversion_us');
+        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion');
+        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion_us');
+        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion');
+        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion_us');
         $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->sum('monto');
         $convenios_monto = $convenios_monto_dol * $request->dolar;
 
-        $total_dolares = $contratos_inv_dol + $convenios_monto_dol;
-        $total_pesos = $contratos_inv + ($convenios_monto_dol * $request->dolar);
+        $total_dolares = $contratos_inv_dol_mens + $contratos_inv_dol_comp + $convenios_monto_dol;
+        $total_pesos = $contratos_inv_mens + $contratos_inv_comp + ($convenios_monto_dol * $request->dolar);
 
         $anio = Carbon::now()->format('Y');
         $mes = Carbon::now()->format('m');
@@ -67,7 +69,7 @@ class ConcentradoController extends Controller
 
         $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
 
-        return view('concentrado.datos', compact("cliente", "contratos", "contrato_mensual", "contrato_compuesto", "contratos_inv", "contratos_inv_dol", "contratos_men_tot", "contratos_comp_tot", "convenio_tot", "convenios", "convenios_monto_dol", "total_dolares", "total_pesos", "convenios_monto"));
+        return view('concentrado.datos', compact("cliente", "contratos", "contrato_mensual", "contrato_compuesto", "contratos_inv_mens", "contratos_inv_dol_mens", "contratos_inv_comp", "contratos_inv_dol_comp", "contratos_men_tot", "contratos_comp_tot", "convenio_tot", "convenios", "convenios_monto_dol", "total_dolares", "total_pesos", "convenios_monto"));
     }
 
 }

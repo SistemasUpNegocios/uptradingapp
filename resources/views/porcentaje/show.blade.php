@@ -33,7 +33,7 @@
                     <use xlink:href="#info-fill" />
                 </svg>
                 <div>
-                    Aquí podrás modificar los porcentajes <b>(comisión por apertura PS, comisión mensual PS, rendimiento del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato interesado a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona que solicitó la modificación
+                    Aquí podrás modificar el porcentaje <b>(rendimiento del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona que solicitó la modificación
                 </div>
             </div>
         </div>
@@ -46,8 +46,6 @@
                         <thead>
                             <tr>
                                 <th data-priority="0" scope="col">Contrato</th>
-                                <th data-priority="0" scope="col">Comisión apertura (PS)</th>
-                                <th data-priority="0" scope="col">Comisión mensual (PS)</th>
                                 <th data-priority="0" scope="col">Rendimiento</th>
                                 <th data-priority="0" scope="col">Acciones</th>
                             </tr>
@@ -304,8 +302,7 @@
                     <div class="row cont-tabla"></div>
                     <div id="alertMessage"></div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="btnCancel"
-                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn principal-button" id="btnSubmit">Añadir contrato</button>
                     </div>
                 </form>

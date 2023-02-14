@@ -405,6 +405,11 @@
                             <i class="bi bi-circle"></i><span>Resumen de PS</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ URL::to('admin/reportePagosPs') }}">
+                            <i class="bi bi-circle"></i><span>Reporte de pagos de PS</span>
+                        </a>
+                    </li>
                 @endif
                 </ul>
             </li>

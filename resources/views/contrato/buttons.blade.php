@@ -42,20 +42,15 @@
         ->get();
         @endphp
 
-        @if (!$query->first())
-        <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button"
-            title="No se ha registrado el contrato escaneado" class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i
-                class="bi bi-file-excel"></i></a>
+        {{-- @if (!$query->first())
+            <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button" title="No se ha registrado el contrato escaneado" class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i class="bi bi-file-excel"></i></a>
         @else
-        @if ($query[0]->img_anverso != null && $query[0]->img_reverso != null)
-        <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button" title="Ver contrato escaneado"
-            class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i class="bi bi-file-earmark-spreadsheet"></i></a>
-        @else
-        <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button"
-            title="El registro del contrato escaneado está incompleto" class="ms-1 btn btn-warning btn-sm btn-icon scanner">
-            <i class="bi bi-file-excel-fill"></i></a>
-        @endif
-        @endif
+            @if ($query[0]->img_anverso != null && $query[0]->img_reverso != null)
+                <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button" title="Ver contrato escaneado" class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i class="bi bi-file-earmark-spreadsheet"></i></a>
+            @else
+                <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button" title="El registro del contrato escaneado está incompleto" class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i class="bi bi-file-excel-fill"></i></a>
+            @endif
+        @endif --}}
 
         @if (auth()->user()->is_root)    
             <input id="contratoStatusInputs" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-status="{{ $status }}" data-celular="{{ $celular }}" data-contrato="{{ $contrato }}" @if ($status=="Activado" ) {{"checked"}} @endif>

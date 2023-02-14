@@ -43,7 +43,7 @@
                             <select class="form-select selectSearch" id="clienteIdInput" >
                                 <option value="" disabled selected>Selecciona..</option>
                                 @foreach($lista_clientes as $cliente)
-                                    <option data-id="{{ $cliente->id }}" value="{{ $cliente->id }}">{{ $cliente->nombre }} {{ $cliente->apellido_p }} {{ $cliente->apellido_m }}</option>
+                                    <option data-id="{{ $cliente->id }}" value="{{ $cliente->id }}">{{ $cliente->apellido_p }} {{ $cliente->apellido_m }} {{ $cliente->nombre }}</option>
                                 @endforeach
                             </select>
                             <label for="clienteIdInput">Cliente</label>

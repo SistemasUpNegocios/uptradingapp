@@ -401,27 +401,49 @@ class ContratoController extends Controller
                 $codigo = "001";
             }
 
-            $request->validate([
-                'operador' => 'required',
-                'operador_ine' => 'required',
-                'contrato' => 'required|unique:contrato',
-                'curp' => 'max:18',
-                'lugar_firma' => 'required',
-                'fechainicio' => 'required|date',
-                'periodo' => 'required',
-                'fecha_renovacion' => 'required|date',
-                'fecha_pago' => 'required|date',
-                'fecha_limite' => 'required|date',
-                'folio' => 'required',
-                'tipo_cambio' => 'required',
-                'porcentaje' => 'required',
-                'inversion' => 'required',
-                'inversion_us' => 'required',
-                'inversion_letra' => 'required',
-                'inversion_letra_us' => 'required',
-                'fecha_reintegro' => 'required|date',
-            ]);
-
+            if ($request->folio == 0) {
+                $request->validate([
+                    'operador' => 'required',
+                    'operador_ine' => 'required',
+                    'contrato' => 'required|unique:contrato',
+                    'curp' => 'max:18',
+                    'lugar_firma' => 'required',
+                    'fechainicio' => 'required|date',
+                    'periodo' => 'required',
+                    'fecha_renovacion' => 'required|date',
+                    'fecha_pago' => 'required|date',
+                    'fecha_limite' => 'required|date',
+                    'tipo_cambio' => 'required',
+                    'porcentaje' => 'required',
+                    'inversion' => 'required',
+                    'inversion_us' => 'required',
+                    'inversion_letra' => 'required',
+                    'inversion_letra_us' => 'required',
+                    'fecha_reintegro' => 'required|date',
+                ]);
+            } else {
+                $request->validate([
+                    'operador' => 'required',
+                    'operador_ine' => 'required',
+                    'contrato' => 'required|unique:contrato',
+                    'curp' => 'max:18',
+                    'lugar_firma' => 'required',
+                    'fechainicio' => 'required|date',
+                    'periodo' => 'required',
+                    'fecha_renovacion' => 'required|date',
+                    'fecha_pago' => 'required|date',
+                    'fecha_limite' => 'required|date',
+                    'folio' => 'required|unique:folio',
+                    'tipo_cambio' => 'required',
+                    'porcentaje' => 'required',
+                    'inversion' => 'required',
+                    'inversion_us' => 'required',
+                    'inversion_letra' => 'required',
+                    'inversion_letra_us' => 'required',
+                    'fecha_reintegro' => 'required|date',
+                ]);
+            }
+            
             $contrato = new Contrato;
 
             $lugar = mb_convert_encoding(ucwords(strtolower($request->lugar_firma)), 'UTF-8', 'UTF-8');
@@ -960,7 +982,7 @@ class ContratoController extends Controller
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
             $contrato->memo_status = $request->input('memo_status');
             if ($request->status == "Refrendado") {
-                $contrato->status = "Activado";
+                $contrato->status = "Pendiente de activación";
                 $contratoAct = explode("-", $request->contrato);
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);

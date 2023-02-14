@@ -518,10 +518,33 @@
                                 <input type="file" id="comprobantePagoInput" class="form-control" name="comprobante_pago[]" multiple>
                             </div>
                         </div>
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Cambiar porcentaje de rendimiento (Si deseas cambiar el pocentaje, activa la casilla y escribe el nuevo porcentaje, se le enviará un mensaje al administrador para que lo apruebe)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-md-12 col-12">
+                                <div class="form-check form-check-inline mb-3">
+                                    <input class="form-check-input" type="checkbox" id="cambiarPorcentajeInput" name="cambiar_porcentaje">
+                                    <label class="form-check-label" for="cambiarPorcentajeInput">¿Cambiar porcentaje de rendimiento?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-12">
+                                <div class="form-floating mb-3" id="porcentajeRendimientoCont">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el porcentaje de rendimiento" id="porcentajeRendimientoInput" name="porcentaje_rendimiento">
+                                    <label for="porcentajeRendimientoInput">Nuevo porcentaje</label>
+                                </div>
+                            </div>
+                        </div>
                         <div id="alertMessage"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="btnCancel"
-                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn principal-button" id="btnSubmit">Añadir contrato</button>
                         </div>
                     </form>
