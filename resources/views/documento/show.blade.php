@@ -28,6 +28,14 @@
                         @endif
                         <div id="contenedorDocumentos">
                             <ol class="ps-3 mt-2">
+                                <li>
+                                    <div class="ps-2 row align-items-center mb-2">
+                                        <div class="col-md-6"><p>Presentación Up (uptrading)</p></div>
+                                        <div class="col-md-6 text-end accion_documentos">
+                                            <a href="https://www.canva.com/design/DAFOLoI_efc/rUbvDzBeM71aRgWbszQ34g/view?utm_content=DAFOLoI_efc&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink" class="btn btn-primary btn-lg btn-icon viewup" target="_blank"><i class="bi bi-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
                                 @foreach ($documentos as $documento)
                                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                                         <li>
@@ -41,6 +49,7 @@
                                                 </div>
                                             </div>
                                         </li>
+                                      
                                     @elseif (auth()->user()->is_cliente && $documento->tipo_documento == "cliente")
                                         <li>
                                             <div class="ps-2 row align-items-center mb-2">
