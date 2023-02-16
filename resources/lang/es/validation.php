@@ -212,8 +212,10 @@ return [
         'folio' => 'número de folio',
 
         //oficinas
-        'codigo_oficina' => 'código de oficina'
+        'codigo_oficina' => 'código de oficina',
 
+        //formulario
+        'ps_id' => 'PS',
     ],
 
 ];

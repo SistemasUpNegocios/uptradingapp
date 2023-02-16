@@ -279,7 +279,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos",
         },
-        order: [[0, "desc"]],
+        aaSorting: [],
     });
 
     $("#contenedor_filtros").hide();
@@ -1636,15 +1636,27 @@ $(document).ready(function () {
                 table.ajax.reload(null, false);
                 if (acc == "new") {
                     if (casilla && rendimiento > 0) {
-                        window.open(
-                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}%0A%0AEn%20este%20mismo%20contrato%20se%20pide%20cambiar%20el%20porcentaje%20del%20rendimiento%20al%20${rendimiento}%`,
-                            "_blank"
-                        );
+                        let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
+                        $.get({
+                            url: "/admin/enviarTelegram",
+                            data: {
+                                mensaje: mensaje,
+                            },
+                            success: function (response) {
+                                $("#contratoInput").val(response);
+                            },
+                        });
                     } else {
-                        window.open(
-                            `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20generado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}`,
-                            "_blank"
-                        );
+                        let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\nNúmero de contrato: ${contrato_numero}`;
+                        $.get({
+                            url: "/admin/enviarTelegram",
+                            data: {
+                                mensaje: mensaje,
+                            },
+                            success: function (response) {
+                                $("#contratoInput").val(response);
+                            },
+                        });
                     }
 
                     Swal.fire({
@@ -1658,15 +1670,27 @@ $(document).ready(function () {
                 } else if (acc == "edit") {
                     if (estatus == "Refrendado") {
                         if (casilla && rendimiento > 0) {
-                            window.open(
-                                `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20refrendado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0AContrato:%0A${contrato_numero}%0A%0AEn%20este%20mismo%20contrato%20se%20pide%20cambiar%20el%20porcentaje%20del%20rendimiento%20al%20${rendimiento}%`,
-                                "_blank"
-                            );
+                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
+                            $.get({
+                                url: "/admin/enviarTelegram",
+                                data: {
+                                    mensaje: mensaje,
+                                },
+                                success: function (response) {
+                                    $("#contratoInput").val(response);
+                                },
+                            });
                         } else {
-                            window.open(
-                                `https://web.whatsapp.com/send?phone=6188397278&text=Se%20ha%20refrendado%20un%20nuevo%20contrato,%20por%20favor%20actívalo.%0ANúmero%20de%20contrato:%0A${contrato_numero}`,
-                                "_blank"
-                            );
+                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nNúmero de contrato: ${contrato_numero}`;
+                            $.get({
+                                url: "/admin/enviarTelegram",
+                                data: {
+                                    mensaje: mensaje,
+                                },
+                                success: function (response) {
+                                    $("#contratoInput").val(response);
+                                },
+                            });
                         }
                     }
 

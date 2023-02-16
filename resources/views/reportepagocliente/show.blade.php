@@ -94,7 +94,10 @@
                         </div>                        
 
                         <div id="tablaResumen">
-
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                            </div>
                         </div>
                     </div>
                 </div>

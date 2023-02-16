@@ -11,13 +11,43 @@ $(document).ready(function () {
 
                 dolar = serie.datos[0].dato;
                 $("#dolarInput").val(dolar);
+                datos();
             }
         },
     });
 
+    const datos = () => {
+        let mes = formatDate(new Date());
+        mes = mes.split("/").reverse().join("-");
+        mes = mes.split("-");
+        $("#fechaInput").val(`${mes[0]}-${mes[1]}`);
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha: `${mes[0]}-${mes[1]}`,
+                dolar: dolar,
+            },
+            url: "/admin/getResumenPagoPs",
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
+    };
+
     let date = formatDate(new Date());
     date = date.split("/").reverse().join("-");
-
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
@@ -207,161 +237,88 @@ $(document).ready(function () {
                 [5, 10, 15, 20, 25, 30, "Todo"],
             ],
             pageLength: 5,
-            order: [[1, "asc"]],
+            order: [[0, "asc"]],
         });
     };
 
-    $(document).on("change", "#fechaInicioInput", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-
-        if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
-            if (fecha_inicio > fecha_fin) {
-                $("#fechaInicioInput").val(0);
-                $("#fechaFinInput").val(0);
-                Swal.fire({
-                    icon: "warning",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
-                    html: '<p style="font-family: Poppins">La fecha de inicio debe de ser menor a la fecha de fin.</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            } else {
-                $("#generarResumenPs").prop("disabled", false);
-                $("#botonActualizar").removeClass("d-none");
-
-                $.ajax({
-                    type: "GET",
-                    data: {
-                        fecha_inicio: fecha_inicio,
-                        fecha_fin: fecha_fin,
-                        dolar: dolar,
-                    },
-                    url: "/admin/getResumenPagoPs",
-                    success: function (response) {
-                        $("#tablaResumen").empty();
-                        $("#tablaResumen").html(response);
-                        tablaResumen();
-
-                        let vacio = $("#vacioInput").val();
-                        if (vacio == "vacio") {
-                            $("#contImprimirResum").addClass("d-none");
-                        } else {
-                            $("#contImprimirResum").removeClass("d-none");
-                        }
-                    },
-                    error: function (response) {
-                        console.log(response);
-                    },
-                });
-            }
-        } else {
-            $("#generarResumenPs").prop("disabled", true);
-            $("#contImprimirResum").addClass("d-none");
-            $("#contVacio").empty();
-        }
-    });
-
-    $(document).on("change", "#fechaFinInput", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-
-        if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
-            if (fecha_inicio > fecha_fin) {
-                $("#fechaInicioInput").val(0);
-                $("#fechaFinInput").val(0);
-                Swal.fire({
-                    icon: "warning",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
-                    html: '<p style="font-family: Poppins">La fecha de inicio debe de ser menor a la fecha de fin.</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            } else {
-                $("#generarResumenPs").prop("disabled", false);
-                $("#botonActualizar").removeClass("d-none");
-
-                $.ajax({
-                    type: "GET",
-                    data: {
-                        fecha_inicio: fecha_inicio,
-                        fecha_fin: fecha_fin,
-                        dolar: dolar,
-                    },
-                    url: "/admin/getResumenPagoPs",
-                    success: function (response) {
-                        $("#tablaResumen").empty();
-                        $("#tablaResumen").html(response);
-                        tablaResumen();
-
-                        let vacio = $("#vacioInput").val();
-                        if (vacio == "vacio") {
-                            $("#contImprimirResum").addClass("d-none");
-                        } else {
-                            $("#contImprimirResum").removeClass("d-none");
-                        }
-                    },
-                    error: function (response) {
-                        console.log(response);
-                    },
-                });
-            }
-        } else {
-            $("#generarResumenPs").prop("disabled", true);
-            $("#contImprimirResum").addClass("d-none");
-            $("#contVacio").empty();
-        }
-    });
-
-    $("#imprimirResumenPs").on("click", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-        let dolar = $("#dolarInput").val();
-
-        window.open(
-            `/admin/imprimirResumenPs?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`,
-            "_blank"
+    $(document).on("change", "#fechaInput", function () {
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="text-success">Cargando comisiones<span class="dotting"> </span></p>
+                </div>
+            `
         );
+
+        let fecha = $("#fechaInput").val();
+
+        if (fecha.length > 0) {
+            $("#generarResumenPs").prop("disabled", false);
+            $.ajax({
+                type: "GET",
+                data: {
+                    fecha: fecha,
+                    dolar: dolar,
+                },
+                url: "/admin/getResumenPagoPs",
+                success: function (response) {
+                    $("#tablaResumen").empty();
+                    $("#tablaResumen").html(response);
+                    tablaResumen();
+
+                    let vacio = $("#vacioInput").val();
+                    if (vacio == "vacio") {
+                        $("#contImprimirResum").addClass("d-none");
+                    } else {
+                        $("#contImprimirResum").removeClass("d-none");
+                    }
+                },
+                error: function (response) {
+                    $("#tablaResumen").empty();
+                    $("#tablaResumen").html(
+                        `
+                            <div class="text-center">
+                                <div class="spinner-border text-danger" role="status"></div>
+                                <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                            </div>
+                        `
+                    );
+                },
+            });
+        } else {
+            $("#generarResumenPs").prop("disabled", true);
+            $("#contImprimirResum").addClass("d-none");
+            $("#contVacio").empty();
+        }
     });
 
     $("#exportarResumenPs").on("click", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
+        let fecha = $("#fechaInput").val();
         let dolar = $("#dolarInput").val();
 
-        window.open(
-            `/admin/exportarResumenPs?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`
-        );
+        window.open(`/admin/exportarResumenPs?fecha=${fecha}&dolar=${dolar}`);
     });
 
     $(document).on("click", "#imprimirReporte", function () {
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
-            var formatearCantidad = new Intl.NumberFormat("es-MX", {
-                style: "currency",
-                currency: "MXN",
-                minimumFractionDigits: 2,
-            });
-
-            let pago = $(this).data("pago");
-            let cliente = $(this).data("cliente");
-            let fecha = $(this).data("fecha");
-            let contrato = $(this).data("contrato");
-            let contratoid = $(this).data("contratoid");
-            let dolar = $("#dolarInput").val();
-            let rendimiento = $(this).data("rendimientoini");
-
-            rendimiento = formatearCantidad
-                .format(parseFloat(rendimiento) * parseFloat(dolar))
+            let ps = $(this).data("ps");
+            let comision = String($(this).data("comision"))
+                .replaceAll("$", "")
+                .replaceAll(",", "");
+            let comision_dolares = String($(this).data("comisiondolares"))
                 .replaceAll("$", "")
                 .replaceAll(",", "");
 
-            let letra = numeroALetrasMXN(rendimiento);
+            let letra = numeroALetrasMXN(comision);
+            let letra_dolares = numeroALetrasUSD(comision_dolares);
+
+            let fecha_mes = $(this).data("fecha");
 
             window.open(
-                `/admin/imprimirReportePs?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}`,
+                `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
                 "_blank"
             );
         } else {
@@ -383,55 +340,75 @@ $(document).ready(function () {
             minimumFractionDigits: 2,
         });
 
-        let id = $(this).data("contratoid");
-        let pago = $(this).data("pago");
-        let fecha = $(this).data("fecha");
-        let cliente = $(this).data("cliente");
-        let contrato = $(this).data("contrato");
-        let rendimiento = String($(this).data("rendimiento"))
+        let ps = $(this).data("ps");
+        let comision = String($(this).data("comision"))
+            .replaceAll("$", "")
+            .replaceAll(",", "");
+        let comision_dolares = String($(this).data("comisiondolares"))
             .replaceAll("$", "")
             .replaceAll(",", "");
 
-        let letra = numeroALetrasMXN(rendimiento);
-        $("#pagoInput").val(pago);
-        $("#fechaInput").val(fecha);
-        $("#clienteInput").val(cliente);
-        $("#rendimientoInput").val(formatearCantidad.format(rendimiento));
-        $("#contratoInput").val(contrato);
+        let letra = numeroALetrasMXN(comision);
+        let letra_dolares = numeroALetrasUSD(comision_dolares);
+
+        let fecha_mes = $(this).data("fecha");
+
+        $("#psInput").val(ps);
+        $("#comisionInput").val(formatearCantidad.format(comision));
+        $("#comisionDolaresInput").val(
+            formatearCantidad.format(comision_dolares)
+        );
         $("#letraInput").val(letra);
-        $("#contratoIdInput").val(id);
+        $("#letraDolaresInput").val(letra_dolares);
+        $("#fechaMesInput").val(fecha_mes);
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {
-        let pago = $("#pagoInput").val();
-        let cliente = $("#clienteInput").val();
-        let rendimiento = $("#rendimientoInput")
+        let ps = $("#psInput").val();
+        let comision = $("#comisionInput")
             .val()
             .replaceAll("$", "")
             .replaceAll(",", "");
-        let fecha = $("#fechaInput").val();
-        let contrato = $("#contratoInput").val();
-        let letra = numeroALetrasMXN(rendimiento);
+        let comision_dolares = $("#comisionDolaresInput")
+            .val()
+            .replaceAll("$", "")
+            .replaceAll(",", "");
+        let letra = numeroALetrasMXN(comision);
+        let letra_dolares = numeroALetrasUSD(comision_dolares);
         let dolar = $("#dolarInput").val();
-        let contratoid = $("#contratoIdInput").val();
+        let date_valor = $("#dateInput").val();
+        let fecha_mes = $("#fechaMesInput").val();
 
         window.open(
-            `/admin/imprimirReportePs?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}`,
+            `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
             "_blank"
         );
     });
 
     $(document).on("change", "#dolarInput", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-        let dolar = $("#dolarInput").val();
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="text-success">Cargando comisiones<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        let dolar_nuevo = $("#dolarInput").val();
+        let fecha = $("#fechaInput").val();
+
+        if (dolar_nuevo == 0 || dolar_nuevo == "") {
+            $("#dolarInput").val(dolar);
+            dolar_nuevo = $("#dolarInput").val();
+        }
 
         $.ajax({
             type: "GET",
             data: {
-                fecha_inicio: fecha_inicio,
-                fecha_fin: fecha_fin,
-                dolar: dolar,
+                fecha: fecha,
+                dolar: dolar_nuevo,
             },
             url: "/admin/getResumenPagoPs",
             success: function (response) {
@@ -446,96 +423,171 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
-                console.log(response);
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
             },
         });
     });
 
     $(document).on("click", ".abrirWhats", function () {
-        let cliente = $(this).data("cliente");
-        let contrato = $(this).data("contrato");
-        let pago = $(this).data("pago");
-        let rendimiento = $(this).data("rendimiento");
-        let clientenumero = $(this).data("clientenumero");
-        let fecha = $(this).data("fecha");
+        $("#modalTitleWhats").text("Mandar WhatsApp para pago en efectivo");
+        let ps = $(this).data("ps");
+        let psnumero = $(this).data("psnumero");
+        let comision = $(this).data("comision");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+        let mensaje = `Buen día ${ps}. Para comentarle que el pago de sus comisiones de PS por la cantidad de $${comision} pesos, en esta ocasión se encuentra listo en efectivo en la oficina. Cuando guste pasar en un horario de 9:00 am a 2:00 pm y de 4:00 pm a 6:00 pm.\n%0AAtte: Departamento de pagos.`;
 
-        $("#nombrePsInput").val(cliente);
-        $("#numeroPsInput").val(clientenumero);
+        $("#nombrePsInput").val(ps);
+        $("#numeroPsInput").val(psnumero);
         $("#mensajeInput").val(mensaje);
 
         $("#formModalWhats").modal("show");
     });
 
     $(document).on("click", ".abrirTrans", function () {
-        let cliente = $(this).data("cliente");
-        let contrato = $(this).data("contrato");
-        let pago = $(this).data("pago");
-        let rendimiento = $(this).data("rendimiento");
-        let clientenumero = $(this).data("clientenumero");
-        let fecha = $(this).data("fecha");
+        $("#modalTitleWhats").text("Mandar WhatsApp para transferencia");
+        let ps = $(this).data("ps");
+        let psnumero = $(this).data("psnumero");
+        let comision_dolares = $(this).data("comisiondolares");
+        let fecha_mes = $(this).data("fecha");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+        let mensaje = `Buen día ${ps}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${comision_dolares} dólares, por su comisión de PS por el mes de ${fecha_mes}.\n%0AAtte: Departamento de pagos.`;
 
-        $("#nombrePsInput").val(cliente);
-        $("#numeroPsInput").val(clientenumero);
+        $("#nombrePsInput").val(ps);
+        $("#numeroPsInput").val(psnumero);
         $("#mensajeInput").val(mensaje);
 
         $("#formModalWhats").modal("show");
     });
 
     $(document).on("click", "#enviarWhats", function () {
-        let cliente = $("#nombrePsInput").val();
+        let ps = $("#nombrePsInput").val();
         let numero = $("#numeroPsInput").val();
         let mensaje = $("#mensajeInput").val();
 
-        $.ajax({
-            type: "GET",
-            data: { cliente: cliente, numero: numero, mensaje: mensaje },
-            url: "/admin/enviarWhatsPagoPs",
-            success: function (response) {
-                if (response == "hecho") {
-                    (d = "https://web.whatsapp.com/send"),
-                        (f = "&text=" + mensaje);
-                    if (
-                        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                            navigator.userAgent
-                        )
-                    )
-                        var d = "whatsapp://send";
-                    var g = d + "?phone=" + numero + f;
-                    window.open(g, "_blank");
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
-                        html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${cliente}</b>, con número de telefono <b>${numero}</b>.</p>`,
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                    $("#formModalWhats").modal("hide");
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
-                        html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                }
-            },
-            error: function (response) {
-                Swal.fire({
-                    icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
-                    html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            },
+        window.open(
+            `https://web.whatsapp.com/send?phone=${numero}&text=${mensaje}`,
+            "_blank"
+        );
+
+        Swal.fire({
+            icon: "success",
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
+            html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${ps}</b>, con número de teléfono <b>${numero}</b>.</p>`,
+            confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
+            confirmButtonColor: "#01bbcc",
         });
+        $("#formModalWhats").modal("hide");
     });
 });
+
+// $(document).on("change", "#fechaInicioInput", function () {
+//     let fecha_inicio = $("#fechaInicioInput").val();
+//     let fecha_fin = $("#fechaFinInput").val();
+
+//     if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
+//         if (fecha_inicio > fecha_fin) {
+//             $("#fechaInicioInput").val(0);
+//             $("#fechaFinInput").val(0);
+//             Swal.fire({
+//                 icon: "warning",
+//                 title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
+//                 html: '<p style="font-family: Poppins">La fecha de inicio debe de ser menor a la fecha de fin.</p>',
+//                 confirmButtonText:
+//                     '<a style="font-family: Poppins">Aceptar</a>',
+//                 confirmButtonColor: "#01bbcc",
+//             });
+//         } else {
+//             $("#generarResumenClientes").prop("disabled", false);
+//             $("#botonActualizar").removeClass("d-none");
+
+//             $.ajax({
+//                 type: "GET",
+//                 data: {
+//                     fecha_inicio: fecha_inicio,
+//                     fecha_fin: fecha_fin,
+//                     dolar: dolar,
+//                 },
+//                 url: "/admin/getResumenPagoCliente",
+//                 success: function (response) {
+//                     $("#tablaResumen").empty();
+//                     $("#tablaResumen").html(response);
+//                     tablaResumen();
+
+//                     let vacio = $("#vacioInput").val();
+//                     if (vacio == "vacio") {
+//                         $("#contImprimirResum").addClass("d-none");
+//                     } else {
+//                         $("#contImprimirResum").removeClass("d-none");
+//                     }
+//                 },
+//                 error: function (response) {
+//                     console.log(response);
+//                 },
+//             });
+//         }
+//     } else {
+//         $("#generarResumenClientes").prop("disabled", true);
+//         $("#contImprimirResum").addClass("d-none");
+//         $("#contVacio").empty();
+//     }
+// });
+
+// $(document).on("change", "#fechaFinInput", function () {
+//     let fecha_inicio = $("#fechaInicioInput").val();
+//     let fecha_fin = $("#fechaFinInput").val();
+
+//     if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
+//         if (fecha_inicio > fecha_fin) {
+//             $("#fechaInicioInput").val(0);
+//             $("#fechaFinInput").val(0);
+//             Swal.fire({
+//                 icon: "warning",
+//                 title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
+//                 html: '<p style="font-family: Poppins">La fecha de inicio debe de ser menor a la fecha de fin.</p>',
+//                 confirmButtonText:
+//                     '<a style="font-family: Poppins">Aceptar</a>',
+//                 confirmButtonColor: "#01bbcc",
+//             });
+//         } else {
+//             $("#generarResumenClientes").prop("disabled", false);
+//             $("#botonActualizar").removeClass("d-none");
+
+//             $.ajax({
+//                 type: "GET",
+//                 data: {
+//                     fecha_inicio: fecha_inicio,
+//                     fecha_fin: fecha_fin,
+//                     dolar: dolar,
+//                 },
+//                 url: "/admin/getResumenPagoCliente",
+//                 success: function (response) {
+//                     $("#tablaResumen").empty();
+//                     $("#tablaResumen").html(response);
+//                     tablaResumen();
+
+//                     let vacio = $("#vacioInput").val();
+//                     if (vacio == "vacio") {
+//                         $("#contImprimirResum").addClass("d-none");
+//                     } else {
+//                         $("#contImprimirResum").removeClass("d-none");
+//                     }
+//                 },
+//                 error: function (response) {
+//                     console.log(response);
+//                 },
+//             });
+//         }
+//     } else {
+//         $("#generarResumenClientes").prop("disabled", true);
+//         $("#contImprimirResum").addClass("d-none");
+//         $("#contVacio").empty();
+//     }
+// });

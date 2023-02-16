@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +50,7 @@ Route::post('/admin/editCliente', [App\Http\Controllers\ClienteController::class
 Route::post('/admin/deleteCliente', [App\Http\Controllers\ClienteController::class, 'deleteCliente']);
 Route::get('/admin/showNumCliente', [App\Http\Controllers\ClienteController::class, 'numCliente']);
 Route::get('/admin/showFormCliente', [App\Http\Controllers\ClienteController::class, 'getFormulario']);
+Route::get('/admin/enviarCorreo', [App\Http\Controllers\ClienteController::class, 'enviarCorreoCumpleanios']);
 
 // Rutas para gestión de menú para pagos a cliente (rendimiento compuesto y mensual)
 Route::get('/admin/pagosCliente', [App\Http\Controllers\PagoClienteController::class, 'index'])->name('pagocliente');
@@ -86,6 +86,9 @@ Route::get('/admin/showPendiente', [App\Http\Controllers\ContratoController::cla
 Route::get('/admin/showNumeroCliente', [App\Http\Controllers\ContratoController::class, 'getNumCliente']);
 Route::get('/admin/editStatus', [App\Http\Controllers\ContratoController::class, 'editStatus']);
 Route::get('/admin/getFolio', [App\Http\Controllers\ContratoController::class, 'getFolio']);
+Route::get('/admin/enviarTelegram', [App\Http\Controllers\ContratoController::class, 'enviarTelegram']);
+
+//Rutas par gestión de contrato escaneado
 Route::get('/admin/checkScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'checkScanner']);
 Route::post('/admin/addScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'addScanner']);
 Route::post('/admin/editScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'editScanner']);
@@ -105,6 +108,9 @@ Route::post('/admin/deleteContratoTerminado', [App\Http\Controllers\ContratoTerm
 Route::get('/admin/getBeneficiariosTerminido', [App\Http\Controllers\ContratoTerminadoController::class, 'getBeneficiarios']);
 Route::get('/admin/showClaveTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'getClave']);
 Route::get('/admin/editStatusTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'editStatus']);
+
+Route::get('/admin/contratovencer', [App\Http\Controllers\ContratoVencerController::class, 'index'])->name('contratovencer');
+Route::get('/admin/showContratoVencer', [App\Http\Controllers\ContratoVencerController::class, 'getContratoVencer']);
 
 // Rutas para gestión de convenio MAM
 Route::get('/admin/convenio', [App\Http\Controllers\ConvenioController::class, 'index'])->name('conveniomam');
@@ -157,7 +163,6 @@ Route::post('/admin/editPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioCo
 Route::get('/admin/reportePagosPs', [App\Http\Controllers\ReportePagoPsController::class, 'index'])->name('reportepagops');
 Route::get('/admin/getResumenPagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'getResumenPagoPs']);
 Route::get('/admin/getResumenPagoPsDia', [App\Http\Controllers\ReportePagoPsController::class, 'getResumenPagoPsDia']);
-Route::get('/admin/imprimirResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'imprimirResumenPs']);
 Route::get('/admin/imprimirReportePs', [App\Http\Controllers\ReportePagoPsController::class, 'getReportePagoPs']);
 Route::get('/admin/exportarResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'exportPs']);
 
@@ -291,15 +296,15 @@ Route::get('/admin/chat/{chat}/get_messages', [App\Http\Controllers\ChatControll
 Route::post('/admin/message/sent', [App\Http\Controllers\MessageController::class, 'sent'])->name('message.sent');
 
 // Rutas de gestión de tickets
-Route::get('/admin/tickets', [TicketController::class, 'index']);
-Route::get('/admin/showUsuariosTickets', [TicketController::class, 'getUsuariosTickets']);
-Route::get('/admin/showTabsTickets', [TicketController::class, 'getTabsTickets']);
-Route::get('/admin/showAsignadosTickets', [TicketController::class, 'getAsignadosTickets']);
-Route::post('/admin/addTicket', [TicketController::class, 'addTicket']);
-Route::post('/admin/editTicket', [TicketController::class, 'editTicket']);
-Route::post('/admin/editStatusTicket', [TicketController::class, 'editStatusTicket']);
-Route::post('/admin/traspasarTicket', [TicketController::class, 'traspasarTicket']);
-Route::get('/admin/getTicketsAlerta', [TicketController::class, 'getTicketsAlerta']);
+Route::get('/admin/tickets', [App\Http\Controllers\TicketController::class, 'index']);
+Route::get('/admin/showUsuariosTickets', [App\Http\Controllers\TicketController::class, 'getUsuariosTickets']);
+Route::get('/admin/showTabsTickets', [App\Http\Controllers\TicketController::class, 'getTabsTickets']);
+Route::get('/admin/showAsignadosTickets', [App\Http\Controllers\TicketController::class, 'getAsignadosTickets']);
+Route::post('/admin/addTicket', [App\Http\Controllers\TicketController::class, 'addTicket']);
+Route::post('/admin/editTicket', [App\Http\Controllers\TicketController::class, 'editTicket']);
+Route::post('/admin/editStatusTicket', [App\Http\Controllers\TicketController::class, 'editStatusTicket']);
+Route::post('/admin/traspasarTicket', [App\Http\Controllers\TicketController::class, 'traspasarTicket']);
+Route::get('/admin/getTicketsAlerta', [App\Http\Controllers\TicketController::class, 'getTicketsAlerta']);
 
 //Rutas auxuliares (usar con cuidado)
 //Actualizar todos los pagos a PS, pagos a cliente y amortizaciones (Compuesto y mensual)

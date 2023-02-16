@@ -90,6 +90,7 @@ class ContratoController extends Controller
                 ->where("oficina.codigo_oficina", "like", $codigo)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
             $contrato = DB::table('contrato')
@@ -103,6 +104,7 @@ class ContratoController extends Controller
                 ->where("oficina.codigo_oficina", "like", $codigo)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -119,6 +121,7 @@ class ContratoController extends Controller
                 ->where("oficina.codigo_oficina", "like", $codigo)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -154,6 +157,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 1)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
             $contrato = DB::table('contrato')
@@ -168,6 +172,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 1)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -185,6 +190,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 1)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -220,6 +226,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 2)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
             $contrato = DB::table('contrato')
@@ -234,6 +241,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 2)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -251,6 +259,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 2)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -286,6 +295,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Pendiente de activación")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
             $contrato = DB::table('contrato')
@@ -300,6 +310,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Pendiente de activación")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -317,6 +328,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Pendiente de activación")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -353,6 +365,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Refrendado")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
             $contrato = DB::table('contrato')
@@ -368,6 +381,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Refrendado")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -386,6 +400,7 @@ class ContratoController extends Controller
                 ->where("contrato.status", "!=", "Refrendado")
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->orderBy("contrato.id", "desc")
                 ->get();
         }
 
@@ -405,7 +420,6 @@ class ContratoController extends Controller
                 $request->validate([
                     'operador' => 'required',
                     'operador_ine' => 'required',
-                    'contrato' => 'required|unique:contrato',
                     'curp' => 'max:18',
                     'lugar_firma' => 'required',
                     'fechainicio' => 'required|date',
@@ -425,7 +439,6 @@ class ContratoController extends Controller
                 $request->validate([
                     'operador' => 'required',
                     'operador_ine' => 'required',
-                    'contrato' => 'required|unique:contrato',
                     'curp' => 'max:18',
                     'lugar_firma' => 'required',
                     'fechainicio' => 'required|date',
@@ -1533,5 +1546,21 @@ class ContratoController extends Controller
         $contrato->update();
 
         return response($contrato);
+    }
+
+    public function enviarTelegram(Request $request)
+    {
+        $contrato = explode("Número de contrato: ", $request->mensaje);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[0]
+        ]);
+
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[1]
+        ]);
     }
 }

@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Oficina;
+use App\Models\Ps;
 use App\Models\TipoCambio;
-use App\Exports\PagosClienteExport;
+use App\Exports\PagosPsExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportePagoPsController extends Controller
@@ -30,89 +31,82 @@ class ReportePagoPsController extends Controller
     {
 
         $psid = session('psid');    
-        $ps = Ps::all();        
+        $ps = Ps::all();
 
         $data = array(
-            "lista_ps" => $ps,            
+            "fecha" => $request->fecha,
+            "lista_ps" => $ps,
             "dolar" => $request->dolar,
         );
 
         return response()->view('reportepagops.tabla', $data, 200);
     }
 
-    public function imprimirResumenPs(Request $request)
-    {
-
-        $psid = session('psid');
-        $clienteid = session('clienteid');
-        $codigo = session('codigo_oficina');
-
-        $resumenContrato = DB::table('contrato')
-        ->join('ps', 'ps.id', '=', 'contrato.ps_id')
-        ->join('oficina', 'oficina.id', '=', 'ps.oficina_id')
-        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-        ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
-        ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
-        ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
-        ->where(function ($query) use ($psid, $clienteid) {
-            $query->where("contrato.ps_id", "like", $psid)
-            ->orWhere("contrato.cliente_id", "like", $clienteid);
-        })
-        ->where("oficina.codigo_oficina", "like", $codigo)
-        ->where("contrato.status", "!=", "Cancelado")
-        ->where("contrato.status", "!=", "Finiquitado")
-        ->distinct("clientenombre")
-        ->orderBy('contrato.id', 'DESC')
-        ->get();
-
-        $data = array(
-            "resumenes_contrato" => $resumenContrato,
-            "fecha_inicio" => $request->fecha_inicio,
-            "fecha_fin" => $request->fecha_fin,
-            "dolar" => $request->dolar,
-        );
-
-        $inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
-        $fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
-
-        $pdf = PDF::loadView('reportepagops.imprimir', $data);
-        $nombreDescarga = "Resumen de pagos a clientes de $inicio hasta $fin.pdf";
-        return $pdf->stream($nombreDescarga);
-    }
-
     public function getReportePagoPs(Request $request)
     {
-        $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');
-        $rendimiento = number_format($request->rendimiento, 2);
+        $comision = number_format($request->comision, 2);
+        $comision_dolares = number_format($request->comision_dolares, 2);
+
+        // Pesos mexicanos
+        $centavos = strval($comision);
+        $resultCentavos = explode(".", $centavos);
+        if (next($resultCentavos)) {
+            if (strlen($resultCentavos[1]) == 1) {
+                $centavos_num = substr($resultCentavos[1], 0, 2) . "0".'/100 M.N.';
+            } else {
+                $centavos_num = substr($resultCentavos[1], 0, 2).'/100 M.N.';
+            }
+        } else {
+            $centavos_num = "00/100 M.N";
+        }
+
+        $posCON = strrpos($request->letra, "con");
+        if($posCON === false){
+            $letra = 'son '.$request->letra;
+        }else{
+            $letra = 'son '.substr_replace($request->letra, "", $posCON);
+        }
+
+        // dólares
+        $centavos_dolares = strval($comision_dolares);
+        $resultCentavos_dolares = explode(".", $centavos_dolares);
+        if (next($resultCentavos_dolares)) {
+            if (strlen($resultCentavos_dolares[1]) == 1) {
+                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2) . "0".'/100 M.N.';
+            } else {
+                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2).'/100 M.N.';
+            }
+        } else {
+            $centavos_num_dolares = "00/100 M.N";
+        }
+        $posCON_dolares = strrpos($request->letra_dolares, "con");
+        if($posCON_dolares === false){
+            $letra_dolares = 'son '.$request->letra_dolares;
+        }else{
+            $letra_dolares = 'son '.substr_replace($request->letra_dolares, "", $posCON_dolares);
+        }
         
         $data = array(
-            "pago" => $request->pago,
-            "cliente" => $request->cliente,
-            "rendimiento" => $rendimiento,
-            "contrato" => $request->contrato,
-            "fecha" => $fecha,
-            "letra" => $request->letra,
+            "ps" => $request->ps,
+            "comision" => $comision,
+            "comision_dolares" => $comision_dolares,
+            "letra" => $letra,
+            "letra_dolares" => $letra_dolares,
+            "centavos_dolares" => $centavos_num_dolares,
+            "centavos" => $centavos_num,
             "fecha_imprimir" => $request->fecha_imprimir,
-        );
+        );        
 
-        $tipo_cambio = new TipoCambio;
-        $tipo_cambio->valor = $request->dolar;
-        $tipo_cambio->contrato_id = $request->contratoid;
-        $tipo_cambio->memo = "Pago de rendimiento mensual ($request->pago)";
-        $tipo_cambio->save();
-
-        $pdf = PDF::loadView('reportepagocliente.reporte', $data);
-        $nombreDescarga = "Reporte del pago de $request->cliente numero $request->pago con fecha de $fecha";
+        $pdf = PDF::loadView('reportepagops.reporte', $data);
+        $fecha_descarga = \Carbon\Carbon::parse($request->fecha_mes)->formatLocalized('%B');
+        $nombreDescarga = "Reporte del pago de comisión del PS $request->ps del mes de $fecha_descarga.pdf";
         return $pdf->stream($nombreDescarga);
     }
 
     public function exportPs(Request $request)
     {
-        $fecha_inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
-        $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
-
-        return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin, $request->dolar), "pagos a clientes del día $fecha_inicio a $fecha_fin.xlsx");
+        $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%B');
+        return Excel::download(new PagosPsExport($request->fecha, $request->dolar), "pagos de comisiones del mes de $fecha.xlsx");
     }
 
 }

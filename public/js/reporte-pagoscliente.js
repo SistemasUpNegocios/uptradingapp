@@ -11,13 +11,42 @@ $(document).ready(function () {
 
                 dolar = serie.datos[0].dato;
                 $("#dolarInput").val(dolar);
+                datos();
             }
         },
     });
 
+    const datos = () => {
+        let fecha = formatDate(new Date());
+        fecha = fecha.split("/").reverse().join("-");
+        $("#botonActualizar").removeClass("d-none");
+
+        $.ajax({
+            type: "GET",
+            data: { fecha: fecha, dolar: dolar },
+            url: "/admin/getResumenPagoClienteDia",
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+            },
+            error: function (response) {
+                console.log(response);
+            },
+        });
+        $("#fechaInicioInput").val(fecha);
+        $("#fechaFinInput").val(fecha);
+    };
+
     let date = formatDate(new Date());
     date = date.split("/").reverse().join("-");
-
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
@@ -228,6 +257,16 @@ $(document).ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             } else {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+
                 $("#generarResumenClientes").prop("disabled", false);
                 $("#botonActualizar").removeClass("d-none");
 
@@ -252,7 +291,15 @@ $(document).ready(function () {
                         }
                     },
                     error: function (response) {
-                        console.log(response);
+                        $("#tablaResumen").empty();
+                        $("#tablaResumen").html(
+                            `
+                                <div class="text-center">
+                                    <div class="spinner-border text-danger" role="status"></div>
+                                    <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                                </div>
+                            `
+                        );
                     },
                 });
             }
@@ -283,6 +330,16 @@ $(document).ready(function () {
                 $("#generarResumenClientes").prop("disabled", false);
                 $("#botonActualizar").removeClass("d-none");
 
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+
                 $.ajax({
                     type: "GET",
                     data: {
@@ -304,7 +361,15 @@ $(document).ready(function () {
                         }
                     },
                     error: function (response) {
-                        console.log(response);
+                        $("#tablaResumen").empty();
+                        $("#tablaResumen").html(
+                            `
+                                <div class="text-center">
+                                    <div class="spinner-border text-danger" role="status"></div>
+                                    <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                                </div>
+                            `
+                        );
                     },
                 });
             }
@@ -341,6 +406,16 @@ $(document).ready(function () {
         fecha = fecha.split("/").reverse().join("-");
         $("#botonActualizar").removeClass("d-none");
 
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
         $.ajax({
             type: "GET",
             data: { fecha: fecha, dolar: dolar },
@@ -358,7 +433,15 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
-                console.log(response);
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
             },
         });
 
@@ -454,14 +537,28 @@ $(document).ready(function () {
     $(document).on("change", "#dolarInput", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
-        let dolar = $("#dolarInput").val();
+        let dolar_nuevo = $("#dolarInput").val();
+        if (dolar_nuevo == 0 || dolar_nuevo == "") {
+            $("#dolarInput").val(dolar);
+            dolar_nuevo = $("#dolarInput").val();
+        }
+
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
 
         $.ajax({
             type: "GET",
             data: {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
-                dolar: dolar,
+                dolar: dolar_nuevo,
             },
             url: "/admin/getResumenPagoCliente",
             success: function (response) {
@@ -476,7 +573,15 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
-                console.log(response);
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
             },
         });
     });
@@ -506,7 +611,7 @@ $(document).ready(function () {
         let clientenumero = $(this).data("clientenumero");
         let fecha = $(this).data("fecha");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
 
         $("#nombreClienteInput").val(cliente);
         $("#numeroClienteInput").val(clientenumero);
@@ -520,52 +625,17 @@ $(document).ready(function () {
         let numero = $("#numeroClienteInput").val();
         let mensaje = $("#mensajeInput").val();
 
-        $.ajax({
-            type: "GET",
-            data: { cliente: cliente, numero: numero, mensaje: mensaje },
-            url: "/admin/enviarWhatsPagoCliente",
-            success: function (response) {
-                if (response == "hecho") {
-                    (d = "https://web.whatsapp.com/send"),
-                        (f = "&text=" + mensaje);
-                    if (
-                        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                            navigator.userAgent
-                        )
-                    )
-                        var d = "whatsapp://send";
-                    var g = d + "?phone=" + numero + f;
-                    window.open(g, "_blank");
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
-                        html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${cliente}</b>, con número de telefono <b>${numero}</b>.</p>`,
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                    $("#formModalWhats").modal("hide");
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
-                        html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                }
-            },
-            error: function (response) {
-                Swal.fire({
-                    icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error</h1>',
-                    html: `<p style="font-family: Poppins">El WhatsApp no se pudo envíar, comuniquese con sistemas.</p>`,
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            },
+        window.open(
+            `https://web.whatsapp.com/send?phone=${numero}&text=${mensaje}`,
+            "_blank"
+        );
+        Swal.fire({
+            icon: "success",
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
+            html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${cliente}</b>, con número de teléfono <b>${numero}</b>.</p>`,
+            confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
+            confirmButtonColor: "#01bbcc",
         });
+        $("#formModalWhats").modal("hide");
     });
 });

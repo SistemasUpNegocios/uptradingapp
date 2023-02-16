@@ -308,10 +308,15 @@
                 </li>
                 @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                     <li>
+                        <a href="{{ URL::to('admin/contratovencer') }}">
+                            <i class="bi bi-circle"></i><span>Contratos a vencer</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ URL::to('admin/contratoTerminado') }}">
                             <i class="bi bi-circle"></i><span>Contratos terminados</span>
                         </a>
-                    </li>
+                    </li>                    
                 @endif
                 @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                     <li>

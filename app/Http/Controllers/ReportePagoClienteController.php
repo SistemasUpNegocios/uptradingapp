@@ -38,7 +38,7 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
             ->where(function ($query) use ($psid, $clienteid) {
                 $query->where("contrato.ps_id", "like", $psid)
@@ -72,7 +72,7 @@ class ReportePagoClienteController extends Controller
         ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
         ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
         ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+        ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
         ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
         ->where(function ($query) use ($psid, $clienteid) {
             $query->where("contrato.ps_id", "like", $psid)
@@ -110,7 +110,7 @@ class ReportePagoClienteController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
             ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
             ->where('amortizacion.fecha', $request->fecha)
             ->where(function ($query) use ($psid, $clienteid) {
                 $query->where("contrato.ps_id", "like", $psid)

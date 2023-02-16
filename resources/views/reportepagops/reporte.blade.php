@@ -6,7 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>Reporte de {{ $cliente }}</title>
+  <title>Reporte de {{ $ps }}</title>
   <meta content="" name="description">
 
   <link rel="shortcut icon" href="{{ public_path('img/favicon.png') }}" type="image/x-icon">
@@ -34,35 +34,11 @@
     <p style="font-size: 12px; margin-bottom: 0 !important; color: #000">
       <b>Victoria de Durango, Durango a {{ \Carbon\Carbon::parse($fecha_imprimir)->formatLocalized('%d de %B de %Y') }}.</b>
     </p>
-    <p style="font-size: 13px; color: #000">
-      <u>Pago: {{ $pago }}</u>
-    </p>
   </div>
 
-  @php
-    $centavos = strval($rendimiento);
-    $resultCentavos = explode(".", $centavos);
-
-    if (next($resultCentavos)) {
-      if (strlen($resultCentavos[1]) == 1) {
-        $centavos_num = substr($resultCentavos[1], 0, 2) . "0".'/100 M.N.';
-      } else {
-        $centavos_num = substr($resultCentavos[1], 0, 2).'/100 M.N.';
-      }
-    } else {
-      $centavos_num = "00/100 M.N";
-    }
-
-    $posCON = strrpos($letra, "con");
-    if($posCON === false){
-      $letra = 'son '.$letra;
-    }else{
-      $letra = 'son '.substr_replace($letra, "", $posCON);
-    }
-  @endphp
   <div class="mt-5">
     <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
-      <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra}} {{ $centavos_num }}), por concepto de pago de rendimiento del día {{ $fecha }} en relación con el contrato {{ $contrato }}, sin que al momento exista algún adeudo.
+      <span style="margin-left: 30px;">Yo,</span> {{ $ps }}, recibo la cantidad de ${{ $comision_dolares }} dólares ({{ $letra_dolares }} {{ $centavos_dolares }}) en efectivo, que al tipo de cambio del día de hoy son ${{ $comision }} M.N ({{ $letra }} {{ $centavos }}) por concepto de pago de comisión por presentador de soluciones patrimoniales de Up Trading Experts, sin que al momento exista algún adeudo.
     </p>
   </div>
 

@@ -23,6 +23,13 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
+                        <div class="row d-none align-items-center" id="contImprimirResum">
+                            <div class="col-md-6 col-12 mb-3">
+                                <button class="btn btn-success" id="exportarResumenPs"> 
+                                    <i class="bi bi-file-earmark-spreadsheet-fill"></i> Exportar resumen a excel
+                                </button>
+                            </div>
+                        </div>
                         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
                             <symbol id="info-fill" fill="#fff" viewBox="0 0 16 16">
                                 <path
@@ -41,32 +48,13 @@
                             <div>
                                 Selecciona una fecha para generar el resumen.
                             </div>
-                        </div>
-
-                        <div class="row d-none align-items-center" id="contImprimirResum">
-                            <div class="col-md-6 col-12 mb-3">
-                                <button class="btn principal-button" id="imprimirResumenClientes">
-                                    <i class="bi bi-printer-fill me-1"></i> Imprimir resumen
-                                </button>
-                            </div>
-                            <div class="col-md-6 col-12 mb-3 d-flex justify-content-end">
-                                <button class="btn btn-success" id="exportarResumenClientes"> 
-                                    <i class="bi bi-file-earmark-spreadsheet-fill"></i> Exportar resumen a excel
-                                </button>
-                            </div>
-                        </div>
+                        </div>                        
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" id="fechaInicioInput" name="fecha_inicio">
-                                    <label for="fechaInicioInput">Fecha de inicio</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" id="fechaFinInput" name="fecha_fin">
-                                    <label for="fechaFinInput">Fecha de fin</label>
+                                    <input type="month" class="form-control" id="fechaInput" name="fecha">
+                                    <label for="fechaInput">Fecha de pago</label>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +62,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" id="dateInput" placeholder="echa a imprimir">
+                                    <input type="date" class="form-control" id="dateInput" placeholder="Fecha a imprimir">
                                     <label for="dateInput">Fecha a imprimir</label>
                                 </div>
                             </div>
@@ -87,13 +75,16 @@
                                         <input type="number" class="form-control" id="dolarInput" placeholder="Valor del dolar actual" aria-label="Valor del dolar actual" aria-describedby="botonActualizar">
                                         <label for="dolarInput">Valor del dolar actual</label>
                                     </div>
-                                    <button class="mt-2 btn btn-outline-success d-none" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
+                                    <button class="mt-2 btn btn-outline-success" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
                             </div>
                             </div>
                         </div>                        
 
                         <div id="tablaResumen">
-
+                            <div class="text-center">
+                                <div class="spinner-border text-success" role="status"></div>
+                                <p class="text-success">Cargando comisiones<span class="dotting"> </span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
