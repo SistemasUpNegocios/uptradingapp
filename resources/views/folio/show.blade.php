@@ -45,8 +45,8 @@
                                 <tr>
                                     <th data-priority="0" scope="col">Número de folio</th>
                                     <th data-priority="0" scope="col">Contrato</th>
-                                    <th data-priority="0" scope="col">Estatus del folio</th>
-                                    <th data-priority="0" scope="col">Fecha de cancelación de folio</th>
+                                    <th data-priority="0" scope="col">Estatus</th>
+                                    <th data-priority="0" scope="col">Fecha de cancelación</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>

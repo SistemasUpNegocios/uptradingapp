@@ -528,7 +528,7 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
-                $("#folioModal").modal("show");
+                $("#folioModal").modal("hide");
                 $("#folioForm")[0].reset();
                 table1.ajax.reload(null, false);
                 table2.ajax.reload(null, false);
@@ -596,44 +596,6 @@ $(document).ready(function () {
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
     });
-
-    // $(document).on("click", ".edit", function (e) {
-    //     $("#alertMessage").text("");
-    //     acc = "edit";
-    //     e.preventDefault();
-    //     var id = $(this).data("id");
-
-    //     var folio = $(this).data("folio");
-    //     var contratoid = $(this).data("contratoid");
-    //     var estatus = $(this).data("estatus");
-    //     var fecha = $(this).data("fecha");
-    //     var fechacancelado = $(this).data("fechacancelado");
-
-    //     $("#formModal").modal("show");
-    //     $("#folioForm").attr("action", "/admin/editFolio");
-
-    //     $("#idInput").val(id);
-
-    //     $("#folioInput").val(folio);
-    //     $("#folioInput").prop("readonly", false);
-
-    //     $("#contratoIdInput").val(contratoid);
-    //     $("#contratoIdInput").prop("disabled", false);
-
-    //     $("#estatusInput").val(estatus);
-    //     $("#estatusInput").prop("disabled", false);
-
-    //     $("#fechaInput").val(fecha);
-    //     $("#fechaInput").prop("readonly", false);
-
-    //     $("#fechaCanceladoInput").val(fechacancelado);
-    //     $("#fechaCanceladoInput").prop("readonly", false);
-
-    //     $("#modalTitle").text(`Editar folio`);
-    //     $("#btnSubmit").show();
-    //     $("#btnSubmit").text("Editar folio");
-    //     $("#btnCancel").text("Cancelar");
-    // });
 
     $(document).on("click", ".edit", function (e) {
         $("#folioForm")[0].reset();
