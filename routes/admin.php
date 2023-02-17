@@ -62,8 +62,10 @@ Route::post('/admin/editPagosCliente', [App\Http\Controllers\PagoClienteControll
 
 // Rutas para gestión de menú para reporte de pagos a cliente (rendimiento compuesto y mensual)
 Route::get('/admin/reportePagosCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'index'])->name('reportepagocliente');
-Route::get('/admin/getResumenPagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoCliente']);
-Route::get('/admin/getResumenPagoClienteDia', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDia']);
+Route::get('/admin/getResumenPagoClienteMensual', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteMensual']);
+Route::get('/admin/getResumenPagoClienteDiaMensual', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaMensual']);
+Route::get('/admin/getResumenPagoClienteCompuesto', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteCompuesto']);
+Route::get('/admin/getResumenPagoClienteDiaCompuesto', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaCompuesto']);
 Route::get('/admin/imprimirResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'imprimirResumenCliente']);
 Route::get('/admin/imprimirReporteCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getReportePago']);
 Route::get('/admin/exportarResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'export']);

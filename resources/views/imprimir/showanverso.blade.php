@@ -298,9 +298,9 @@
       En caso de interpretación o incumplimiento del presente contrato, las partes se someten a la jurisdicción de los
       Tribunales del Estado de Durango, la validez del presente contrato comienza a partir de sus firmas y validaciones
       correspondiendo a la fecha del día <span style="text-decoration: underline">{{\Carbon\Carbon::parse(strtotime($contratos[0]->fecha))->formatLocalized('%d de %B de %Y')}}</span>. {{$contratos[0]->lugar_firma }}.
-      @if ($contratos[0]->operador == "MARIA EUGENIA RINCON ACEVAL" && !empty($holograma2))
+      @if (!empty($holograma2))
         <br>
-        <span>Número de autorización: {{$holograma2}}</span>
+        <span>Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
       @endif
     </p>
 

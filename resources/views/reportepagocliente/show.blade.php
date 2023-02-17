@@ -91,10 +91,17 @@
                                     <button class="mt-2 btn btn-outline-success d-none" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
                             </div>
                             </div>
-                        </div>                        
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-3 px-2 text-center">
+                                <a class="btn btn-primary" id="filtroMensual">Mensuales</a>
+                                <a class="btn btn-outline-primary" id="filtroCompuesto">Compuestos</a>
+                            </div>
+                        </div>
 
                         <div id="tablaResumen">
-                            <div class="text-center">
+                            <div class="text-center mt-4">
                                 <div class="spinner-border text-primary" role="status"></div>
                                 <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
                             </div>

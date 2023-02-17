@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    var url_filtro = "/admin/getResumenPagoClienteDiaMensual";
+    var filtro = "mensual";
     let dolar = 0;
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
@@ -24,7 +26,7 @@ $(document).ready(function () {
         $.ajax({
             type: "GET",
             data: { fecha: fecha, dolar: dolar },
-            url: "/admin/getResumenPagoClienteDia",
+            url: url_filtro,
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
@@ -38,7 +40,15 @@ $(document).ready(function () {
                 }
             },
             error: function (response) {
-                console.log(response);
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
             },
         });
         $("#fechaInicioInput").val(fecha);
@@ -244,6 +254,12 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
 
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+        }
+
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
             if (fecha_inicio > fecha_fin) {
                 $("#fechaInicioInput").val(0);
@@ -260,7 +276,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-primary" role="status"></div>
                             <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
                         </div>
@@ -277,7 +293,7 @@ $(document).ready(function () {
                         fecha_fin: fecha_fin,
                         dolar: dolar,
                     },
-                    url: "/admin/getResumenPagoCliente",
+                    url: url_filtro,
                     success: function (response) {
                         $("#tablaResumen").empty();
                         $("#tablaResumen").html(response);
@@ -314,6 +330,12 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
 
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+        }
+
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
             if (fecha_inicio > fecha_fin) {
                 $("#fechaInicioInput").val(0);
@@ -333,7 +355,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-primary" role="status"></div>
                             <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
                         </div>
@@ -347,7 +369,7 @@ $(document).ready(function () {
                         fecha_fin: fecha_fin,
                         dolar: dolar,
                     },
-                    url: "/admin/getResumenPagoCliente",
+                    url: url_filtro,
                     success: function (response) {
                         $("#tablaResumen").empty();
                         $("#tablaResumen").html(response);
@@ -380,46 +402,31 @@ $(document).ready(function () {
         }
     });
 
-    $("#imprimirResumenClientes").on("click", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-        let dolar = $("#dolarInput").val();
-
-        window.open(
-            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`,
-            "_blank"
-        );
-    });
-
-    $("#exportarResumenClientes").on("click", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-        let dolar = $("#dolarInput").val();
-
-        window.open(
-            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`
-        );
-    });
-
     $("#reporteDia").on("click", function () {
-        let fecha = formatDate(new Date());
-        fecha = fecha.split("/").reverse().join("-");
-        $("#botonActualizar").removeClass("d-none");
-
         $("#tablaResumen").empty();
         $("#tablaResumen").html(
             `
-                <div class="text-center">
+                <div class="text-center mt-4">
                     <div class="spinner-border text-primary" role="status"></div>
                     <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
                 </div>
             `
         );
 
+        let fecha = formatDate(new Date());
+        fecha = fecha.split("/").reverse().join("-");
+        $("#botonActualizar").removeClass("d-none");
+
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteDiaMensual";
+        } else if (filtro == "compuesto") {
+            ("/admin/getResumenPagoClienteDiaCompuesto");
+        }
+
         $.ajax({
             type: "GET",
             data: { fecha: fecha, dolar: dolar },
-            url: "/admin/getResumenPagoClienteDia",
+            url: url_filtro,
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
@@ -449,6 +456,27 @@ $(document).ready(function () {
         $("#fechaFinInput").val(fecha);
     });
 
+    $("#imprimirResumenClientes").on("click", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let dolar = $("#dolarInput").val();
+
+        window.open(
+            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`,
+            "_blank"
+        );
+    });
+
+    $("#exportarResumenClientes").on("click", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let dolar = $("#dolarInput").val();
+
+        window.open(
+            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`
+        );
+    });
+
     $(document).on("click", "#imprimirReporte", function () {
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
@@ -463,6 +491,7 @@ $(document).ready(function () {
             let fecha = $(this).data("fecha");
             let contrato = $(this).data("contrato");
             let contratoid = $(this).data("contratoid");
+            let tipo = $(this).data("tipo");
             let dolar = $("#dolarInput").val();
             let rendimiento = $(this).data("rendimientoini");
 
@@ -472,9 +501,10 @@ $(document).ready(function () {
                 .replaceAll(",", "");
 
             let letra = numeroALetrasMXN(rendimiento);
+            let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
 
             window.open(
-                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}`,
+                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
                 "_blank"
             );
         } else {
@@ -501,6 +531,7 @@ $(document).ready(function () {
         let fecha = $(this).data("fecha");
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
+        let tipo = $(this).data("tipo");
         let rendimiento = String($(this).data("rendimiento"))
             .replaceAll("$", "")
             .replaceAll(",", "");
@@ -513,9 +544,11 @@ $(document).ready(function () {
         $("#contratoInput").val(contrato);
         $("#letraInput").val(letra);
         $("#contratoIdInput").val(id);
+        $("#tipoInput").val(tipo);
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {
+        let date_valor = $("#dateInput").val();
         let pago = $("#pagoInput").val();
         let cliente = $("#clienteInput").val();
         let rendimiento = $("#rendimientoInput")
@@ -526,10 +559,12 @@ $(document).ready(function () {
         let contrato = $("#contratoInput").val();
         let letra = numeroALetrasMXN(rendimiento);
         let dolar = $("#dolarInput").val();
+        let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
         let contratoid = $("#contratoIdInput").val();
+        let tipo = $("#tipoInput").val();
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&dolar=${dolar}&contratoid=${contratoid}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
             "_blank"
         );
     });
@@ -546,12 +581,18 @@ $(document).ready(function () {
         $("#tablaResumen").empty();
         $("#tablaResumen").html(
             `
-                <div class="text-center">
+                <div class="text-center mt-4">
                     <div class="spinner-border text-primary" role="status"></div>
                     <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
                 </div>
             `
         );
+
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            ("/admin/getResumenPagoClienteCompuesto");
+        }
 
         $.ajax({
             type: "GET",
@@ -560,7 +601,7 @@ $(document).ready(function () {
                 fecha_fin: fecha_fin,
                 dolar: dolar_nuevo,
             },
-            url: "/admin/getResumenPagoCliente",
+            url: url_filtro,
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
@@ -587,14 +628,20 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".abrirWhats", function () {
+        let mensaje = "";
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
         let pago = $(this).data("pago");
         let rendimiento = $(this).data("rendimiento");
         let clientenumero = $(this).data("clientenumero");
         let fecha = $(this).data("fecha");
+        let tipo = $(this).data("tipo");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+        if (tipo == 1) {
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos.`;
+        } else if (tipo == 2) {
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos.`;
+        }
 
         $("#nombreClienteInput").val(cliente);
         $("#numeroClienteInput").val(clientenumero);
@@ -604,14 +651,20 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".abrirTrans", function () {
+        let mensaje = "";
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
         let pago = $(this).data("pago");
         let rendimiento = $(this).data("rendimiento");
         let clientenumero = $(this).data("clientenumero");
         let fecha = $(this).data("fecha");
+        let tipo = $(this).data("tipo");
 
-        let mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n Atte: Departamento de pagos.`;
+        if (tipo == 1) {
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos.`;
+        } else if (tipo == 2) {
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos.`;
+        }
 
         $("#nombreClienteInput").val(cliente);
         $("#numeroClienteInput").val(clientenumero);
@@ -637,5 +690,91 @@ $(document).ready(function () {
             confirmButtonColor: "#01bbcc",
         });
         $("#formModalWhats").modal("hide");
+    });
+
+    const filtros = () => {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                dolar: dolar,
+            },
+            url: url_filtro,
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+            },
+            error: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+            },
+        });
+    };
+
+    $(document).on("click", "#filtroMensual", function () {
+        filtro = "mensual";
+        $("#filtroCompuesto").removeClass("btn-primary");
+        $("#filtroCompuesto").addClass("btn-outline-primary");
+
+        $("#filtroMensual").addClass("btn-primary");
+        $("#filtroMensual").removeClass("btn-outline-primary");
+
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        filtros();
+    });
+    $(document).on("click", "#filtroCompuesto", function () {
+        filtro = "compuesto";
+
+        $("#filtroMensual").removeClass("btn-primary");
+        $("#filtroMensual").addClass("btn-outline-primary");
+
+        $("#filtroCompuesto").addClass("btn-primary");
+        $("#filtroCompuesto").removeClass("btn-outline-primary");
+
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        filtros();
     });
 });

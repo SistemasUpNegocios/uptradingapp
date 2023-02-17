@@ -1511,7 +1511,7 @@ class ContratoController extends Controller
         $id_user = auth()->user()->id;
 
         if($request->status == "Activado"){
-            $contrato->memo_status = "Contrato activado por id:$id_user";
+            $contrato->memo_status = "Contrato activado por id:1";
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Hamilton activo un nuevo contrato";

@@ -6,6 +6,7 @@ use App\Models\Documento;
 use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentoController extends Controller
 {
@@ -35,11 +36,7 @@ class DocumentoController extends Controller
                 $file = $request->file('documento');            
                 $filename = $file->getClientOriginalName();
     
-                if($request->tipo_documento == "swissquote"){
-                    $file->move(public_path("documentos/swissquote"), $filename);
-                }else if($request->tipo_documento == "uptrading"){
-                    $file->move(public_path("documentos/uptrading"), $filename);
-                }
+                $file->move(public_path("documentos/$request->tipo_documento"), $filename);
 
                 $documento->documento = $filename;
             }
@@ -115,11 +112,12 @@ class DocumentoController extends Controller
         $log->bitacora_id = $bitacora_id;
 
         if ($log->save()) {
-        if ($request->ajax())
-        {
+            $documento  = Documento::find($request->id);
+            $nombre = $documento->tipo_documento.'/'.$documento->documento;
+            Storage::disk('documento')->delete($nombre);
+
             Documento::destroy($request->id);
         }
-    }
 
         $documentos = Documento::orderByDesc("tipo_documento")->get();
         return response($documentos);

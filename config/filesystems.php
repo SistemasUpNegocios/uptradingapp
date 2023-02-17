@@ -75,6 +75,10 @@ return [
             'root'   => public_path() . '/documentos/intencion',
         ],
 
+        'documento' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/documentos',
+        ],
     ],
 
     /*

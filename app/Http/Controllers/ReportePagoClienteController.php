@@ -26,7 +26,7 @@ class ReportePagoClienteController extends Controller
         }
     }
 
-    public function getResumenPagoCliente(Request $request)
+    public function getResumenPagoClienteMensual(Request $request)
     {
         $psid = session('psid');
         $clienteid = session('clienteid');
@@ -45,8 +45,101 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where("contrato.status", "!=", "Cancelado")
-            ->where("contrato.status", "!=", "Finiquitado")
+            ->where("contrato.status", "Activado")
+            ->where("contrato.tipo_id", 1)
+            ->distinct("clientenombre")
+            ->orderBy('contrato.id', 'DESC')
+            ->get();
+
+        $data = array(
+            "dolar" => $request->dolar,
+            "resumenes_contrato" => $resumenContrato,
+        );
+
+        return response()->view('reportepagocliente.tabla', $data, 200);
+    }
+
+    public function getResumenPagoClienteDiaMensual(Request $request)
+    {
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+        
+        $resumenContrato = DB::table('contrato')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
+            ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->where('amortizacion.fecha', $request->fecha)
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })
+            ->where("contrato.status", "Activado")
+            ->where("contrato.tipo_id", 1)
+            ->distinct("clientenombre")
+            ->orderBy('contrato.id', 'DESC')
+            ->get();
+
+        $data = array(
+            "dolar" => $request->dolar,
+            "resumenes_contrato" => $resumenContrato,
+        );
+
+        return response()->view('reportepagocliente.tabla', $data, 200);
+    }
+
+    public function getResumenPagoClienteCompuesto(Request $request)
+    {
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+
+        $resumenContrato = DB::table('contrato')
+            ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('oficina', 'oficina.id', '=', 'ps.oficina_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
+            ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where("contrato.status", "Activado")
+            ->where("contrato.tipo_id", 2)
+            ->distinct("clientenombre")
+            ->orderBy('contrato.id', 'DESC')
+            ->get();
+
+        $data = array(
+            "dolar" => $request->dolar,
+            "resumenes_contrato" => $resumenContrato,
+        );
+
+        return response()->view('reportepagocliente.tabla', $data, 200);
+    }
+
+    public function getResumenPagoClienteDiaCompuesto(Request $request)
+    {
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+        
+        $resumenContrato = DB::table('contrato')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
+            ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
+            ->where('amortizacion.fecha', $request->fecha)
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("contrato.ps_id", "like", $psid)
+                ->orWhere("contrato.cliente_id", "like", $clienteid);
+            })
+            ->where("contrato.status", "Activado")
+            ->where("contrato.tipo_id", 2)
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
             ->get();
@@ -61,7 +154,6 @@ class ReportePagoClienteController extends Controller
 
     public function imprimirResumenCliente(Request $request)
     {
-
         $psid = session('psid');
         $clienteid = session('clienteid');
         $codigo = session('codigo_oficina');
@@ -98,42 +190,13 @@ class ReportePagoClienteController extends Controller
         $pdf = PDF::loadView('reportepagocliente.imprimir', $data);
         $nombreDescarga = "Resumen de pagos a clientes de $inicio hasta $fin.pdf";
         return $pdf->stream($nombreDescarga);
-    }
-
-    public function getResumenPagoClienteDia(Request $request)
-    {
-        $psid = session('psid');
-        $clienteid = session('clienteid');
-        $codigo = session('codigo_oficina');
-        
-        $resumenContrato = DB::table('contrato')
-            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-            ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
-            ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
-            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.celular AS clientenumero, pago_cliente.pago, amortizacion.memo, amortizacion.serie as serie_pago, amortizacion.fecha, contrato.tipo_id"))
-            ->where('amortizacion.fecha', $request->fecha)
-            ->where(function ($query) use ($psid, $clienteid) {
-                $query->where("contrato.ps_id", "like", $psid)
-                ->orWhere("contrato.cliente_id", "like", $clienteid);
-            })
-            ->where("contrato.status", "!=", "Cancelado")
-            ->where("contrato.status", "!=", "Finiquitado")
-            ->distinct("clientenombre")
-            ->orderBy('contrato.id', 'DESC')
-            ->get();
-
-        $data = array(
-            "dolar" => $request->dolar,
-            "resumenes_contrato" => $resumenContrato,
-        );
-
-        return response()->view('reportepagocliente.tabla', $data, 200);
-    }
+    }    
 
     public function getReportePago(Request $request)
     {
         $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');
         $rendimiento = number_format($request->rendimiento, 2);
+        $total_dolares = number_format($request->rendimiento / $request->dolar, 2);
         
         $data = array(
             "pago" => $request->pago,
@@ -143,6 +206,10 @@ class ReportePagoClienteController extends Controller
             "fecha" => $fecha,
             "letra" => $request->letra,
             "fecha_imprimir" => $request->fecha_imprimir,
+            "tipo" => $request->tipo,
+            "total_dolares" => $total_dolares,
+            "letra_total" => $request->letra_dolares,
+            "contratoid" => $request->contratoid
         );
 
         $tipo_cambio = new TipoCambio;
