@@ -185,6 +185,15 @@ document.addEventListener("DOMContentLoaded", function () {
             },
 
             dateClick: function (info) {
+                $("#idInput").prop("disabled", false);
+                $("#tituloInput").prop("disabled", false);
+                $("#descripcionInput").prop("disabled", false);
+                $("#horaInput").prop("disabled", false);
+                $("#colorInput").prop("disabled", false);
+                $("#asignadoAInput").prop("disabled", false);
+                $("#asignadoA2Input").prop("disabled", false);
+                $("#fechaInput").prop("disabled", false);
+
                 $("#agendaForm")[0].reset();
                 $("#fechaInput").val(info.dateStr);
                 $("#btnModificar").hide();
@@ -196,10 +205,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
             eventClick: function (info) {
                 $("#formModal").modal("show");
-                $("#btnModificar").show();
-                $("#btnEliminar").show();
                 $("#btnGuardar").hide();
-                $("#modalTitle").text("Editar cita");
+                let id_generado = info.event.extendedProps.generado_por;
+                let id_user = $("#id_user").val();
+                if (id_user == id_generado) {
+                    $("#idInput").prop("disabled", false);
+                    $("#tituloInput").prop("disabled", false);
+                    $("#descripcionInput").prop("disabled", false);
+                    $("#horaInput").prop("disabled", false);
+                    $("#colorInput").prop("disabled", false);
+                    $("#asignadoAInput").prop("disabled", false);
+                    $("#asignadoA2Input").prop("disabled", false);
+                    $("#fechaInput").prop("disabled", false);
+
+                    $("#btnModificar").show();
+                    $("#btnEliminar").show();
+                    $("#modalTitle").text("Editar cita");
+                } else {
+                    $("#idInput").prop("disabled", true);
+                    $("#tituloInput").prop("disabled", true);
+                    $("#descripcionInput").prop("disabled", true);
+                    $("#horaInput").prop("disabled", true);
+                    $("#colorInput").prop("disabled", true);
+                    $("#asignadoAInput").prop("disabled", true);
+                    $("#asignadoA2Input").prop("disabled", true);
+                    $("#fechaInput").prop("disabled", true);
+
+                    $("#btnModificar").hide();
+                    $("#btnEliminar").hide();
+                    $("#modalTitle").text("Cita asignada a ti");
+                }
 
                 $.get({
                     url: "/admin/showCita",
@@ -226,5 +261,6 @@ document.addEventListener("DOMContentLoaded", function () {
         calendar.render();
     };
 
-    mostrarCalendario("/admin/showAgenda?citas=all");
+    let ver_citas = $("#verCitasInput").val();
+    mostrarCalendario(`/admin/showAgenda?citas=${ver_citas}`);
 });

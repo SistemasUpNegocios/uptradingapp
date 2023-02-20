@@ -42,11 +42,19 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
-                                        <option value="all" selected>Todas</option>
-                                        <option value="asignada_a" >Asignadas a mí</option>
-                                        <option value="generado_por" >Creadas por mí</option>
-                                    </select>
+                                    @if (auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                                        <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
+                                            <option value="all" selected>Todas</option>
+                                            <option value="asignada_a" >Asignadas a mí</option>
+                                            <option value="generado_por" >Creadas por mí</option>
+                                        </select>    
+                                    @elseif(auth()->user()->is_root || auth()->user()->is_ps_gold || auth()->user()->is_egresos)
+                                        <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
+                                            <option value="all">Todas</option>
+                                            <option value="asignada_a" selected>Asignadas a mí</option>
+                                            <option value="generado_por" >Creadas por mí</option>
+                                        </select>
+                                    @endif                                    
                                     <label for="verCitasInput">Ver citas</label>
                                 </div>
                             </div>
@@ -69,6 +77,7 @@
                     <form id="agendaForm" method="post">
                         @csrf
                         <input type="hidden" name="id" id="idInput">
+                        <input type="hidden" id="id_user" value="{{ auth()->user()->id }}">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
