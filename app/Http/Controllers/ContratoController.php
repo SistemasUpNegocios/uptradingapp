@@ -649,9 +649,19 @@ class ContratoController extends Controller
             $fecha_feb = Carbon::parse($fecha_inicio);
             $fecha_nueva = Carbon::parse($fecha_inicio);
             $fechaFeb = Carbon::parse($fecha_inicio);
-            
-            $fecha_limite = "";
 
+            $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+            $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+            $mes_pago_ps = $mes_pago_ps + 1;
+            $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
+
+            if ($mes_pago_ps == 13) {
+                $anio_pago_ps = $anio_pago_ps + 1;
+                $fecha_limite = $anio_pago_ps . "-01-10";
+            }else{
+                $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
+            }
+            
             $capertura = $tipo_contrato[0]->capertura;
             $capertura = $capertura * .01;
 
@@ -665,18 +675,15 @@ class ContratoController extends Controller
 
             if ($tipo_contrato[0]->tipo == "Rendimiento compuesto") {
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+
                     if ($i == 0) {
                         $pagops = new PagoPS;
 
@@ -684,7 +691,7 @@ class ContratoController extends Controller
 
                         $pagops->contrato_id = $contrato_id;
                         $pagops->serie = ($i + 1);
-                        $pagops->fecha_pago = $fecha_pago;
+                        $pagops->fecha_pago = $fecha_limite;
                         $pagops->fecha_limite = $fecha_limite;
                         $pagops->pago = floatval(number_format(($pago * $capertura), 2));
                         $pagops->status = 'Pendiente';
@@ -722,7 +729,7 @@ class ContratoController extends Controller
                         $pagops->tipo_pago = 'Pendiente';
 
                         $pagops->save();
-                    }
+                    }                    
 
                     $amortizacion = new Amortizacion;
 
@@ -787,18 +794,15 @@ class ContratoController extends Controller
                 $fecha_pago_cliente = Carbon::parse($fecha_inicio);
 
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+                    
                     if ($i == 0) {
                         $pagops = new PagoPS;
 
@@ -1118,7 +1122,17 @@ class ContratoController extends Controller
             $fecha_nueva = Carbon::parse($fecha_inicio);
             $fechaFeb = Carbon::parse($fecha_inicio);
 
-            $fecha_limite = "";
+            $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+            $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+            $mes_pago_ps = $mes_pago_ps + 1;
+            $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
+
+            if ($mes_pago_ps == 13) {
+                $anio_pago_ps = $anio_pago_ps + 1;
+                $fecha_limite = $anio_pago_ps . "-01-10";                
+            }else{
+                $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
+            }
 
             $capertura = $tipo_contrato[0]->capertura;
             $capertura = $capertura * .01;
@@ -1133,18 +1147,15 @@ class ContratoController extends Controller
 
             if ($tipo_contrato[0]->tipo == "Rendimiento compuesto") {
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+
                     if ($i == 0) {
                         $pagops = new PagoPS;
 
@@ -1255,18 +1266,15 @@ class ContratoController extends Controller
                 $fecha_pago_cliente = Carbon::parse($fecha_inicio);
 
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+
                     if ($i == 0) {
                         $pagops = new PagoPS;
 
@@ -1312,7 +1320,7 @@ class ContratoController extends Controller
                         $pagops->tipo_pago = 'Pendiente';
 
                         $pagops->save();
-                    }                    
+                    }
 
                     $amortizacion = new Amortizacion;
 
@@ -1384,7 +1392,6 @@ class ContratoController extends Controller
                     $pago_cliente_table->save();
                 }
             }
-
 
             $contrato->update();
 

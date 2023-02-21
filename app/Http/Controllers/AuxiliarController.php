@@ -26,13 +26,23 @@ class AuxiliarController extends Controller
             PagoPS::where('contrato_id', '=', $contrato->id)->delete();
             PagoCliente::where('contrato_id', '=', $contrato->id)->delete();
 
-            $fecha_limite = "";
-
             $fecha_pago = Carbon::parse($contrato->fecha);
             $fecha_amortizacion = Carbon::parse($contrato->fecha);
             $fecha_feb = Carbon::parse($fecha_pago);
             $fecha_nueva = Carbon::parse($fecha_pago);
             $fechaFeb = Carbon::parse($fecha_pago);
+
+            $mes_pago_ps = Carbon::parse($contrato->fecha)->format('m');
+            $anio_pago_ps = Carbon::parse($contrato->fecha)->format('Y');
+            $mes_pago_ps = $mes_pago_ps + 1;            
+            $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
+
+            if ($mes_pago_ps == 13) {
+                $anio_pago_ps = $anio_pago_ps + 1;
+                $fecha_limite = $anio_pago_ps . "-01-10";
+            }else{
+                $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
+            }
 
             $capertura = $contrato->tipo_contrato->capertura;
             $capertura = $capertura * .01;
@@ -50,18 +60,15 @@ class AuxiliarController extends Controller
 
             if ($tipo_contrato == "Rendimiento compuesto") {
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+
                     if ($i == 0) {
                         $pagops = new PagoPS;
 
@@ -163,18 +170,15 @@ class AuxiliarController extends Controller
                 $fecha_pago_cliente = Carbon::parse($contrato->fecha_inicio);
 
                 for ($i = 0; $i < $periodo; $i++) {
-                    if ($fecha_limite == "") {
-                        $fecha_pago->addMonth()->endOfMonth();
-                        $fecha_pago->format('Y-m-d');
-                    } else {
-                        $fecha_pago = Carbon::parse($fecha_limite);
-                        $fecha_pago->endOfMonth();
-                    }
+                    $fecha_pago = Carbon::parse($fecha_limite);
+                    $fecha_pago->endOfMonth();
+                    $fecha_pago->format('Y-m-d');
 
-                    $fecha_limite = Carbon::parse($fecha_pago);
-                    $fecha_limite->setDay(10)->addMonth();
+                    $fecha_limite = Carbon::parse($fecha_limite);
+                    $fecha_limite->addMonth();
 
                     $fecha_limite->format('Y-m-d');
+                    
                     if ($i == 0) {
                         $pagops = new PagoPS;
 

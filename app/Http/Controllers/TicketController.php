@@ -430,26 +430,20 @@ class TicketController extends Controller
 
     public function getTicketsAlerta(Request $request)
     {
+        $id = auth()->user()->id;
         $tickets = Ticket::where('fecha_limite', '<=', Carbon::now()->addDays(2)->toDateTimeString())
-        ->where(function ($query) {
-            $query->where('status', 'Abierto')
-            ->orWhere('status', 'En proceso');
-        })->orderBy("status", "asc")->get();
+            ->where('fecha_limite', '>=', Carbon::now()->toDateTimeString())
+            ->where('asignado_a', 'like', "%,$id,%")
+            ->where(function ($query) {
+                $query->where('status', 'Abierto')
+                ->orWhere('status', 'En proceso');
+            })->orderBy("status", "asc")
+            ->get();
 
-        foreach($tickets as $ticket) {
-            $asignado_a = $ticket->asignado_a;
-            $asignado_a_array = explode(',', $asignado_a);
-            foreach($asignado_a_array as $key => $asignado_item) {
-                if (!next($asignado_a_array)) {
-                    $current_id = $asignado_a_array[$key - 1];
-                    if (auth()->user()->id == $current_id) {
-                        return response($tickets);
-                    }
-                }
-            }
+        if (sizeof($tickets) <= 0) {
+            $tickets = [];            
         }
 
-        $tickets = [];
         return response($tickets);
     }
 }

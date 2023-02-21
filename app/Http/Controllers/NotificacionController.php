@@ -64,6 +64,15 @@ class NotificacionController extends Controller
         return response($notificacionesU);
     }
 
+    public function editNotificacion(Request $request)
+    {
+        $notificacionesO = DB::table('notificacion')
+            ->where("id", "=", $request->id)
+            ->update(["status" => $request->status]);
+
+        return response($notificacionesO);
+    }
+
     public function deleteNotificaciones(Request $request)
     {
         if ($request->ajax())
