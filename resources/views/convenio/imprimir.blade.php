@@ -41,8 +41,8 @@
     </p>
 
 
-    <ol type="I">
-        <li style="font-size: 10px; margin-bottom: -0.7rem">Objeto del Convenio</li>
+    <ol type="1">
+        <li style="font-size: 10px; margin-bottom: -0.7rem; color: #000">Objeto del Convenio</li>
     </ol>
 
     <ol type="I">
@@ -54,7 +54,7 @@
                 patrimonio, en la cuenta destinada para la operación contratada (Cuenta MAM), haciendo referencia al
                 número de cuenta <span style="font-weight: bold; text-transform: uppercase;">{{
                     $convenio[0]->numerocuenta }}</span> en firme con el banco <span
-                    style="text-transform: uppercase;">{{ $convenio[0]->banconombre }}</span>.</p>
+                    style="text-transform: uppercase; font-weight: bold;">{{ $convenio[0]->banconombre }}</span>.</p>
         </li>
         <li style="font-size: 10px; margin-bottom: -0.7rem">
             <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El IB</span>"
@@ -84,8 +84,8 @@
         <li style="font-size: 10px; margin-bottom: -0.7rem">
             <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                     cliente</span>" si así lo decide y opta por realizar un retiro parcial o total de su rendimiento,
-                este se realizará con una transferencia a la Tarjeta emitida por el Banco <span
-                    style="text-transform: uppercase;">{{ $convenio[0]->banconombre }}</span>, o a otro medio de
+                este se realizará con una transferencia a la tarjeta emitida por el banco <span
+                    style="text-transform: uppercase; font-weight: bold;">{{ $convenio[0]->banconombre }}</span>, o a otro medio de
                 dispersión que el cliente decida y que sea factible de realizar.</p>
         </li>
         <li style="font-size: 10px; margin-bottom: -0.7rem">
@@ -144,7 +144,7 @@
                 </p>
             </div>
         </div>
-        <div class="contenedor_firma__centro" style="margin-top: 4.2rem">
+        <div class="contenedor_firma__centro" style="margin-top: 5rem">
             <hr class="contenedor_firma__hr">
             <div class=" text-center">
                 <p class="contrato_parrafo_firmas">

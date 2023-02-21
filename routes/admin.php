@@ -237,6 +237,7 @@ Route::get('/admin/imprimirResumenOficina', [App\Http\Controllers\ResumenPSContr
 Route::get('/admin/notificacion', [App\Http\Controllers\NotificacionController::class, 'index'])->name('notificaciones');
 Route::get('/admin/showNotificaciones', [App\Http\Controllers\NotificacionController::class, 'getNotificaciones']);
 Route::get('/admin/editNotificaciones', [App\Http\Controllers\NotificacionController::class, 'editNotificaciones']);
+Route::get('/admin/editNotificacion', [App\Http\Controllers\NotificacionController::class, 'editNotificacion']);
 Route::post('/admin/deleteNotificaciones', [App\Http\Controllers\NotificacionController::class, 'deleteNotificaciones']);
 
 //Rutas de formulario

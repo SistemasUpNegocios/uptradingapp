@@ -272,6 +272,33 @@ $(document).ready(function () {
                         );
                     }
                     $("#numeroNotifBadge").text(response.notificacionesCount);
+
+                    Swal.fire({
+                        icon: "success",
+                        title: `<h1 style="font-family: Poppins; font-weight: 700;">${response.notificaciones[0].titulo}</h1>`,
+                        html: `<p style="font-family: Poppins">${response.notificaciones[0].mensaje}</p>`,
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let conteo =
+                                parseInt(response.notificacionesCount) - 1;
+                            $.get({
+                                data: {
+                                    id: response.notificaciones[0].id,
+                                    status: "Leida",
+                                },
+                                url: "/admin/editNotificacion",
+                                success: function (response) {
+                                    $("#numeroNotifBadge").text(conteo);
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                },
+                            });
+                        }
+                    });
                 } else {
                     $("#contNotificaciones").empty();
                     $("#contNotificaciones").append(`
@@ -318,5 +345,5 @@ $(document).ready(function () {
         });
     });
 
-    setInterval(notificaciones, 30000);
+    setInterval(notificaciones, 15000);
 });
