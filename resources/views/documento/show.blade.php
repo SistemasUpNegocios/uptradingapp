@@ -36,6 +36,14 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li>
+                                    <div class="ps-2 row align-items-center mb-2">
+                                        <div class="col-md-6"><p>Presentación Cuentas MAM (uptrading)</p></div>
+                                        <div class="col-md-6 text-end accion_documentos">
+                                            <a href="https://www.canva.com/design/DAFbJrsICSE/9nj5F0xv-yDVqtyY2jsR9A/view?utm_content=DAFbJrsICSE&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink" class="btn btn-primary btn-lg btn-icon viewup" target="_blank"><i class="bi bi-eye"></i> Visualizar presentación</a>
+                                        </div>
+                                    </div>
+                                </li>
                                 @foreach ($documentos as $documento)
                                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                                         <li>
