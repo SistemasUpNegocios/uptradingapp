@@ -41,7 +41,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body mt-3">
-                        <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="cambios">
+                        <table class="table table-striped table-bordered nowrap text-center" style="width: 100%; font-size: 14px !important" id="cambios">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Tipo de acción</th>

@@ -117,6 +117,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="number" minlength="5" maxlength="30" class="form-control" placeholder="Ingresa la INE" id="ineInput" name="ine">
+                                    <label for="ineInput">INE</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" minlength="5" maxlength="30" class="form-control" placeholder="Ingresa el pasaporte" id="pasaporteInput" name="pasaporte">
+                                    <label for="pasaporteInput">Pasaporte</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">                        
                             <div class="col-12">
                                 <div class="form-floating mb-3">

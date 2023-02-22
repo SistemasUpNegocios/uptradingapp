@@ -486,7 +486,6 @@ class ContratoController extends Controller
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
             $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
             $contrato->pendiente_id = $request->input('pendiente_id');
-            $contrato->memo_status = $request->input('memo_status');
 
             if (empty($request->status)) {
                 $contrato->contrato = strtoupper($request->input('contrato'));
@@ -997,7 +996,6 @@ class ContratoController extends Controller
             $contrato->fecha_reintegro = $request->input('fecha_reintegro');
             $contrato->status_reintegro = $request->input('status_reintegro');
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
-            $contrato->memo_status = $request->input('memo_status');
             if ($request->status == "Refrendado") {
                 $contrato->status = "Pendiente de activación";
                 $contratoAct = explode("-", $request->contrato);

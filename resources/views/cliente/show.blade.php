@@ -237,7 +237,7 @@
                                     <label for="ibanInput">Cuenta IBAN</label>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-6 col-12">
                                 <div class="form-check form-switch mb-3">
                                     <input class="form-check-input" name="tarjeta" type="checkbox" role="switch" id="tarjetaInput">
                                     <label class="form-check-label" for="tarjetaInput">¿Tiene tarjeta?</label>

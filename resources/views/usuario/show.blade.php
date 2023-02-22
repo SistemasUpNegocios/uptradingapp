@@ -28,7 +28,7 @@
                         @if (auth()->user()->is_root)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo usuario</a>
                         @endif
-                        <table class="table table-striped table-bordered nowrap" id="usuario">
+                        <table class="table table-striped table-bordered nowrap" style="font-size: 13px !important" id="usuario">
                             <thead class="text-center">
                                 <tr>
                                     <th data-priority="0" scope="col">Nombre</th>

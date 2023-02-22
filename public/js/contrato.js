@@ -1891,6 +1891,8 @@ $(document).ready(function () {
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
 
+        $("#cambiarPorcentajeInput").prop("disabled", false);
+
         $("#comprobantePagoInput").removeClass("is-valid");
         $("#comprobantePagoInput").removeClass("is-invalid");
 
@@ -2118,6 +2120,8 @@ $(document).ready(function () {
 
         $("#statusReinInput").val(statusrein);
         $("#statusReinInput").prop("disabled", true);
+
+        $("#cambiarPorcentajeInput").prop("disabled", true);
 
         $("#memoReinInput").val(memorein);
         $("#memoReinInput").prop("readonly", true);
@@ -2777,6 +2781,8 @@ $(document).ready(function () {
         $("#montoRenovacionInput").prop("disabled", false);
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
+
+        $("#cambiarPorcentajeInput").prop("disabled", false);
 
         $.ajax({
             type: "GET",

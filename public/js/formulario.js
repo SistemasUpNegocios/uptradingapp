@@ -322,6 +322,8 @@ $(document).ready(function () {
         $("#apellidoPatInput").prop("readonly", false);
         $("#apellidoMatInput").prop("readonly", false);
         $("#fechaNacInput").prop("readonly", false);
+        $("#ineInput").prop("readonly", false);
+        $("#pasaporteInput").prop("readonly", false);
         $("#nacionalidadInput").prop("readonly", false);
         $("#solteroInput").prop("disabled", false);
         $("#casadoInput").prop("disabled", false);
@@ -413,6 +415,8 @@ $(document).ready(function () {
         var apellidop = $(this).data("apellidop");
         var apellidom = $(this).data("apellidom");
         var fechanac = $(this).data("fechanac");
+        var pasaporte = $(this).data("pasaporte");
+        var ine = $(this).data("ine");
         var nacionalidad = $(this).data("nacionalidad");
         var estadocivil = $(this).data("estadocivil");
         var direccion = $(this).data("direccion");
@@ -484,6 +488,12 @@ $(document).ready(function () {
 
         $("#fechaNacInput").val(fechanac);
         $("#fechaNacInput").prop("readonly", true);
+
+        $("#ineInput").val(ine);
+        $("#ineInput").prop("readonly", true);
+
+        $("#pasaporteInput").val(pasaporte);
+        $("#pasaporteInput").prop("readonly", true);
 
         $("#nacionalidadInput").val(nacionalidad);
         $("#nacionalidadInput").prop("readonly", true);
@@ -696,6 +706,8 @@ $(document).ready(function () {
         var apellidop = $(this).data("apellidop");
         var apellidom = $(this).data("apellidom");
         var fechanac = $(this).data("fechanac");
+        var pasaporte = $(this).data("pasaporte");
+        var ine = $(this).data("ine");
         var nacionalidad = $(this).data("nacionalidad");
         var estadocivil = $(this).data("estadocivil");
         var direccion = $(this).data("direccion");
@@ -768,6 +780,12 @@ $(document).ready(function () {
 
         $("#fechaNacInput").val(fechanac);
         $("#fechaNacInput").prop("readonly", false);
+
+        $("#ineInput").val(ine);
+        $("#ineInput").prop("readonly", false);
+
+        $("#pasaporteInput").val(pasaporte);
+        $("#pasaporteInput").prop("readonly", false);
 
         $("#nacionalidadInput").val(nacionalidad);
         $("#nacionalidadInput").prop("readonly", false);

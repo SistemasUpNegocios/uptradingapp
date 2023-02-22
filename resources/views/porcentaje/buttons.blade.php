@@ -10,7 +10,7 @@
     data-memorein="{{ $memo_reintegro }}" data-pendienteid="{{ $pendienteid }}"
     data-fechalimite="{{ $fecha_limite }}" data-tipopago="{{ $tipo_pago }}"
     data-comprobantepago="{{ $comprobante_pago }}" type="button" title="Vista previa"
-    class="ms-1 btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i> Ver porcentajes</a>
+    class="ms-1 btn btn-primary btn-sm btn-icon view mb-1 mt-1"> <i class="bi bi-eye"></i> Ver porcentajes</a>
 <a href="" data-id="{{ $id }}" data-nombrecliente="{{ $clientenombre }}" data-operador="{{ $operador }}"
     data-operadorine="{{ $operador_ine }}" data-lugarfirma="{{ $lugar_firma }}" data-periodo="{{ $periodo }}"
     data-fecha="{{ $fecha }}" data-fecharen="{{ $fecha_renovacion }}" data-fechapag="{{ $fecha_pago }}"
@@ -23,4 +23,4 @@
     data-memorein="{{ $memo_reintegro }}" data-pendienteid="{{ $pendienteid }}"
     data-fechalimite="{{ $fecha_limite }}" data-tipopago="{{ $tipo_pago }}"
     data-comprobantepago="{{ $comprobante_pago }}" type="button" title="Editar contrato"
-    class="ms-1 btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i> Editar porcentajes</a>
+    class="ms-1 btn btn-success btn-sm btn-icon edit mb-1 mt-1"> <i class="bi bi-pencil"></i> Editar porcentajes</a>

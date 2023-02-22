@@ -1738,6 +1738,10 @@ h6 {
     overflow: hidden !important;
 }
 
+.table, .table tbody{
+    vertical-align: middle !important;
+}
+
 #tipoContrato td,
 #tipoContrato th,
 #pregunta td,
@@ -1748,28 +1752,30 @@ h6 {
 #pagops th,
 #pagopsconvenio td,
 #pagopsconvenio th,
-#cambios th,
-#cambios td,
 #usuario th,
 #usuario td,
 #porcentaje th,
-#porcentaje td {
-    width: auto !important;
-    white-space: normal !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-}
-
+#porcentaje td,
 #contrato td,
-#contrato th {
-    width: auto !important;
-    white-space: normal !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-}
-
+#contrato th,
 #reintegro td,
-#reintegro th {
+#reintegro th,
+#contratoVencer td,
+#contratoVencer th,
+#contratoTerminado td,
+#contratoTerminado th,
+#modelo td,
+#modelo th,
+#convenio td,
+#convenio th,
+#psmovil td,
+#psmovil th,
+#bitacora td,
+#bitacora th,
+#intencion td,
+#intencion th,
+#cambios td,
+#cambios th {
     width: auto !important;
     white-space: normal !important;
     text-overflow: ellipsis !important;
@@ -2765,7 +2771,7 @@ pre {
 }
 
 @media (max-width: 449px) {
-    #filtros {
+    .filtros_dash {
         display: none !important;
     }
 }
@@ -2789,5 +2795,29 @@ pre {
 @media (max-width: 575px) {
     .accion_documentos {
         text-align: center !important;
+    }
+}
+
+@media (max-width: 766px) {
+    .dataTables_filter .form-control-sm {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .form-floating label {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 357px) {
+    .form-floating label {
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 310px) {
+    .form-floating label {
+        font-size: 10px !important;
     }
 }
