@@ -229,7 +229,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ cuentas",
         },
-        order: [[0, "desc"]],
+        aaSorting: [],
     });
 
     var formatearCantidad = new Intl.NumberFormat("es-US", {
