@@ -298,8 +298,8 @@ class FormularioController extends Controller
             $numeroOficina = "001";
         }
 
-        $codigoForm = Formulario::select('codigoCliente')->orderBy('id', 'desc')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->orderBy('id', 'desc')->first();
+        $codigoForm = Formulario::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
 
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 
