@@ -5,6 +5,11 @@
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
+    <style>
+        table.dataTable th, table.dataTable td {
+            font-size: 14px;
+        }
+    </style>
 @endsection
 
 @section('content')

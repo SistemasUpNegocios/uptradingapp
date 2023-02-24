@@ -684,7 +684,11 @@ class AgendaController extends Controller
                     ->orWhere('users.privilegio', 'egresos')
                     ->orWhere('users.privilegio', 'ps_gold')
                     ->orWhere('users.privilegio', 'ps_diamond');
-                })->where('agenda.generado_por','=', auth()->user()->id)->get();
+                })
+                ->where(function ($query) {
+                    $query->where('agenda.asignado_a','=', auth()->user()->id)
+                    ->orWhere('agenda.generado_por','=', auth()->user()->id);
+                })->get();
             }
         }else if ($request->citas == "asignada_a") {
             $cita = Agenda::where('agenda.asignado_a','=', auth()->user()->id)->get();

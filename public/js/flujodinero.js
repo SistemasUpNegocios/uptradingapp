@@ -327,6 +327,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
         },
+        aaSorting: [],
     });
 
     $.ajaxSetup({
@@ -347,7 +348,7 @@ $(document).ready(function () {
         },
     });
 
-    $(document).on("click", "#mostrarPagos", function (e) {
+    $(document).on("change", "#fechaInput", function (e) {
         e.preventDefault();
         var tabla = $("#flujoDinero");
         let fecha = $("#fechaInput").val();
@@ -717,6 +718,7 @@ $(document).ready(function () {
                         },
                         info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
                     },
+                    aaSorting: [],
                 });
             },
         });

@@ -42,19 +42,11 @@
                         <div class="row mb-3">
                             <div class="col-12">
                                 <div class="form-floating">
-                                    @if (auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
-                                        <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
-                                            <option value="all" selected>Todas</option>
-                                            <option value="asignada_a" >Asignadas a mí</option>
-                                            <option value="generado_por" >Creadas por mí</option>
-                                        </select>    
-                                    @elseif(auth()->user()->is_root || auth()->user()->is_ps_gold || auth()->user()->is_egresos)
-                                        <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
-                                            <option value="all">Todas</option>
-                                            <option value="asignada_a" selected>Asignadas a mí</option>
-                                            <option value="generado_por" >Creadas por mí</option>
-                                        </select>
-                                    @endif                                    
+                                    <select name="ver_citas" class="form-control" id="verCitasInput" required style="text-transform: none !important;">
+                                        <option value="all" selected>Todas</option>
+                                        <option value="asignada_a" >Asignadas a mí</option>
+                                        <option value="generado_por" >Creadas por mí</option>
+                                    </select>
                                     <label for="verCitasInput">Ver citas</label>
                                 </div>
                             </div>

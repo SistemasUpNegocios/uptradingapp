@@ -638,9 +638,9 @@ $(document).ready(function () {
         let tipo = $(this).data("tipo");
 
         if (tipo == 1) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         $("#nombreClienteInput").val(cliente);
@@ -661,9 +661,9 @@ $(document).ready(function () {
         let tipo = $(this).data("tipo");
 
         if (tipo == 1) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         $("#nombreClienteInput").val(cliente);

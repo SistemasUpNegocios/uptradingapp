@@ -36,6 +36,7 @@ class FlujoDineroController extends Controller
             ->select(DB::raw("contrato.contrato, contrato.fecha, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, contrato.tipo_pago, contrato.monto_pago"))
             ->where('contrato.tipo_pago', "!=", NULL)
             ->where('fecha', "like", "$request->fecha%")
+            ->orderBy("contrato.fecha", "DESC")
             ->get();
             
         return datatables()->of($flujodinero)->addColumn('btn', 'flujodinero.buttons')->rawColumns(['btn'])->toJson();
@@ -46,6 +47,7 @@ class FlujoDineroController extends Controller
         $flujodinero = Contrato::select(DB::raw("contrato, tipo_pago, monto_pago"))
         ->where('tipo_pago', "!=", NULL)
         ->where('fecha', "like", "$request->fecha%")
+        ->orderBy("fecha", "DESC")
         ->get();
 
         $total_swiss_pool = 0;
@@ -106,8 +108,8 @@ class FlujoDineroController extends Controller
             ->join('ps', 'ps.id', 'contrato.ps_id')
             ->select(DB::raw("contrato.contrato, contrato.fecha, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, contrato.tipo_pago, contrato.monto_pago"))
             ->where('contrato.tipo_pago', "!=", NULL)
-            ->where('fecha', "like", "$request->fecha%")
-            ->orderBy("contrato.contrato", "ASC")
+            ->where('contrato.fecha', "like", "$request->fecha%")
+            ->orderBy("contrato.fecha", "DESC")
             ->get();
 
         $total_swiss_pool = 0;
