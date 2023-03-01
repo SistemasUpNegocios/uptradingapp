@@ -34,6 +34,7 @@ class UsuarioController extends Controller
         
         $usuario = DB::table('users')
             ->where("privilegio", "!=", 'cliente')
+            ->orderBy('id', 'ASC')
             ->get();
 
         return datatables()->of($usuario)->addColumn('btn', 'usuario.buttons')->rawColumns(['btn'])->toJson();

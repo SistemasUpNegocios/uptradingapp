@@ -241,6 +241,99 @@ $(document).ready(function () {
         });
     };
 
+    $(document).on("change", ".status", function () {
+        var checked = $(this).is(":checked");
+
+        if (checked) {
+            $(this).val("Pagado");
+        } else {
+            $(this).val("Pendiente");
+        }
+
+        var id = $(this).data("id");
+        var statusValor = $(this).val();
+
+        console.log(id);
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus de pago</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus de pago</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClavePagoPs",
+                    data: {
+                        clave: clave,
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/editStatusPagoPs",
+                                {
+                                    id: id,
+                                    status: statusValor,
+                                },
+                                function () {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+                                }
+                            );
+                        } else {
+                            $(this).prop("checked", false);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        $(this).prop("checked", false);
+
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                $(this).prop("checked", false);
+
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
+
     $(document).on("change", "#fechaInput", function () {
         $("#tablaResumen").empty();
         $("#tablaResumen").html(

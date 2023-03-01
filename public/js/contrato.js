@@ -32,40 +32,6 @@ $(".image-upload-wrapScanner1").bind("dragleave", function () {
     $(".image-upload-wrapScanner1").removeClass("image-droppingScanner1");
 });
 
-function readURL2(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $(".image-upload-wrapScanner2").hide();
-
-            $(".file-upload-imageScanner2").attr("src", e.target.result);
-            $(".file-upload-contentScanner2").show();
-
-            $(".image-titleScanner2").html(input.files[0].name);
-        };
-
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        removeUpload2();
-    }
-}
-
-function removeUpload2() {
-    $(".file-upload-inputScanner2").replaceWith(
-        $(".file-upload-inputScanner2").clone()
-    );
-    $(".file-upload-contentScanner2").hide();
-    $(".image-upload-wrapScanner2").show();
-}
-
-$(".image-upload-wrapScanner2").bind("dragover", function () {
-    $(".image-upload-wrapScanner2").addClass("image-droppingScanner2");
-});
-$(".image-upload-wrapScanner2").bind("dragleave", function () {
-    $(".image-upload-wrapScanner2").removeClass("image-droppingScanner2");
-});
-
 $(document).ready(function () {
     let acc = "";
     let casilla = false;
@@ -1635,7 +1601,31 @@ $(document).ready(function () {
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
-                    if (casilla && rendimiento > 0) {
+                    if (estatus == "Refrendado") {
+                        if (casilla && rendimiento > 0) {
+                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
+                            $.get({
+                                url: "/admin/enviarTelegram",
+                                data: {
+                                    mensaje: mensaje,
+                                },
+                                success: function (response) {
+                                    $("#contratoInput").val(response);
+                                },
+                            });
+                        } else {
+                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nNúmero de contrato: ${contrato_numero}`;
+                            $.get({
+                                url: "/admin/enviarTelegram",
+                                data: {
+                                    mensaje: mensaje,
+                                },
+                                success: function (response) {
+                                    $("#contratoInput").val(response);
+                                },
+                            });
+                        }
+                    } else if (casilla && rendimiento > 0) {
                         let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
                         $.get({
                             url: "/admin/enviarTelegram",
@@ -1790,8 +1780,8 @@ $(document).ready(function () {
                 table.ajax.reload(null, false);
                 Swal.fire({
                     icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Documento(s) añadidos</h1>',
-                    html: '<p style="font-family: Poppins">Los documento(s) han sido añadido(s) correctamente</p>',
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Escaner subido</h1>',
+                    html: '<p style="font-family: Poppins">El escaner ha sido subido correctamente</p>',
                     confirmButtonText:
                         '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",
@@ -1841,9 +1831,7 @@ $(document).ready(function () {
         $("#contratoInput").prop("readonly", false);
         $("#psIdInput").prop("disabled", false);
         $("#clienteIdInput").prop("disabled", false);
-        $("#pendienteIdInput").prop("disabled", false);
         $("#tipoIdInput").prop("disabled", false);
-        // $("#porcentajeInput").prop("readonly", false);
         $("#folioInput").prop("readonly", false);
         $("#modeloIdInput").prop("disabled", false);
         $("#inversionInput").prop("readonly", false);
@@ -1877,6 +1865,7 @@ $(document).ready(function () {
         $("#transferenciaSwissInput").prop("disabled", false);
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
+        $("#wiseInput").prop("disabled", false);
         $("#hsbcInput").prop("disabled", false);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
@@ -1886,10 +1875,16 @@ $(document).ready(function () {
         $("#montoTransSwissPOOLInput").prop("disabled", false);
         $("#montoTransMXPOOLInput").prop("disabled", false);
         $("#montoBankInput").prop("disabled", false);
+        $("#montoWiseInput").prop("disabled", false);
         $("#montoHSBCInput").prop("disabled", false);
         $("#montoRenovacionInput").prop("disabled", false);
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
+
+        $("#referenciaTransSwissPOOLInput").prop("disabled", false);
+        $("#referenciaTransMXPOOLInput").prop("disabled", false);
+        $("#referenciaWiseInput").prop("disabled", false);
+        $("#referenciaHSBCInput").prop("disabled", false);
 
         $("#cambiarPorcentajeInput").prop("disabled", false);
 
@@ -2011,7 +2006,6 @@ $(document).ready(function () {
         var psid = $(this).data("psid");
         var psnombre = $(this).data("psnombre");
         var clienteid = $(this).data("clienteid");
-        var pendienteid = $(this).data("pendienteid");
         var tipoid = $(this).data("tipoid");
         var porcentaje = $(this).data("porcentaje");
         var folio = $(this).data("folio");
@@ -2081,9 +2075,6 @@ $(document).ready(function () {
         $("#psIdInput").val(psid);
         $("#psIdInput").prop("disabled", true);
 
-        $("#pendienteIdInput").val(pendienteid);
-        $("#pendienteIdInput").prop("disabled", true);
-
         $("#tipoIdInput").val(tipoid);
         $("#tipoIdInput").prop("disabled", true);
 
@@ -2140,6 +2131,7 @@ $(document).ready(function () {
         $("#transferenciaSwissInput").prop("disabled", true);
         $("#transferenciaMXInput").prop("disabled", true);
         $("#ciBankInput").prop("disabled", true);
+        $("#wiseInput").prop("disabled", true);
         $("#hsbcInput").prop("disabled", true);
         $("#renovacionInput").prop("disabled", true);
         $("#rendimientosInput").prop("disabled", true);
@@ -2150,10 +2142,16 @@ $(document).ready(function () {
         $("#montoTransSwissPOOLInput").prop("disabled", true);
         $("#montoTransMXPOOLInput").prop("disabled", true);
         $("#montoBankInput").prop("disabled", true);
+        $("#montoWiseInput").prop("disabled", true);
         $("#montoHSBCInput").prop("disabled", true);
         $("#montoRenovacionInput").prop("disabled", true);
         $("#montoRendimientosInput").prop("disabled", true);
         $("#montoComisionesInput").prop("disabled", true);
+
+        $("#referenciaTransSwissPOOLInput").prop("disabled", true);
+        $("#referenciaTransMXPOOLInput").prop("disabled", true);
+        $("#referenciaWiseInput").prop("disabled", true);
+        $("#referenciaHSBCInput").prop("disabled", true);
 
         $.ajax({
             type: "GET",
@@ -2580,10 +2578,6 @@ $(document).ready(function () {
         $(".file-upload-imageScanner1").attr("src", "");
         $(".file-upload-contentScanner1").hide();
 
-        $(".image-upload-wrapScanner2").show();
-        $(".file-upload-imageScanner2").attr("src", "");
-        $(".file-upload-contentScanner2").hide();
-
         $.get({
             url: "/admin/checkScanner",
             data: {
@@ -2594,26 +2588,13 @@ $(document).ready(function () {
                     acc = "edit";
                     $("#scannerForm").attr("action", "/admin/editScanner");
 
-                    if (res[0].img_anverso != null) {
+                    if (res[0].img != null) {
                         $(".image-upload-wrapScanner1").hide();
                         $(".file-upload-imageScanner1").attr(
                             "src",
-                            "/documentos/contrato_escaneado" +
-                                "/" +
-                                res[0].img_anverso
+                            "/documentos/contrato_escaneado" + "/" + res[0].img
                         );
                         $(".file-upload-contentScanner1").show();
-                    }
-
-                    if (res[0].img_reverso != null) {
-                        $(".image-upload-wrapScanner2").hide();
-                        $(".file-upload-imageScanner2").attr(
-                            "src",
-                            "/documentos/contrato_escaneado" +
-                                "/" +
-                                res[0].img_reverso
-                        );
-                        $(".file-upload-contentScanner2").show();
                     }
                 } else if (res == "none") {
                     $("#scannerForm").attr("action", "/admin/addScanner");
@@ -2654,7 +2635,6 @@ $(document).ready(function () {
         var psid = $(this).data("psid");
         var psnombre = $(this).data("psnombre");
         var clienteid = $(this).data("clienteid");
-        var pendienteid = $(this).data("pendienteid");
         var tipoid = $(this).data("tipoid");
         var porcentaje = $(this).data("porcentaje");
         var folio = $(this).data("folio");
@@ -2710,9 +2690,6 @@ $(document).ready(function () {
         $("#psIdInput").val(psid);
         $("#psIdInput").prop("disabled", false);
 
-        $("#pendienteIdInput").val(pendienteid);
-        $("#pendienteIdInput").prop("disabled", false);
-
         $("#tipoIdInput").val(tipoid);
         $("#tipoIdInput").prop("disabled", false);
 
@@ -2767,6 +2744,7 @@ $(document).ready(function () {
         $("#transferenciaSwissInput").prop("disabled", false);
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
+        $("#wiseInput").prop("disabled", false);
         $("#hsbcInput").prop("disabled", false);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
@@ -2777,10 +2755,16 @@ $(document).ready(function () {
         $("#montoTransSwissPOOLInput").prop("disabled", false);
         $("#montoTransMXPOOLInput").prop("disabled", false);
         $("#montoBankInput").prop("disabled", false);
+        $("#montoWiseInput").prop("disabled", false);
         $("#montoHSBCInput").prop("disabled", false);
         $("#montoRenovacionInput").prop("disabled", false);
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
+
+        $("#referenciaTransSwissPOOLInput").prop("disabled", false);
+        $("#referenciaTransMXPOOLInput").prop("disabled", false);
+        $("#referenciaWiseInput").prop("disabled", false);
+        $("#referenciaHSBCInput").prop("disabled", false);
 
         $("#cambiarPorcentajeInput").prop("disabled", false);
 
@@ -4386,8 +4370,10 @@ $(document).ready(function () {
 
             if (transferenciaSwissChecked) {
                 $("#montoTransSwissPOOLCont").show();
+                $("#referenciaTransSwissPOOLCont").show();
             } else {
                 $("#montoTransSwissPOOLCont").hide();
+                $("#referenciaTransSwissPOOLCont").hide();
             }
         }
         if (target.is("#transferenciaMXInput")) {
@@ -4397,8 +4383,10 @@ $(document).ready(function () {
 
             if (transferenciaMXChecked) {
                 $("#montoTransMXPOOLCont").show();
+                $("#referenciaTransMXPOOLCont").show();
             } else {
                 $("#montoTransMXPOOLCont").hide();
+                $("#referenciaTransMXPOOLCont").hide();
             }
         }
         if (target.is("#ciBankInput")) {
@@ -4410,13 +4398,26 @@ $(document).ready(function () {
                 $("#montoBankCont").hide();
             }
         }
+        if (target.is("#wiseInput")) {
+            let wiseChecked = $("#wiseInput").is(":checked");
+
+            if (wiseChecked) {
+                $("#montoWiseCont").show();
+                $("#referenciaWiseCont").show();
+            } else {
+                $("#montoWiseCont").hide();
+                $("#referenciaWiseCont").hide();
+            }
+        }
         if (target.is("#hsbcInput")) {
             let hsbcChecked = $("#hsbcInput").is(":checked");
 
             if (hsbcChecked) {
                 $("#montoHSBCCont").show();
+                $("#referenciaHSBCCont").show();
             } else {
                 $("#montoHSBCCont").hide();
+                $("#referenciaHSBCCont").hide();
             }
         }
         if (target.is("#renovacionInput")) {
@@ -4459,52 +4460,8 @@ $(document).ready(function () {
         }
     });
 
-    //Evento change en el cambio de cliente para mostrar los pendientes que coincidan con el nombre del cliente
     $("#clienteIdInput").change(function () {
         var id = $("#clienteIdInput").val();
-        $.ajax({
-            type: "GET",
-            url: "/admin/showListaPendientes",
-            data: {
-                id: id,
-            },
-            success: function (response) {
-                $("#pendienteIdInput").empty();
-                $("#pendienteIdInput").append(`
-                    <option value="" disabled selected>Selecciona...</option>
-                `);
-
-                response.map(function (pendiente) {
-                    $("#pendienteIdInput").append(`
-                        <option value="${pendiente.id}">${pendiente.nombre}</option>
-                    `);
-                });
-
-                $("#pendienteIdInput").change(function () {
-                    var psid = $("#pendienteIdInput").val();
-                    $.ajax({
-                        type: "GET",
-                        url: "/admin/showPendiente",
-                        data: {
-                            id: psid,
-                        },
-                        success: function (response) {
-                            $("#psIdInput").empty();
-                            $("#psIdInput").append(`
-                                <option value="" disabled>Selecciona...</option>
-                            `);
-
-                            response.map(function (ps) {
-                                $("#psIdInput").append(`
-                                    <option value="${ps.psid}" selected>${ps.psnombre}</option>
-                                `);
-                            });
-                        },
-                    });
-                });
-            },
-        });
-
         $.get({
             url: "/admin/showNumeroCliente",
             data: {
@@ -4560,6 +4517,7 @@ $(document).ready(function () {
             "#renovacionInput",
             "#rendimientosInput",
             "#comisionesInput",
+            "#wiseInput",
         ];
 
         let inputs = [
@@ -4571,6 +4529,7 @@ $(document).ready(function () {
             "#montoRenovacionInput",
             "#montoRendimientosInput",
             "#montoComisionesInput",
+            "#montoWiseInput",
         ];
 
         let conts = [
@@ -4580,32 +4539,101 @@ $(document).ready(function () {
             "#montoBankCont",
             "#montoHSBCCont",
             "#montoRenovacionCont",
+            "montoRendimientosCont",
             "#montoComisionesCont",
+            "#montoWiseCont",
+        ];
+
+        let inputsRef = [
+            "#referenciaEfectivoInput",
+            "#referenciaTransSwissPOOLInput",
+            "#referenciaTransMXPOOLInput",
+            "#referenciaBankInput",
+            "#referenciaHSBCInput",
+            "#referenciaRenovacionInput",
+            "#referenciaRendimientosInput",
+            "#referenciaComisionesInput",
+            "#referenciaWiseInput",
+        ];
+
+        let contsRef = [
+            "#referenciaEfectivoCont",
+            "#referenciaTransSwissPOOLCont",
+            "#referenciaTransMXPOOLCont",
+            "#referenciaBankCont",
+            "#referenciaHSBCCont",
+            "#referenciaRenovacionCont",
+            "referenciaRendimientosCont",
+            "#referenciaComisionesCont",
+            "#referenciaWiseCont",
         ];
 
         let montopago = $(thiss).data("montopago");
         let tipopago = $(thiss).data("tipopago");
+        let referencia = $(thiss).data("referencia");
 
         if (typeof montopago !== "undefined") {
             montopago = montopago.split(",");
-
             tipopago = tipopago.split(",");
-            let j = 0;
-            tipopago.map((tipo) => {
-                let i = 0;
-                checkbox.map((input) => {
+            referencia = referencia.split(",");
+
+            let z = 0;
+            tipopago.map((tipo, j) => {
+                checkbox.map((input, i) => {
                     if (tipo == $(input).val()) {
                         $(input).prop("checked", true);
                         let checked = $(input).is(":checked");
                         if (checked) {
                             $(conts[i]).show();
                             $(inputs[i]).val(montopago[j]);
+
+                            referencia.map((ref, j) => {
+                                if (
+                                    contsRef[j] ==
+                                        "#referenciaTransSwissPOOLCont" &&
+                                    tipo == "transferencia_swiss_pool"
+                                ) {
+                                    $("#referenciaTransSwissPOOLCont").show();
+                                    $("#referenciaTransSwissPOOLInput").val(
+                                        ref
+                                    );
+                                } else if (
+                                    contsRef[j] ==
+                                        "#referenciaTransMXPOOLCont" &&
+                                    tipo == "transferencia_mx_pool"
+                                ) {
+                                    $("#referenciaTransMXPOOLCont").show();
+                                    $("#referenciaTransMXPOOLInput").val(ref);
+                                } else if (
+                                    contsRef[j] == "#referenciaHSBCCont" &&
+                                    tipo == "HSBC"
+                                ) {
+                                    $("#referenciaHSBCCont").show();
+                                    $("#referenciaHSBCInput").val(ref);
+                                } else if (
+                                    contsRef[j] == "#referenciaWiseCont" &&
+                                    tipo == "wise"
+                                ) {
+                                    $("#referenciaWiseCont").show();
+                                    $("#referenciaWiseInput").val(ref);
+                                }
+                            });
                         }
-                        j++;
                     }
-                    i++;
                 });
             });
+
+            // if (contsRef[j] == "XXXXX") {
+            //     $(contsRef[j]).show();
+            // }
+            // $(inputsRef[j]).val(ref);
+            // referencia.map((ref, j) => {
+            //     console.log(contsRef[j], inputsRef[j], ref);
+            //     if (ref != "XXXXX") {
+            //         $(contsRef[j]).show();
+            //     }
+            //     $(inputsRef[j]).val(ref);
+            // });
         }
     };
 
@@ -4619,6 +4647,12 @@ $(document).ready(function () {
         $("#montoRendimientosCont").hide();
         $("#montoComisionesCont").hide();
         $("#porcentajeRendimientoCont").hide();
+        $("#montoWiseCont").hide();
+
+        $("#referenciaTransSwissPOOLCont").hide();
+        $("#referenciaTransMXPOOLCont").hide();
+        $("#referenciaHSBCCont").hide();
+        $("#referenciaWiseCont").hide();
     };
 
     const estilos = (

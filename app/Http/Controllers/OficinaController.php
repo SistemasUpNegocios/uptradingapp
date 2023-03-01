@@ -28,7 +28,7 @@ class OficinaController extends Controller
     {
         $oficinas = Oficina::all();
 
-        return datatables()->of($oficinas)->addColumn('btn', 'oficina.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($oficinas)->addColumn('mapa', 'oficina.mapa')->addColumn('btn', 'oficina.buttons')->rawColumns(['mapa', 'btn'])->toJson();
     }
 
     public function addOficina(Request $request)

@@ -79,7 +79,7 @@
                             <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control" placeholder="Ingresa la nota de la bitacora"
-                                        id="notaInput" name="nota" title="Ingresa la nota de la bitacora" minlength="3" maxlength="200" style="height: 200px" ></textarea>
+                                        id="notaInput" name="nota" title="Ingresa la nota de la bitacora" style="height: 200px" ></textarea>
                                     <label for="floatingInput">Nota</label>
                                 </div>
                             </div>

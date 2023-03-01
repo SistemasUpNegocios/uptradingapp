@@ -8,7 +8,7 @@
   
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
   <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
-  <title>@yield('title') | Up Trading App</title>
+  <title>@yield('title') | Administrador Up Trading</title>
 
   <link id="pagestyle" href="{{ asset('css/login.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/preloader.css') }}" rel="stylesheet">

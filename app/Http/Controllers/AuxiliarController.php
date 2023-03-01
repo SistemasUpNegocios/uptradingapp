@@ -252,37 +252,21 @@ class AuxiliarController extends Controller
                         $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                     }
 
-                    $amortizacion->monto = round($monto, 2);
+                    $amortizacion->monto = $monto;
                     $redito = $monto * $rendimiento;
-                    $amortizacion->redito = round($redito, 2);
-                    $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = ($monto + $redito);
 
                     $amortizacion->save();
 
                     $pago_cliente_table = new PagoCliente;
 
                     $pago_cliente_table->contrato_id = $contrato->id;
-                    $pago_cliente_table->serie = ($i + 1);
-
-                    if ($fecha_mes == 2){
-                        if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                            $pago_cliente_table->fecha_pago = $fecha_pago_cliente->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
-                        }else{
-                            $pago_cliente_table->fecha_pago = $fecha_pago_cliente->addMonth()->format('Y-m-d');
-                        }
-                    }else if ($fecha_dia == 31){
-                        $fecha_pago_cliente = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                        $pago_cliente_table->fecha_pago = $fecha_pago_cliente->format('Y-m-d');
-                    }else if($fecha_dia == 29 || $fecha_dia == 30){
-                        $fecha_pago_cliente = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                        $pago_cliente_table->fecha_pago = $fecha_pago_cliente->format('Y-m-d');
-                    }else{
-                        $pago_cliente_table->fecha_pago = $fecha_pago_cliente->addMonth()->format('Y-m-d');
-                    }
-                    
-                    $pago_cliente_table->pago = round($redito, 2);
+                    $pago_cliente_table->serie = ($i + 1);                
+                    $pago_cliente_table->pago = $redito;
                     $pago_cliente_table->status = "Pendiente";
                     $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->fecha_pago = $amortizacion->fecha;
 
                     $pago_cliente_table->save();
                 }

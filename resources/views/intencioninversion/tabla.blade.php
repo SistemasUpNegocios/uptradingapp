@@ -30,8 +30,8 @@
 
             <div class="card">
                 <div class="card-body mt-3">
-                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="intencion">
-                        <thead>
+                    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%; vertical-align: middle !important;" id="intencion">
+                        <thead style="vertical-align: middle !important;">
                             <tr>
                                 <th data-priority="0" scope="col">Nombre completo</th>
                                 <th data-priority="0" scope="col">Teléfono</th>

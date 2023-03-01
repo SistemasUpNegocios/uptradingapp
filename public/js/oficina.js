@@ -4,8 +4,9 @@ $(document).ready(function () {
     var table = $("#oficina").DataTable({
         ajax: "/admin/showOficina",
         columns: [
-            { data: "ciudad" },
             { data: "codigo_oficina" },
+            { data: "ciudad" },
+            { data: "mapa" },
             { data: "btn" },
         ],
         responsive: {
@@ -28,7 +29,6 @@ $(document).ready(function () {
                 },
             ],
         },
-        order: [[1, "asc"]],
         language: {
             processing: "Procesando...",
             lengthMenu: "Mostrar _MENU_ oficinas",

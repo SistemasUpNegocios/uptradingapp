@@ -1,7 +1,14 @@
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
     var url_filtro = "/admin/getResumenPagoClienteDiaMensual";
     var filtro = "mensual";
     let dolar = 0;
+
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
         jsonp: "callback",
@@ -43,7 +50,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-danger" role="status"></div>
                             <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                         </div>
@@ -250,6 +257,97 @@ $(document).ready(function () {
         });
     };
 
+    $(document).on("change", ".status", function () {
+        var checked = $(this).is(":checked");
+
+        if (checked) {
+            $(this).val("Pagado");
+        } else {
+            $(this).val("Pendiente");
+        }
+
+        var id = $(this).data("id");
+        var statusValor = $(this).val();
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus de pago</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus de pago</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/showClavePagoCliente",
+                    data: {
+                        clave: clave,
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/editStatusPagoCliente",
+                                {
+                                    id: id,
+                                    status: statusValor,
+                                },
+                                function () {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+                                }
+                            );
+                        } else {
+                            $(this).prop("checked", false);
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        $(this).prop("checked", false);
+
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                $(this).prop("checked", false);
+
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
+
     $(document).on("change", "#fechaInicioInput", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
@@ -310,7 +408,7 @@ $(document).ready(function () {
                         $("#tablaResumen").empty();
                         $("#tablaResumen").html(
                             `
-                                <div class="text-center">
+                                <div class="text-center mt-4">
                                     <div class="spinner-border text-danger" role="status"></div>
                                     <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                                 </div>
@@ -386,7 +484,7 @@ $(document).ready(function () {
                         $("#tablaResumen").empty();
                         $("#tablaResumen").html(
                             `
-                                <div class="text-center">
+                                <div class="text-center mt-4">
                                     <div class="spinner-border text-danger" role="status"></div>
                                     <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                                 </div>
@@ -443,7 +541,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-danger" role="status"></div>
                             <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                         </div>
@@ -617,7 +715,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-danger" role="status"></div>
                             <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                         </div>
@@ -726,7 +824,7 @@ $(document).ready(function () {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(
                     `
-                        <div class="text-center">
+                        <div class="text-center mt-4">
                             <div class="spinner-border text-danger" role="status"></div>
                             <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                         </div>

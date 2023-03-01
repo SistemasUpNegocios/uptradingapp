@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Oficina;
 use App\Models\Ps;
+use App\Models\PagoPS;
 use App\Models\TipoCambio;
 use App\Exports\PagosPsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class ReportePagoPsController extends Controller
 {
@@ -107,6 +109,40 @@ class ReportePagoPsController extends Controller
     {
         $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%B');
         return Excel::download(new PagosPsExport($request->fecha, $request->dolar), "pagos de comisiones del mes de $fecha.xlsx");
+    }
+
+    public function getClave(Request $request)
+    {
+        $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+        if (\Hash::check($request->clave, $clave->password)) {                
+            return response("success");
+        }else{
+            return response("error");
+        }
+    }
+
+    public function editStatus(Request $request)
+    {
+
+        $id_arr = explode(',', $request->id);
+
+        foreach ($id_arr as $id) {
+            $pago_ps = PagoPS::find($id);
+
+            if(strlen($pago_ps) > 0){
+                if($request->status == "Pagado"){
+                    $fecha = Carbon::now()->format('Y-m');
+                    $pago_ps->fecha_pagado = $fecha."-10";
+                }else{
+                    $pago_ps->fecha_pagado = NULL;
+                }
+    
+                $pago_ps->status = $request->status;
+                $pago_ps->update();
+            }
+        }
+
+        return response('success');
     }
 
 }

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 
 class ConcentradoController extends Controller
@@ -70,6 +71,51 @@ class ConcentradoController extends Controller
         $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
 
         return view('concentrado.datos', compact("cliente", "contratos", "contrato_mensual", "contrato_compuesto", "contratos_inv_mens", "contratos_inv_dol_mens", "contratos_inv_comp", "contratos_inv_dol_comp", "contratos_men_tot", "contratos_comp_tot", "convenio_tot", "convenios", "convenios_monto_dol", "total_dolares", "total_pesos", "convenios_monto"));
+    }
+
+    public function reporteConcentrado(Request $request)
+    {
+        $cliente = Cliente::where("id", $request->id)->first();
+        $contratos = Contrato::where("cliente_id", $request->id)->count();
+        $contrato_mensual = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->count();
+        $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->count();
+        $convenios = Convenio::where("cliente_id", $request->id)->count();
+
+        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion');
+        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion_us');
+        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion');
+        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion_us');
+        $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->sum('monto');
+        $convenios_monto = $convenios_monto_dol * $request->dolar;
+
+        $total_dolares = $contratos_inv_dol_mens + $contratos_inv_dol_comp + $convenios_monto_dol;
+        $total_pesos = $contratos_inv_mens + $contratos_inv_comp + ($convenios_monto_dol * $request->dolar);
+
+        $anio = Carbon::now()->format('Y');
+        $mes = Carbon::now()->format('m');
+        
+        $contratos_men_tot = Contrato::join("pago_cliente", "pago_cliente.contrato_id", "contrato.id")
+            ->select("contrato.contrato", "pago_cliente.serie", "contrato.tipo_id", "contrato.inversion", "contrato.inversion_us")
+            ->where("contrato.cliente_id", $request->id)
+            ->where("contrato.tipo_id", 1)            
+            ->where("pago_cliente.fecha_pago", "like", "$anio-$mes%")
+            ->orderBy("tipo_id", "ASC")
+            ->distinct("contrato.contrato")
+            ->get();
+
+        $contratos_comp_tot = Contrato::join("pago_cliente", "pago_cliente.contrato_id", "contrato.id")
+            ->select("contrato.contrato", "pago_cliente.fecha_pago", "contrato.tipo_id", "contrato.inversion", "contrato.inversion_us")
+            ->where("contrato.cliente_id", $request->id)
+            ->where("contrato.tipo_id", 2)
+            ->orderBy("tipo_id", "ASC")
+            ->distinct("contrato.contrato")
+            ->get();
+
+        $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
+
+        $pdf = PDF::loadView('concentrado.reporte', compact("cliente", "contratos", "contrato_mensual", "contrato_compuesto", "contratos_inv_mens", "contratos_inv_dol_mens", "contratos_inv_comp", "contratos_inv_dol_comp", "contratos_men_tot", "contratos_comp_tot", "convenio_tot", "convenios", "convenios_monto_dol", "total_dolares", "total_pesos", "convenios_monto"));
+        $nombreDescarga = "Concentrado del cliente $cliente->nombre $cliente->apellido_p $cliente->apellido_m.pdf";
+        return $pdf->stream($nombreDescarga);
     }
 
 }

@@ -63,7 +63,7 @@
                         </div>
                         <div id="contTotal" class="mt-4"></div>
                         <div class="mt-4" style="overflow-x: auto;">
-                            <table class="table table-striped table-bordered nowrap " style="width: 100%" id="flujoDinero">
+                            <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="flujoDinero">
                                 <thead>                               
                                     <tr>
                                         <th data-priority="0" scope="col">Contrato</th>

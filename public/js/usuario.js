@@ -11,7 +11,30 @@ $(document).ready(function () {
                 },
             },
             { data: "correo" },
-            { data: "privilegio" },
+            {
+                data: "privilegio",
+                render: function (privilegio) {
+                    if (privilegio == "root") {
+                        return "SUPERUSUARIO";
+                    } else if (privilegio == "admin") {
+                        return "ADMINISTRADOR";
+                    } else if (privilegio == "procesos") {
+                        return "PROCESOS";
+                    } else if (privilegio == "egresos") {
+                        return "EGRESOS";
+                    } else if (privilegio == "contabilidad") {
+                        return "CONTABILIDAD";
+                    } else if (privilegio == "ps_diamond") {
+                        return "PS DIAMOND";
+                    } else if (privilegio == "ps_gold") {
+                        return "PS GOLD";
+                    } else if (privilegio == "ps_silver") {
+                        return "PS SILVER";
+                    } else if (privilegio == "cliente") {
+                        return "CLIENTE";
+                    }
+                },
+            },
             { data: "btn" },
         ],
         responsive: {
@@ -215,6 +238,7 @@ $(document).ready(function () {
             },
             info: "Mostrando del _START_ al _END_ de _TOTAL_ usuarios",
         },
+        aaSorting: [],
     });
 
     $.ajaxSetup({

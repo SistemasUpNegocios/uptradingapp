@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pendiente;
 use App\Models\Ps;
+use App\Models\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -48,23 +49,29 @@ class PendienteController extends Controller
 
     public function addPendiente(Request $request)
     {
-        if ($request->ajax()) {
-            $pendiente = new Pendiente;
-            $pendiente->ps_id = $request->input('ps_id');
-            $pendiente->memo_nombre = strtoupper($request->input('nombre'));
-            $pendiente->memo_apertura = "Sin notas";
-            $pendiente->save();
+        $pendiente = new Pendiente;
+        $pendiente->ps_id = $request->input('ps_id');
+        $pendiente->memo_nombre = strtoupper($request->input('nombre'));
+        $pendiente->memo_apertura = "Sin notas";
+        $pendiente->save();
 
-            if ($pendiente) {
-                $pendientes = DB::table("pendiente")
-                    ->orderBy("ultima_modificacion", "desc")
-                    ->get();
+        $pendiente_id = $pendiente->id;
+        $bitacora_id = session('bitacora_id');
 
-                return response(["data" => $pendientes]);
-            }
+        $log = new Log;
 
-            // return response($pendiente);
-        }
+        $log->tipo_accion = "Inserción";
+        $log->tabla = "Pendientes";
+        $log->id_tabla = $pendiente_id;
+        $log->bitacora_id = $bitacora_id;
+
+        if ($log->save()) {
+            $pendientes = DB::table("pendiente")
+                ->orderBy("ultima_modificacion", "desc")
+                ->get();
+            return response(["data" => $pendientes]);
+        }   
+        
     }
 
     public function listaPendientes(Request $request)
@@ -81,10 +88,18 @@ class PendienteController extends Controller
 
     public function listaClientes()
     {
+
+        if(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+            $codigo = session('codigo_oficina');
+        }else{
+            $codigo = "%";
+        }
+        
         $pendientes = DB::table('pendiente')
             ->join('ps', 'ps.id', '=', 'pendiente.ps_id')
             ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.intencion_inversion, pendiente.formulario, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.transferencia, pendiente.contrato, pendiente.conexion_mampool, pendiente.primer_pago, pendiente.tarjeta_swissquote, pendiente.tarjeta_uptrading, pendiente.ultima_modificacion"))
             ->orderBy("ultima_modificacion", "desc")
+            ->where("codigo_oficina", "like", $codigo)
             ->get();
 
         $ps = Ps::all();
@@ -145,14 +160,8 @@ class PendienteController extends Controller
 
         if (!empty($request->contrato)) {
             $pendiente->contrato = "Hecho";
-            $contrato_activo = DB::table('contrato')            
-                        ->where("pendiente_id", "=", $request->id)
-                        ->update(["status" => "Activado"]);
         } else {
             $pendiente->contrato = "Pendiente";
-            $contrato_activo = DB::table('contrato')            
-                        ->where("pendiente_id", "=", $request->id)
-                        ->update(["status" => "Pendiente de activación"]);
         }
 
         if (!empty($request->conexion_mampool)) {
@@ -231,15 +240,37 @@ class PendienteController extends Controller
 
         $pendiente->ultima_modificacion = date("Y-m-d H:i:s");
 
-        $pendiente->update();
-        return response($pendiente);
+
+        $pendiente_id = $request->id;
+        $bitacora_id = session('bitacora_id');
+
+        $log = new Log;
+
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Pendientes";
+        $log->id_tabla = $pendiente_id;
+        $log->bitacora_id = $bitacora_id;
+
+        if ($log->save()) {
+            $pendiente->update();
+            return response($pendiente);
+        }        
     }
 
     public function deletePendiente(Request $request)
     {
-        if ($request->ajax()) {
-            Pendiente::destroy($request->id);
+        $pendiente_id = $request->id;
+        $bitacora_id = session('bitacora_id');
 
+        $log = new Log;
+
+        $log->tipo_accion = "Eliminación";
+        $log->tabla = "Pendientes";
+        $log->id_tabla = $pendiente_id;
+        $log->bitacora_id = $bitacora_id;
+
+        if ($log->save()) {
+            Pendiente::destroy($request->id);
             $pendientes = DB::table("pendiente")
                 ->orderBy("ultima_modificacion", "desc")
                 ->get();
@@ -248,7 +279,7 @@ class PendienteController extends Controller
         }
     }
 
-    public function generateList(Request $request)
+    public function generateList()
     {
         if(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
             $codigo = session('codigo_oficina');

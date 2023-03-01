@@ -81,4 +81,34 @@ class ReportePagoClienteOficinaController extends Controller
         $nombreDescarga = "Resumen de pagos por oficina de $inicio hasta $fin.pdf";
         return $pdf->stream($nombreDescarga);
     }
+
+    public function imprimirResumenClienteOficinaForanea(Request $request)
+    {
+
+        $resumenContrato = DB::table('contrato')
+            ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
+            ->select(DB::raw("contrato.id as contratoid, contrato.contrato, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, pago_cliente.pago, pago_cliente.memo, pago_cliente.serie"))
+            ->whereBetween('pago_cliente.fecha_pago', [$request->fecha_inicio, $request->fecha_fin])
+            ->where('ps.oficina_id', "!=", 1)
+            ->get();
+
+        $oficina = "FORANEOS";
+
+        $data = array(
+            "resumenes_contrato" => $resumenContrato,
+            "fecha_inicio" => $request->fecha_inicio,
+            "fecha_fin" => $request->fecha_fin,
+            "oficina" => $oficina
+        );
+
+        $inicio = Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
+        $fin = Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
+
+        $pdf = PDF::loadView('reportepagoclienteoficina.imprimir', $data);
+        $nombreDescarga = "Resumen de pagos por oficina de $inicio hasta $fin.pdf";
+        return $pdf->stream($nombreDescarga);
+
+    }
 }

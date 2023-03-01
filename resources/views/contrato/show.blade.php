@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+
+    <style>
+        table.dataTable th, table.dataTable td {
+            font-size: 15px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -200,21 +206,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-12" id="colSelectPendiente">
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <select id="pendienteIdInput" name="pendiente_id" minlength="3" maxlength="120"
-                                            pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch">
-                                            <option value="" disabled selected>Selecciona...</option>
-                                            @foreach($lista_pendientes as $pendiente)
-                                            <option value="{{ $pendiente->id }}">{{ $pendiente->memo_nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                        <label for="pendienteIdInput">Pendientes en checklist</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-12 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
                                         class="form-select selectSearch" id="psIdInput">
@@ -442,6 +434,10 @@
                                     <label class="form-check-label" for="ciBankInput">CI BANK</label>
                                 </div>
                                 <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="wiseInput" name="tipo_pago[]" value="wise">
+                                    <label class="form-check-label" for="wiseInput">Wise</label>
+                                </div>
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]" value="HSBC">
                                     <label class="form-check-label" for="hsbcInput">HSBC</label>
                                 </div>
@@ -464,48 +460,94 @@
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en efectivo" id="montoEfectivoInput" name="monto_pago[]">
                                     <label for="montoEfectivoInput">Monto en efectivo</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
                             </div>
+
                             <div class="col-md-6 col-12" id="montoTransSwissPOOLCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto de transferencia Swiss a POOL" id="montoTransSwissPOOLInput" name="monto_pago[]">
                                     <label for="montoTransSwissPOOLInput">Monto de transferencia Swiss a POOL</label>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-12" id="referenciaTransSwissPOOLCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de transferencia Swiss a POOL" id="referenciaTransSwissPOOLInput" name="referencia_pago[]">
+                                    <label for="referenciaTransSwissPOOLInput">Referencia de transferencia Swiss a POOL</label>
+                                </div>
+                            </div>
+
                             <div class="col-md-6 col-12" id="montoTransMXPOOLCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto de transferencia MX a POOL" id="montoTransMXPOOLInput" name="monto_pago[]">
                                     <label for="montoTransMXPOOLInput">Monto de transferencia MX a POOL</label>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-12" id="referenciaTransMXPOOLCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de transferencia MX a POOL" id="referenciaTransMXPOOLInput" name="referencia_pago[]">
+                                    <label for="referenciaTransMXPOOLInput">Referencia de transferencia MX a POOL</label>
+                                </div>
+                            </div>
+
                             <div class="col-md-6 col-12" id="montoBankCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en CI BANK" id="montoBankInput" name="monto_pago[]">
                                     <label for="montoBankInput">Monto en CI BANK</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
-                            </div>
+                            </div>                           
+                            
                             <div class="col-md-6 col-12" id="montoHSBCCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en HSBC" id="montoHSBCInput" name="monto_pago[]">
                                     <label for="montoHSBCInput">Monto en HSBC</label>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-12" id="referenciaHSBCCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de HSBC" id="referenciaHSBCInput" name="referencia_pago[]">
+                                    <label for="referenciaHSBCInput">Referencia de HSBC</label>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-6 col-12" id="montoRenovacionCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en renovación" id="montoRenovacionInput" name="monto_pago[]">
                                     <label for="montoRenovacionInput">Monto en renovación</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoRendimientosCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en rendimientos" id="montoRendimientosInput" name="monto_pago[]">
                                     <label for="montoRendimientosInput">Monto en rendimientos</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="montoComisionesCont">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en comisiones" id="montoComisionesInput" name="monto_pago[]">
                                     <label for="montoComisionesInput">Monto en comisiones</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12" id="montoWiseCont">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en Wise" id="montoWiseInput" name="monto_pago[]">
+                                    <label for="montoWiseInput">Monto en Wise</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12" id="referenciaWiseCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de Wise" id="referenciaWiseInput" name="referencia_pago[]">
+                                    <label for="referenciaWiseInput">Referencia de Wise</label>
                                 </div>
                             </div>
                         </div>
@@ -568,10 +610,10 @@
 
                         <div class="row justify-content-center">
                             <div class="col-md-6 col-12">
-                                <div class="file-uploadScanner1 mb-3">
+                                <div class="file-uploadScanner1 mb-3 text-center">
                                     <label for="pictureInputScanner1">Contrato escaneado</label>
                                     <div class="image-upload-wrapScanner1">
-                                        <input class="file-upload-inputScanner1" type='file' name="anverso" onchange="readURL(this);" accept="image/*" />
+                                        <input class="file-upload-inputScanner1" type='file' name="img" onchange="readURL(this);" accept="image/*" />
                                         <div class="drag-textScanner1">
                                             <h3>Arrastra una imagen o haz clic aquí</h3>
                                         </div>

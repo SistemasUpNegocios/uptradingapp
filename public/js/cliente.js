@@ -820,6 +820,8 @@ $(document).ready(function () {
                     $("#celularInput").val(form.celular);
                     $("#correopInput").val(form.correo_personal);
                     $("#correoiInput").val(form.correo_institucional);
+                    $("#ineInput").val(form.ine);
+                    $("#pasaporteInput").val(form.pasaporte);
                 });
             },
         });

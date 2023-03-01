@@ -1,5 +1,17 @@
 @if (sizeof($lista_oficinas) > 0)
     <div class="row mt-2">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="d-flex">
+                    <div class="horizontal-card-bg-img"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Foraneos</h5>
+                        <p class="card-text">Presiona el botón para generar un resumen.</p>
+                        <button class="btn btn-sm principal-button" id="foraneos">Crear resumen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         @foreach ($lista_oficinas as $oficina)
         <div class="col-md-6 col-12">
             <div class="card">

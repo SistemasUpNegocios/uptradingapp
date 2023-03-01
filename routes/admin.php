@@ -69,12 +69,14 @@ Route::get('/admin/getResumenPagoClienteDiaCompuesto', [App\Http\Controllers\Rep
 Route::get('/admin/imprimirResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'imprimirResumenCliente']);
 Route::get('/admin/imprimirReporteCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getReportePago']);
 Route::get('/admin/exportarResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'export']);
-Route::get('/admin/enviarWhatsPagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'enviarWhats']);
+Route::get('/admin/showClavePagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getClave']);
+Route::get('/admin/editStatusPagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'editStatus']);
 
 // Rutas para gestión de menú para reporte de pagos a cliente (rendimiento compuesto y mensual) por oficina
 Route::get('/admin/reportePagosClienteOficina', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'index'])->name('reportepagoclienteoficina');
 Route::get('/admin/getResumenClienteOficina', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'getResumenClienteOficina']);
 Route::get('/admin/imprimirResumenClienteOficina', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'imprimirResumenClienteOficina']);
+Route::get('/admin/imprimirResumenClienteOficinaForanea', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'imprimirResumenClienteOficinaForanea']);
 
 // Rutas para gestión de contrato
 Route::get('/admin/contrato', [App\Http\Controllers\ContratoController::class, 'index'])->name('contrato');
@@ -167,6 +169,8 @@ Route::get('/admin/getResumenPagoPs', [App\Http\Controllers\ReportePagoPsControl
 Route::get('/admin/getResumenPagoPsDia', [App\Http\Controllers\ReportePagoPsController::class, 'getResumenPagoPsDia']);
 Route::get('/admin/imprimirReportePs', [App\Http\Controllers\ReportePagoPsController::class, 'getReportePagoPs']);
 Route::get('/admin/exportarResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'exportPs']);
+Route::get('/admin/showClavePagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'getClave']);
+Route::get('/admin/editStatusPagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'editStatus']);
 
 // Rutas para gestión de tipo de contrato
 Route::get('/admin/tipocontrato', [App\Http\Controllers\TipoContratoController::class, 'index'])->name('tipocontrato');
@@ -353,3 +357,4 @@ Route::post('/admin/deleteFolio', [App\Http\Controllers\FolioController::class, 
 // Rutas para gestión de concentrados
 Route::get('/admin/concentrado', [App\Http\Controllers\ConcentradoController::class, 'index'])->name('concentrado');
 Route::get('/admin/showConcentrado', [App\Http\Controllers\ConcentradoController::class, 'getConcentrado']);
+Route::get('/admin/reporteConcentrado/{id}', [App\Http\Controllers\ConcentradoController::class, 'reporteConcentrado']);

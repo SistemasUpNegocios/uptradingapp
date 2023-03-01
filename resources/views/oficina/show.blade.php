@@ -56,11 +56,12 @@
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)                                    
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir una nueva oficina</a>
                         @endif
-                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="oficina">
+                        <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="oficina">
                             <thead>
                                 <tr>
-                                    <th data-priority="0" scope="col">Ciudad</th>
                                     <th data-priority="0" scope="col">Código de oficina</th>
+                                    <th data-priority="0" scope="col">Ciudad</th>
+                                    <th data-priority="0" scope="col">Mapa</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -166,6 +167,6 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}&callback=initMap&v=weekly" defer></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}&callback=initMap&v=weekly" defer></script> --}}
     <script src="{{ asset('js/oficina.js') }}"></script>
 @endsection

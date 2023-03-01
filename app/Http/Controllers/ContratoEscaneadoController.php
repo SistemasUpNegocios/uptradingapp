@@ -28,16 +28,16 @@ class ContratoEscaneadoController extends Controller
 
             $contrato_escaneado = new ContratoEscaneado;
 
-            if ($request->hasFile('anverso')) {
-                $anverso = $request->file('anverso');
+            if ($request->hasFile('img')) {
+                $img = $request->file('img');
 
                 $time = time();
                 $timestamp = date("Y-m-d", $time);
 
                 $filename = $contrato . ' ' . $timestamp . '.png';
 
-                $anverso->move(public_path('documentos/contrato_escaneado'), $filename);
-                $contrato_escaneado->img_anverso = $filename;
+                $img->move(public_path('documentos/contrato_escaneado'), $filename);
+                $contrato_escaneado->img = $filename;
                 
             }
 
@@ -60,28 +60,16 @@ class ContratoEscaneadoController extends Controller
 
             $contrato_escaneado = ContratoEscaneado::find($contrato_escaneado[0]->id);
 
-            if ($request->hasFile('anverso')) {
-                $anverso = $request->file('anverso');
+            if ($request->hasFile('img')) {
+                $img = $request->file('img');
 
                 $time = time();
                 $timestamp = date("Y-m-d", $time);
 
-                $filename = "Anverso " . $contrato . ' ' . $timestamp . '.png';
+                $filename = $contrato . ' ' . $timestamp . '.png';
 
-                $anverso->move(public_path('documentos/contrato_escaneado'), $filename);
-                $contrato_escaneado->img_anverso = $filename;
-            } 
-
-            if ($request->hasFile('reverso')) {
-                $reverso = $request->file('reverso');
-
-                $time = time();
-                $timestamp = date("Y-m-d", $time);
-
-                $filename_reverso = "Reverso " . $contrato . ' ' . $timestamp . '.png';
-
-                $reverso->move(public_path('documentos/contrato_escaneado'), $filename_reverso);
-                $contrato_escaneado->img_reverso = $filename_reverso;
+                $img->move(public_path('documentos/contrato_escaneado'), $filename);
+                $contrato_escaneado->img = $filename;
             } 
 
             $contrato_escaneado->update();

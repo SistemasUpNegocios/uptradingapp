@@ -1,4 +1,7 @@
-<div class="title text-center mb-4">Código de cliente - <b>{{ $cliente->codigoCliente }}</b></div>
+<div class="title text-center">Código de cliente - <b>{{ $cliente->codigoCliente }}</b></div>
+<div class="text-center mb-4">
+    <a href='{{ url("/admin/reporteConcentrado/$cliente->id") }}' target="_blank" class="btn principal-button">Imprimir concentrado</a>
+</div>
 <div class="row mb-3" style="font-size: 15px;">
     <div class="alert alert-primary d-flex align-items-center l-bg-primary mt-2" role="alert">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
@@ -78,7 +81,7 @@
     </div>
 
     <div class="col-md-6 col-12">
-        <div class="subtitle"><b>Cuenta IBAN:</b> 
+        <div class="subtitle"><b>Cuenta IBAN:</b>
             @if (strlen($cliente->iban) > 2)
                 {{ $cliente->iban }}
             @else
@@ -88,13 +91,13 @@
     </div>
     <div class="col-md-6 col-12">
         <div class="subtitle"><b>Cuenta Swift:</b>
-            @if (strlen($cliente->swift) > 0)
+            @if ($cliente->swift != "SWQBCHZZXXX" && strlen($cliente->swift) > 0)
                 {{ $cliente->swift }}
             @else
                 <span class="badge bg-warning">No tiene cuenta Swift</span>
             @endif
         </div>
-    </div>                            
+    </div>
 </div>
 
 <div class="row mb-3">

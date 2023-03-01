@@ -29,7 +29,7 @@
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo PS</a>
                         @endif
-                        <table class="table table-striped table-bordered nowrap" id="ps">
+                        <table class="table table-striped table-bordered nowrap text-center" id="ps">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Código PS</th>
@@ -41,10 +41,6 @@
                             <tbody id="psBody">
                             </tbody>
                         </table>
-
-
-                        {{-- <p class='fw-bold mt-3'>No se ha registrado ninguna calle destacada. ¡Añade una ahora!</p> --}}
-
                     </div>
                 </div>
 
