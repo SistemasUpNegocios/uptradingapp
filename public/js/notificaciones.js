@@ -160,17 +160,20 @@ $(document).ready(function () {
                 "/admin/deleteNotificaciones",
                 { id: idNotif },
                 function (response) {
+                    let foto = $("#foto").val();
                     $("#contenedorNotificacion").empty();
                     var i = 0;
                     response.notificaciones.map(function (notificacion) {
                         $("#contenedorNotificacion").append(`
-                            <div class="col-1"><i class="bi bi-chat-text-fill fs-1"></i></div>
-                            <div class="col-6">
+                            <div class="col-md-1 text-center">
+                                <img src="../img/usuarios/${foto}" id="imgPerfilNav" alt="Foto de perfil" class="rounded-circle text-center" width="66px">
+                            </div>
+                            <div class="col-md-6" style="text-align: justify; padding-left: 2rem">
                                 <span class="text-muted">
-                                    ${notificacion.mensaje}
+                                    ${notificacion.mensaje}.
                                 </span>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3 text-center">
                                 <span class="text-muted">
                                     ${
                                         response.fecha[i][0].toUpperCase() +
@@ -178,7 +181,7 @@ $(document).ready(function () {
                                     }
                                 </span>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2 text-center">
                                 <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="text-muted">
                                         <i class="bi bi-three-dots"></i>

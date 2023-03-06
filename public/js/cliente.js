@@ -336,6 +336,7 @@ $(document).ready(function () {
         $("#swiftInput").prop("readonly", false);
         $("#ibanInput").prop("readonly", false);
         $("#tarjetaInput").prop("disabled", false);
+        $("#identificadorInput").prop("readonly", false);
 
         $("#ineDocumentoInput").prop("disabled", false);
         $("#pasaporteDocumentoInput").prop("disabled", false);
@@ -356,6 +357,9 @@ $(document).ready(function () {
 
         $("#btnSubmit").show();
         $("#btnCancel").text("Cancelar");
+
+        $("#tipoClienteSwitch").prop("checked", false);
+        switchCliente();
     });
 
     $(document).on("click", ".view", function (e) {
@@ -384,6 +388,30 @@ $(document).ready(function () {
         var swift = $(this).data("swift");
         var iban = $(this).data("iban");
         var tarjeta = $(this).data("tarjeta");
+        var identificador = $(this).data("identificador");
+
+        if (
+            String(identificador).length > 0 ||
+            (String(fechanac).length == 0 &&
+                String(nacionalidad).length == 0 &&
+                String(direccion).length == 0 &&
+                String(colonia).length == 0 &&
+                String(cp).length == 0 &&
+                String(ciudad).length == 0 &&
+                String(estado).length == 0 &&
+                String(celular).length == 0 &&
+                String(correop).length == 0 &&
+                String(correoi).length == 0 &&
+                String(ine).length == 0 &&
+                String(pasaporte).length == 0 &&
+                String(vencimientopas).length == 0)
+        ) {
+            $("#tipoClienteSwitch").prop("checked", true);
+            switchCliente();
+        } else {
+            $("#tipoClienteSwitch").prop("checked", false);
+            switchCliente();
+        }
 
         let nombrecompleto = `${nombre} ${apellidop} ${apellidom}`;
 
@@ -463,6 +491,9 @@ $(document).ready(function () {
 
         $("#tarjetaInput").prop("disabled", true);
 
+        $("#identificadorInput").val(identificador);
+        $("#identificadorInput").prop("readonly", true);
+
         if (tarjeta == "SI") {
             $("#tarjetaInput").prop("checked", true);
         } else if (tarjeta == "NO") {
@@ -519,6 +550,30 @@ $(document).ready(function () {
         var swift = $(this).data("swift");
         var iban = $(this).data("iban");
         var tarjeta = $(this).data("tarjeta");
+        var identificador = $(this).data("identificador");
+
+        if (
+            String(identificador).length > 0 ||
+            (String(fechanac).length == 0 &&
+                String(nacionalidad).length == 0 &&
+                String(direccion).length == 0 &&
+                String(colonia).length == 0 &&
+                String(cp).length == 0 &&
+                String(ciudad).length == 0 &&
+                String(estado).length == 0 &&
+                String(celular).length == 0 &&
+                String(correop).length == 0 &&
+                String(correoi).length == 0 &&
+                String(ine).length == 0 &&
+                String(pasaporte).length == 0 &&
+                String(vencimientopas).length == 0)
+        ) {
+            $("#tipoClienteSwitch").prop("checked", true);
+            switchCliente();
+        } else {
+            $("#tipoClienteSwitch").prop("checked", false);
+            switchCliente();
+        }
 
         let nombrecompleto = `${nombre} ${apellidop} ${apellidom}`;
 
@@ -596,6 +651,9 @@ $(document).ready(function () {
         $("#ibanInput").prop("readonly", false);
 
         $("#tarjetaInput").prop("disabled", false);
+
+        $("#identificadorInput").val(identificador);
+        $("#identificadorInput").prop("readonly", false);
 
         if (tarjeta == "SI") {
             $("#tarjetaInput").prop("checked", true);
@@ -737,66 +795,76 @@ $(document).ready(function () {
         window.open(docUrl, "_blank");
     });
 
-    if ($("#tipoClienteSwitch").prop("checked") == true) {
-        $("#codigoClienteCont").hide();
-        $("#fechaNacCont").hide();
-        $("#dirColCont").hide();
-        $("#codCiudCont").hide();
-        $("#estCelCont").hide();
-        $("#corrCont").hide();
-        $("#inPasCont").hide();
-        $("#venCuentCont").hide();
-        $("#ibanCont").hide();
-        $("#inePasCont").hide();
-        $("#comprobanteLPOACont").hide();
-        $("#formAPRICont").hide();
-        $("#cargarCliente").hide();
-        $("#formCont").hide();
+    const switchCliente = () => {
+        if ($("#tipoClienteSwitch").prop("checked") == true) {
+            $("#codigoClienteCont").hide();
+            $("#fechaNacCont").hide();
+            $("#dirColCont").hide();
+            $("#codCiudCont").hide();
+            $("#estCelCont").hide();
+            $("#corrCont").hide();
+            $("#inPasCont").hide();
+            $("#venCuentCont").hide();
+            $("#ibanCont").hide();
+            $("#inePasCont").hide();
+            $("#comprobanteLPOACont").hide();
+            $("#formAPRICont").hide();
+            $("#cargarCliente").hide();
+            $("#formCont").hide();
+            $("#identificadorCont").show();
 
-        $("#codigoClienteInput").prop("required", false);
-        $("#fechaNacInput").prop("required", false);
-        $("#nacionalidadInput").prop("required", false);
-        $("#direccionInput").prop("required", false);
-        $("#colFraccInput").prop("required", false);
-        $("#cpInput").prop("required", false);
-        $("#ciudadInput").prop("required", false);
-        $("#estadoInput").prop("required", false);
-        $("#celularInput").prop("required", false);
-        $("#correopInput").prop("required", false);
-        $("#correoiInput").prop("required", false);
-        $("#ineInput").prop("required", false);
-        $("#pasaporteInput").prop("required", false);
-        $("#fechapasInput").prop("required", false);
-        $("#swiftInput").prop("required", false);
-        $("#ibanInput").prop("required", false);
-    } else {
-        $("#codigoClienteCont").show();
-        $("#fechaNacCont").show();
-        $("#dirColCont").show();
-        $("#codCiudCont").show();
-        $("#estCelCont").show();
-        $("#corrCont").show();
-        $("#inPasCont").show();
-        $("#venCuentCont").show();
-        $("#ibanCont").show();
-        $("#inePasCont").show();
-        $("#comprobanteLPOACont").show();
-        $("#formAPRICont").show();
-        $("#cargarCliente").show();
-        $("#formCont").show();
+            $("#codigoClienteInput").prop("required", false);
+            $("#fechaNacInput").prop("required", false);
+            $("#nacionalidadInput").prop("required", false);
+            $("#direccionInput").prop("required", false);
+            $("#colFraccInput").prop("required", false);
+            $("#cpInput").prop("required", false);
+            $("#ciudadInput").prop("required", false);
+            $("#estadoInput").prop("required", false);
+            $("#celularInput").prop("required", false);
+            $("#correopInput").prop("required", false);
+            $("#correoiInput").prop("required", false);
+            $("#ineInput").prop("required", false);
+            $("#pasaporteInput").prop("required", false);
+            $("#fechapasInput").prop("required", false);
+            $("#swiftInput").prop("required", false);
+            $("#ibanInput").prop("required", false);
 
-        $("#codigoClienteInput").prop("required", true);
-        $("#fechaNacInput").prop("required", true);
-        $("#nacionalidadInput").prop("required", true);
-        $("#direccionInput").prop("required", true);
-        $("#colFraccInput").prop("required", true);
-        $("#cpInput").prop("required", true);
-        $("#ciudadInput").prop("required", true);
-        $("#estadoInput").prop("required", true);
-        $("#celularInput").prop("required", true);
-        $("#correopInput").prop("required", true);
-        $("#correoiInput").prop("required", true);
-    }
+            $("#identificadorInput").prop("required", true);
+        } else {
+            $("#codigoClienteCont").show();
+            $("#fechaNacCont").show();
+            $("#dirColCont").show();
+            $("#codCiudCont").show();
+            $("#estCelCont").show();
+            $("#corrCont").show();
+            $("#inPasCont").show();
+            $("#venCuentCont").show();
+            $("#ibanCont").show();
+            $("#inePasCont").show();
+            $("#comprobanteLPOACont").show();
+            $("#formAPRICont").show();
+            $("#cargarCliente").show();
+            $("#formCont").show();
+            $("#identificadorCont").hide();
+
+            $("#codigoClienteInput").prop("required", true);
+            $("#fechaNacInput").prop("required", true);
+            $("#nacionalidadInput").prop("required", true);
+            $("#direccionInput").prop("required", true);
+            $("#colFraccInput").prop("required", true);
+            $("#cpInput").prop("required", true);
+            $("#ciudadInput").prop("required", true);
+            $("#estadoInput").prop("required", true);
+            $("#celularInput").prop("required", true);
+            $("#correopInput").prop("required", true);
+            $("#correoiInput").prop("required", true);
+
+            $("#identificadorInput").prop("required", false);
+        }
+    };
+
+    switchCliente();
 
     $("#formIdInput").change(function () {
         var idForm = $("#formIdInput").val();
@@ -843,6 +911,7 @@ $(document).ready(function () {
             $("#formAPRICont").hide();
             $("#cargarCliente").hide();
             $("#formCont").hide();
+            $("#identificadorCont").show();
 
             $("#codigoClienteInput").prop("required", false);
             $("#fechaNacInput").prop("required", false);
@@ -860,6 +929,8 @@ $(document).ready(function () {
             $("#fechapasInput").prop("required", false);
             $("#swiftInput").prop("required", false);
             $("#ibanInput").prop("required", false);
+
+            $("#identificadorInput").prop("readonly", true);
         } else {
             $("#codigoClienteCont").show();
             $("#fechaNacCont").show();
@@ -875,6 +946,7 @@ $(document).ready(function () {
             $("#formAPRICont").show();
             $("#cargarCliente").show();
             $("#formCont").show();
+            $("#identificadorCont").hide();
 
             $("#codigoClienteInput").prop("required", true);
             $("#fechaNacInput").prop("required", true);
@@ -887,6 +959,8 @@ $(document).ready(function () {
             $("#celularInput").prop("required", true);
             $("#correopInput").prop("required", true);
             $("#correoiInput").prop("required", true);
+
+            $("#identificadorInput").prop("readonly", false);
         }
     });
 

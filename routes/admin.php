@@ -140,6 +140,10 @@ Route::post('/admin/addPs', [App\Http\Controllers\PsController::class, 'addPs'])
 Route::post('/admin/editPs', [App\Http\Controllers\PsController::class, 'editPs']);
 Route::post('/admin/deletePs', [App\Http\Controllers\PsController::class, 'deletePs']);
 
+// Rutas para gestión de # contratos PS
+Route::get('/admin/conteocontratosps', [App\Http\Controllers\ConteoContratosPsController::class, 'index'])->name('conteocontratosps');
+Route::get('/admin/showConteoPs', [App\Http\Controllers\ConteoContratosPsController::class, 'getPs']);
+
 // Rutas para gestión de oficinas
 Route::get('/admin/oficina', [App\Http\Controllers\OficinaController::class, 'index'])->name('oficinas');
 Route::get('/admin/showOficina', [App\Http\Controllers\OficinaController::class, 'getOficina']);

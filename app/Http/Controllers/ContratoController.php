@@ -413,6 +413,7 @@ class ContratoController extends Controller
                 $request->validate([
                     'operador' => 'required',
                     'operador_ine' => 'required',
+                    'ps_id' => 'required',
                     'curp' => 'max:18',
                     'lugar_firma' => 'required',
                     'fechainicio' => 'required|date',
@@ -432,6 +433,7 @@ class ContratoController extends Controller
                 $request->validate([
                     'operador' => 'required',
                     'operador_ine' => 'required',
+                    'ps_id' => 'required',
                     'curp' => 'max:18',
                     'lugar_firma' => 'required',
                     'fechainicio' => 'required|date',
@@ -533,6 +535,8 @@ class ContratoController extends Controller
                 foreach ($request->referencia_pago as $referencia_pago) {
                     if(gettype($referencia_pago) != 'NULL'){
                         $referencias_pagos .= $referencia_pago.',';
+                    }else{
+                        $referencias_pagos .= 'XXXXX,';
                     }
                 }
                 $contrato->referencia_pago = $referencias_pagos;
@@ -1018,30 +1022,6 @@ class ContratoController extends Controller
                 $contrato->referencia_pago = $referencias_pagos;
             }
 
-            // if(){
-            //     if (gettype($request->referencia_pago) != 'NULL'){
-            //         $referencias_pagos = "";
-            //         foreach ($request->referencia_pago as $referencia_pago) {
-            //             if(gettype($referencia_pago) != 'NULL'){
-            //                 $referencias_pagos .= $referencia_pago.',';
-            //             }
-            //         }
-            //         $contrato->referencia_pago = $referencias_pagos;
-            //     }
-            // }else{
-            //     if (gettype($request->referencia_pago) != 'NULL'){
-            //         $referencias_pagos = "";
-            //         foreach ($request->referencia_pago as $referencia_pago) {
-            //             if(gettype($referencia_pago) != 'NULL'){
-            //                 $referencias_pagos .= $referencia_pago.',';
-            //             }else{
-            //                 $referencias_pagos .= 'XXXXX,';
-            //             }
-            //         }
-            //         $contrato->referencia_pago = $referencias_pagos;
-            //     }
-            // }
-
             if (is_file(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip')) {
                 chmod(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip', 0777);
                 unlink(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip');
@@ -1523,17 +1503,17 @@ class ContratoController extends Controller
 
     public function enviarTelegram(Request $request)
     {
-        // $contrato = explode("Número de contrato: ", $request->mensaje);
-        // \Telegram::sendMessage([
-        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-        //     'parse_mode' => 'HTML',
-        //     'text' => $contrato[0]
-        // ]);
+        $contrato = explode("Número de contrato: ", $request->mensaje);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[0]
+        ]);
 
-        // \Telegram::sendMessage([
-        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-        //     'parse_mode' => 'HTML',
-        //     'text' => $contrato[1]
-        // ]);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[1]
+        ]);
     }
 }

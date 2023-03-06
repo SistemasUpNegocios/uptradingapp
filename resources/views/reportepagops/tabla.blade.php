@@ -60,8 +60,8 @@
                             <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" title="Mandar whats para pago en efectivo"><i class="bi bi-whatsapp"></i></button>
                             <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%B') }}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
 
-                            <input id="pagadoStatus" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" data-id="{{ $pagos }}" @if ($status == "Pagado" ) {{"checked"}} @endif>
-                            <label class="form-check-label ms-1" for="pagadoStatus">¿Pago realizado?</label> 
+                            <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $pagos }}" @if ($status == "Pagado" ) {{"checked"}} @endif>
+                            <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label> 
                         </td>
                     </tr>
                 @endif

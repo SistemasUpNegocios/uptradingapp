@@ -178,6 +178,7 @@ class FormularioController extends Controller
                 'nombre' => 'required|string',
                 'apellido_p' => 'required|string',
                 'correo_institucional' => 'required|email',
+                'ps_id' => 'required',
             ]);
 
             $formulario = Formulario::find($request->id);

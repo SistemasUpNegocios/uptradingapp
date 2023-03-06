@@ -430,10 +430,15 @@
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
                         </a>
-                    </li>                   
+                    </li>                    
                     <li>
                         <a href="{{ URL::to('admin/psmovil') }}">
                             <i class="bi bi-circle"></i><span>PS Móvil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/conteocontratosps') }}">
+                            <i class="bi bi-circle"></i><span># contratos de PS</span>
                         </a>
                     </li>
                     <li>

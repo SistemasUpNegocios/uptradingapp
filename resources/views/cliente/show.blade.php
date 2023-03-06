@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+
+    <style>
+        table.dataTable th, table.dataTable td {
+            font-size: 15.5px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -86,7 +92,7 @@
                         <div class="row mb-3">
                             <div class="col-12 mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="tipoClienteSwitch">
+                                    <input class="form-check-input" type="checkbox" name="convenio_mam" id="tipoClienteSwitch">
                                     <label class="form-check-label" for="tipoClienteSwitch">¿El cliente es para convenio MAM?</label>
                                 </div>
                             </div>
@@ -116,8 +122,6 @@
                                     <label for="nombreInput">Nombre</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido paterno" id="apellidoPatInput" name="apellidop" required>
@@ -126,8 +130,14 @@
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido materno" id="apellidoMatInput" name="apellidom" required>
+                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido materno" id="apellidoMatInput" name="apellidom">
                                     <label for="apellidoMatInput">Apellido materno</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12" id="identificadorCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa el identificador" id="identificadorInput" name="identificador" required>
+                                    <label for="identificadorInput">Identificador</label>
                                 </div>
                             </div>
                         </div>

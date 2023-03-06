@@ -259,6 +259,7 @@ $(document).ready(function () {
 
     $(document).on("change", ".status", function () {
         var checked = $(this).is(":checked");
+        var thiss = this;
 
         if (checked) {
             $(this).val("Pagado");
@@ -314,7 +315,12 @@ $(document).ready(function () {
                                 }
                             );
                         } else {
-                            $(this).prop("checked", false);
+                            if (checked) {
+                                $(thiss).prop("checked", false);
+                            } else {
+                                $(thiss).prop("checked", true);
+                            }
+
                             Toast.fire({
                                 icon: "error",
                                 title: "Clave incorrecta",
@@ -322,7 +328,11 @@ $(document).ready(function () {
                         }
                     },
                     error: function () {
-                        $(this).prop("checked", false);
+                        if (checked) {
+                            $(thiss).prop("checked", false);
+                        } else {
+                            $(thiss).prop("checked", true);
+                        }
 
                         Toast.fire({
                             icon: "error",
@@ -334,7 +344,11 @@ $(document).ready(function () {
             allowOutsideClick: () => !Swal.isLoading(),
         }).then((result) => {
             if (!result.isConfirmed) {
-                $(this).prop("checked", false);
+                if (checked) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
 
                 Swal.fire({
                     icon: "error",

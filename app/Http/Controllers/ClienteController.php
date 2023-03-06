@@ -29,7 +29,6 @@ class ClienteController extends Controller
 
     public function index()
     {
-
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
@@ -39,8 +38,6 @@ class ClienteController extends Controller
         }else{
             return redirect()->to('/admin/dashboard');
         }
-
-        
     }
 
     public function getCliente()
@@ -118,6 +115,7 @@ class ClienteController extends Controller
                 $cliente->vencimiento_pasaporte = $request->input('fechapas');
                 $cliente->swift = strtoupper($request->input('swift'));
                 $cliente->iban = strtoupper($request->input('iban'));
+                $cliente->identificador_mam = $request->input('identificador');
 
                 $tarjeta = $request->input('tarjeta');
                 
@@ -302,6 +300,7 @@ class ClienteController extends Controller
             $cliente->vencimiento_pasaporte = $request->input('fechapas');
             $cliente->swift = strtoupper($request->input('swift'));
             $cliente->iban = $request->input('iban');
+            $cliente->identificador_mam = $request->input('identificador');
 
             $tarjeta = $request->input('tarjeta');
             

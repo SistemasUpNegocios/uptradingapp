@@ -29,17 +29,18 @@
                             <div class="col-md-2"><p class="text-muted fw-bold"></p></div>
                         </div>
                         <hr class="m-0">
+                        @php $foto = auth()->user()->foto_perfil; @endphp
+                        <input type="hidden" id="foto" value="{{$foto}}">
                         <div class="row align-items-center mt-3" id="contenedorNotificacion">
                             @if (sizeof($notificacionesList) <= 0)
                                 <div class="col-12" style="text-align: center;"><span class="text-muted">No tienes ninguna notificación</span></div>
-                            @else
-                                @php $foto = auth()->user()->foto_perfil; @endphp
+                            @else                                
                                 @foreach ($notificacionesList as $notificacion)
                                     <div class="col-md-1 text-center">
                                         <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil" class="rounded-circle text-center" width="66px">
                                     </div>
                                     @if (strlen($notificacion->mensaje) > 50)
-                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>                                        
+                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
                                     @else
                                         <div class="col-md-6" style="text-align: center;"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
                                     @endif
@@ -49,7 +50,7 @@
                                             <span class="text-muted">
                                                 <i class="bi bi-three-dots"></i>
                                             </span>
-                                        </button>                                
+                                        </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item eliminarNotif" href="#" data-id="{{ $notificacion->id }}">Eliminar</a></li>
                                         </ul>

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class PsController extends Controller
+class ConteoContratosPsController extends Controller
 {
     public function __construct()
     {
@@ -22,40 +22,22 @@ class PsController extends Controller
     {
 
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-            $codigo = session('codigo_oficina');
-
-            $oficinas = Oficina::select()->where("codigo_oficina", "like", $codigo)->get();
-            $ps = DB::table("ps")
-                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->where("tipo_ps", "=", "Encargado")
-                ->where("oficina.codigo_oficina", "like", $codigo)
-                ->get();
-
-            $data = array(
-                "lista_oficinas" => $oficinas,
-                "lista_ps" => $ps
-            );
-            return response()->view('ps.show', $data, 200);
+            return response()->view('conteocontratosps.show');
         }else{
             return redirect()->to('/admin/dashboard');
         }
     }
 
-    public function getPs()
+    public function getPs(Request $request)
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-            $codigo = session('codigo_oficina');
-            $ps = DB::table('ps')
-                ->join('oficina', 'oficina.id', '=', 'ps.oficina_id')
-                ->select(DB::raw("ps.id, ps.codigoPS, ps.nombre, ps.apellido_p, ps.apellido_m, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS nombrePS, ps.fecha_nac, ps.nacionalidad, ps.direccion, ps.colonia, ps.cp, ps.ciudad, ps.estado, ps.celular, ps.estado, ps.celular, ps.correo_personal, ps.correo_institucional, ps.ine, ps.pasaporte, ps.vencimiento_pasaporte, ps.tipo_ps, ps.encargado_id, oficina.id AS oficina_id, oficina.ciudad AS oficina_ciudad, ps.swift, ps.iban"))
-                ->where("tipo_ps", "=", "Encargado")
-                ->where("oficina.codigo_oficina", "like", $codigo)
-                ->get();
+        $lista_ps = Ps::all();
+        $data = array(
+            "fecha_inicio" => $request->fecha_inicio,
+            "fecha_fin" => $request->fecha_fin,
+            "lista_ps" => $lista_ps
+        );
 
-            return datatables()->of($ps)->addColumn('btn', 'ps.buttons')->rawColumns(['btn'])->toJson();
-        }else{
-            return redirect()->to('/admin/dashboard');
-        }
+        return response()->view('conteocontratosps.tabla', $data, 200);
     }
 
     public function addPs(Request $request)
