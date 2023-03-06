@@ -5,27 +5,7 @@ $(document).ready(function () {
     $("#fechaFinInput").val(endOfMonth);
 
     const tablaResumen = () => {
-        table = $("#ps").DataTable({
-            responsive: {
-                breakpoints: [
-                    {
-                        name: "desktop",
-                        width: Infinity,
-                    },
-                    {
-                        name: "tablet",
-                        width: 1024,
-                    },
-                    {
-                        name: "fablet",
-                        width: 768,
-                    },
-                    {
-                        name: "phone",
-                        width: 480,
-                    },
-                ],
-            },
+        table = $("#conteo").DataTable({
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ PS",
@@ -206,6 +186,12 @@ $(document).ready(function () {
                 },
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ PS",
             },
+            lengthMenu: [
+                [50, 100, 150, -1],
+                [50, 100, 150, "Todo"],
+            ],
+            pageLength: 50,
+            aaSorting: [],
         });
     };
 
@@ -222,7 +208,7 @@ $(document).ready(function () {
             $("#contTabla").empty();
             $("#contTabla").html(
                 `
-                    <div class="text-center">
+                    <div class="text-center mt-4">
                         <div class="spinner-border text-danger" role="status"></div>
                         <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                     </div>
@@ -271,7 +257,7 @@ $(document).ready(function () {
                         $("#contTabla").empty();
                         $("#contTabla").html(
                             `
-                                <div class="text-center">
+                                <div class="text-center mt-4">
                                     <div class="spinner-border text-danger" role="status"></div>
                                     <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                                 </div>
@@ -294,7 +280,7 @@ $(document).ready(function () {
                     $("#contTabla").empty();
                     $("#contTabla").html(
                         `
-                                <div class="text-center">
+                                <div class="text-center mt-4">
                                     <div class="spinner-border text-danger" role="status"></div>
                                     <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
                                 </div>

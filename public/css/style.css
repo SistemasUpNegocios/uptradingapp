@@ -1775,7 +1775,9 @@ h6 {
 #intencion td,
 #intencion th,
 #cambios td,
-#cambios th {
+#cambios th,
+#conteo td,
+#conteo th {
     width: auto !important;
     white-space: normal !important;
     text-overflow: ellipsis !important;

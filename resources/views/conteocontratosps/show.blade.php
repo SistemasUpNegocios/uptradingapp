@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Gestión de # contratos y convenios PS')
+@section('title', 'Gestión de # contratos PS')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -15,11 +15,11 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Gestión de # contratos y convenios PS</h1>
+        <h1>Gestión de # contratos PS</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Gestión de # contratos y convenios PS</li>
+                <li class="breadcrumb-item active">Gestión de # contratos PS</li>
             </ol>
         </nav>
     </div>
@@ -67,7 +67,7 @@
                         <div id="contTabla">
                             <div class="text-center mt-4">
                                 <div class="spinner-border" style="color: #01bbcc" role="status"></div>
-                                <p style="color: #01bbcc">Cargando número de contratos y convenios de PS<span class="dotting"> </span></p>
+                                <p style="color: #01bbcc">Cargando número de contratos de PS<span class="dotting"> </span></p>
                             </div>
                         </div>
                     </div>

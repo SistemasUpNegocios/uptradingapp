@@ -30,7 +30,12 @@ class ConteoContratosPsController extends Controller
 
     public function getPs(Request $request)
     {
-        $lista_ps = Ps::all();
+        $lista_ps = Ps::select()
+            ->where('codigoPS', "!=", "IA1")
+            ->where('codigoPS', "!=", "IA2")
+            ->where('codigoPS', "!=", "IA3")
+            ->orderBy('codigoPS', 'ASC')->get();
+            
         $data = array(
             "fecha_inicio" => $request->fecha_inicio,
             "fecha_fin" => $request->fecha_fin,

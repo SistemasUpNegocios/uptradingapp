@@ -1,12 +1,10 @@
-<table class="table table-striped table-bordered nowrap text-center" id="ps">
+<table class="table table-striped table-bordered nowrap text-center" id="conteo">
     <thead>
         <tr>
-            <th data-priority="0" scope="col">Código PS</th>
             <th data-priority="0" scope="col">Nombre</th>
             <th data-priority="0" scope="col">Mensuales</th>
             <th data-priority="0" scope="col">Compuestos</th>
             <th data-priority="0" scope="col">Total</th>
-            <th data-priority="0" scope="col">Convenios</th>
         </tr>
     </thead>
     <tbody id="psBody">
@@ -18,34 +16,55 @@
                     ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
                     ->count();
 
-                $count_mensual = DB::table('contrato')
+                // Todo sobre los contratos mensuales
+                $contratos_mensuales = DB::table('contrato')
+                    ->select('contrato')
                     ->where('ps_id', $ps->id)
                     ->where('status', "Activado")
                     ->where('tipo_id', 1)
                     ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                    ->count();
+                    ->get();
 
-                $count_compuesto = DB::table('contrato')
+                $contratos_men = "";
+                foreach ($contratos_mensuales as $contrato){
+                    $contratos_men .= $contrato->contrato.", ";
+                }
+
+                $contratos_men = substr($contratos_men, 0, -2);
+
+                // Todo sobre los contratos compuestos
+                $contratos_compuestos = DB::table('contrato')
+                    ->select('contrato')
                     ->where('ps_id', $ps->id)
                     ->where('status', "Activado")
                     ->where('tipo_id', 2)
                     ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                    ->count();
+                    ->get();
 
-                $count_convenio = DB::table('convenio')
-                    ->where('ps_id', $ps->id)
-                    ->where('status', "Activado")
-                    ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
-                    ->count();
+                $contratos_comp = "";
+                foreach ($contratos_compuestos as $contrato){
+                    $contratos_comp .= $contrato->contrato.", ";
+                }
 
+                $contratos_comp = substr($contratos_comp, 0, -2);
             @endphp
             <tr>
-                <td>{{ $ps->codigoPS }}</td>
                 <td>{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
-                <td>{{ $count_mensual }}</td>
-                <td>{{ $count_compuesto }}</td>
+                <td>
+                    @if (strlen($contratos_men) > 0)
+                        {{$contratos_men}}.
+                    @else
+                        <b>No se encontraton resultados</b>
+                    @endif
+                </td>
+                <td>
+                    @if (strlen($contratos_comp) > 0)
+                        {{$contratos_comp}}.
+                    @else
+                        <b>No se encontraton resultados</b>
+                    @endif
+                </td>
                 <td>{{ $count_contrato }}</td>
-                <td>{{ $count_convenio }}</td>
             </tr>
         @endforeach
     </tbody>
