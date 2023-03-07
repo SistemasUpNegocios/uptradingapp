@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Gestión de # contratos PS')
+@section('title', 'Gestión de # convenios PS')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -8,18 +8,18 @@
 
     <style>
         table.dataTable th, table.dataTable td {
-            font-size: 12px;
+            font-size: 14px;
         }
     </style>
 @endsection
 
 @section('content')
     <div class="pagetitle">
-        <h1>Gestión de # contratos PS</h1>
+        <h1>Gestión de # convenios PS</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Gestión de # contratos PS</li>
+                <li class="breadcrumb-item active">Gestión de # convenios PS</li>
             </ol>
         </nav>
     </div>
@@ -45,7 +45,7 @@
                                 <use xlink:href="#info-fill" />
                             </svg>
                             <div>
-                                Selecciona una fecha para generar el conteo de contratos activados. (Si borras cualquier fecha o ambas, el conteo empezará desde el inicio de los registros.)
+                                Selecciona una fecha para generar el conteo de convenios activados. (Si borras cualquier fecha o ambas, el conteo empezará desde el inicio de los registros.)
                             </div>
                         </div>
 
@@ -67,7 +67,7 @@
                         <div id="contTabla">
                             <div class="text-center mt-4">
                                 <div class="spinner-border" style="color: #01bbcc" role="status"></div>
-                                <p style="color: #01bbcc">Cargando número de contratos de PS<span class="dotting"> </span></p>
+                                <p style="color: #01bbcc">Cargando número de convenios de PS<span class="dotting"> </span></p>
                             </div>
                         </div>
                     </div>
@@ -104,5 +104,5 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script src="{{ asset('js/conteocontratosps.js') }}"></script>
+    <script src="{{ asset('js/conteoconveniosps.js') }}"></script>
 @endsection

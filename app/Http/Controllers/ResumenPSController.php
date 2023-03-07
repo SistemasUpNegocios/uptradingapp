@@ -178,21 +178,38 @@ class ResumenPSController extends Controller
     public function imprimirResumenOficina(Request $request)
     {
 
-        $ps = Ps::where('oficina_id', $request->id)->get();
-        $oficina = Oficina::find($request->id);
-        
-        $data = array(
-            "lista_ps" => $ps,
-            "oficina" => $oficina,
-            "fecha" => $request->fecha,
-            "dolar" => $request->dolar,
-            "total" => 0
-        );
+        if(!empty($request->id)){
+            $ps = Ps::where('oficina_id', $request->id)->get();
+            $oficina = Oficina::find($request->id);
+
+            $data = array(
+                "lista_ps" => $ps,
+                "oficina" => $oficina->ciudad,
+                "fecha" => $request->fecha,
+                "dolar" => $request->dolar,
+                "total" => 0
+            );
+        }else{
+            $ps = Ps::where('oficina_id', "!=", 1)->get();
+            $oficina = Oficina::where('id', "!=", 1)->get();
+            
+            $data = array(
+                "lista_ps" => $ps,
+                "oficina" => "Foranea",
+                "fecha" => $request->fecha,
+                "dolar" => $request->dolar,
+                "total" => 0
+            );
+        }
         
         $mes = Carbon::parse("$request->fecha-10")->formatLocalized('%B');
 
         $pdf = PDF::loadView('resumenps.imprimir_oficina', $data);
-        $nombreDescarga = "Pagos a PS de la oficina de $oficina->ciudad del mes de $mes.pdf";
+        if(!empty($request->id)){
+            $nombreDescarga = "Pagos a PS de la oficina de $oficina->ciudad del mes de $mes.pdf";
+        }else{
+            $nombreDescarga = "Pagos a PS foraneos del mes de $mes.pdf";
+        }
         return $pdf->stream($nombreDescarga);
     }
 }

@@ -28,6 +28,24 @@
         });
     });
 
+    $.ajax({
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp",
+        success: function (response) {
+            var series = response.bmx.series;
+            for (var i in series) {
+                var serie = series[i];
+
+                var precioDolar = parseFloat(serie.datos[0].dato);
+
+                $("#valor_dolar_dashboard").text(
+                    "$" + precioDolar.toFixed(2) + " c/d"
+                );
+            }
+        },
+    });
+
     /**
      * Easy selector helper function
      */

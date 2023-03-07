@@ -230,7 +230,11 @@ $(document).ready(function () {
                 } else {
                     $("#contOficinas").empty();
                     $("#contOficinas").html(response);
-                    $("#fechaInputOficina").val(fechaInput);
+
+                    let mes = formatDate(new Date());
+                    mes = mes.split("/").reverse().join("-");
+                    mes = mes.split("-");
+                    $("#fechaInputOficina").val(`${mes[0]}-${mes[1]}`);
 
                     $("#btnVolverOficinas").click(function (e) {
                         e.preventDefault();

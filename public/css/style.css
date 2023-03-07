@@ -1714,31 +1714,8 @@ h6 {
     }
 }
 
-#locations td,
-#locations th {
-    width: auto !important;
-    white-space: normal;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-#utilities td,
-#utilities th {
-    width: auto !important;
-    white-space: normal !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-}
-
-#users td,
-#users th {
-    width: auto !important;
-    white-space: normal !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-}
-
-.table, .table tbody{
+.table,
+.table tbody {
     vertical-align: middle !important;
 }
 
@@ -1776,8 +1753,14 @@ h6 {
 #intencion th,
 #cambios td,
 #cambios th,
+#users td,
+#users th,
 #conteo td,
-#conteo th {
+#conteo th,
+#utilities td,
+#utilities th,
+#locations td,
+#locations th {
     width: auto !important;
     white-space: normal !important;
     text-overflow: ellipsis !important;
@@ -2821,5 +2804,33 @@ pre {
 @media (max-width: 310px) {
     .form-floating label {
         font-size: 10px !important;
+    }
+}
+
+.administrador_up {
+    width: 100%;
+}
+
+@media (max-width: 990px) {
+    .administrador_up {
+        width: auto;
+    }
+}
+
+@media (max-width: 381px) {
+    .valor_dolar_menu {
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 371px) {
+    .valor_dolar_menu {
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 365px) {
+    .valor_dolar_menu {
+        display: none;
     }
 }

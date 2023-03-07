@@ -1,6 +1,6 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between administrador_up">
         <a href="{{ url('/admin/dashboard') }}" class="logo d-flex align-items-center">
             <span class="d-none d-lg-block">Administrador Up Trading</span>
         </a>
@@ -21,6 +21,8 @@
             </form>
         </div>
     @endif
+
+    <div class="align-items-center text-center text-white w-100 valor_dolar_menu" style="font-size: 14px;"><b id="valor_dolar_dashboard"></b></div>
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
@@ -439,6 +441,11 @@
                     <li>
                         <a href="{{ URL::to('admin/conteocontratosps') }}">
                             <i class="bi bi-circle"></i><span># contratos de PS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/conteoconveniosps') }}">
+                            <i class="bi bi-circle"></i><span># convenios de PS</span>
                         </a>
                     </li>
                     <li>

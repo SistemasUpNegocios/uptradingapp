@@ -29,7 +29,7 @@
   <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
   
   <div style="padding-top: 6rem" class="text-center">
-    <p style="font-size: 18px; text-transform: uppercase;"><b>Resumen de la oficina de {{ $oficina->ciudad }}</b></p>
+    <p style="font-size: 18px; text-transform: uppercase;"><b>Resumen de la oficina @if ($oficina != "Foranea") de @endif {{ $oficina }}</b></p>
   </div>
 
     <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important; vertical-align: middle !important; line-height: 18px;">

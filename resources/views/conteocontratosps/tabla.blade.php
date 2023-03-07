@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered nowrap text-center" id="conteo">
+<table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="conteo">
     <thead>
         <tr>
             <th data-priority="0" scope="col">Nombre</th>

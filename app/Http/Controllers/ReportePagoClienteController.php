@@ -222,7 +222,7 @@ class ReportePagoClienteController extends Controller
         $tipo_cambio->save();
 
         $pdf = PDF::loadView('reportepagocliente.reporte', $data);
-        $nombreDescarga = "Reporte del pago de $request->cliente numero $request->pago con fecha de $fecha";
+        $nombreDescarga = "Reporte del pago de $request->cliente numero $request->pago con fecha de $fecha.pdf";
         return $pdf->stream($nombreDescarga);
     }
 

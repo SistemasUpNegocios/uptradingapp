@@ -218,7 +218,7 @@ $(document).ready(function () {
     $.ajax({
         type: "GET",
         data: { fecha_inicio: startOfMonth, fecha_fin: endOfMonth },
-        url: "showConteoPs",
+        url: "showConteoConvPs",
         success: function (response) {
             $("#contTabla").empty();
             $("#contTabla").html(response);
@@ -246,7 +246,7 @@ $(document).ready(function () {
             `
                 <div class="text-center mt-4">
                     <div class="spinner-border" style="color: #01bbcc" role="status"></div>
-                    <p style="color: #01bbcc">Cargando número de contratos de PS<span class="dotting"> </span></p>
+                    <p style="color: #01bbcc">Cargando número de convenios de PS<span class="dotting"> </span></p>
                 </div>
             `
         );
@@ -267,7 +267,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: "GET",
                     data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
-                    url: "showConteoPs",
+                    url: "showConteoConvPs",
                     success: function (response) {
                         $("#contTabla").empty();
                         $("#contTabla").html(response);
@@ -290,7 +290,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "GET",
                 data: { fecha_inicio: "2020-02-28", fecha_fin: endOfMonth },
-                url: "showConteoPs",
+                url: "showConteoConvPs",
                 success: function (response) {
                     $("#contTabla").empty();
                     $("#contTabla").html(response);
