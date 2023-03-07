@@ -100,6 +100,7 @@
                                             <option value="ps_silver">PS Silver</option>
                                             <option value="contabilidad">Contabilidad</option>
                                             <option value="egresos">Egresos</option>
+                                            <option value="cliente">Cliente</option>
                                         </select>
                                         <label for="privilegioInput">Privilegio</label>
                                     </div>
