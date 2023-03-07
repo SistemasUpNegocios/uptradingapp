@@ -447,11 +447,17 @@ class ClienteController extends Controller
                 $cliente = intval($codigoCliente[2]) + 1;
             }else{
                 $cliente = intval($codigoForm[2]) + 1;
-            }
-            
-            $numeroCliente = str_pad($cliente, 5, "0", STR_PAD_LEFT);  
-            $numeroCliente = "MXN-$numeroOficina-$numeroCliente-000-00";
-            return response($numeroCliente);
+            }        
+
+            $numeroCliente = str_pad($cliente, 5, "0", STR_PAD_LEFT);
+            $numeroClienteCompleto = "MXN-$numeroOficina-$numeroCliente-000-00";
+
+            $data = array(
+                "numeroCliente" => $numeroClienteCompleto,
+                "correoCliente" => "mxa_" . $numeroCliente . "@uptradingexperts.com"
+            );
+
+            return response($data);
         } else {
             $numeroCliente = "MXN-$numeroOficina-00001-000-00";
             return response($numeroCliente);

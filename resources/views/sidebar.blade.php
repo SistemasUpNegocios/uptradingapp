@@ -496,7 +496,7 @@
             </li>            
         @endif        
 
-        @if (auth()->user()->is_root)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
             <li class="nav-heading">Configuración</li>
 
             <li class="nav-item">
@@ -504,26 +504,30 @@
                     <i class="bi bi-clock-history"></i><span>Control</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="control-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ URL::to('admin/cuentasGoogle') }}">
-                            <i class="bi bi-circle"></i><span>Cuentas Google</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/bitacoraAcceso') }}">
-                            <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/historialCambios') }}">
-                            <i class="bi bi-circle"></i><span>Historial de cambios</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/usuario') }}">
-                            <i class="bi bi-circle"></i><span>Usuarios del sistema</span>
-                        </a>
-                    </li>                    
+                    @if (auth()->user()->is_root)
+                        <li>
+                            <a href="{{ URL::to('admin/cuentasGoogle') }}">
+                                <i class="bi bi-circle"></i><span>Cuentas Google</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/bitacoraAcceso') }}">
+                                <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/historialCambios') }}">
+                                <i class="bi bi-circle"></i><span>Historial de cambios</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/usuario') }}">
+                                <i class="bi bi-circle"></i><span>Usuarios del sistema</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
         @endif

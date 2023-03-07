@@ -314,6 +314,9 @@ $(document).ready(function () {
         $("#containerPrivilegio").addClass("col-md-6 col-12");
         $("#containerPrivilegio").removeClass("col-12");
 
+        $("#checkCont").hide();
+        $("#passInputCheck").prop("checked", false);
+
         $("#modalTitle").text("Añadir usuario");
         $("#btnSubmit").text("Añadir usuario");
 
@@ -355,6 +358,9 @@ $(document).ready(function () {
         $("#containerPrivilegio").removeClass("col-md-6 col-12");
         $("#containerPrivilegio").addClass("col-12");
 
+        $("#checkCont").hide();
+        $("#passInputCheck").prop("checked", false);
+
         $("#privilegioInput").val(privilegio);
         $("#privilegioInput").prop("disabled", true);
 
@@ -384,13 +390,13 @@ $(document).ready(function () {
         $("#idInput").val(id);
 
         $("#nombreInput").val(nombre);
-        $("#nombreInput").prop("readonly", false);
+        $("#nombreInput").prop("readonly", true);
 
         $("#apellidoPatInput").val(apellidop);
-        $("#apellidoPatInput").prop("readonly", false);
+        $("#apellidoPatInput").prop("readonly", true);
 
         $("#apellidoMatInput").val(apellidom);
-        $("#apellidoMatInput").prop("readonly", false);
+        $("#apellidoMatInput").prop("readonly", true);
 
         $("#correoInput").val(correo);
         $("#correoInput").prop("readonly", true);
@@ -398,6 +404,9 @@ $(document).ready(function () {
         $("#containerPassword").hide();
         $("#containerPrivilegio").removeClass("col-md-6 col-12");
         $("#containerPrivilegio").addClass("col-12");
+
+        $("#passInputCheck").prop("checked", false);
+        $("#checkCont").show();
 
         $("#privilegioInput").val(privilegio);
         $("#privilegioInput").prop("disabled", false);
@@ -452,6 +461,18 @@ $(document).ready(function () {
                 });
             }
         });
+    });
+
+    $(document).on("change", "#passInputCheck", function (e) {
+        if ($("#passInputCheck").prop("checked") == true) {
+            $("#containerPassword").show();
+            $("#containerPrivilegio").addClass("col-md-6 col-12");
+            $("#containerPrivilegio").removeClass("col-12");
+        } else {
+            $("#containerPassword").hide();
+            $("#containerPrivilegio").removeClass("col-md-6 col-12");
+            $("#containerPrivilegio").addClass("col-12");
+        }
     });
 });
 

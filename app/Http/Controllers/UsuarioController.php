@@ -21,7 +21,7 @@ class UsuarioController extends Controller
     public function index()
     {
 
-        if(auth()->user()->is_root){            
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
             return response()->view('usuario.show');
         }else{
             return redirect()->to('/admin/dashboard');
@@ -31,12 +31,19 @@ class UsuarioController extends Controller
 
     public function getUsuario() 
     {
-        
-        $usuario = DB::table('users')
-            ->where("privilegio", "!=", 'cliente')
+
+        if(auth()->user()->is_root){
+            $usuario = DB::table('users')
             ->orderBy('id', 'ASC')
             ->get();
-
+        }elseif(auth()->user()->is_admin || auth()->user()->is_procesos){
+            $usuario = DB::table('users')
+            ->where("privilegio", 'ps_silver')
+            ->orWhere("privilegio", 'ps_gold')
+            ->orderBy('id', 'ASC')
+            ->get();
+        }
+        
         return datatables()->of($usuario)->addColumn('btn', 'usuario.buttons')->rawColumns(['btn'])->toJson();
     }
 
@@ -97,6 +104,9 @@ class UsuarioController extends Controller
             $usuario->nombre = strtoupper($request->input('nombre'));
             $usuario->apellido_p = strtoupper($request->input('apellidop'));
             $usuario->apellido_m = strtoupper($request->input('apellidom'));
+            if(!empty($request->password)){
+                $usuario->password = $request->password;
+            }
             $usuario->privilegio = $request->input('privilegio');
 
             $usuario->update();

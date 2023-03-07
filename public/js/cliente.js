@@ -299,7 +299,8 @@ $(document).ready(function () {
         $.get({
             url: "/admin/showNumCliente",
             success: function (response) {
-                $("#codigoClienteInput").val(response);
+                $("#codigoClienteInput").val(response.numeroCliente);
+                $("#correoiInput").val(response.correoCliente);
             },
             error: function (error) {
                 console.log(error);
@@ -401,7 +402,6 @@ $(document).ready(function () {
                 String(estado).length == 0 &&
                 String(celular).length == 0 &&
                 String(correop).length == 0 &&
-                String(correoi).length == 0 &&
                 String(ine).length == 0 &&
                 String(pasaporte).length == 0 &&
                 String(vencimientopas).length == 0)
@@ -563,7 +563,6 @@ $(document).ready(function () {
                 String(estado).length == 0 &&
                 String(celular).length == 0 &&
                 String(correop).length == 0 &&
-                String(correoi).length == 0 &&
                 String(ine).length == 0 &&
                 String(pasaporte).length == 0 &&
                 String(vencimientopas).length == 0)
@@ -829,8 +828,6 @@ $(document).ready(function () {
             $("#fechapasInput").prop("required", false);
             $("#swiftInput").prop("required", false);
             $("#ibanInput").prop("required", false);
-
-            $("#identificadorInput").prop("required", true);
         } else {
             $("#codigoClienteCont").show();
             $("#fechaNacCont").show();
@@ -859,8 +856,6 @@ $(document).ready(function () {
             $("#celularInput").prop("required", true);
             $("#correopInput").prop("required", true);
             $("#correoiInput").prop("required", true);
-
-            $("#identificadorInput").prop("required", false);
         }
     };
 
@@ -929,8 +924,6 @@ $(document).ready(function () {
             $("#fechapasInput").prop("required", false);
             $("#swiftInput").prop("required", false);
             $("#ibanInput").prop("required", false);
-
-            $("#identificadorInput").prop("readonly", true);
         } else {
             $("#codigoClienteCont").show();
             $("#fechaNacCont").show();
@@ -959,8 +952,6 @@ $(document).ready(function () {
             $("#celularInput").prop("required", true);
             $("#correopInput").prop("required", true);
             $("#correoiInput").prop("required", true);
-
-            $("#identificadorInput").prop("readonly", false);
         }
     });
 

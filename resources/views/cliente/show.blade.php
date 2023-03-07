@@ -136,7 +136,7 @@
                             </div>
                             <div class="col-md-6 col-12" id="identificadorCont">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" placeholder="Ingresa el identificador" id="identificadorInput" name="identificador" required>
+                                    <input type="text" class="form-control" placeholder="Ingresa el identificador" id="identificadorInput" name="identificador">
                                     <label for="identificadorInput">Identificador</label>
                                 </div>
                             </div>

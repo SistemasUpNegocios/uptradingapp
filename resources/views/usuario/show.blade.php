@@ -28,7 +28,7 @@
                         @if (auth()->user()->is_root)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo usuario</a>
                         @endif
-                        <table class="table table-striped table-bordered nowrap" style="font-size: 13px !important" id="usuario">
+                        <table class="table table-striped table-bordered nowrap" style="font-size: 13px !important; width: 100%" id="usuario">
                             <thead class="text-center">
                                 <tr>
                                     <th data-priority="0" scope="col">Nombre</th>
@@ -41,10 +41,6 @@
                             <tbody id="usuarioBody" class="text-center">
                             </tbody>
                         </table>
-
-
-                        {{-- <p class='fw-bold mt-3'>No se ha registrado ninguna calle destacada. ¡Añade una ahora!</p> --}}
-
                     </div>
                 </div>
 
@@ -66,13 +62,13 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el nombre" id="nombreInput" name="nombre" >
+                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el nombre" id="nombreInput" name="nombre" readonly>
                                     <label for="floatingInput">Nombre</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido paterno" id="apellidoPatInput" name="apellidop" >
+                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido paterno" id="apellidoPatInput" name="apellidop" readonly>
                                     <label for="floatingInput">Apellido paterno</label>                                                                                                
                                 </div>
                             </div>
@@ -80,7 +76,7 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido materno" id="apellidoMatInput" name="apellidom" required>
+                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" placeholder="Ingresa el apellido materno" id="apellidoMatInput" name="apellidom" required readonly>
                                     <label for="floatingInput">Apellido materno</label>                                                                                                
                                 </div>
                             </div>
@@ -91,29 +87,53 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row">                            
+                            @if (auth()->user()->is_root)
+                                <div class="col-md-6 col-12" id="containerPrivilegio">
+                                    <div class="form-floating mb-3">
+                                        <select name="privilegio" class="form-control" id="privilegioInput" required>
+                                            <option value="" disabled selected>Selecciona...</option>
+                                            <option value="root">Root</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="procesos">Procesos</option>
+                                            <option value="ps_gold">PS Gold</option>
+                                            <option value="ps_silver">PS Silver</option>
+                                            <option value="contabilidad">Contabilidad</option>
+                                            <option value="egresos">Egresos</option>
+                                        </select>
+                                        <label for="privilegioInput">Privilegio</label>
+                                    </div>
+                                </div>
+                            @elseif(auth()->user()->is_admin || auth()->user()->is_procesos)
+                                <div class="col-md-6 col-12" id="containerPrivilegio">
+                                    <div class="form-floating mb-3">
+                                        <select name="privilegio" class="form-control" id="privilegioInput" required>
+                                            <option value="" disabled selected>Selecciona...</option>
+                                            <option value="ps_gold">PS Gold</option>
+                                            <option value="ps_silver">PS Silver</option>
+                                        </select>
+                                        <label for="privilegioInput">Privilegio</label>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="col-md-6 col-12" id="containerPassword">
                                 <div class="form-floating mb-3">
                                     <input type="password" id="passwordInput" class="form-control" placeholder="Ingresa una contraseña" name="password" value="{{old('password')}}">
                                     <label for="floatingInput">Contraseña</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12" id="containerPrivilegio">
-                                <div class="form-floating mb-3">
-                                    <select name="privilegio" class="form-control" id="privilegioInput" required>
-                                        <option value="" disabled selected>Selecciona...</option>                                   
-                                        <option value="root">Root</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="procesos">Procesos</option>
-                                        <option value="ps_gold">PS Gold</option>
-                                        <option value="ps_silver">PS Silver</option>
-                                        <option value="contabilidad">Contabilidad</option>
-                                        <option value="egresos">Egresos</option>
-                                    </select>
-                                    <label for="privilegioInput">Privilegio</label>
+                        </div>
+                        @if (auth()->user()->is_root)
+                            <div class="row justify-content-start" id="checkCont">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-check form-switch mb-3 d-flex justify-content-start">
+                                        <input class="form-check-input" type="checkbox" role="switch" name="switch-pass" id="passInputCheck">
+                                        <label class="form-check-label ms-1" for="passInputCheck">Restablecer contraseña</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
+
                         <div id="alertMessage"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
