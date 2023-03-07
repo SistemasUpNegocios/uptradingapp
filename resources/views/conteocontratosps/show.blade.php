@@ -8,7 +8,7 @@
 
     <style>
         table.dataTable th, table.dataTable td {
-            font-size: 12px;
+            font-size: 14px;
         }
     </style>
 @endsection
