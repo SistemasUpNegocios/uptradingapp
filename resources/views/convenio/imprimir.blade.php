@@ -68,7 +68,7 @@
             <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                     cliente</span>" se compromete a que durante el periodo contratado de 12 meses de operación de su
                 cuenta MAM, en ningún momento realizará retiros de su patrimonio inicial con el que realizó la apertura
-                de su cuenta.</p>
+                de su cuenta, en caso de haber aumento a su patrimonio, dicha obligación se ampliará hasta por el monto total de sus aportaciones a patrimonio.</p>
         </li>
         <li style="font-size: 10px; margin-bottom: -0.7rem">
             <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
@@ -97,6 +97,10 @@
                 rendimientos siempre y cuando en ningún caso el retiro disminuya la cantidad con la que se celebró el
                 contrato del cual se desprende este convenio.</p>
         </li>
+        <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                    cliente</span>", dado el caso de querer incrementar el monto de su inversión, para su cuenta MAM, deberá en todo momento dar aviso, tanto por correo electrónico, como por llamada telefónica, esto sin afectar el tiempo de vencimiento del plazo forzoso.</p>
+        </li>
         @php
         $monto = $convenio[0]->monto;
         $centavos = explode(".", $monto);
@@ -124,7 +128,7 @@
     </ol>
 
     <div class="contenedor_firma">
-        <div class="contenedor_firma__izquierda" style="margin-top: -1rem">
+        <div class="contenedor_firma__izquierda" style="margin-top: -3rem">
             <hr class="contenedor_firma__hr">
             <div class=" text-center">
                 <p class="contrato_parrafo_firmas">
@@ -134,7 +138,7 @@
                 </p>
             </div>
         </div>
-        <div class="contenedor_firma__derecha" style="margin-top: -1rem">
+        <div class="contenedor_firma__derecha" style="margin-top: -3rem">
             <hr class="contenedor_firma__hr">
             <div class="text-center">
                 <p class="contrato_parrafo_firmas">
@@ -144,7 +148,7 @@
                 </p>
             </div>
         </div>
-        <div class="contenedor_firma__centro" style="margin-top: 5rem">
+        <div class="contenedor_firma__centro" style="margin-top: 1.3rem">
             <hr class="contenedor_firma__hr">
             <div class=" text-center">
                 <p class="contrato_parrafo_firmas">
