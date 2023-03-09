@@ -542,12 +542,13 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".abrirWhats", function () {
-        $("#modalTitleWhats").text("Mandar WhatsApp para pago en efectivo");
+        $("#modalTitleWhats").text("Mandar WhatsApp para pago en pesos");
         let ps = $(this).data("ps");
         let psnumero = $(this).data("psnumero");
         let comision = $(this).data("comision");
+        let fecha_mes = $(this).data("fecha");
 
-        let mensaje = `Buen día ${ps}. Para comentarle que el pago de sus comisiones de PS por la cantidad de $${comision} pesos, en esta ocasión se encuentra listo en efectivo en la oficina. Cuando guste pasar en un horario de 9:00 am a 2:00 pm y de 4:00 pm a 6:00 pm.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+        let mensaje = `Buen día ${ps}, se ha realizado una transferencia a su cuenta por la cantidad de $${comision} pesos, por su comisión de PS por el mes de ${fecha_mes}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
 
         $("#nombrePsInput").val(ps);
         $("#numeroPsInput").val(psnumero);

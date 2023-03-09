@@ -23,6 +23,20 @@
                         ->orderBy('ps.id', 'DESC')
                         ->sum('pago_ps.pago');
 
+                    $comision_convenio_ps = DB::table('convenio')
+                        ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                        ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
+                        ->where('pago_ps_convenio.fecha_limite', 'like', "$fecha%")
+                        ->where('convenio.ps_id', $ps->id)
+                        ->where("convenio.status", "Activado")
+                        ->where('ps.codigoPS', '!=', "IA1")
+                        ->where('ps.codigoPS', '!=', "IA2")
+                        ->where('ps.codigoPS', '!=', "IA3")
+                        ->orderBy('ps.id', 'DESC')
+                        ->sum('pago_ps_convenio.pago');
+
+                    $comision_ps = $comision_ps + $comision_convenio_ps;
+
                     $status_pago = DB::table('contrato')
                         ->join('ps', 'ps.id', '=', 'contrato.ps_id')
                         ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
@@ -57,8 +71,8 @@
                         <td class="d-flex align-items-center">
                             <button class="btn btn-warning ms-1" style="font-size: 13px; padding: 7px" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-fecha="{{ $fecha }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                             <button class="btn btn-success ms-1" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-fecha="{{ $fecha }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" title="Mandar whats para pago en efectivo"><i class="bi bi-whatsapp"></i></button>
-                            <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%B') }}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
+                            <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%B') }}" title="Mandar whats para pesos"><i class="bi bi-whatsapp"></i></button>
+                            <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%B') }}" title="Mandar whats para dolares"><i class="bi bi-whatsapp"></i></button>
 
                             <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $pagos }}" @if ($status == "Pagado" ) {{"checked"}} @endif>
                             <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label> 
