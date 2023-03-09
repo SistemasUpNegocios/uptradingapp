@@ -327,6 +327,11 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
         },
+        lengthMenu: [
+            [50, 100, 150, -1],
+            [50, 100, 150, "Todo"],
+        ],
+        pageLength: 50,
         aaSorting: [],
     });
 
@@ -718,6 +723,11 @@ $(document).ready(function () {
                         },
                         info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
                     },
+                    lengthMenu: [
+                        [50, 100, 150, -1],
+                        [50, 100, 150, "Todo"],
+                    ],
+                    pageLength: 50,
                     aaSorting: [],
                 });
             },

@@ -33,7 +33,7 @@
                     <use xlink:href="#info-fill" />
                 </svg>
                 <div>
-                    Aquí podrás modificar el porcentaje <b>(rendimiento del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona que solicitó la modificación
+                    Aquí podrás modificar el porcentaje <b>(rendimiento del contrato)</b> para los contratos no activados en casos especiales de atender. Si el contrato a modificar no se encuentra en la siguiente tabla, reporta desactivarlo a la persona encargada.
                 </div>
             </div>
         </div>
