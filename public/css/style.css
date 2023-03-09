@@ -2195,7 +2195,7 @@ pre {
 .contenedor_firma__centro .contrato_parrafo_firmas,
 .contenedor_firma__derecha .contrato_parrafo_firmas {
     font-weight: bold;
-    line-height: 10px;
+    line-height: 8px;
 }
 
 .contenedor_firma__izquierda .contrato_parrafo_firmas_nombre,
