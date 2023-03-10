@@ -104,7 +104,7 @@
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>", dado el caso de querer incrementar el monto de su inversión, para su cuenta MAM,
                     deberá en todo momento dar aviso, tanto por correo electrónico, como por llamada telefónica, esto sin
-                    afectar el tiempo de vencimiento del plazo forzoso.</p>
+                    afectar el tiempo de vencimiento del plazo forzoso inicial.</p>
             </li>
             @php
                 $monto = $convenio[0]->monto;
