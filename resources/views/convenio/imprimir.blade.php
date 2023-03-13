@@ -28,8 +28,7 @@
 
         <p class="mb-0 contrato_parrafo">
             El presente convenio se suscribe entre "<span style="font-weight: bold">el Introducer Broker</span>", esto es:
-            <span style="text-transform: uppercase; font-weight: bold">Up Trading Experts
-                LLC</span> (en adelante "<span style="font-weight: bold">el IB</span>") y por otra parte <span
+            <span style="text-transform: uppercase; font-weight: bold">Up Trading Experts </span> (en adelante "<span style="font-weight: bold">el IB</span>") y por otra parte <span
                 style="text-transform: uppercase; font-weight: bold">{{ $convenio[0]->clientenombre }}</span> en lo sucesivo
             "<span style="font-weight: bold; text-transform: uppercase;">El cliente</span>".
         </p>
