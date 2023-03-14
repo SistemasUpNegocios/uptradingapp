@@ -981,7 +981,7 @@ class ContratoController extends Controller
             $contrato->status_reintegro = $request->input('status_reintegro');
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
             if ($request->status == "Refrendado") {
-                $contrato->status = "Pendiente de activación";
+                $contrato->status = "Activado";
                 $contratoAct = explode("-", $request->contrato);
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
