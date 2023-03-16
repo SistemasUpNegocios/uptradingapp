@@ -54,14 +54,14 @@
                     @if (strlen($contratos_men) > 0)
                         {{$contratos_men}}.
                     @else
-                        <b>No se encontraton resultados</b>
+                        <b>No se encontraron resultados</b>
                     @endif
                 </td>
                 <td>
                     @if (strlen($contratos_comp) > 0)
                         {{$contratos_comp}}.
                     @else
-                        <b>No se encontraton resultados</b>
+                        <b>No se encontraron resultados</b>
                     @endif
                 </td>
                 <td>{{ $count_contrato }}</td>
