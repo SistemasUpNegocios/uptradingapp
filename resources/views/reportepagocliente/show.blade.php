@@ -97,6 +97,7 @@
                             <div class="col-12 mt-3 px-2 text-center">
                                 <a class="btn btn-primary" id="filtroMensual">Mensuales</a>
                                 <a class="btn btn-outline-primary" id="filtroCompuesto">Compuestos</a>
+                                <a class="btn btn-outline-primary" id="filtroLiquidacion">Liquidación</a>
                             </div>
                         </div>
 

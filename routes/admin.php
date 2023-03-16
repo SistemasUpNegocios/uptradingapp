@@ -66,6 +66,8 @@ Route::get('/admin/getResumenPagoClienteMensual', [App\Http\Controllers\ReporteP
 Route::get('/admin/getResumenPagoClienteDiaMensual', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaMensual']);
 Route::get('/admin/getResumenPagoClienteCompuesto', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteCompuesto']);
 Route::get('/admin/getResumenPagoClienteDiaCompuesto', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaCompuesto']);
+Route::get('/admin/getResumenPagoClienteLiquidacion', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteLiquidacion']);
+Route::get('/admin/getResumenPagoClienteDiaLiquidacion', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaLiquidacion']);
 Route::get('/admin/imprimirResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'imprimirResumenCliente']);
 Route::get('/admin/imprimirReporteCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getReportePago']);
 Route::get('/admin/exportarResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'export']);

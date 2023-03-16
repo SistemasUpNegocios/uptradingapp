@@ -9,6 +9,7 @@ use App\Models\Oficina;
 use App\Models\Ps;
 use App\Models\PagoPS;
 use App\Models\TipoCambio;
+use App\Models\Log;
 use App\Exports\PagosPsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -133,6 +134,19 @@ class ReportePagoPsController extends Controller
                 if($request->status == "Pagado"){
                     $fecha = Carbon::now()->format('Y-m');
                     $pago_ps->fecha_pagado = $fecha."-10";
+
+                    $tipo_cambio = new TipoCambio;
+                    $tipo_cambio->valor = number_format($request->dolar, 2);
+                    $tipo_cambio->contrato_id = $pago_ps->contrato_id;
+                    $tipo_cambio->memo = "Pago de comisión";
+                    $tipo_cambio->save();
+
+                    $log = new Log;
+                    $log->tipo_accion = "Actualización";
+                    $log->tabla = "Pago de PS por el contrato $pago_ps->contrato_id";
+                    $log->id_tabla = $id;
+                    $log->bitacora_id = session('bitacora_id');
+                    $log->save();
                 }else{
                     $pago_ps->fecha_pagado = NULL;
                 }

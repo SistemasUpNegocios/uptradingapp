@@ -243,7 +243,6 @@ $(document).ready(function () {
 
     $(document).on("change", ".status", function () {
         var checked = $(this).is(":checked");
-        var thiss = this;
 
         if (checked) {
             $(this).val("Pagado");
@@ -253,6 +252,7 @@ $(document).ready(function () {
 
         var id = $(this).data("id");
         var statusValor = $(this).val();
+        var dolar = $("#dolarInput").val();
 
         const Toast = Swal.mixin({
             toast: true,
@@ -265,84 +265,27 @@ $(document).ready(function () {
                 toast.addEventListener("mouseleave", Swal.resumeTimer);
             },
         });
-        Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus de pago</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus de pago</p>',
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
-            cancelButtonColor: "#01bbcc",
-            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
-            confirmButtonColor: "#198754",
-            input: "password",
-            showLoaderOnConfirm: true,
-            preConfirm: (clave) => {
-                $.ajax({
-                    type: "GET",
-                    url: "/admin/showClavePagoPs",
-                    data: {
-                        clave: clave,
-                    },
-                    success: function (result) {
-                        if (result == "success") {
-                            $.get(
-                                "/admin/editStatusPagoPs",
-                                {
-                                    id: id,
-                                    status: statusValor,
-                                },
-                                function () {
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Estatus actualizado",
-                                    });
-                                }
-                            );
-                        } else {
-                            if (checked) {
-                                $(thiss).prop("checked", false);
-                            } else {
-                                $(thiss).prop("checked", true);
-                            }
 
-                            Toast.fire({
-                                icon: "error",
-                                title: "Clave incorrecta",
-                            });
-                        }
-                    },
-                    error: function () {
-                        if (checked) {
-                            $(thiss).prop("checked", false);
-                        } else {
-                            $(thiss).prop("checked", true);
-                        }
-
-                        Toast.fire({
-                            icon: "error",
-                            title: "Clave incorrecta",
-                        });
-                    },
+        $.ajax({
+            type: "GET",
+            url: "/admin/editStatusPagoPs",
+            data: {
+                id: id,
+                status: statusValor,
+                dolar: dolar,
+            },
+            success: function () {
+                Toast.fire({
+                    icon: "success",
+                    title: "Estatus actualizado",
                 });
             },
-            allowOutsideClick: () => !Swal.isLoading(),
-        }).then((result) => {
-            if (!result.isConfirmed) {
-                if (checked) {
-                    $(this).prop("checked", false);
-                } else {
-                    $(this).prop("checked", true);
-                }
-
-                Swal.fire({
+            error: function () {
+                Toast.fire({
                     icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
+                    title: "Clave incorrecta",
                 });
-            }
+            },
         });
     });
 
