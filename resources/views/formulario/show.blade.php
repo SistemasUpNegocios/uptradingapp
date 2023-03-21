@@ -45,7 +45,7 @@
 
                             <div class="form-floating mb-3">
                                 <select class="form-select selectSearch" id="psIdInput" >
-                                    <option value="" disabled selected>Selecciona..</option>
+                                    <option value="todos" selected>TODOS</option>
                                     @foreach($lista_ps as $ps)
                                         <option data-id="{{ $ps->id }}" value="{{ $ps->id }}">
                                             {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
