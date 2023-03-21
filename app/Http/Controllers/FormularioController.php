@@ -50,6 +50,17 @@ class FormularioController extends Controller
         return datatables()->of($formulario)->addColumn('btn', 'formulario.buttons')->rawColumns(['btn'])->toJson();
     }
 
+    public function getFormularioFiltro(Request $request)
+    {
+
+        $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, formulario.id as formularioid, formulario.codigoCliente, formulario.nombre, formulario.apellido_p, formulario.apellido_m, formulario.estado_civil, formulario.fecha_nacimiento, formulario.pasaporte, formulario.ine, formulario.nacionalidad, formulario.direccion, formulario.colonia, formulario.cp, formulario.ciudad, formulario.estado, formulario.pais, formulario.celular, formulario.correo_personal, formulario.correo_institucional, formulario.fuera_mexico, formulario.situacion_laboral, formulario.nombre_direccion, formulario.giro_empresa, formulario.puesto, formulario.sector_empresa, formulario.personas_cargo, formulario.porcentaje_acciones, formulario.monto_anio, formulario.pagina_web, formulario.ultimo_empleo, formulario.ultimo_empleador, formulario.status_anterior, formulario.monto_mensual_jubilacion, formulario.escuela_universidad, formulario.campo_facultad, formulario.especificacion_trabajo, formulario.funcion_publica, formulario.descripcion_funcion_publica, formulario.residencia, formulario.rfc, formulario.deposito_inicial, formulario.origen_dinero, formulario.ps_id"))
+            ->where("formulario.ps_id", $request->id)
+            ->orderBy('formulario.id', 'DESC')->get();
+
+        return datatables()->of($formulario)->addColumn('btn', 'formulario.buttons')->rawColumns(['btn'])->toJson();
+    }
+
     public function addFormulario(Request $request)
     {
         if ($request->ajax()) {
@@ -172,7 +183,6 @@ class FormularioController extends Controller
     public function editFormulario(Request $request)
     {
         if ($request->ajax()) {
-            
             $request->validate([
                 'codigocliente' => 'required',
                 'nombre' => 'required|string',

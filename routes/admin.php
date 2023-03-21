@@ -257,6 +257,7 @@ Route::post('/admin/deleteNotificaciones', [App\Http\Controllers\NotificacionCon
 //Rutas de formulario
 Route::get('/admin/formulario', [App\Http\Controllers\FormularioController::class, 'index'])->name('formulario');
 Route::get('/admin/showFormulario', [App\Http\Controllers\FormularioController::class, 'getFormulario']);
+Route::get('/admin/showFormularioFiltro', [App\Http\Controllers\FormularioController::class, 'getFormularioFiltro']);
 Route::post('/admin/addFormulario', [App\Http\Controllers\FormularioController::class, 'addFormulario']);
 Route::post('/admin/editFormulario', [App\Http\Controllers\FormularioController::class, 'editFormulario']);
 Route::post('/admin/deleteFormulario', [App\Http\Controllers\FormularioController::class, 'deleteFormulario']);

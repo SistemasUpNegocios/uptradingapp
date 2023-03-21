@@ -31,6 +31,30 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
+                        @if(auth()->user()->is_root || auth()->user()->is_root || auth()->user()->is_procesos)
+                            <div class="col-12">
+                                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                        <use xlink:href="#info-fill" />
+                                    </svg>
+                                    <div>
+                                        Elige a un PS para filtrar los formularios de cuenta Forex
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <select class="form-select selectSearch" id="psIdInput" >
+                                    <option value="" disabled selected>Selecciona..</option>
+                                    @foreach($lista_ps as $ps)
+                                        <option data-id="{{ $ps->id }}" value="{{ $ps->id }}">
+                                            {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <label for="psIdInput">PS</label>
+                            </div>
+                        @endif
                         <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Apertura de cuenta Forex</a>
                         <table class="table table-striped table-bordered nowrap text-center" id="formulario">
                             <thead>
