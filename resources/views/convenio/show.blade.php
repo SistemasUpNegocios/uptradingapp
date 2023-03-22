@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control"
                                         placeholder="Ingresa la comisión por apertura" id="cAperturaInput" value="3"
@@ -159,7 +159,7 @@
                                     <label for="cAperturaInput">Comisión por apertura del PS (%)</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control"
                                         placeholder="Ingresa la comisión mensual" id="cMensualInput" value="0.5"
@@ -167,7 +167,9 @@
                                     <label for="cMensualInput">Comisión mensual del PS (%)</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control"
                                         placeholder="Ingresa la comisión trimestral" id="cTrimestralInput" value="0.3"
@@ -175,8 +177,6 @@
                                     <label for="cTrimestralInput">Comisión trimestral del PS (%)</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control"
@@ -185,8 +185,9 @@
                                     <label for="montoInput">Cantidad de inversión (USD)</label>
                                 </div>
                             </div>
-
-                            <div class="col-md-6 col-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control"
                                         placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput"
