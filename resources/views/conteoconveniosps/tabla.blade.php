@@ -35,7 +35,7 @@
                     @if (strlen($conv) > 0)
                         {{$conv}}.
                     @else
-                        <b>No se encontraton resultados</b>
+                        <b>No se encontraron resultados</b>
                     @endif
                 </td>
                 <td>{{ $count_convenio }}</td>

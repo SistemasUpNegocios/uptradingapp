@@ -936,6 +936,7 @@ class ContratoController extends Controller
                 'inversion_letra' => 'required',
                 'inversion_letra_us' => 'required',
                 'fecha_reintegro' => 'required|date',
+                'ps_id' => 'required',
             ]);
 
             $contrato = Contrato::find($request->id);
@@ -1392,16 +1393,17 @@ class ContratoController extends Controller
         $bitacora_id = session('bitacora_id');
 
         $log = new Log;
-
         $log->tipo_accion = "Eliminación";
         $log->tabla = "Contrato";
         $log->id_tabla = $contrato_id;
         $log->bitacora_id = $bitacora_id;
 
         if ($log->save()) {
-            if ($request->ajax()) {
-                Contrato::destroy($request->id);
-            }
+            $contrato = Contrato::find($request->id);
+            Folio::where('contrato_id', $contrato->id)
+                ->where('folio', $contrato->folio)
+                ->update(["estatus" => "Cancelado", "fecha_cancelado" => Carbon::now()->format('Y-m-d')]);
+            Contrato::destroy($request->id);
         }
     }
 

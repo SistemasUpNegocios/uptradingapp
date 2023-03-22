@@ -342,10 +342,27 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
+                let folio = $("#folioInput").val();
+                let estatus = $("#statusInput").val();
+                if (estatus == "Activado") {
+                    $("option:selected", "#statusInput").prop("disabled", true);
+                }
+
                 $("#formModal").modal("hide");
                 $("#convenioForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
+                    let mensaje = `Se ha generado un nuevo convenio, por favor actívalo.\nFolio de convenio: ${folio}`;
+                    $.get({
+                        url: "/admin/enviarTelegramConvenio",
+                        data: {
+                            mensaje: mensaje,
+                        },
+                        success: function (response) {
+                            $("#folioInput").val(response);
+                        },
+                    });
+
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Convenio añadido</h1>',

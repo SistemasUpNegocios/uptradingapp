@@ -127,6 +127,7 @@ Route::post('/admin/deleteConvenio', [App\Http\Controllers\ConvenioController::c
 Route::get('/admin/validateClaveConvenio', [App\Http\Controllers\ConvenioController::class, 'validateClave']);
 Route::get('/admin/editStatusConvenio', [App\Http\Controllers\ConvenioController::class, 'editStatus']);
 Route::get('/admin/getFolioConvenio', [App\Http\Controllers\ConvenioController::class, 'getFolioConvenio']);
+Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioController::class, 'enviarTelegram']);
 
 // Rutas para gestión de modelo
 Route::get('/admin/modelo', [App\Http\Controllers\ModeloController::class, 'index'])->name('modelo');
@@ -257,6 +258,7 @@ Route::post('/admin/deleteNotificaciones', [App\Http\Controllers\NotificacionCon
 //Rutas de formulario
 Route::get('/admin/formulario', [App\Http\Controllers\FormularioController::class, 'index'])->name('formulario');
 Route::get('/admin/showFormulario', [App\Http\Controllers\FormularioController::class, 'getFormulario']);
+Route::get('/admin/showFormularioFiltro', [App\Http\Controllers\FormularioController::class, 'getFormularioFiltro']);
 Route::post('/admin/addFormulario', [App\Http\Controllers\FormularioController::class, 'addFormulario']);
 Route::post('/admin/editFormulario', [App\Http\Controllers\FormularioController::class, 'editFormulario']);
 Route::post('/admin/deleteFormulario', [App\Http\Controllers\FormularioController::class, 'deleteFormulario']);

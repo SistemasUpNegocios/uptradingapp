@@ -41,11 +41,11 @@
 
 
         <ol type="1">
-            <li style="font-size: 10px; margin-bottom: -0.7rem; color: #000">Objeto del Convenio</li>
+            <li style="font-size: 9px; margin-bottom: -0.7rem; color: #000">Objeto del Convenio</li>
         </ol>
 
         <ol type="I">
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" se compromete a respetar
                     los plazos que acordarán para realizar análisis de sus operaciones como la revisión del rendimiento,
@@ -56,7 +56,7 @@
                     firme con el banco <span
                         style="text-transform: uppercase; font-weight: bold;">{{ $convenio[0]->banconombre }}</span>.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El IB</span>"
                     se compromete a realizar ante el cliente presente en oficinas, un análisis de sus operaciones, así como
                     realizar una revisión de saldo de su cuenta MAM., para que en ese momento de la revisión de saldos se
@@ -64,14 +64,14 @@
                     rendimiento o el dejar en firme la totalidad de sus fondos en reinversión, y que continúe su saldo en
                     operación.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" se compromete a que durante el periodo contratado de 12 meses de operación de su
                     cuenta MAM, en ningún momento realizará retiros de su patrimonio inicial con el que realizó la apertura
                     de su cuenta, en caso de haber aumento a su patrimonio, dicha obligación se ampliará hasta por el monto
                     total de sus aportaciones a patrimonio.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" cuando se llegue el tiempo de la revisión trimestral, acudirá personalmente y con
                     previa cita acordada telefónicamente y que dicha cita haya sido confirmada a través del correo
@@ -82,7 +82,7 @@
                     posponerla al siguiente trimestre para revisión o retiro, de igual forma deberá de dar aviso tanto
                     telefónicamente como por correo electrónico.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" si así lo decide y opta por realizar un retiro parcial o total de su rendimiento,
                     este se realizará con una transferencia a la tarjeta emitida por el banco <span
@@ -90,7 +90,7 @@
                     otro medio de
                     dispersión que el cliente decida y que sea factible de realizar.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" en todo momento tiene el derecho de retirar sus rendimientos, en cualquiera de sus 3
                     (tres) revisiones trimestrales, a las que tiene derecho durante la vigencia de su contrato de operación
@@ -99,7 +99,7 @@
                     rendimientos siempre y cuando en ningún caso el retiro disminuya la cantidad con la que se celebró el
                     contrato del cual se desprende este convenio.</p>
             </li>
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>", dado el caso de querer incrementar el monto de su inversión, para su cuenta MAM,
                     deberá en todo momento dar aviso, tanto por correo electrónico, como por llamada telefónica, esto sin
@@ -120,7 +120,7 @@
                     $centavos = '00';
                 }
             @endphp
-            <li style="font-size: 10px; margin-bottom: -0.7rem">
+            <li style="font-size: 9px; margin-bottom: -0.7rem">
                 <p class="mb-3 contrato_parrafo">El presente convenio lo firman las partes aquí mencionadas por la cantidad
                     de $@convert($convenio[0]->monto) <span style="text-transform: uppercase;">({{ $convenio[0]->monto_letra }}
                         {{ $centavos }}/100)</span> al día <span
@@ -137,9 +137,9 @@
                 <hr class="contenedor_firma__hr">
                 <div class=" text-center">
                     <p class="contrato_parrafo_firmas">
-                        <span class="contrato_parrafo_firmas_nombre">Up Trading Experts</span>
+                        <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->psnombre }}</span>
                         <br>
-                        <span>Representante Legal</span>
+                        <span>PS</span>
                     </p>
                 </div>
             </div>
@@ -157,9 +157,11 @@
                 <hr class="contenedor_firma__hr">
                 <div class=" text-center">
                     <p class="contrato_parrafo_firmas">
-                        <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->psnombre }}</span>
+                        <span>UP TRADING EXPERTS</span>
                         <br>
-                        <span>PS</span>
+                        <span>GERENTE GENERAL</span>
+                        <br>
+                        <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
                     </p>
                 </div>
             </div>

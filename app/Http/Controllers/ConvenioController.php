@@ -13,6 +13,8 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class ConvenioController extends Controller
 {
@@ -23,7 +25,6 @@ class ConvenioController extends Controller
 
     public function index()
     {
-
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
@@ -41,7 +42,7 @@ class ConvenioController extends Controller
             return response()->view('convenio.show', $data, 200);
         }else{
             return redirect()->to('/admin/dashboard');
-        }   
+        }
     }
 
     public function getConvenio()
@@ -514,11 +515,8 @@ class ConvenioController extends Controller
     public function editStatus(Request $request)
     {
         $convenio = Convenio::find($request->id);
-
         $convenio->status = $request->status;
-
         $convenio->update();
-
         return response($convenio);
     }
 
@@ -546,7 +544,10 @@ class ConvenioController extends Controller
 
         $pdf = PDF::loadView('convenio.imprimir', ['convenio' => $convenio, 'convenio2' => $convenio]);
 
-        return $pdf->stream('Convenio.pdf');
+        $fecha_hoy = Carbon::now();
+        $nombreDescarga = $convenio[0]->folio.'_'.$convenio[0]->clientenombre.'_'.$fecha_hoy->format('d-m-Y').'.pdf';
+
+        return $pdf->stream($nombreDescarga);
     }
 
     public function getFolioConvenio(Request $request)
@@ -592,5 +593,21 @@ class ConvenioController extends Controller
                 return response($codigo_oficina, 200);
             }
         }
+    }
+
+    public function enviarTelegram(Request $request)
+    {
+        $folio = explode("Folio de convenio: ", $request->mensaje);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $folio[0]
+        ]);
+
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $folio[1]
+        ]);
     }
 }

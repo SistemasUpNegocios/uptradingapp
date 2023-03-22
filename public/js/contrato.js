@@ -1601,31 +1601,7 @@ $(document).ready(function () {
                 $("#contratoForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
-                    if (estatus == "Refrendado") {
-                        if (casilla && rendimiento > 0) {
-                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
-                            $.get({
-                                url: "/admin/enviarTelegram",
-                                data: {
-                                    mensaje: mensaje,
-                                },
-                                success: function (response) {
-                                    $("#contratoInput").val(response);
-                                },
-                            });
-                        } else {
-                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nNúmero de contrato: ${contrato_numero}`;
-                            $.get({
-                                url: "/admin/enviarTelegram",
-                                data: {
-                                    mensaje: mensaje,
-                                },
-                                success: function (response) {
-                                    $("#contratoInput").val(response);
-                                },
-                            });
-                        }
-                    } else if (casilla && rendimiento > 0) {
+                    if (casilla && rendimiento > 0) {
                         let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
                         $.get({
                             url: "/admin/enviarTelegram",
@@ -1658,32 +1634,6 @@ $(document).ready(function () {
                         confirmButtonColor: "#01bbcc",
                     });
                 } else if (acc == "edit") {
-                    if (estatus == "Refrendado") {
-                        if (casilla && rendimiento > 0) {
-                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
-                            $.get({
-                                url: "/admin/enviarTelegram",
-                                data: {
-                                    mensaje: mensaje,
-                                },
-                                success: function (response) {
-                                    $("#contratoInput").val(response);
-                                },
-                            });
-                        } else {
-                            let mensaje = `Se ha refrendado un contrato, por favor actívalo.\nNúmero de contrato: ${contrato_numero}`;
-                            $.get({
-                                url: "/admin/enviarTelegram",
-                                data: {
-                                    mensaje: mensaje,
-                                },
-                                success: function (response) {
-                                    $("#contratoInput").val(response);
-                                },
-                            });
-                        }
-                    }
-
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato actualizado</h1>',
@@ -2685,7 +2635,6 @@ $(document).ready(function () {
         $("#contratoInput").prop("readonly", false);
 
         $("#clienteIdInput").val(clienteid);
-        // $("#clienteIdInput").prop("disabled", true);
 
         $("#psIdInput").val(psid);
         $("#psIdInput").prop("disabled", false);
@@ -2695,7 +2644,6 @@ $(document).ready(function () {
 
         porcentaje = porcentaje.toString().replace(",", ".");
         $("#porcentajeInput").val(porcentaje);
-        // $("#porcentajeInput").prop("readonly", false);
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", false);
