@@ -25,26 +25,24 @@ class ConvenioController extends Controller
 
     public function index()
     {
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
+            $codigo = session('codigo_oficina');
+            $numeroCliente = "MXN-" . $codigo . "-";
 
-        echo env('GOOGLE_MAPS_KEY');
-        // if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
-        //     $codigo = session('codigo_oficina');
-        //     $numeroCliente = "MXN-" . $codigo . "-";
+            $ps = Ps::select()->orderBy("apellido_p")->where('codigoPS', 'like', "$codigo%")->get();
+            $clientes = Cliente::select()->orderBy("apellido_p")->where("codigoCliente", "like", "%$numeroCliente%")->get();
+            $bancos = Banco::all();
 
-        //     $ps = Ps::select()->orderBy("apellido_p")->where('codigoPS', 'like', "$codigo%")->get();
-        //     $clientes = Cliente::select()->orderBy("apellido_p")->where("codigoCliente", "like", "%$numeroCliente%")->get();
-        //     $bancos = Banco::all();
+            $data = array(
+                "lista_ps" => $ps,
+                "clientes" => $clientes,
+                "bancos" => $bancos,
+            );
 
-        //     $data = array(
-        //         "lista_ps" => $ps,
-        //         "clientes" => $clientes,
-        //         "bancos" => $bancos,
-        //     );
-
-        //     return response()->view('convenio.show', $data, 200);
-        // }else{
-        //     return redirect()->to('/admin/dashboard');
-        // }   
+            return response()->view('convenio.show', $data, 200);
+        }else{
+            return redirect()->to('/admin/dashboard');
+        }
     }
 
     public function getConvenio()
