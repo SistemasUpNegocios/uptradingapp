@@ -306,32 +306,7 @@
                                             <option value="Refrendado">Refrendado</option>
                                             <option value="Cancelado">Cancelado</option>
                                         </select>
-                                        <label for="statusInput">Status del contrato</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row d-none" id="contMemoCan">
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
-                                            id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
-                                        <label for="memoCanInput">Memo de cancelacion</label>
-                                    </div>
-                                </div>
-                            </div>
-                        @elseif(auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <select name="status" class="form-control" id="statusInput" required>
-                                            <option value="" disabled>Selecciona...</option>
-                                            <option value="Pendiente de activación">Pendiente de activación</option>
-                                            <option value="Activado" disabled>Activado</option>
-                                            <option value="Finiquitado">Finiquitado</option>
-                                            <option value="Refrendado">Refrendado</option>
-                                            <option value="Cancelado">Cancelado</option>
-                                        </select>
-                                        <label for="statusInput">Status del contrato</label>
+                                        <label for="statusInput">Estatus del contrato</label>
                                     </div>
                                 </div>
                             </div>
@@ -350,13 +325,22 @@
                                     <div class="form-floating mb-3">
                                         <select name="status" class="form-control" id="statusInput" required>
                                             <option value="" disabled>Selecciona...</option>
-                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Pendiente de activación">Pendiente de activación</option>
                                             <option value="Activado" disabled>Activado</option>
-                                            <option value="Finiquitado" disabled>Finiquitado</option>
-                                            <option value="Refrendado" disabled>Refrendado</option>
-                                            <option value="Cancelado" disabled>Cancelado</option>
+                                            <option value="Finiquitado">Finiquitado</option>
+                                            <option value="Refrendado">Refrendado</option>
+                                            <option value="Cancelado">Cancelado</option>
                                         </select>
-                                        <label for="statusInput">Status del contrato</label>
+                                        <label for="statusInput">Estatus del contrato</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-none" id="contMemoCan">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
+                                            id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
+                                        <label for="memoCanInput">Memo de cancelacion</label>
                                     </div>
                                 </div>
                             </div>

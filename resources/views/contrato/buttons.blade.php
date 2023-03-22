@@ -49,7 +49,7 @@
             <a href="" data-id="{{ $id }}" data-contrato="{{ $contrato }}" type="button" title="Ver contrato escaneado" class="ms-1 btn btn-warning btn-sm btn-icon scanner"> <i class="bi bi-file-earmark-spreadsheet"></i></a>
         @endif
 
-        @if (auth()->user()->is_root)    
+        @if (auth()->user()->is_root)
             <input id="contratoStatusInputs" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-status="{{ $status }}" data-celular="{{ $celular }}" data-contrato="{{ $contrato }}" @if ($status=="Activado" ) {{"checked"}} @endif>
             <label class="form-check-label ms-1" for="contratoStatusInput">@if ($status == "Activado") Desactivar contrato @else Activar contrato @endif</label>
         @endif

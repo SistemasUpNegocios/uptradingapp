@@ -137,9 +137,9 @@
                 <hr class="contenedor_firma__hr">
                 <div class=" text-center">
                     <p class="contrato_parrafo_firmas">
-                        <span class="contrato_parrafo_firmas_nombre">Up Trading Experts</span>
+                        <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->psnombre }}</span>
                         <br>
-                        <span>Representante Legal</span>
+                        <span>PS</span>
                     </p>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                     <p class="contrato_parrafo_firmas">
                         <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->clientenombre }}</span>
                         <br>
-                        <span>Cliente</span>
+                        <span>CLIENTE</span>
                     </p>
                 </div>
             </div>
@@ -157,9 +157,12 @@
                 <hr class="contenedor_firma__hr">
                 <div class=" text-center">
                     <p class="contrato_parrafo_firmas">
-                        <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->psnombre }}</span>
+                        <span>UP TRADING EXPERTS</span>
                         <br>
-                        <span>PS</span>
+                        {{-- <span>REPRESENTANTE LEGAL</span> --}}
+                        <span>GERENTE GENERAL</span>
+                        <br>
+                        <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
                     </p>
                 </div>
             </div>

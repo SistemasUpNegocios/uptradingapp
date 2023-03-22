@@ -196,7 +196,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                            @if (auth()->user()->is_root)
                                 <div class="col-md-6 col-12">
                                     <div class="form-floating mb-3">
                                         <select name="status" class="form-control" id="statusInput" required>
@@ -221,7 +221,7 @@
                                             <option value="Refrendado" disabled>Refrendado</option>
                                             <option value="Cancelado" disabled>Cancelado</option>
                                         </select>
-                                        <label for="statusInput">Status del convenio</label>
+                                        <label for="statusInput">Estatus del convenio</label>
                                     </div>
                                 </div>
                             @endif

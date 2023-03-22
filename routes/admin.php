@@ -127,6 +127,7 @@ Route::post('/admin/deleteConvenio', [App\Http\Controllers\ConvenioController::c
 Route::get('/admin/validateClaveConvenio', [App\Http\Controllers\ConvenioController::class, 'validateClave']);
 Route::get('/admin/editStatusConvenio', [App\Http\Controllers\ConvenioController::class, 'editStatus']);
 Route::get('/admin/getFolioConvenio', [App\Http\Controllers\ConvenioController::class, 'getFolioConvenio']);
+Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioController::class, 'enviarTelegram']);
 
 // Rutas para gestión de modelo
 Route::get('/admin/modelo', [App\Http\Controllers\ModeloController::class, 'index'])->name('modelo');
