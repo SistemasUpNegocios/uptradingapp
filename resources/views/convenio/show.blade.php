@@ -187,7 +187,11 @@
                             </div>
                         </div>
                         <div class="row">
+<<<<<<< HEAD
                             <div class="col-md-16 col-12">
+=======
+                            <div class="col-md-12 col-12">
+>>>>>>> 155284705f5f374310ebaee2fa944728455efb74
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control"
                                         placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput"

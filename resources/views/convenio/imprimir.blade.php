@@ -149,7 +149,7 @@
                     <p class="contrato_parrafo_firmas">
                         <span class="contrato_parrafo_firmas_nombre">{{ $convenio[0]->clientenombre }}</span>
                         <br>
-                        <span>Cliente</span>
+                        <span>CLIENTE</span>
                     </p>
                 </div>
             </div>
@@ -159,6 +159,10 @@
                     <p class="contrato_parrafo_firmas">
                         <span>UP TRADING EXPERTS</span>
                         <br>
+<<<<<<< HEAD
+=======
+                        {{-- <span>REPRESENTANTE LEGAL</span> --}}
+>>>>>>> 155284705f5f374310ebaee2fa944728455efb74
                         <span>GERENTE GENERAL</span>
                         <br>
                         <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
