@@ -146,6 +146,20 @@ $(document).ready(function () {
                     return formatearCantidad.format(0);
                 },
             },
+            //Wise
+            {
+                data: function (data) {
+                    let tipo_pago = data.tipo_pago.split(",");
+                    let monto_pago = data.monto_pago.split(",");
+
+                    for (let i = 0; i < tipo_pago.length; i++) {
+                        if (tipo_pago[i] == "wise") {
+                            return formatearCantidad.format(monto_pago[i]);
+                        }
+                    }
+                    return formatearCantidad.format(0);
+                },
+            },
         ],
         language: {
             processing: "Procesando...",

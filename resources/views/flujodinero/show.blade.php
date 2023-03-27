@@ -79,6 +79,7 @@
                                         <th data-priority="0" scope="col">Efectivo</th>
                                         <th data-priority="0" scope="col">CI BANK</th>
                                         <th data-priority="0" scope="col">HSBC</th>
+                                        <th data-priority="0" scope="col">WISE</th>
                                     </tr>
                                 </thead>
                                 <tbody id="flujoDineroBody" style="vertical-align: middle;">

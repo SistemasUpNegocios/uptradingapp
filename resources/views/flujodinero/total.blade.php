@@ -1,4 +1,7 @@
-<div class="row">
+<div class="row justify-content-center">
+    <div class="col-md-4 col-6 text-center">
+        <p><b>Wise:</b> ${{ $total_wise }}</p>
+    </div>
     <div class="col-md-4 col-6 text-center">
         <p><b>Efectivo:</b> ${{ $total_efectivo }}</p>
     </div>
