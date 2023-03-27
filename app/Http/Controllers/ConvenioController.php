@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Convenio;
 use App\Models\Log;
 use App\Models\Oficina;
+use App\Models\Notificacion;
 use App\Models\PagoPSConvenio;
 use App\Models\Ps;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -66,7 +67,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("convenio.ps_id", "like", $psid)
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
@@ -79,7 +80,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -93,7 +94,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -124,7 +125,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("convenio.ps_id", "like", $psid)
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
@@ -138,7 +139,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -153,7 +154,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -185,7 +186,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("convenio.ps_id", "like", $psid)
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
@@ -199,7 +200,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -214,7 +215,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -245,6 +246,7 @@ class ConvenioController extends Controller
 
             $convenio = new Convenio;
 
+            $convenio->firma = $request->firma;
             $convenio->monto = $request->input('monto');
             $convenio->monto_letra = $request->input('monto_letra');
             $convenio->fecha_inicio = $request->input('fecha_inicio');
@@ -374,6 +376,7 @@ class ConvenioController extends Controller
 
             $convenio = Convenio::find($request->id);
 
+            $convenio->firma = $request->firma;
             $convenio->monto = $request->input("monto");
             $convenio->monto_letra = $request->input("monto_letra");
             $convenio->fecha_inicio = $request->input('fecha_inicio');
@@ -695,7 +698,7 @@ class ConvenioController extends Controller
             ->join('ps', 'ps.id', '=', 'convenio.ps_id')
             ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
             ->join('banco', 'banco.id', '=', 'convenio.banco_id')
-            ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.memo_status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, banco.nombre AS banconombre"))
+            ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.memo_status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, banco.nombre AS banconombre"))
             ->where('convenio.id', '=', $request->id)
             ->get();
 

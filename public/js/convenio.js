@@ -1129,6 +1129,8 @@ $(document).ready(function () {
         $("#idInput").val("");
 
         $("#clienteIdInput").prop("disabled", false);
+        $("#gerenteInput").prop("disabled", false);
+        $("#representanteInput").prop("disabled", false);
         $("#psIdInput").prop("disabled", false);
         $("#bancoIdInput").prop("disabled", false);
         $("#fechaInicioInput").prop("readonly", false);
@@ -1170,6 +1172,7 @@ $(document).ready(function () {
         var cliente_id = $(this).data("cliente_id");
         var banco_id = $(this).data("banco_id");
         var psnombre = $(this).data("psnombre");
+        var firma = $(this).data("firma");
 
         $("#clienteIdInput").next().children().first().empty();
         $("#clienteIdInput").next().children().first().text(nombrecliente);
@@ -1195,6 +1198,17 @@ $(document).ready(function () {
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
+
+        console.log(firma);
+        if (firma == "MARIA EUGENIA RINCON ACEVAL") {
+            $("#gerenteInput").prop("checked", true);
+            $("#representanteInput").prop("checked", false);
+        } else {
+            $("#representanteInput").prop("checked", true);
+            $("#gerenteInput").prop("checked", false);
+        }
+        $("#gerenteInput").prop("disabled", true);
+        $("#representanteInput").prop("disabled", true);
 
         monto = monto.toString().replace(",", ".");
         $("#montoInput").val(monto);
@@ -1268,6 +1282,7 @@ $(document).ready(function () {
         var cliente_id = $(this).data("cliente_id");
         var psnombre = $(this).data("psnombre");
         var banco_id = $(this).data("banco_id");
+        var firma = $(this).data("firma");
 
         if (cmensual.toString().charAt(1) == ",") {
             cmensual = cmensual.replace(",", ".");
@@ -1301,6 +1316,16 @@ $(document).ready(function () {
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
+
+        if (firma == "MARIA EUGENIA RINCON ACEVAL") {
+            $("#gerenteInput").prop("checked", true);
+            $("#representanteInput").prop("checked", false);
+        } else {
+            $("#representanteInput").prop("checked", true);
+            $("#gerenteInput").prop("checked", false);
+        }
+        $("#gerenteInput").prop("disabled", false);
+        $("#representanteInput").prop("disabled", false);
 
         monto = monto.toString().replace(",", ".");
         $("#montoInput").val(monto);

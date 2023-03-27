@@ -166,9 +166,13 @@
                     <p class="contrato_parrafo_firmas">
                         <span>UP TRADING EXPERTS</span>
                         <br>
-                        <span>GERENTE GENERAL</span>
-                        <br>
-                        <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
+                        @if ($convenio[0]->firma == "MARIA EUGENIA RINCON ACEVAL")
+                            <span>GERENTE GENERAL</span>
+                            <br>
+                            <span class="contrato_parrafo_firmas_nombre">{{$convenio[0]->firma}}</span>
+                        @else
+                            <span>REPRESENTANTE LEGAL</span>
+                        @endif
                     </p>
                 </div>
             </div>
