@@ -20,12 +20,31 @@
         </nav>
     </div>
 
+    <div id="contenedor_filtros" class="contenedor_filtros">
+        <div class="card info-card machines-card">
+            <div class="card-body pb-0">
+                <h5 class="card-title mb-0 text-center">Convenios</h5>
+                <div class="col-12 mb-2 px-2">
+                    <a class="btn btn-primary mb-2" id="todos">Todos</a>
+                    <a class="btn btn-outline-primary mb-2" id="conveniosActivados">Activados</a>
+                    <a class="btn btn-outline-primary mb-2" id="conveniosPendientes">Pendientes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="card-body mt-3">
+                        <div class="alert alert-primary d-flex align-items-center l-bg-primary mt-2" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                <use xlink:href="#info-fill"></use>
+                            </svg>
+                            <div id="titulo_filtro">Mostrando todos los convenios</div>
+                        </div>
+
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo convenio</a>
                         @endif
@@ -187,11 +206,7 @@
                             </div>
                         </div>
                         <div class="row">
-<<<<<<< HEAD
-                            <div class="col-md-16 col-12">
-=======
                             <div class="col-md-12 col-12">
->>>>>>> 155284705f5f374310ebaee2fa944728455efb74
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control"
                                         placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput"
@@ -276,6 +291,10 @@
             </div>
         </div>
     </div>
+
+    <a href="#" id="filtros" title="Filtros de contratos" class="d-flex align-items-center justify-content-center">
+        <i class="bi bi-funnel-fill text-white"></i>
+    </a>
 @endsection
 
 @section('preloader')

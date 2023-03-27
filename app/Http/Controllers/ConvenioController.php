@@ -103,6 +103,128 @@ class ConvenioController extends Controller
         return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
     }
 
+    public function getConvenioActivado()
+    {
+        
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
+            $psid = $ps_cons->id;
+        }
+
+        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+        if (strlen($cliente_con) > 0) {
+            $clienteid = $cliente_con->id;
+
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where(function ($query) use ($psid, $clienteid) {
+                    $query->where("convenio.ps_id", "like", $psid)
+                    ->orWhere("convenio.cliente_id", "like", $clienteid);
+                })
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Activado')
+                ->get();
+        }else{
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where("convenio.ps_id", "like", $psid)
+                ->where("convenio.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Activado')
+                ->get();
+        }
+
+        if (auth()->user()->is_cliente) {
+            $clienteid = $cliente_con->id;
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where("convenio.ps_id", "like", $psid)
+                ->where("convenio.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Activado')
+                ->get();
+        }
+
+        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
+    }
+
+    public function getConvenioPendiente()
+    {
+        
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+
+        if (auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
+            $psid = $ps_cons->id;
+        }
+
+        $cliente_con = Cliente::select()->where("correo_institucional", auth()->user()->correo)->first();
+        if (strlen($cliente_con) > 0) {
+            $clienteid = $cliente_con->id;
+
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where(function ($query) use ($psid, $clienteid) {
+                    $query->where("convenio.ps_id", "like", $psid)
+                    ->orWhere("convenio.cliente_id", "like", $clienteid);
+                })
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Pendiente de activación')
+                ->get();
+        }else{
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where("convenio.ps_id", "like", $psid)
+                ->where("convenio.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Pendiente de activación')
+                ->get();
+        }
+
+        if (auth()->user()->is_cliente) {
+            $clienteid = $cliente_con->id;
+            $convenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('banco', 'banco.id', '=', 'convenio.banco_id')
+                ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->where("convenio.ps_id", "like", $psid)
+                ->where("convenio.cliente_id", "like", $clienteid)
+                ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where('convenio.status', 'Pendiente de activación')
+                ->get();
+        }
+
+        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
+    }
+
     public function addConvenio(Request $request)
     {
         if ($request->ajax()) {
@@ -515,8 +637,43 @@ class ConvenioController extends Controller
     public function editStatus(Request $request)
     {
         $convenio = Convenio::find($request->id);
+        $id_user = auth()->user()->id;
+
+        if($request->status == "Activado"){
+            $convenio->memo_status = "Convenio activado por id:1";
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 1;
+            $notificacion->save();
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 234;
+            $notificacion->save();
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 235;
+            $notificacion->save();
+
+        }elseif($request->status == "Pendiente de activación"){
+            $convenio->memo_status = "Convenio desactivado por id:$id_user";
+        }elseif($request->status == "Finiquitado"){
+            $convenio->memo_status = "Convenio finiquitado por id:$id_user";
+        }elseif($request->status == "Refrendado"){
+            $convenio->memo_status = "Convenio refrendado por id:$id_user";
+        }
+
         $convenio->status = $request->status;
         $convenio->update();
+
         return response($convenio);
     }
 
@@ -538,16 +695,33 @@ class ConvenioController extends Controller
             ->join('ps', 'ps.id', '=', 'convenio.ps_id')
             ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
             ->join('banco', 'banco.id', '=', 'convenio.banco_id')
-            ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, banco.nombre AS banconombre"))
+            ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.memo_status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, banco.nombre AS banconombre"))
             ->where('convenio.id', '=', $request->id)
             ->get();
 
-        $pdf = PDF::loadView('convenio.imprimir', ['convenio' => $convenio, 'convenio2' => $convenio]);
+        if(!empty($convenio[0]->memo_status)){
+            $memo = explode(":", $convenio[0]->memo_status);
+            $holograma_fecha = strtotime($convenio[0]->fecha_inicio);
+
+            if (isset($memo[1])) {
+                $holograma2 = $holograma_fecha."U".$convenio[0]->monto."P".$memo[1];
+            }else{
+                $holograma2 = "";
+            }
+
+        }else{
+            $holograma2 = "";
+        }
+
+        $pdf = PDF::loadView('convenio.imprimir', ['convenio' => $convenio, 'convenio2' => $convenio, 'holograma2' => $holograma2]);
 
         $fecha_hoy = Carbon::now();
         $nombreDescarga = $convenio[0]->folio.'_'.$convenio[0]->clientenombre.'_'.$fecha_hoy->format('d-m-Y').'.pdf';
 
-        return $pdf->stream($nombreDescarga);
+        $visualizacion = $pdf->stream($nombreDescarga);
+        Storage::disk('convenios')->put($nombreDescarga, $visualizacion);
+
+        return $visualizacion;
     }
 
     public function getFolioConvenio(Request $request)

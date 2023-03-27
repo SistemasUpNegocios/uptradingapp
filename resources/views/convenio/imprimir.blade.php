@@ -10,6 +10,9 @@
         .page-break {
             page-break-after: always;
         }
+        .contrato_parrafo {
+            line-height: 10px !important;
+        }
     </style>
 @endsection
 
@@ -21,12 +24,12 @@
     <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">
 
     <div class="contenedor_imprimir_contrato" style="margin-top: -1.5rem">
-        <p class="mb-3 contrato_parrafo" style="font-weight: bold; text-align: right">FOLIO: {{ $convenio[0]->folio }}</p>
+        <p class="mb-3 contrato_parrafo" style="font-weight: bold; text-align: right; line-height: 10px !important;">FOLIO: {{ $convenio[0]->folio }}</p>
 
         <p class="mb-0 text-center" style="font-weight: bold; text-transform: uppercase; margin-top: -1rem; color: #000;">
             Convenio</p>
 
-        <p class="mb-0 contrato_parrafo">
+        <p class="mb-0 contrato_parrafo" style="line-height: 10px !important;">
             El presente convenio se suscribe entre "<span style="font-weight: bold">el Introducer Broker</span>", esto es:
             <span style="text-transform: uppercase; font-weight: bold">Up Trading Experts </span> (en adelante "<span style="font-weight: bold">el IB</span>") y por otra parte <span
                 style="text-transform: uppercase; font-weight: bold">{{ $convenio[0]->clientenombre }}</span> en lo sucesivo
@@ -35,7 +38,7 @@
 
         <p class="mb-0 text-center" style="font-weight: bold; text-transform: uppercase; color: #000;">Cláusulas</p>
 
-        <p class="mb-0 contrato_parrafo">
+        <p class="mb-0 contrato_parrafo" style="line-height: 10px !important;">
             Por lo tanto, las partes celebran el siguiente convenio:
         </p>
 
@@ -46,7 +49,7 @@
 
         <ol type="I">
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase; line-height: 10px !important;">El
                         cliente</span>" se compromete a respetar
                     los plazos que acordarán para realizar análisis de sus operaciones como la revisión del rendimiento,
                     mismo que será siempre cada 3 (tres) meses a partir de la fecha en que se realice el depósito del
@@ -57,7 +60,7 @@
                         style="text-transform: uppercase; font-weight: bold;">{{ $convenio[0]->banconombre }}</span>.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El IB</span>"
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El IB</span>"
                     se compromete a realizar ante el cliente presente en oficinas, un análisis de sus operaciones, así como
                     realizar una revisión de saldo de su cuenta MAM., para que en ese momento de la revisión de saldos se
                     determine, en su caso, la autorización consensuada por ambas partes, del retiro total o parcial de
@@ -65,14 +68,14 @@
                     operación.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" se compromete a que durante el periodo contratado de 12 meses de operación de su
                     cuenta MAM, en ningún momento realizará retiros de su patrimonio inicial con el que realizó la apertura
                     de su cuenta, en caso de haber aumento a su patrimonio, dicha obligación se ampliará hasta por el monto
                     total de sus aportaciones a patrimonio.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" cuando se llegue el tiempo de la revisión trimestral, acudirá personalmente y con
                     previa cita acordada telefónicamente y que dicha cita haya sido confirmada a través del correo
                     electrónico por parte de "<span style="font-weight: bold; text-transform: uppercase;">El IB</span>". En
@@ -83,7 +86,7 @@
                     telefónicamente como por correo electrónico.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" si así lo decide y opta por realizar un retiro parcial o total de su rendimiento,
                     este se realizará con una transferencia a la tarjeta emitida por el banco <span
                         style="text-transform: uppercase; font-weight: bold;">{{ $convenio[0]->banconombre }}</span>, o a
@@ -91,7 +94,7 @@
                     dispersión que el cliente decida y que sea factible de realizar.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>" en todo momento tiene el derecho de retirar sus rendimientos, en cualquiera de sus 3
                     (tres) revisiones trimestrales, a las que tiene derecho durante la vigencia de su contrato de operación
                     de cuenta MAM. Lo anterior quiere decir, que sin importar en cual revisión trimestral, "<span
@@ -100,7 +103,7 @@
                     contrato del cual se desprende este convenio.</p>
             </li>
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">"<span style="font-weight: bold; text-transform: uppercase;">El
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">"<span style="font-weight: bold; text-transform: uppercase;">El
                         cliente</span>", dado el caso de querer incrementar el monto de su inversión, para su cuenta MAM,
                     deberá en todo momento dar aviso, tanto por correo electrónico, como por llamada telefónica, esto sin
                     afectar el tiempo de vencimiento del plazo forzoso inicial.</p>
@@ -121,14 +124,18 @@
                 }
             @endphp
             <li style="font-size: 9px; margin-bottom: -0.7rem">
-                <p class="mb-3 contrato_parrafo">El presente convenio lo firman las partes aquí mencionadas por la cantidad
-                    de $@convert($convenio[0]->monto) <span style="text-transform: uppercase;">({{ $convenio[0]->monto_letra }}
-                        {{ $centavos }}/100)</span> al día <span
-                        style="text-decoration: underline">{{ \Carbon\Carbon::parse(strtotime($convenio[0]->fecha_inicio))->formatLocalized('%d
-                                            de %B de %Y') }}</span>,
-                    quedando de acuerdo, después de haber leído cada uno de los puntos o
-                    cláusulas descritas, no quedando ningún punto por aclarar o entender. Siendo así que ambas partes se
-                    sujetan a lo dispuesto y conveniado.</p>
+                <p class="mb-3 contrato_parrafo" style="line-height: 10px !important;">
+                    El presente convenio lo firman las partes aquí mencionadas por la cantidad
+                    de $@convert($convenio[0]->monto) 
+                    <span style="text-transform: uppercase;">({{ $convenio[0]->monto_letra }} {{ $centavos }}/100)</span> 
+                    al día 
+                    <span style="text-decoration: underline">{{ \Carbon\Carbon::parse(strtotime($convenio[0]->fecha_inicio))->formatLocalized('%d de %B de %Y') }}</span>,
+                    quedando de acuerdo, después de haber leído cada uno de los puntos o cláusulas descritas, no quedando ningún punto por aclarar o entender. Siendo así que ambas partes se sujetan a lo dispuesto y conveniado.
+                    <br>
+                    @if (!empty($holograma2))
+                        <span>Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
+                    @endif
+                </p>
             </li>
         </ol>
 
@@ -159,10 +166,6 @@
                     <p class="contrato_parrafo_firmas">
                         <span>UP TRADING EXPERTS</span>
                         <br>
-<<<<<<< HEAD
-=======
-                        {{-- <span>REPRESENTANTE LEGAL</span> --}}
->>>>>>> 155284705f5f374310ebaee2fa944728455efb74
                         <span>GERENTE GENERAL</span>
                         <br>
                         <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
