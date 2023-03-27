@@ -117,6 +117,8 @@ Route::get('/admin/editStatusTerminado', [App\Http\Controllers\ContratoTerminado
 
 Route::get('/admin/contratovencer', [App\Http\Controllers\ContratoVencerController::class, 'index'])->name('contratovencer');
 Route::get('/admin/showContratoVencer', [App\Http\Controllers\ContratoVencerController::class, 'getContratoVencer']);
+Route::post('/admin/contrato/editnota', [App\Http\Controllers\ContratoVencerController::class, 'editNota']);
+Route::get('/admin/contrato/autorizarnota', [App\Http\Controllers\ContratoVencerController::class, 'autorizarNota']);
 
 // Rutas para gestión de convenio MAM
 Route::get('/admin/convenio', [App\Http\Controllers\ConvenioController::class, 'index'])->name('conveniomam');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Ps;
+use App\Models\Contrato;
+use App\Models\Log;
 use App\Models\TipoContrato;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,7 +55,7 @@ class ContratoVencerController extends Controller
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-            ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.pendiente_id AS pendienteid, contrato.tipo_pago, contrato.monto_pago, contrato.comprobante_pago"))
+            ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.pendiente_id AS pendienteid, contrato.tipo_pago, contrato.monto_pago, contrato.comprobante_pago, contrato.nota_contrato, contrato.autorizacion_nota"))
             ->where("contrato.status", "Activado")
             ->where("fecha_renovacion", "<=", Carbon::now()->addDays(15)->format('Y-m-d'))
             ->where("fecha_renovacion", ">=", Carbon::now()->format('Y-m-d'))
@@ -62,5 +64,23 @@ class ContratoVencerController extends Controller
        
 
         return datatables()->of($contrato)->addColumn('btn', 'contratosvencer.buttons')->rawColumns(['btn'])->toJson();
+    }
+
+    public function editNota(Request $request)
+    {
+        $contrato = Contrato::find($request->id);
+        $contrato->nota_contrato = $request->nota_contrato;
+        $contrato->save();
+
+        return response($contrato);
+    }
+    
+    public function autorizarNota(Request $request)
+    {
+        $contrato = Contrato::find($request->id);
+        $contrato->autorizacion_nota = $request->autorizacion;
+        $contrato->save();
+
+        return response($contrato);
     }
 }

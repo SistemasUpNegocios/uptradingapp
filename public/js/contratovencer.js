@@ -236,7 +236,6 @@ $(document).ready(function () {
         $("#contratoForm")[0].reset();
 
         $("#alertMessage").text("");
-        acc = "view";
         e.preventDefault();
 
         var id = $(this).data("id");
@@ -800,6 +799,121 @@ $(document).ready(function () {
 
             fecha = fecha.split("/").reverse().join("-");
         }
+    });
+
+    $(document).on("click", ".edit", function (e) {
+        $("#contratoFormNota")[0].reset();
+        $("#alertMessage").text("");
+        e.preventDefault();
+
+        var id = $(this).data("id");
+        var contrato = $(this).data("contrato");
+        var nota = $(this).data("notacontrato");
+        var cliente = $(this).data("cliente");
+
+        $("#idInputNota").val(id);
+        $("#notaInput").val(nota);
+
+        $("#modalTitleNota").text(
+            `Agregar nota para el contrato: ${contrato} de ${cliente}`
+        );
+        $("#formModalNota").modal("show");
+
+        $("#btnCancelNota").text("Cerrar vista previa");
+        $("#btnSubmitNota").text("Agregar nota");
+    });
+
+    $(document).on("change", ".autorizado", function () {
+        var checked = $(this).is(":checked");
+        var thiss = $(this);
+
+        if (checked) {
+            $(this).val("SI");
+        } else {
+            $(this).val("NO");
+        }
+
+        var id = $(this).data("id");
+        var autorizacion = $(this).val();
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/contrato/autorizarnota",
+            data: {
+                id: id,
+                autorizacion: autorizacion,
+            },
+            success: function () {
+                if (autorizacion == "SI") {
+                    Toast.fire({
+                        icon: "success",
+                        title: "Autorización emitida",
+                    });
+                    $(thiss).prop("checked", true);
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Autorización revocada",
+                    });
+                    $(thiss).prop("checked", false);
+                }
+            },
+            error: function () {
+                Toast.fire({
+                    icon: "error",
+                    title: "Error al emitir autorización",
+                });
+                $(thiss).prop("checked", false);
+            },
+        });
+    });
+
+    $("#contratoFormNota").on("submit", function (e) {
+        e.preventDefault();
+        $("#alertMessage").text("");
+        $.ajax({
+            type: "POST",
+            url: "/admin/contrato/editnota",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function () {
+                console.log("success");
+                $("#formModalNota").modal("hide");
+                $("#contratoFormNota")[0].reset();
+                table.ajax.reload(null, false);
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Nota agregada</h1>',
+                    html: '<p style="font-family: Poppins">La nota ha sido agregada correctamente</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function (err, exception) {
+                var validacion = err.responseJSON.errors;
+                for (let clave in validacion) {
+                    $("#alertMessage").append(
+                        `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
+                    );
+                }
+            },
+        });
     });
 
     const comprobantePago = (thiss) => {
