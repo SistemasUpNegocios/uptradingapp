@@ -4,7 +4,6 @@ $(document).ready(function () {
     };
 
     dselect(document.querySelector("#psInput"), config);
-    dselect(document.querySelector("#psIdInput"), config);
 
     $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
     $(".dselect-no-results").text("No se encontraron resultados...");

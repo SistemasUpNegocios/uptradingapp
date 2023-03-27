@@ -31,7 +31,7 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if(auth()->user()->is_root || auth()->user()->is_root || auth()->user()->is_procesos)
+                        @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                             <div class="col-12">
                                 <div class="alert alert-primary d-flex align-items-center" role="alert">
                                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
@@ -647,5 +647,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+        <script src="{{ asset('js/formulariofiltro.js') }}"></script>
+    @endif
     <script src="{{ asset('js/formulario.js') }}"></script>
 @endsection
