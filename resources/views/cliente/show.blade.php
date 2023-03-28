@@ -322,6 +322,45 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="formModalWhats" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Mandar mensaje</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" style="text-transform: none !important;" placeholder="Ingresa el nombre" id="nombreInputWhats" readonly>
+                                <label for="nombreInputWhats">Cliente</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" style="text-transform: none !important;" placeholder="Ingresa el nombre" id="numeroInputWhats" readonly>
+                                <label for="numeroInputWhats">Número</label>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <textarea type="text" class="form-control" placeholder="Ingresa el mensaje" id="mensajeInputWhats" title="Ingresa el mensaje" style="height: 150px; text-transform: none !important;" required></textarea>
+                                <label for="mensajeInputWhats">Mensaje</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn principal-button" id="enviarWhats">Enviar WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('preloader')

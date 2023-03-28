@@ -729,6 +729,41 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".whats", function (e) {
+        e.preventDefault();
+
+        let nombre = $(this).data("nombre");
+        let apellidop = $(this).data("apellidop");
+        let apellidom = $(this).data("apellidom");
+        let numero = $(this).data("numero");
+        let mensaje = `Buen día ${nombre} ${apellidop} ${apellidom}, .\n%0AAtte: Up Trading Experts.`;
+
+        $("#nombreInputWhats").val(`${nombre} ${apellidop} ${apellidom}`);
+        $("#numeroInputWhats").val(numero);
+        $("#mensajeInputWhats").val(mensaje);
+
+        $("#formModalWhats").modal("show");
+    });
+
+    $(document).on("click", "#enviarWhats", function () {
+        let cliente = $("#nombreInputWhats").val();
+        let numero = $("#numeroInputWhats").val();
+        let mensaje = $("#mensajeInputWhats").val();
+
+        window.open(
+            `https://web.whatsapp.com/send?phone=${numero}&text=${mensaje}`,
+            "_blank"
+        );
+        Swal.fire({
+            icon: "success",
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">WhatsApp envíado</h1>',
+            html: `<p style="font-family: Poppins">Se ha enviado un mensaje a <b>${cliente}</b>, con número de teléfono <b>${numero}</b>.</p>`,
+            confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
+            confirmButtonColor: "#01bbcc",
+        });
+        $("#formModalWhats").modal("hide");
+    });
+
     $(document).on("click", ".print", async function (e) {
         e.preventDefault();
 

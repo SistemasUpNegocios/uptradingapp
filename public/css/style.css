@@ -1760,7 +1760,9 @@ h6 {
 #utilities td,
 #utilities th,
 #locations td,
-#locations th {
+#locations th,
+#cliente td,
+#cliente th {
     width: auto !important;
     white-space: normal !important;
     text-overflow: ellipsis !important;
@@ -1773,6 +1775,7 @@ h6 {
 .delete,
 .print,
 .download,
+.whats,
 .scanner {
     font-size: 13px;
     padding: 3px 5px;
