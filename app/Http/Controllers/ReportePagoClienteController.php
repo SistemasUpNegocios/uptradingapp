@@ -9,6 +9,7 @@ use App\Models\Oficina;
 use App\Models\PagoCliente;
 use App\Models\TipoCambio;
 use App\Models\Log;
+use App\Models\Pago;
 use App\Exports\PagosClienteExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -330,5 +331,52 @@ class ReportePagoClienteController extends Controller
         $pago_cliente->update();
 
         return response($pago_cliente);
+    }
+
+    public function guardarPago(Request $request)
+    {
+        $pago = new Pago;
+        $pago->id_contrato = $request->contrato_id;
+        $pago->memo = $request->memo;
+        $pago->dolar = $request->dolar;
+        if (gettype($request->tipo_pago) != 'NULL'){
+            $tipos_pagos = "";
+            foreach ($request->tipo_pago as $tipo_pago) {
+                if($tipo_pago != ""){
+                    $tipos_pagos .= $tipo_pago.',';
+                }
+            }
+            $pago->tipo_pago = $tipos_pagos;
+        }
+        if(count($request->monto) > 0 ){
+            $montos = "";
+            foreach ($request->monto as $monto) {
+                if($monto > 0){
+                    $montos .= $monto.',';
+                }
+            }
+            $pago->monto = $montos;
+        }
+        $pago->save();
+
+        $pago_cliente = PagoCliente::find($request->id);
+        $pago_cliente->fecha_pagado = Carbon::now()->format('Y-m-d');
+        $pago_cliente->status = "Pagado";
+        $pago_cliente->update();
+
+        $tipo_cambio = new TipoCambio;
+        $tipo_cambio->valor = number_format($request->dolar, 2);
+        $tipo_cambio->contrato_id = $request->contrato_id;
+        $tipo_cambio->memo = "Pago de rendimiento ($request->pago)";
+        $tipo_cambio->save();
+
+        $log = new Log;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Pago de cliente";
+        $log->id_tabla = $request->id;
+        $log->bitacora_id = session('bitacora_id');
+        $log->save();
+
+        return response($pago);
     }
 }

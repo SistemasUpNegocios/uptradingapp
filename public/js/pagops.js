@@ -1099,7 +1099,7 @@ $(document).ready(function () {
                             data: "serie",
                         },
                         {
-                            data: "fecha_pago",
+                            data: "fecha_limite",
                             render: function (data) {
                                 return formatearFecha(data);
                             },

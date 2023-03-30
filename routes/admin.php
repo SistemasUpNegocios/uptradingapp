@@ -73,6 +73,7 @@ Route::get('/admin/imprimirReporteCliente', [App\Http\Controllers\ReportePagoCli
 Route::get('/admin/exportarResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'export']);
 Route::get('/admin/showClavePagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getClave']);
 Route::get('/admin/editStatusPagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'editStatus']);
+Route::post('/admin/guardarPago', [App\Http\Controllers\ReportePagoClienteController::class, 'guardarPago']);
 
 // Rutas para gestión de menú para reporte de pagos a cliente (rendimiento compuesto y mensual) por oficina
 Route::get('/admin/reportePagosClienteOficina', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'index'])->name('reportepagoclienteoficina');

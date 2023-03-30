@@ -8,6 +8,7 @@ $(document).ready(function () {
     var url_filtro = "/admin/getResumenPagoClienteDiaMensual";
     var filtro = "mensual";
     let dolar = 0;
+    var table = "";
 
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
@@ -67,7 +68,7 @@ $(document).ready(function () {
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
-        var table = $("#resumenPagoCliente").DataTable({
+        table = $("#resumenPagoCliente").DataTable({
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ pagos",
@@ -867,5 +868,110 @@ $(document).ready(function () {
         );
 
         filtros();
+    });
+
+    $(document).on("click", ".nota", function (e) {
+        $("#notaForm")[0].reset();
+        $("#formModalNota").modal("show");
+
+        $("#montoEfectivoCont").hide();
+        $("#montoTransferenciaCont").hide();
+        $("#montoTransSwissCont").hide();
+
+        let pagoid = $(this).data("pagoid");
+        let contratoid = $(this).data("contratoid");
+        let pago = $(this).data("pago");
+        let dolar = $("#dolarInput").val();
+
+        let monto = $(this).data("monto");
+        let tipopago = $(this).data("tipopago");
+
+        let checkbox = [
+            "#efectivoInput",
+            "#transferenciaInput",
+            "#transferenciaSwissInput",
+        ];
+
+        let inputs = [
+            "#montoEfectivoInput",
+            "#montoTransferenciaInput",
+            "#montoTransferenciaSwissInput",
+        ];
+
+        let conts = [
+            "#montoEfectivoCont",
+            "#montoTransferenciaCont",
+            "#montoTransSwissCont",
+        ];
+
+        if (typeof monto !== "undefined") {
+            monto = monto.split(",");
+            tipopago = tipopago.split(",");
+
+            tipopago.map((tipo, j) => {
+                checkbox.map((input, i) => {
+                    if (tipo == $(input).val()) {
+                        $(input).prop("checked", true);
+                        let checked = $(input).is(":checked");
+                        if (checked) {
+                            $(conts[i]).show();
+                            $(inputs[i]).val(monto[j]);
+                        }
+                    }
+                });
+            });
+        }
+
+        $("#idInputNota").val(pagoid);
+        $("#contratoIdInputNota").val(contratoid);
+        $("#memoInputNota").val(`Pago a cliente (${pago})`);
+        $("#pagoInputNota").val(pago);
+        $("#dolarInputNota").val(dolar);
+
+        $("#notaForm").attr("action", "/admin/guardarPago");
+    });
+
+    $(document).on("change", "#efectivoInput", () => {
+        $("#montoEfectivoCont").toggle();
+    });
+
+    $(document).on("change", "#transferenciaInput", () => {
+        $("#montoTransferenciaCont").toggle();
+    });
+
+    $(document).on("change", "#transferenciaSwissInput", () => {
+        $("#montoTransSwissCont").toggle();
+    });
+
+    $(document).on("submit", "#notaForm", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("action");
+        $("#alertMessage").text("");
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function () {
+                $("#formModalNota").modal("hide");
+                $("#notaForm")[0].reset();
+                filtros();
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Pago guardado</h1>',
+                    html: '<p style="font-family: Poppins">El pago ha sido guardado correctamente</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        });
     });
 });

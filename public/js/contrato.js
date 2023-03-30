@@ -1712,7 +1712,6 @@ $(document).ready(function () {
 
     $("#scannerForm").on("submit", function (e) {
         e.preventDefault();
-        var form = $(this).serialize();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
 
@@ -4492,18 +4491,6 @@ $(document).ready(function () {
             "#montoWiseCont",
         ];
 
-        let inputsRef = [
-            "#referenciaEfectivoInput",
-            "#referenciaTransSwissPOOLInput",
-            "#referenciaTransMXPOOLInput",
-            "#referenciaBankInput",
-            "#referenciaHSBCInput",
-            "#referenciaRenovacionInput",
-            "#referenciaRendimientosInput",
-            "#referenciaComisionesInput",
-            "#referenciaWiseInput",
-        ];
-
         let contsRef = [
             "#referenciaEfectivoCont",
             "#referenciaTransSwissPOOLCont",
@@ -4525,7 +4512,6 @@ $(document).ready(function () {
             tipopago = tipopago.split(",");
             referencia = referencia.split(",");
 
-            let z = 0;
             tipopago.map((tipo, j) => {
                 checkbox.map((input, i) => {
                     if (tipo == $(input).val()) {
@@ -4570,18 +4556,6 @@ $(document).ready(function () {
                     }
                 });
             });
-
-            // if (contsRef[j] == "XXXXX") {
-            //     $(contsRef[j]).show();
-            // }
-            // $(inputsRef[j]).val(ref);
-            // referencia.map((ref, j) => {
-            //     console.log(contsRef[j], inputsRef[j], ref);
-            //     if (ref != "XXXXX") {
-            //         $(contsRef[j]).show();
-            //     }
-            //     $(inputsRef[j]).val(ref);
-            // });
         }
     };
 

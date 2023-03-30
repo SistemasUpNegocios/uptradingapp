@@ -1,6 +1,6 @@
 <div class="mt-4" style="overflow-x: auto;">
-    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="resumenPagoPs">
-        <thead>
+    <table class="table table-striped table-bordered nowrap text-center" style="width: 100%; vertical-align: middle" id="resumenPagoPs">
+        <thead style="vertical-align: middle">
             <tr>
                 <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">PS</th>
                 <th style="font-size: 14px !important; width: 30px !important;" data-priority="0" scope="col">Comisión (MXN)</th>
