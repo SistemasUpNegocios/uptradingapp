@@ -37,9 +37,9 @@
                             <td style="font-size: 12.5px">{{ $pago }}</td>
                             <td class="d-flex align-items-center justify-content-center">
                                 @if($pagos_bd)
-                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @else
-                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @endif
                                 <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                 <button class="btn btn-success ms-1 editar_pago" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
@@ -61,9 +61,9 @@
                             <td style="font-size: 12.5px">{{ $pago }}</td>
                             <td class="d-flex align-items-center justify-content-center">
                                 @if($pagos_bd)
-                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @else
-                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @endif
                                 <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                 <button class="btn btn-success ms-1 editar_pago" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
@@ -85,9 +85,9 @@
                             <td style="font-size: 12.5px">COMPUESTO</td>
                             <td class="d-flex align-items-center justify-content-center">
                                 @if($pagos_bd)
-                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @else
-                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-pago="{{$pago}}"> <i class="bi bi-journal-text"></i></button>
                                 @endif
                                 <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                 <button class="btn btn-success ms-1 editar_pago" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
@@ -289,6 +289,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="alertaNota"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn principal-button">Guardar info</button>

@@ -5,21 +5,25 @@ $(document).ready(function () {
         },
     });
 
-    var url_filtro = "/admin/getResumenPagoClienteDiaMensual";
-    var filtro = "mensual";
+    let url_filtro = "/admin/getResumenPagoClienteDiaMensual";
+    let filtro = "mensual";
     let dolar = 0;
-    var table = "";
+    let table = "";
+    let pesos = 0;
+    let pesos_divididos = 0;
 
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
         jsonp: "callback",
         dataType: "jsonp",
         success: function (response) {
-            var series = response.bmx.series;
-            for (var i in series) {
-                var serie = series[i];
+            let series = response.bmx.series;
+            for (let i in series) {
+                let serie = series[i];
 
                 dolar = serie.datos[0].dato;
+                dolar = parseFloat(dolar);
+                dolar = dolar.toFixed(2);
                 $("#dolarInput").val(dolar);
                 datos();
             }
@@ -250,16 +254,16 @@ $(document).ready(function () {
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
             },
             lengthMenu: [
-                [5, 10, 15, 20, 25, 30, -1],
-                [5, 10, 15, 20, 25, 30, "Todo"],
+                [50, 100, 150, -1],
+                [50, 100, 150, "Todo"],
             ],
-            pageLength: 5,
+            pageLength: 50,
             order: [[1, "asc"]],
         });
     };
 
     $(document).on("change", ".status", function () {
-        var checked = $(this).is(":checked");
+        let checked = $(this).is(":checked");
 
         if (checked) {
             $(this).val("Pagado");
@@ -267,11 +271,11 @@ $(document).ready(function () {
             $(this).val("Pendiente");
         }
 
-        var id = $(this).data("id");
-        var contratoid = $(this).data("contratoid");
-        var pago = $(this).data("pago");
-        var statusValor = $(this).val();
-        var dolar = $("#dolarInput").val();
+        let id = $(this).data("id");
+        let contratoid = $(this).data("contratoid");
+        let pago = $(this).data("pago");
+        let statusValor = $(this).val();
+        let dolar = $("#dolarInput").val();
 
         const Toast = Swal.mixin({
             toast: true,
@@ -540,7 +544,7 @@ $(document).ready(function () {
     $(document).on("click", "#imprimirReporte", function () {
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
-            var formatearCantidad = new Intl.NumberFormat("es-MX", {
+            let formatearCantidad = new Intl.NumberFormat("es-MX", {
                 style: "currency",
                 currency: "MXN",
                 minimumFractionDigits: 2,
@@ -580,7 +584,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#editarInput", function () {
-        var formatearCantidad = new Intl.NumberFormat("es-MX", {
+        let formatearCantidad = new Intl.NumberFormat("es-MX", {
             style: "currency",
             currency: "MXN",
             minimumFractionDigits: 2,
@@ -873,6 +877,7 @@ $(document).ready(function () {
     $(document).on("click", ".nota", function (e) {
         $("#notaForm")[0].reset();
         $("#formModalNota").modal("show");
+        $("#alertaNota").empty();
 
         $("#montoEfectivoCont").hide();
         $("#montoTransferenciaCont").hide();
@@ -884,6 +889,7 @@ $(document).ready(function () {
         let dolar = $("#dolarInput").val();
 
         let monto = $(this).data("monto");
+        pesos = $(this).data("pesos").replaceAll(",", "");
         let tipopago = $(this).data("tipopago");
 
         let checkbox = [
@@ -920,6 +926,12 @@ $(document).ready(function () {
                     }
                 });
             });
+        } else {
+            checkbox.map((input, i) => {
+                $(input).prop("checked", false);
+                $(conts[i]).hide();
+                $(inputs[i]).val(pesos);
+            });
         }
 
         $("#idInputNota").val(pagoid);
@@ -932,46 +944,214 @@ $(document).ready(function () {
     });
 
     $(document).on("change", "#efectivoInput", () => {
+        $("#alertaNota").empty();
         $("#montoEfectivoCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 3;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransferenciaCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaSwissInput").val(pesos);
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaCont").val(pesos);
+        } else if (
+            $("#montoTransferenciaCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoEfectivoInput").val(pesos);
+        }
     });
 
     $(document).on("change", "#transferenciaInput", () => {
+        $("#alertaNota").empty();
         $("#montoTransferenciaCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 3;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransferenciaCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaSwissInput").val(pesos);
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaCont").val(pesos);
+        } else if (
+            $("#montoTransferenciaCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoEfectivoInput").val(pesos);
+        }
     });
 
     $(document).on("change", "#transferenciaSwissInput", () => {
+        $("#alertaNota").empty();
         $("#montoTransSwissCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 3;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            !$("#montoTransferenciaCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransferenciaCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaSwissInput").val(pesos);
+        } else if (
+            $("#montoEfectivoCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoTransferenciaCont").val(pesos);
+        } else if (
+            $("#montoTransferenciaCont").is(":hidden") &&
+            $("#montoTransSwissCont").is(":hidden")
+        ) {
+            $("#montoEfectivoInput").val(pesos);
+        }
     });
 
     $(document).on("submit", "#notaForm", function (e) {
         e.preventDefault();
-        var url = $(this).attr("action");
+        let url = $(this).attr("action");
         $("#alertMessage").text("");
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: new FormData(this),
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function () {
-                $("#formModalNota").modal("hide");
-                $("#notaForm")[0].reset();
-                filtros();
-                Swal.fire({
-                    icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Pago guardado</h1>',
-                    html: '<p style="font-family: Poppins">El pago ha sido guardado correctamente</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            },
-            error: function (err) {
-                console.log(err);
-            },
-        });
+        if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(0);
+        }
+
+        if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(0);
+        }
+
+        if ($("#montoTransSwissCont").is(":hidden")) {
+            $("#montoTransferenciaSwissInput").val(0);
+        }
+
+        let efectivo = $("#montoEfectivoInput").val();
+        let transferencia = $("#montoTransferenciaInput").val();
+        let transferenciaSwiss = $("#montoTransferenciaSwissInput").val();
+
+        if (efectivo > 0 || transferencia > 0 || transferenciaSwiss > 0) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: new FormData(this),
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function () {
+                    $("#formModalNota").modal("hide");
+                    $("#notaForm")[0].reset();
+                    filtros();
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Pago guardado</h1>',
+                        html: '<p style="font-family: Poppins">El pago ha sido guardado correctamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+            });
+        } else {
+            $("#alertaNota").html(`
+                <div class="alert alert-danger" role="alert">
+                    Debe de ingresar un monto
+                </div>
+            `);
+        }
     });
 });

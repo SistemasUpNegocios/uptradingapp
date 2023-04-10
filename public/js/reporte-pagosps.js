@@ -10,6 +10,8 @@ $(document).ready(function () {
                 var serie = series[i];
 
                 dolar = serie.datos[0].dato;
+                dolar = parseFloat(dolar);
+                dolar = dolar.toFixed(2);
                 $("#dolarInput").val(dolar);
                 datos();
             }
