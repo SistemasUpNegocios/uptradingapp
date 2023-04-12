@@ -5,11 +5,18 @@
             <th data-priority="0" scope="col">Mensuales</th>
             <th data-priority="0" scope="col">Compuestos</th>
             <th data-priority="0" scope="col">Total</th>
+            <th data-priority="0" scope="col">$USD</th>
         </tr>
     </thead>
     <tbody id="psBody">
         @foreach ($lista_ps as $ps)
             @php
+                $sum_contrato = DB::table('contrato')
+                    ->where('ps_id', $ps->id)
+                    ->where('status', "Activado")
+                    ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                    ->sum("inversion_us");
+
                 $count_contrato = DB::table('contrato')
                     ->where('ps_id', $ps->id)
                     ->where('status', "Activado")
@@ -65,6 +72,7 @@
                     @endif
                 </td>
                 <td>{{ $count_contrato }}</td>
+                <td>${{ number_format($sum_contrato, 2) }}</td>
             </tr>
         @endforeach
     </tbody>

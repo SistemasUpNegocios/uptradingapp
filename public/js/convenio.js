@@ -941,96 +941,96 @@ $(document).ready(function () {
         $("#contenedor_filtros").toggle();
     });
 
-    table.on("change", ".status", function () {
-        var checked = $(this).is(":checked");
+    // table.on("change", ".status", function () {
+    //     var checked = $(this).is(":checked");
 
-        if (checked) {
-            $(this).val("Activado");
-        } else {
-            $(this).val("Pendiente de activación");
-        }
+    //     if (checked) {
+    //         $(this).val("Activado");
+    //     } else {
+    //         $(this).val("Pendiente de activación");
+    //     }
 
-        var id = $(this).data("id");
-        var statusValor = $(this).val();
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-        });
-        Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar status</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para editar el status</p>',
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
-            cancelButtonColor: "#01bbcc",
-            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
-            confirmButtonColor: "#198754",
-            input: "password",
-            showLoaderOnConfirm: true,
-            preConfirm: (clave) => {
-                $.ajax({
-                    type: "GET",
-                    url: "/admin/validateClaveConvenio",
-                    data: {
-                        clave: clave,
-                    },
-                    success: function (result) {
-                        if (result == "success") {
-                            $.get(
-                                "/admin/editStatusConvenio",
-                                {
-                                    id: id,
-                                    status: statusValor,
-                                },
-                                function () {
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Estatus actualizado",
-                                    });
+    //     var id = $(this).data("id");
+    //     var statusValor = $(this).val();
+    //     const Toast = Swal.mixin({
+    //         toast: true,
+    //         position: "top-end",
+    //         showConfirmButton: false,
+    //         timer: 2000,
+    //         timerProgressBar: true,
+    //         didOpen: (toast) => {
+    //             toast.addEventListener("mouseenter", Swal.stopTimer);
+    //             toast.addEventListener("mouseleave", Swal.resumeTimer);
+    //         },
+    //     });
+    //     Swal.fire({
+    //         title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar status</h1>',
+    //         html: '<p style="font-family: Poppins">Necesitas una clave para editar el status</p>',
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+    //         cancelButtonColor: "#01bbcc",
+    //         confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+    //         confirmButtonColor: "#198754",
+    //         input: "password",
+    //         showLoaderOnConfirm: true,
+    //         preConfirm: (clave) => {
+    //             $.ajax({
+    //                 type: "GET",
+    //                 url: "/admin/validateClaveConvenio",
+    //                 data: {
+    //                     clave: clave,
+    //                 },
+    //                 success: function (result) {
+    //                     if (result == "success") {
+    //                         $.get(
+    //                             "/admin/editStatusConvenio",
+    //                             {
+    //                                 id: id,
+    //                                 status: statusValor,
+    //                             },
+    //                             function () {
+    //                                 Toast.fire({
+    //                                     icon: "success",
+    //                                     title: "Estatus actualizado",
+    //                                 });
 
-                                    table.ajax.reload(null, false);
-                                }
-                            );
-                        } else {
-                            statusClaveIncorrecta();
+    //                                 table.ajax.reload(null, false);
+    //                             }
+    //                         );
+    //                     } else {
+    //                         statusClaveIncorrecta();
 
-                            Toast.fire({
-                                icon: "error",
-                                title: "Clave incorrecta",
-                            });
-                        }
-                    },
-                    error: function () {
-                        statusClaveIncorrecta();
-                        Toast.fire({
-                            icon: "error",
-                            title: "Clave incorrecta",
-                        });
-                    },
-                });
-            },
-            allowOutsideClick: () => !Swal.isLoading(),
-        }).then((result) => {
-            if (!result.isConfirmed) {
-                statusClaveIncorrecta();
-                Swal.fire({
-                    icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El status del convenio no se ha actualizado</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            }
-        });
-    });
+    //                         Toast.fire({
+    //                             icon: "error",
+    //                             title: "Clave incorrecta",
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function () {
+    //                     statusClaveIncorrecta();
+    //                     Toast.fire({
+    //                         icon: "error",
+    //                         title: "Clave incorrecta",
+    //                     });
+    //                 },
+    //             });
+    //         },
+    //         allowOutsideClick: () => !Swal.isLoading(),
+    //     }).then((result) => {
+    //         if (!result.isConfirmed) {
+    //             statusClaveIncorrecta();
+    //             Swal.fire({
+    //                 icon: "error",
+    //                 title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+    //                 html: '<p style="font-family: Poppins">El status del convenio no se ha actualizado</p>',
+    //                 confirmButtonText:
+    //                     '<a style="font-family: Poppins">Aceptar</a>',
+    //                 confirmButtonColor: "#01bbcc",
+    //             });
+    //         }
+    //     });
+    // });
 
     $.ajaxSetup({
         headers: {
@@ -1053,26 +1053,26 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
-                let folio = $("#folioInput").val();
-                let estatus = $("#statusInput").val();
-                if (estatus == "Activado") {
-                    $("option:selected", "#statusInput").prop("disabled", true);
-                }
+                // let folio = $("#folioInput").val();
+                // let estatus = $("#statusInput").val();
+                // if (estatus == "Activado") {
+                //     $("option:selected", "#statusInput").prop("disabled", true);
+                // }
 
                 $("#formModal").modal("hide");
                 $("#convenioForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
-                    let mensaje = `Se ha generado un nuevo convenio, por favor actívalo.\nFolio de convenio: ${folio}`;
-                    $.get({
-                        url: "/admin/enviarTelegramConvenio",
-                        data: {
-                            mensaje: mensaje,
-                        },
-                        success: function (response) {
-                            $("#folioInput").val(response);
-                        },
-                    });
+                    // let mensaje = `Se ha generado un nuevo convenio, por favor actívalo.\nFolio de convenio: ${folio}`;
+                    // $.get({
+                    //     url: "/admin/enviarTelegramConvenio",
+                    //     data: {
+                    //         mensaje: mensaje,
+                    //     },
+                    //     success: function (response) {
+                    //         $("#folioInput").val(response);
+                    //     },
+                    // });
 
                     Swal.fire({
                         icon: "success",

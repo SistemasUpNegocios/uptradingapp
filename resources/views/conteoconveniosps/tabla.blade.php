@@ -4,11 +4,18 @@
             <th data-priority="0" scope="col">Nombre</th>
             <th data-priority="0" scope="col">Convenios</th>
             <th data-priority="0" scope="col">Total</th>
+            <th data-priority="0" scope="col">$USD</th>
         </tr>
     </thead>
     <tbody id="psBody">
         @foreach ($lista_ps as $ps)
             @php
+                $sum_convenio = DB::table('convenio')
+                    ->where('ps_id', $ps->id)
+                    ->where('status', "Activado")
+                    ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
+                    ->sum("monto");
+
                 $count_convenio = DB::table('convenio')
                     ->where('ps_id', $ps->id)
                     ->where('status', "Activado")
@@ -39,6 +46,7 @@
                     @endif
                 </td>
                 <td>{{ $count_convenio }}</td>
+                <td>${{ number_format($sum_convenio, 2) }}</td>
             </tr>
         @endforeach
     </tbody>
