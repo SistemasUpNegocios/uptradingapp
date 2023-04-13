@@ -643,24 +643,37 @@ class ConvenioController extends Controller
         $id_user = auth()->user()->id;
 
         if($request->status == "Activado"){
+            \Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID_CONVENIOS'),
+                'parse_mode' => 'HTML',
+                'text' => "El convenio con folio $convenio->folio ha sido activado por Jorge"
+            ]);
+            
             $convenio->memo_status = "Convenio activado por id:1";
 
             $notificacion = new Notificacion;
-            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->titulo = "Jorge activó un nuevo convenio";
             $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 1;
             $notificacion->save();
 
             $notificacion = new Notificacion;
-            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->titulo = "Jorge activó un nuevo convenio";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 4;
+            $notificacion->save();
+
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Jorge activó un nuevo convenio";
             $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 234;
             $notificacion->save();
 
             $notificacion = new Notificacion;
-            $notificacion->titulo = "Hamilton activó un nuevo convenio";
+            $notificacion->titulo = "Jorge activó un nuevo convenio";
             $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 235;
@@ -770,21 +783,5 @@ class ConvenioController extends Controller
                 return response($codigo_oficina, 200);
             }
         }
-    }
-
-    public function enviarTelegram(Request $request)
-    {
-        $folio = explode("Folio de convenio: ", $request->mensaje);
-        \Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-            'parse_mode' => 'HTML',
-            'text' => $folio[0]
-        ]);
-
-        \Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-            'parse_mode' => 'HTML',
-            'text' => $folio[1]
-        ]);
     }
 }

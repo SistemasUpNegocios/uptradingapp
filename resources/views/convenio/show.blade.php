@@ -229,19 +229,35 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select name="status" class="form-control" id="statusInput" required>
-                                        <option value="" disabled>Selecciona...</option>
-                                        <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                        <option value="Activado">Activado</option>
-                                        <option value="Finiquitado">Finiquitado</option>
-                                        <option value="Refrendado">Refrendado</option>
-                                        <option value="Cancelado">Cancelado</option>
-                                    </select>
-                                    <label for="statusInput">Status del convenio</label>
+                            @if (auth()->user()->is_root)
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado">Activado</option>
+                                            <option value="Finiquitado">Finiquitado</option>
+                                            <option value="Refrendado">Refrendado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Status del convenio</label>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado" disabled>Activado</option>
+                                            <option value="Finiquitado" disabled>Finiquitado</option>
+                                            <option value="Refrendado" disabled>Refrendado</option>
+                                            <option value="Cancelado" disabled>Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Estatus del convenio</label>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="banco_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"

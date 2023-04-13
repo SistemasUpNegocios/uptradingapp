@@ -38,6 +38,15 @@ return [
                 //Acme\Project\Commands\MyTelegramBot\BotCommand::class
             ],
         ],
+        'convniosbot' => [
+            'username'            => env('TELEGRAM_BOT_USERNAME_CONVENIOS', 'MY-USER'),
+            'token'               => env('TELEGRAM_BOT_TOKEN_CONVENIOS', 'YOUR-BOT-TOKEN'),
+            'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH_CONVENIOS', 'YOUR-CERTIFICATE-PATH'),
+            'webhook_url'         => env('TELEGRAM_WEBHOOK_URL_CONVENIOS', 'YOUR-BOT-WEBHOOK-URL'),
+            'commands'            => [
+                //Acme\Project\Commands\MyTelegramBot\BotCommand::class
+            ],
+        ],
 
         //        'mySecondBot' => [
         //            'token' => '123456:abc',
