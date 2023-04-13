@@ -1,3 +1,5 @@
+<button class="btn principal-button mb-3" data-inicio="{{$fecha_inicio}}" data-fin="{{$fecha_fin}}" id="imprimirReporte"><i class="bi bi-file-earmark-pdf-fill"></i> Imprimir reporte</button>
+
 <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="conteo">
     <thead>
         <tr>
@@ -5,6 +7,7 @@
             <th data-priority="0" scope="col">Convenios</th>
             <th data-priority="0" scope="col">Total</th>
             <th data-priority="0" scope="col">$USD</th>
+            <th data-priority="0" scope="col">$MXN</th>
         </tr>
     </thead>
     <tbody id="psBody">
@@ -47,6 +50,7 @@
                 </td>
                 <td>{{ $count_convenio }}</td>
                 <td>${{ number_format($sum_convenio, 2) }}</td>
+                <td>${{ number_format($sum_convenio * $dolar, 2) }}</td>
             </tr>
         @endforeach
     </tbody>

@@ -216,24 +216,44 @@ $(document).ready(function () {
     };
 
     $.ajax({
-        type: "GET",
-        data: { fecha_inicio: startOfMonth, fecha_fin: endOfMonth },
-        url: "showConteoConvPs",
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp",
         success: function (response) {
-            $("#contTabla").empty();
-            $("#contTabla").html(response);
-            tablaResumen();
-        },
-        error: function (response) {
-            $("#contTabla").empty();
-            $("#contTabla").html(
-                `
-                    <div class="text-center mt-4">
-                        <div class="spinner-border text-danger" role="status"></div>
-                        <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
-                    </div>
-                `
-            );
+            let series = response.bmx.series;
+            for (let i in series) {
+                let serie = series[i];
+
+                dolar = serie.datos[0].dato;
+                dolar = parseFloat(dolar);
+                dolar = dolar.toFixed(2);
+            }
+
+            $.ajax({
+                type: "GET",
+                data: {
+                    fecha_inicio: startOfMonth,
+                    fecha_fin: endOfMonth,
+                    dolar: dolar,
+                },
+                url: "showConteoConvPs",
+                success: function (response) {
+                    $("#contTabla").empty();
+                    $("#contTabla").html(response);
+                    tablaResumen();
+                },
+                error: function (response) {
+                    $("#contTabla").empty();
+                    $("#contTabla").html(
+                        `
+                            <div class="text-center mt-4">
+                                <div class="spinner-border text-danger" role="status"></div>
+                                <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                            </div>
+                        `
+                    );
+                },
+            });
         },
     });
 
@@ -266,7 +286,11 @@ $(document).ready(function () {
             } else {
                 $.ajax({
                     type: "GET",
-                    data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
+                    data: {
+                        fecha_inicio: fecha_inicio,
+                        fecha_fin: fecha_fin,
+                        dolar: dolar,
+                    },
                     url: "showConteoConvPs",
                     success: function (response) {
                         $("#contTabla").empty();
@@ -289,7 +313,11 @@ $(document).ready(function () {
         } else {
             $.ajax({
                 type: "GET",
-                data: { fecha_inicio: "2020-02-28", fecha_fin: endOfMonth },
+                data: {
+                    fecha_inicio: "2020-02-28",
+                    fecha_fin: endOfMonth,
+                    dolar: dolar,
+                },
                 url: "showConteoConvPs",
                 success: function (response) {
                     $("#contTabla").empty();
@@ -309,6 +337,17 @@ $(document).ready(function () {
                 },
             });
         }
+    });
+
+    $(document).on("click", "#imprimirReporte", function (e) {
+        e.preventDefault();
+        let inicio = $(this).data("inicio");
+        let fin = $(this).data("fin");
+
+        window.open(
+            `/admin/imprimir-reporte-conteo-convenios?inicio=${inicio}&fin=${fin}&dolar=${dolar}`,
+            "_blank"
+        );
     });
 });
 

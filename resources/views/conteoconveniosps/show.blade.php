@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
 
     <style>
-        table.dataTable th, table.dataTable td {
+        table.dataTable th {
             font-size: 14px;
+        }
+        table.dataTable td {
+            font-size: 12px;
         }
     </style>
 @endsection
@@ -45,7 +48,7 @@
                                 <use xlink:href="#info-fill" />
                             </svg>
                             <div>
-                                Selecciona una fecha para generar el conteo de convenios activados. (Si borras cualquier fecha o ambas, el conteo empezará desde el inicio de los registros.)
+                                Selecciona una fecha para generar el conteo de convenios <b>activados</b>. (Si borras cualquier fecha o ambas, el conteo empezará desde el inicio de los registros.)
                             </div>
                         </div>
 

@@ -11,6 +11,7 @@ $(document).ready(function () {
     let table = "";
     let pesos = 0;
     let pesos_divididos = 0;
+    let dolares = 0;
 
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
@@ -890,6 +891,7 @@ $(document).ready(function () {
 
         let monto = $(this).data("monto");
         pesos = $(this).data("pesos").replaceAll(",", "");
+        dolares = $(this).data("dolares");
         let tipopago = $(this).data("tipopago");
 
         let checkbox = [
@@ -949,48 +951,14 @@ $(document).ready(function () {
 
         if (
             !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 3;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
             !$("#montoTransferenciaCont").is(":hidden")
         ) {
             pesos_divididos = pesos / 2;
             $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
             $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransferenciaCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaSwissInput").val(pesos);
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaCont").val(pesos);
-        } else if (
-            $("#montoTransferenciaCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
             $("#montoEfectivoInput").val(pesos);
         }
     });
@@ -1001,48 +969,14 @@ $(document).ready(function () {
 
         if (
             !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 3;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
             !$("#montoTransferenciaCont").is(":hidden")
         ) {
             pesos_divididos = pesos / 2;
             $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
             $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransferenciaCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaSwissInput").val(pesos);
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaCont").val(pesos);
-        } else if (
-            $("#montoTransferenciaCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
             $("#montoEfectivoInput").val(pesos);
         }
     });
@@ -1053,50 +987,18 @@ $(document).ready(function () {
 
         if (
             !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 3;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
             !$("#montoTransferenciaCont").is(":hidden")
         ) {
             pesos_divididos = pesos / 2;
             $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
             $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoEfectivoCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            !$("#montoTransferenciaCont").is(":hidden") &&
-            !$("#montoTransSwissCont").is(":hidden")
-        ) {
-            pesos_divididos = pesos / 2;
-            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(pesos_divididos.toFixed(2));
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransferenciaCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaSwissInput").val(pesos);
-        } else if (
-            $("#montoEfectivoCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
-            $("#montoTransferenciaCont").val(pesos);
-        } else if (
-            $("#montoTransferenciaCont").is(":hidden") &&
-            $("#montoTransSwissCont").is(":hidden")
-        ) {
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
             $("#montoEfectivoInput").val(pesos);
         }
+
+        $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
     });
 
     $(document).on("submit", "#notaForm", function (e) {
