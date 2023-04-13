@@ -178,8 +178,8 @@ class PsController extends Controller
             $ps->ciudad = strtoupper($request->input('ciudad'));
             $ps->estado = strtoupper($request->input('estado'));
             $ps->celular = $request->input('celular');
-            $ps->correo_personal = strtoupper($request->input('correo_personal'));
-            $ps->correo_institucional = strtoupper($request->input('correo_institucional'));
+            $ps->correo_personal = strtolower($request->input('correo_personal'));
+            $ps->correo_institucional = strtolower($request->input('correo_institucional'));
             $ps->ine = $request->input('ine');
             $ps->pasaporte = strtoupper($request->input('pasaporte'));
             $ps->vencimiento_pasaporte = $request->input('fechapas');
@@ -204,7 +204,7 @@ class PsController extends Controller
 
 
             //editar user
-            User::where('correo', $request->correo_temp)
+            User::where('correo', strtolower($request->correo_temp))
                 ->update([
                     'nombre' => strtoupper($request->nombre),
                     "apellido_p" => strtoupper($request->apellidop),

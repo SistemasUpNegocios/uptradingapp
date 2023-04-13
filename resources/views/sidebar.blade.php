@@ -32,11 +32,14 @@
                     <i class="bi bi-search"></i>
                 </a>
             </li>
-            <li class="nav-item" id="preguntas" title="Preguntas Frecuentes">
-                <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalFaq">
-                    <i class="bi bi-question-octagon"></i>
-                </a>
-            </li>
+
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_gold)
+                <li class="nav-item" id="preguntas" title="Preguntas Frecuentes">
+                    <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalFaq">
+                        <i class="bi bi-question-octagon"></i>
+                    </a>
+                </li>
+            @endif
 
             <li class="nav-item dropdown" id="notificaciones">
 
@@ -78,6 +81,8 @@
                                 PS DIAMOND
                             @elseif(auth()->user()->is_ps_gold)
                                 PS GOLD
+                            @elseif(auth()->user()->is_ps_bronze)
+                                USUARIO
                             @elseif(auth()->user()->is_cliente)
                                 CLIENTE                                                      
                             @else
@@ -141,7 +146,7 @@
             </a>
         </li>
 
-        @if (!auth()->user()->is_cliente)
+        @if (!auth()->user()->is_ps_bronze && !auth()->user()->is_cliente)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/tickets') }}">
@@ -155,23 +160,7 @@
                     <i class="bi bi-whatsapp"></i><span>Chat de ayuda</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
-                        @if (auth()->user()->id != 1)
-                            <li>
-                                <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
-                                    <i class="bi bi-circle"></i><span>Departamento de sistemas</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if (auth()->user()->id != 246)
-                            <li>
-                                <a href="#" id="deptoEgresos" class="chatModal" data-chatid="246">
-                                    <i class="bi bi-circle"></i><span>Departamento de egresos</span>
-                                </a>
-                            </li>
-                        @endif
-                    @endif
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)                    
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
                         <li class="nav-heading">Departamento de administración</li>
                         @if (auth()->user()->id != 234)
                             <li>
@@ -190,6 +179,21 @@
                     @endif
 
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                        @if (auth()->user()->id != 1)
+                            <li>
+                                <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
+                                    <i class="bi bi-circle"></i><span>Departamento de sistemas</span>
+                                </a>
+                            </li>
+                        @endif
+                        @if (auth()->user()->id != 246)
+                            <li>
+                                <a href="#" id="deptoEgresos" class="chatModal" data-chatid="246">
+                                    <i class="bi bi-circle"></i><span>Departamento de egresos</span>
+                                </a>
+                            </li>
+                        @endif
+
                         <li class="nav-heading">Departamento de contabilidad</li>
                         @if (auth()->user()->id != 236)
                             <li>
@@ -224,7 +228,7 @@
         @endif
 
         <li class="nav-heading">Opciones de administrador</li>
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/cliente')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/cliente') }}">
                     <i class="bi bi-people"></i>
@@ -297,95 +301,97 @@
             </li>
         @endif
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#contratos-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-file-earmark-richtext"></i><span>Contratos</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="contratos-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ URL::to('admin/contrato') }}">
-                        <i class="bi bi-circle"></i><span>Contratos</span>
-                    </a>
-                </li>
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+        @if (!auth()->user()->is_ps_bronze)
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#contratos-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Contratos</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="contratos-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ URL::to('admin/contratovencer') }}">
-                            <i class="bi bi-circle"></i><span>Contratos a vencer</span>
+                        <a href="{{ URL::to('admin/contrato') }}">
+                            <i class="bi bi-circle"></i><span>Contratos</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('admin/contratoTerminado') }}">
-                            <i class="bi bi-circle"></i><span>Contratos terminados</span>
-                        </a>
-                    </li>                    
-                @endif
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                    <li>
-                        <a href="{{ URL::to('admin/folio') }}">
-                            <i class="bi bi-circle"></i><span>Folios</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->is_root)
-                    <li>
-                        <a href="{{ URL::to('admin/modelo') }}">
-                            <i class="bi bi-circle"></i><span>Modelos de contrato</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/tipocontrato') }}">
-                            <i class="bi bi-circle"></i><span>Tipos de contrato</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </li>
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                        <li>
+                            <a href="{{ URL::to('admin/contratovencer') }}">
+                                <i class="bi bi-circle"></i><span>Contratos a vencer</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/contratoTerminado') }}">
+                                <i class="bi bi-circle"></i><span>Contratos terminados</span>
+                            </a>
+                        </li>                    
+                    @endif
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/folio') }}">
+                                <i class="bi bi-circle"></i><span>Folios</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->is_root)
+                        <li>
+                            <a href="{{ URL::to('admin/modelo') }}">
+                                <i class="bi bi-circle"></i><span>Modelos de contrato</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/tipocontrato') }}">
+                                <i class="bi bi-circle"></i><span>Tipos de contrato</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-file-earmark-text"></i><span>Convenios MAM</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="convenios-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ URL::to('admin/convenio') }}">
-                        <i class="bi bi-circle"></i><span>Convenios</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark-text"></i><span>Convenios MAM</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="convenios-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ URL::to('admin/convenio') }}">
+                            <i class="bi bi-circle"></i><span>Convenios</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#pagosCliente-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-cash"></i><span>Pagos a clientes</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="pagosCliente-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente)
-                    <li class="nav-heading">Tabla</li>
-                    <li>
-                        <a href="{{ URL::to('admin/pagosCliente') }}">
-                            <i class="bi bi-circle"></i><span>Pagos a clientes (compuesto y mensual)</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
-                    <li class="nav-heading">Rendimiento mensual</li>
-                    <li>
-                        <a href="{{ URL::to('admin/reportePagosCliente') }}">
-                            <i class="bi bi-circle"></i><span>Reporte de pagos a clientes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::to('admin/reportePagosClienteOficina') }}">
-                            <i class="bi bi-circle"></i><span>Reporte de pagos a clientes por oficina</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#pagosCliente-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-cash"></i><span>Pagos a clientes</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="pagosCliente-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente)
+                        <li class="nav-heading">Tabla</li>
+                        <li>
+                            <a href="{{ URL::to('admin/pagosCliente') }}">
+                                <i class="bi bi-circle"></i><span>Pagos a clientes (compuesto y mensual)</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+                        <li class="nav-heading">Rendimiento mensual</li>
+                        <li>
+                            <a href="{{ URL::to('admin/reportePagosCliente') }}">
+                                <i class="bi bi-circle"></i><span>Reporte de pagos a clientes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/reportePagosClienteOficina') }}">
+                                <i class="bi bi-circle"></i><span>Reporte de pagos a clientes por oficina</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </li>
+        @endif
         
-        @if (!auth()->user()->is_cliente)
+        @if (!auth()->user()->is_ps_bronze && !auth()->user()->is_cliente)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#pagos-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-cash-stack"></i><span>Pagos a PS</span><i class="bi bi-chevron-down ms-auto"></i>

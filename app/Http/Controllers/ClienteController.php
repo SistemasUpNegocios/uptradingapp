@@ -29,9 +29,14 @@ class ClienteController extends Controller
 
     public function index()
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
+            if(auth()->user()->is_ps_bronze){
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+                $numeroCliente = "MXN-" . $codigo . "-";
+            }
             $lista_form = Formulario::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
 
             return view('cliente.show', compact("lista_form"));
@@ -42,9 +47,14 @@ class ClienteController extends Controller
 
     public function getCliente()
     {
-
         $codigo = session('codigo_oficina');
         $numeroCliente = "MXN-" . $codigo . "-";
+        if(auth()->user()->is_ps_bronze){
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                
+            $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+            $numeroCliente = "MXN-" . $codigo . "-";
+        }
 
         $cliente = Cliente::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
 
@@ -433,8 +443,13 @@ class ClienteController extends Controller
             $numeroOficina = "001";
         }
 
-        $codigoForm = Formulario::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
+        if(auth()->user()->is_ps_bronze){
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $numeroOficina = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+        }
+
+        $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
         
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 
@@ -460,6 +475,11 @@ class ClienteController extends Controller
             return response($data);
         } else {
             $numeroCliente = "MXN-$numeroOficina-00001-000-00";
+
+            $data = array(
+                "numeroCliente" => $numeroCliente,
+                "correoCliente" => "mxa_00001@uptradingexperts.com"
+            );
             return response($numeroCliente);
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Formulario;
 use Illuminate\Http\Request;
 use App\Models\Ps;
+use App\Models\Oficina;
 use Illuminate\Support\Facades\DB;
 use App\Models\Contrato;
 use App\Models\Cliente;
@@ -20,8 +21,14 @@ class FormularioController extends Controller
     public function index()
     {
 
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
             $codigo = session("codigo_oficina");
+            if(auth()->user()->is_ps_bronze){
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                $psid = $ps_cons->id;
+                    
+                $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+            }
             $lista_ps = Ps::select()->where('codigoPS', 'like', "$codigo%")->get();
             return response()->view('formulario.show', compact("lista_ps"));
         }else{
@@ -39,6 +46,12 @@ class FormularioController extends Controller
         if (auth()->user()->is_ps_gold) {
             $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
+        }
+
+        if(auth()->user()->is_ps_bronze){
+            $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+            $numeroCliente = "MXN-" . $codigo . "-";
         }
 
         $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
@@ -314,8 +327,13 @@ class FormularioController extends Controller
             $numeroOficina = "001";
         }
 
-        $codigoForm = Formulario::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->where('codigoCliente', "like", "MXN-$numeroOficina-%")->orderBy('codigoCliente', 'DESC')->first();
+        if(auth()->user()->is_ps_bronze){
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $numeroOficina = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+        }
+
+        $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
 
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 

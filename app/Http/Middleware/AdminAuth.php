@@ -17,7 +17,7 @@ class AdminAuth
     public function handle(Request $request, Closure $next)
     {
         if(auth()->check()){
-            if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_gold || auth()->user()->is_egresos || auth()->user()->is_contabilidad || auth()->user()->is_cliente){
+            if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_egresos || auth()->user()->is_contabilidad || auth()->user()->is_cliente){
                 return $next($request);
             }
         }

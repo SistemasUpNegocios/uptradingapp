@@ -79,6 +79,8 @@
                                         PS DIAMOND
                                     @elseif(auth()->user()->is_ps_gold)
                                         PS GOLD
+                                    @elseif(auth()->user()->is_ps_bronze)
+                                        USUARIO
                                     @elseif(auth()->user()->is_cliente)
                                         CLIENTE                                                      
                                     @else

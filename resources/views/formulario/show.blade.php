@@ -594,7 +594,7 @@
                                                 {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
                                             </option>
                                         </select>
-                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
                                         <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psInput">
                                             <option value="" disabled selected>Selecciona..</option>
                                             @foreach($lista_ps as $ps)

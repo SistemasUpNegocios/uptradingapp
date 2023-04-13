@@ -84,6 +84,11 @@ class User extends Authenticatable
         return $this->privilegio == "ps_gold";
     }
 
+    public function getIsPsBronzeAttribute()
+    {
+        return $this->privilegio == "ps_bronze";
+    }
+
     public function getIsClienteAttribute()
     {
         return $this->privilegio == "cliente";

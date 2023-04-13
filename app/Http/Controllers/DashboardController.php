@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Contrato;
 use App\Models\Convenio;
+use App\Models\Oficina;
 use App\Models\Formulario;
 use App\Models\Amortizacion;
 use App\Models\Ps;
@@ -32,9 +33,17 @@ class DashboardController extends Controller
         $codigo = session("codigo_oficina");
 
         if (auth()->user()->is_ps_gold) {
-            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
-            $psid = $ps_cons->id;            
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
         }
+
+        if(auth()->user()->is_ps_bronze){
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+            
+            $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+        }
+        $clientesCountBronze = Cliente::where("codigoCliente", "like", "MXN-$codigo%")->count();
 
         $ps = Ps::where('codigoPS', 'like', "$codigo%")->count();
         $clientesCount = Cliente::where("codigoCliente", "like", "MXN-$codigo%")->count();
@@ -127,8 +136,6 @@ class DashboardController extends Controller
             ->where('status', 'Activado')
             ->count();
         }
-
-        
         
         $fecha = Carbon::now()->format('Y-m-d');
 
@@ -155,6 +162,8 @@ class DashboardController extends Controller
             "convenios" => $convenios,
             
             "agenda" => $agenda,
+
+            "clientesCountBronze" => $clientesCountBronze,
         );
 
         return response()->view('dashboard.show', $data, 200);
