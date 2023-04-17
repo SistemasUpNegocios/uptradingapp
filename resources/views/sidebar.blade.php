@@ -435,7 +435,6 @@
                     <span>Gestión de todos los pagos</span>
                 </a>
             </li>
-            
         @endif
         
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
