@@ -393,6 +393,14 @@
         
         @if (!auth()->user()->is_ps_bronze && !auth()->user()->is_cliente)
             <li class="nav-item">
+                <a class="@if (request()->is('admin/pagos')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/pagos') }}">
+                    <i class="bi bi-credit-card"></i>
+                    <span>Gestión de todos los pagos</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#pagos-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-cash-stack"></i><span>Pagos a PS</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>

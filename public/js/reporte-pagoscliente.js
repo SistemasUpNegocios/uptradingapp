@@ -890,7 +890,7 @@ $(document).ready(function () {
         let dolar = $("#dolarInput").val();
 
         let monto = $(this).data("monto");
-        pesos = $(this).data("pesos").replaceAll(",", "");
+        pesos = $(this).data("pesos").toString().replaceAll(",", "");
         dolares = parseFloat($(this).data("dolares"));
         let tipopago = $(this).data("tipopago");
 

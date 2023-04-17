@@ -1719,6 +1719,8 @@ h6 {
     vertical-align: middle !important;
 }
 
+#pagos td,
+#pagos th,
 #tipoContrato td,
 #tipoContrato th,
 #pregunta td,

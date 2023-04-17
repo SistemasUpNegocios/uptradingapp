@@ -81,6 +81,12 @@ Route::get('/admin/getResumenClienteOficina', [App\Http\Controllers\ReportePagoC
 Route::get('/admin/imprimirResumenClienteOficina', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'imprimirResumenClienteOficina']);
 Route::get('/admin/imprimirResumenClienteOficinaForanea', [App\Http\Controllers\ReportePagoClienteOficinaController::class, 'imprimirResumenClienteOficinaForanea']);
 
+// Rutas para gestión de pagos de PS y Clientes en general
+Route::get('/admin/pagos', [App\Http\Controllers\PagoController::class, 'index'])->name('pagos');
+Route::get('/admin/showPagos', [App\Http\Controllers\PagoController::class, 'getPagos']);
+Route::post('/admin/deletePago', [App\Http\Controllers\PagoController::class, 'deletePago']);
+Route::get('/admin/showClavePago', [App\Http\Controllers\PagoController::class, 'getClave']);
+
 // Rutas para gestión de contrato
 Route::get('/admin/contrato', [App\Http\Controllers\ContratoController::class, 'index'])->name('contrato');
 Route::post('/admin/addContrato', [App\Http\Controllers\ContratoController::class, 'addContrato']);
