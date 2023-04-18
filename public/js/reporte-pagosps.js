@@ -1,5 +1,10 @@
 $(document).ready(function () {
     let dolar = 0;
+    let pesos = 0;
+    let pesos_divididos = 0;
+    let dolares = 0;
+    var table = "";
+
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
         jsonp: "callback",
@@ -53,7 +58,7 @@ $(document).ready(function () {
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
-        var table = $("#resumenPagoPs").DataTable({
+        table = $("#resumenPagoPs").DataTable({
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ pagos",
@@ -536,5 +541,210 @@ $(document).ready(function () {
             confirmButtonColor: "#01bbcc",
         });
         $("#formModalWhats").modal("hide");
+    });
+
+    $(document).on("click", ".nota", function (e) {
+        $("#notaForm")[0].reset();
+        $("#formModalNota").modal("show");
+        $("#alertaNota").empty();
+
+        $("#montoEfectivoCont").hide();
+        $("#montoTransferenciaCont").hide();
+        $("#montoTransSwissCont").hide();
+
+        let pagoid = $(this).data("pagoid");
+        let contratoid = $(this).data("contratoid");
+        let dolar = $("#dolarInput").val();
+
+        let monto = $(this).data("monto");
+        pesos = $(this).data("pesos").toString().replaceAll(",", "");
+        dolares = parseFloat($(this).data("dolares"));
+        let tipopago = $(this).data("tipopago");
+
+        let checkbox = [
+            "#efectivoInput",
+            "#transferenciaInput",
+            "#transferenciaSwissInput",
+        ];
+
+        let inputs = [
+            "#montoEfectivoInput",
+            "#montoTransferenciaInput",
+            "#montoTransferenciaSwissInput",
+        ];
+
+        let conts = [
+            "#montoEfectivoCont",
+            "#montoTransferenciaCont",
+            "#montoTransSwissCont",
+        ];
+
+        if (typeof monto !== "undefined") {
+            monto = monto.split(",");
+            tipopago = tipopago.split(",");
+
+            tipopago.map((tipo, j) => {
+                checkbox.map((input, i) => {
+                    if (tipo == $(input).val()) {
+                        $(input).prop("checked", true);
+                        let checked = $(input).is(":checked");
+                        if (checked) {
+                            $(conts[i]).show();
+                            $(inputs[i]).val(monto[j]);
+                        }
+                    }
+                });
+            });
+        } else {
+            checkbox.map((input, i) => {
+                $(input).prop("checked", false);
+                $(conts[i]).hide();
+                $(inputs[i]).val(pesos);
+            });
+        }
+
+        $("#idInputNota").val(pagoid);
+        $("#contratoIdInputNota").val(contratoid);
+        $("#memoInputNota").val("Pago de comisión");
+        $("#dolarInputNota").val(dolar);
+
+        $("#notaForm").attr("action", "/admin/guardarPagoPs");
+    });
+
+    $(document).on("change", "#efectivoInput", () => {
+        $("#alertaNota").empty();
+        $("#montoEfectivoCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(pesos);
+        }
+    });
+
+    $(document).on("change", "#transferenciaInput", () => {
+        $("#alertaNota").empty();
+        $("#montoTransferenciaCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(pesos);
+        }
+    });
+
+    $(document).on("change", "#transferenciaSwissInput", () => {
+        $("#alertaNota").empty();
+        $("#montoTransSwissCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(pesos);
+        }
+
+        $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
+    });
+
+    $(document).on("submit", "#notaForm", function (e) {
+        e.preventDefault();
+        let url = $(this).attr("action");
+        $("#alertMessage").text("");
+
+        if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(0);
+        }
+
+        if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(0);
+        }
+
+        if ($("#montoTransSwissCont").is(":hidden")) {
+            $("#montoTransferenciaSwissInput").val(0);
+        }
+
+        let efectivo = $("#montoEfectivoInput").val();
+        let transferencia = $("#montoTransferenciaInput").val();
+        let transferenciaSwiss = $("#montoTransferenciaSwissInput").val();
+
+        if (efectivo > 0 || transferencia > 0 || transferenciaSwiss > 0) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: new FormData(this),
+                // dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function () {
+                    $("#formModalNota").modal("hide");
+                    $("#notaForm")[0].reset();
+                    let fecha = $("#fechaInput").val();
+                    $.ajax({
+                        type: "GET",
+                        data: {
+                            fecha: fecha,
+                            dolar: dolar,
+                        },
+                        url: "/admin/getResumenPagoPs",
+                        success: function (response) {
+                            table.destroy();
+                            $("#tablaResumen").empty();
+                            $("#tablaResumen").html(response);
+                            tablaResumen();
+                        },
+                        error: function (response) {
+                            $("#tablaResumen").empty();
+                            $("#tablaResumen").html(
+                                `
+                                    <div class="text-center mt-4">
+                                        <div class="spinner-border text-danger" role="status"></div>
+                                        <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                                    </div>
+                                `
+                            );
+                        },
+                    });
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Pago guardado</h1>',
+                        html: '<p style="font-family: Poppins">El pago ha sido guardado correctamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+            });
+        } else {
+            $("#alertaNota").html(`
+                <div class="alert alert-danger" role="alert">
+                    Debe de ingresar un monto
+                </div>
+            `);
+        }
     });
 });

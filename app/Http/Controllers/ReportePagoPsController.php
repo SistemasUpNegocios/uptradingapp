@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Oficina;
 use App\Models\Ps;
+use App\Models\Pago;
 use App\Models\PagoPS;
 use App\Models\TipoCambio;
 use App\Models\Log;
@@ -153,6 +154,61 @@ class ReportePagoPsController extends Controller
     
                 $pago_ps->status = $request->status;
                 $pago_ps->update();
+            }
+        }
+
+        return response('success');
+    }
+
+    public function guardarPago(Request $request)
+    {
+        $id_arr = explode(',', $request->id);
+
+        foreach ($id_arr as $id) {
+            $pago_ps = PagoPS::find($id);
+
+            if(strlen($pago_ps) > 0){
+                $fecha = Carbon::now()->format('Y-m');
+                $pago_ps->fecha_pagado = $fecha."-10";
+                $pago_ps->status = "Pagado";
+                $pago_ps->update();
+
+                $tipo_cambio = new TipoCambio;
+                $tipo_cambio->valor = number_format($request->dolar, 2);
+                $tipo_cambio->contrato_id = $pago_ps->contrato_id;
+                $tipo_cambio->memo = "Pago de comisión";
+                $tipo_cambio->save();
+
+                $log = new Log;
+                $log->tipo_accion = "Actualización";
+                $log->tabla = "Pago de PS por el contrato $pago_ps->contrato_id";
+                $log->id_tabla = $id;
+                $log->bitacora_id = session('bitacora_id');
+                $log->save();
+
+                $pago = new Pago;
+                $pago->id_contrato = $pago_ps->contrato_id;
+                $pago->memo = "Pago de comisión por el contrato $pago_ps->contrato_id";
+                $pago->dolar = $request->dolar;
+                if (gettype($request->tipo_pago) != 'NULL'){
+                    $tipos_pagos = "";
+                    foreach ($request->tipo_pago as $tipo_pago) {
+                        if($tipo_pago != ""){
+                            $tipos_pagos .= $tipo_pago.',';
+                        }
+                    }
+                    $pago->tipo_pago = $tipos_pagos;
+                }
+                if(count($request->monto) > 0 ){
+                    $montos = "";
+                    foreach ($request->monto as $monto) {
+                        if($monto > 0){
+                            $montos .= $monto.',';
+                        }
+                    }
+                    $pago->monto = $montos;
+                }
+                $pago->save();
             }
         }
 

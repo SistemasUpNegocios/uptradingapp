@@ -195,6 +195,7 @@ Route::get('/admin/imprimirReportePs', [App\Http\Controllers\ReportePagoPsContro
 Route::get('/admin/exportarResumenPs', [App\Http\Controllers\ReportePagoPsController::class, 'exportPs']);
 Route::get('/admin/showClavePagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'getClave']);
 Route::get('/admin/editStatusPagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'editStatus']);
+Route::post('/admin/guardarPagoPs', [App\Http\Controllers\ReportePagoPsController::class, 'guardarPago']);
 
 // Rutas para gestión de tipo de contrato
 Route::get('/admin/tipocontrato', [App\Http\Controllers\TipoContratoController::class, 'index'])->name('tipocontrato');
