@@ -216,180 +216,6 @@ $(document).ready(function () {
                     }
                 });
 
-                $("#memo_intencionButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_intencionButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_intencion").addClass("d-none");
-                        $("#memo_intencionInput").removeClass("d-none");
-                        $("#memo_intencionButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_intencion").removeClass("d-none");
-                        $("#memo_intencionInput").addClass("d-none");
-                        $("#memo_intencionButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_intencionInput").val();
-                        $("#p_memo_intencion").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
-                $("#memo_formularioButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_formularioButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_formulario").addClass("d-none");
-                        $("#memo_formularioInput").removeClass("d-none");
-                        $("#memo_formularioButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_formulario").removeClass("d-none");
-                        $("#memo_formularioInput").addClass("d-none");
-                        $("#memo_formularioButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_formularioInput").val();
-                        $("#p_memo_formulario").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
-                $("#memo_videoconferenciaButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_videoconferenciaButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_videoconferencia").addClass("d-none");
-                        $("#memo_videoconferenciaInput").removeClass("d-none");
-                        $("#memo_videoconferenciaButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_videoconferencia").removeClass("d-none");
-                        $("#memo_videoconferenciaInput").addClass("d-none");
-                        $("#memo_videoconferenciaButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_videoconferenciaInput").val();
-                        $("#p_memo_videoconferencia").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
                 $("#memo_aperturaButton").click(function (e) {
                     e.preventDefault();
                     var textoButton = $("#memo_aperturaButton").text();
@@ -448,24 +274,24 @@ $(document).ready(function () {
                     }
                 });
 
-                $("#memo_instruccionesButton").click(function (e) {
+                $("#memo_lpoaButton").click(function (e) {
                     e.preventDefault();
-                    var textoButton = $("#memo_instruccionesButton").text();
+                    var textoButton = $("#memo_lpoaButton").text();
 
                     if (textoButton == "Editar") {
                         //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_instrucciones").addClass("d-none");
-                        $("#memo_instruccionesInput").removeClass("d-none");
-                        $("#memo_instruccionesButton").text("Aplicar");
+                        $("#p_memo_lpoa").addClass("d-none");
+                        $("#memo_lpoaInput").removeClass("d-none");
+                        $("#memo_lpoaButton").text("Aplicar");
                     } else if (textoButton == "Aplicar") {
                         //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_instrucciones").removeClass("d-none");
-                        $("#memo_instruccionesInput").addClass("d-none");
-                        $("#memo_instruccionesButton").text("Editar");
+                        $("#p_memo_lpoa").removeClass("d-none");
+                        $("#memo_lpoaInput").addClass("d-none");
+                        $("#memo_lpoaButton").text("Editar");
 
                         //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_instruccionesInput").val();
-                        $("#p_memo_instrucciones").text(valorInput);
+                        var valorInput = $("#memo_lpoaInput").val();
+                        $("#p_memo_lpoa").text(valorInput);
 
                         //sube a la BD lo que hay en el input
                         var url = $("#listaForm").attr("action");
@@ -564,64 +390,6 @@ $(document).ready(function () {
                     }
                 });
 
-                $("#memo_contratoButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_contratoButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_contrato").addClass("d-none");
-                        $("#memo_contratoInput").removeClass("d-none");
-                        $("#memo_contratoButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_contrato").removeClass("d-none");
-                        $("#memo_contratoInput").addClass("d-none");
-                        $("#memo_contratoButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_contratoInput").val();
-                        $("#p_memo_contrato").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
                 $("#memo_mam_poolButton").click(function (e) {
                     e.preventDefault();
                     var textoButton = $("#memo_mam_poolButton").text();
@@ -680,142 +448,24 @@ $(document).ready(function () {
                     }
                 });
 
-                $("#memo_tarjeta_swissButton").click(function (e) {
+                $("#memo_generar_convenioButton").click(function (e) {
                     e.preventDefault();
-                    var textoButton = $("#memo_tarjeta_swissButton").text();
+                    var textoButton = $("#memo_generar_convenioButton").text();
 
                     if (textoButton == "Editar") {
                         //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_tarjeta_swiss").addClass("d-none");
-                        $("#memo_tarjeta_swissInput").removeClass("d-none");
-                        $("#memo_tarjeta_swissButton").text("Aplicar");
+                        $("#p_memo_generar_convenio").addClass("d-none");
+                        $("#memo_generar_convenioInput").removeClass("d-none");
+                        $("#memo_generar_convenioButton").text("Aplicar");
                     } else if (textoButton == "Aplicar") {
                         //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_tarjeta_swiss").removeClass("d-none");
-                        $("#memo_tarjeta_swissInput").addClass("d-none");
-                        $("#memo_tarjeta_swissButton").text("Editar");
+                        $("#p_memo_generar_convenio").removeClass("d-none");
+                        $("#memo_generar_convenioInput").addClass("d-none");
+                        $("#memo_generar_convenioButton").text("Editar");
 
                         //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_tarjeta_swissInput").val();
-                        $("#p_memo_tarjeta_swiss").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
-                $("#memo_tarjeta_uptradingButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_tarjeta_uptradingButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_tarjeta_uptrading").addClass("d-none");
-                        $("#memo_tarjeta_uptradingInput").removeClass("d-none");
-                        $("#memo_tarjeta_uptradingButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_tarjeta_uptrading").removeClass("d-none");
-                        $("#memo_tarjeta_uptradingInput").addClass("d-none");
-                        $("#memo_tarjeta_uptradingButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $(
-                            "#memo_tarjeta_uptradingInput"
-                        ).val();
-                        $("#p_memo_tarjeta_uptrading").text(valorInput);
-
-                        //sube a la BD lo que hay en el input
-                        var url = $("#listaForm").attr("action");
-                        var form = $("#listaForm")[0];
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: new FormData(form),
-                            dataType: "json",
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function (result) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener(
-                                            "mouseenter",
-                                            Swal.stopTimer
-                                        );
-                                        toast.addEventListener(
-                                            "mouseleave",
-                                            Swal.resumeTimer
-                                        );
-                                    },
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Pendiente actualizado",
-                                });
-                            },
-                        });
-                    }
-                });
-
-                $("#memo_primer_pagoButton").click(function (e) {
-                    e.preventDefault();
-                    var textoButton = $("#memo_primer_pagoButton").text();
-
-                    if (textoButton == "Editar") {
-                        //Si al darle click al boton, tiene la palabra "EDITAR", oculta el parrafo y muestra un input
-                        $("#p_memo_primer_pago").addClass("d-none");
-                        $("#memo_primer_pagoInput").removeClass("d-none");
-                        $("#memo_primer_pagoButton").text("Aplicar");
-                    } else if (textoButton == "Aplicar") {
-                        //Si al darle click al boton, tiene la palabra "APLICAR", oculta el input y muestra el parrafo
-                        $("#p_memo_primer_pago").removeClass("d-none");
-                        $("#memo_primer_pagoInput").addClass("d-none");
-                        $("#memo_primer_pagoButton").text("Editar");
-
-                        //guarda el texto del input en el parrafo
-                        var valorInput = $("#memo_primer_pagoInput").val();
-                        $("#p_memo_primer_pago").text(valorInput);
+                        var valorInput = $("#memo_generar_convenioInput").val();
+                        $("#p_memo_generar_convenio").text(valorInput);
 
                         //sube a la BD lo que hay en el input
                         var url = $("#listaForm").attr("action");
@@ -939,17 +589,6 @@ const addChecked = () => {
         $("#introduccion").removeClass("alert-success");
     }
 
-    var checkboxInputInversion = $("#checkboxInputInversion").val();
-    if (checkboxInputInversion == "Hecho") {
-        $("#checkboxInputInversion").prop("checked", true);
-        $("#intencion_inversion").removeClass("alert-danger");
-        $("#intencion_inversion").addClass("alert-success");
-    } else {
-        $("#checkboxInputInversion").prop("checked", false);
-        $("#intencion_inversion").addClass("alert-danger");
-        $("#intencion_inversion").removeClass("alert-success");
-    }
-
     var checkboxInputForm = $("#checkboxInputForm").val();
     if (checkboxInputForm == "Hecho") {
         $("#checkboxInputForm").prop("checked", true);
@@ -959,6 +598,17 @@ const addChecked = () => {
         $("#checkboxInputForm").prop("checked", false);
         $("#formulario").addClass("alert-danger");
         $("#formulario").removeClass("alert-success");
+    }
+
+    var checkboxInputCliente = $("#checkboxInputCliente").val();
+    if (checkboxInputCliente == "Hecho") {
+        $("#checkboxInputCliente").prop("checked", true);
+        $("#altaCliente").removeClass("alert-danger");
+        $("#altaCliente").addClass("alert-success");
+    } else {
+        $("#checkboxInputCliente").prop("checked", false);
+        $("#altaCliente").addClass("alert-danger");
+        $("#altaCliente").removeClass("alert-success");
     }
 
     var checkboxInputVideo = $("#checkboxInputVideo").val();
@@ -994,6 +644,30 @@ const addChecked = () => {
         $("#instrucciones_bancarias").removeClass("alert-success");
     }
 
+    var checkboxInputLPOA = $("#checkboxInputLPOA").val();
+    if (checkboxInputLPOA == "Hecho") {
+        $("#checkboxInputLPOA").prop("checked", true);
+        $("#lpoa").removeClass("alert-danger");
+        $("#lpoa").addClass("alert-success");
+    } else {
+        $("#checkboxInputLPOA").prop("checked", false);
+        $("#lpoa").addClass("alert-danger");
+        $("#lpoa").removeClass("alert-success");
+    }
+
+    var checkboxInputInstruccionesMAM = $(
+        "#checkboxInputInstruccionesMAM"
+    ).val();
+    if (checkboxInputInstruccionesMAM == "Hecho") {
+        $("#checkboxInputInstruccionesMAM").prop("checked", true);
+        $("#instrucciones_bancarias_mam").removeClass("alert-danger");
+        $("#instrucciones_bancarias_mam").addClass("alert-success");
+    } else {
+        $("#checkboxInputInstruccionesMAM").prop("checked", false);
+        $("#instrucciones_bancarias_mam").addClass("alert-danger");
+        $("#instrucciones_bancarias_mam").removeClass("alert-success");
+    }
+
     var checkboxInputTrans = $("#checkboxInputTrans").val();
     if (checkboxInputTrans == "Hecho") {
         $("#checkboxInputTrans").prop("checked", true);
@@ -1003,17 +677,6 @@ const addChecked = () => {
         $("#checkboxInputTrans").prop("checked", false);
         $("#transferencia").addClass("alert-danger");
         $("#transferencia").removeClass("alert-success");
-    }
-
-    var checkboxInputContrato = $("#checkboxInputContrato").val();
-    if (checkboxInputContrato == "Hecho") {
-        $("#checkboxInputContrato").prop("checked", true);
-        $("#contrato").removeClass("alert-danger");
-        $("#contrato").addClass("alert-success");
-    } else {
-        $("#checkboxInputContrato").prop("checked", false);
-        $("#contrato").addClass("alert-danger");
-        $("#contrato").removeClass("alert-success");
     }
 
     var checkboxInputConectar = $("#checkboxInputConectar").val();
@@ -1027,37 +690,26 @@ const addChecked = () => {
         $("#conectar_mam_pool").removeClass("alert-success");
     }
 
-    var checkboxInputTarjetaSwiss = $("#checkboxInputTarjetaSwiss").val();
-    if (checkboxInputTarjetaSwiss == "Hecho") {
-        $("#checkboxInputTarjetaSwiss").prop("checked", true);
-        $("#tarjetaSwiss").removeClass("alert-danger");
-        $("#tarjetaSwiss").addClass("alert-success");
+    var checkboxInputConvenio = $("#checkboxInputConvenio").val();
+    if (checkboxInputConvenio == "Hecho") {
+        $("#checkboxInputConvenio").prop("checked", true);
+        $("#convenio").removeClass("alert-danger");
+        $("#convenio").addClass("alert-success");
     } else {
-        $("#checkboxInputTarjetaSwiss").prop("checked", false);
-        $("#tarjetaSwiss").addClass("alert-danger");
-        $("#tarjetaSwiss").removeClass("alert-success");
+        $("#checkboxInputConvenio").prop("checked", false);
+        $("#convenio").addClass("alert-danger");
+        $("#convenio").removeClass("alert-success");
     }
 
-    var checkboxInputTarjetaUp = $("#checkboxInputTarjetaUp").val();
-    if (checkboxInputTarjetaUp == "Hecho") {
-        $("#checkboxInputTarjetaUp").prop("checked", true);
-        $("#tarjetaUp").removeClass("alert-danger");
-        $("#tarjetaUp").addClass("alert-success");
+    var checkboxInputReporte = $("#checkboxInputReporte").val();
+    if (checkboxInputReporte == "Hecho") {
+        $("#checkboxInputReporte").prop("checked", true);
+        $("#1erReporte").removeClass("alert-danger");
+        $("#1erReporte").addClass("alert-success");
     } else {
-        $("#checkboxInputTarjetaUp").prop("checked", false);
-        $("#tarjetaUp").addClass("alert-danger");
-        $("#tarjetaUp").removeClass("alert-success");
-    }
-
-    var checkboxInputPago = $("#checkboxInputPago").val();
-    if (checkboxInputPago == "Hecho") {
-        $("#checkboxInputPago").prop("checked", true);
-        $("#1erPago").removeClass("alert-danger");
-        $("#1erPago").addClass("alert-success");
-    } else {
-        $("#checkboxInputPago").prop("checked", false);
-        $("#1erPago").addClass("alert-danger");
-        $("#1erPago").removeClass("alert-success");
+        $("#checkboxInputReporte").prop("checked", false);
+        $("#1erReporte").addClass("alert-danger");
+        $("#1erReporte").removeClass("alert-success");
     }
 };
 
@@ -1077,22 +729,6 @@ const editChecked = () => {
         }
     });
 
-    $("#checkboxInputInversion").change(function () {
-        var checkboxInputInversion = $("#checkboxInputInversion").is(
-            ":checked"
-        );
-
-        if (checkboxInputInversion) {
-            $("#intencion_inversion").removeClass("alert-danger");
-            $("#intencion_inversion").addClass("alert-success");
-            $("#checkboxInputInversion").val("Hecho");
-        } else {
-            $("#intencion_inversion").addClass("alert-danger");
-            $("#intencion_inversion").removeClass("alert-success");
-            $("#checkboxInputInversion").val("Pendiente");
-        }
-    });
-
     $("#checkboxInputForm").change(function () {
         var checkboxInputForm = $("#checkboxInputForm").is(":checked");
 
@@ -1104,6 +740,20 @@ const editChecked = () => {
             $("#formulario").addClass("alert-danger");
             $("#formulario").removeClass("alert-success");
             $("#checkboxInputForm").val("Pendiente");
+        }
+    });
+
+    $("#checkboxInputCliente").change(function () {
+        var checkboxInputCliente = $("#checkboxInputCliente").is(":checked");
+
+        if (checkboxInputCliente) {
+            $("#altaCliente").removeClass("alert-danger");
+            $("#altaCliente").addClass("alert-success");
+            $("#checkboxInputCliente").val("Hecho");
+        } else {
+            $("#altaCliente").addClass("alert-danger");
+            $("#altaCliente").removeClass("alert-success");
+            $("#checkboxInputCliente").val("Pendiente");
         }
     });
 
@@ -1151,6 +801,36 @@ const editChecked = () => {
         }
     });
 
+    $("#checkboxInputLPOA").change(function () {
+        var checkboxInputLPOA = $("#checkboxInputLPOA").is(":checked");
+
+        if (checkboxInputLPOA) {
+            $("#lpoa").removeClass("alert-danger");
+            $("#lpoa").addClass("alert-success");
+            $("#checkboxInputLPOA").val("Hecho");
+        } else {
+            $("#lpoa").addClass("alert-danger");
+            $("#lpoa").removeClass("alert-success");
+            $("#checkboxInputLPOA").val("Pendiente");
+        }
+    });
+
+    $("#checkboxInputInstruccionesMAM").change(function () {
+        var checkboxInputInstruccionesMAM = $(
+            "#checkboxInputInstruccionesMAM"
+        ).is(":checked");
+
+        if (checkboxInputInstruccionesMAM) {
+            $("#instrucciones_bancarias_mam").removeClass("alert-danger");
+            $("#instrucciones_bancarias_mam").addClass("alert-success");
+            $("#checkboxInputInstruccionesMAM").val("Hecho");
+        } else {
+            $("#instrucciones_bancarias_mam").addClass("alert-danger");
+            $("#instrucciones_bancarias_mam").removeClass("alert-success");
+            $("#checkboxInputInstruccionesMAM").val("Pendiente");
+        }
+    });
+
     $("#checkboxInputTrans").change(function () {
         var checkboxInputTrans = $("#checkboxInputTrans").is(":checked");
 
@@ -1162,20 +842,6 @@ const editChecked = () => {
             $("#transferencia").addClass("alert-danger");
             $("#transferencia").removeClass("alert-success");
             $("#checkboxInputTrans").val("Pendiente");
-        }
-    });
-
-    $("#checkboxInputContrato").change(function () {
-        var checkboxInputContrato = $("#checkboxInputContrato").is(":checked");
-
-        if (checkboxInputContrato) {
-            $("#contrato").removeClass("alert-danger");
-            $("#contrato").addClass("alert-success");
-            $("#checkboxInputContrato").val("Hecho");
-        } else {
-            $("#contrato").addClass("alert-danger");
-            $("#contrato").removeClass("alert-success");
-            $("#checkboxInputContrato").val("Pendiente");
         }
     });
 
@@ -1193,49 +859,31 @@ const editChecked = () => {
         }
     });
 
-    $("#checkboxInputTarjetaSwiss").change(function () {
-        var checkboxInputTarjetaSwiss = $("#checkboxInputTarjetaSwiss").is(
-            ":checked"
-        );
+    $("#checkboxInputConvenio").change(function () {
+        var checkboxInputConvenio = $("#checkboxInputConvenio").is(":checked");
 
-        if (checkboxInputTarjetaSwiss) {
-            $("#tarjetaSwiss").removeClass("alert-danger");
-            $("#tarjetaSwiss").addClass("alert-success");
-            $("#checkboxInputTarjetaSwiss").val("Hecho");
+        if (checkboxInputConvenio) {
+            $("#convenio").removeClass("alert-danger");
+            $("#convenio").addClass("alert-success");
+            $("#checkboxInputConvenio").val("Hecho");
         } else {
-            $("#tarjetaSwiss").addClass("alert-danger");
-            $("#tarjetaSwiss").removeClass("alert-success");
-            $("#checkboxInputTarjetaSwiss").val("Pendiente");
+            $("#convenio").addClass("alert-danger");
+            $("#convenio").removeClass("alert-success");
+            $("#checkboxInputConvenio").val("Pendiente");
         }
     });
 
-    $("#checkboxInputTarjetaUp").change(function () {
-        var checkboxInputTarjetaUp = $("#checkboxInputTarjetaUp").is(
-            ":checked"
-        );
+    $("#checkboxInputReporte").change(function () {
+        var checkboxInputReporte = $("#checkboxInputReporte").is(":checked");
 
-        if (checkboxInputTarjetaUp) {
-            $("#tarjetaUp").removeClass("alert-danger");
-            $("#tarjetaUp").addClass("alert-success");
-            $("#checkboxInputTarjetaUp").val("Hecho");
+        if (checkboxInputReporte) {
+            $("#1erReporte").removeClass("alert-danger");
+            $("#1erReporte").addClass("alert-success");
+            $("#checkboxInputReporte").val("Hecho");
         } else {
-            $("#tarjetaUp").addClass("alert-danger");
-            $("#tarjetaUp").removeClass("alert-success");
-            $("#checkboxInputTarjetaUp").val("Pendiente");
-        }
-    });
-
-    $("#checkboxInputPago").change(function () {
-        var checkboxInputPago = $("#checkboxInputPago").is(":checked");
-
-        if (checkboxInputPago) {
-            $("#1erPago").removeClass("alert-danger");
-            $("#1erPago").addClass("alert-success");
-            $("#checkboxInputPago").val("Hecho");
-        } else {
-            $("#1erPago").addClass("alert-danger");
-            $("#1erPago").removeClass("alert-success");
-            $("#checkboxInputPago").val("Pendiente");
+            $("#1erReporte").addClass("alert-danger");
+            $("#1erReporte").removeClass("alert-success");
+            $("#checkboxInputReporte").val("Pendiente");
         }
     });
 };

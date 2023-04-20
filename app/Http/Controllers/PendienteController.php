@@ -22,13 +22,13 @@ class PendienteController extends Controller
 
     public function index()
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
             $codigo = session('codigo_oficina');
 
             $pendientes = DB::table('pendiente')
                 ->join('ps', 'ps.id', '=', 'pendiente.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.intencion_inversion, pendiente.formulario, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.transferencia, pendiente.contrato, pendiente.conexion_mampool, pendiente.primer_pago, pendiente.tarjeta_swissquote, pendiente.tarjeta_uptrading, pendiente.ultima_modificacion"))
+                ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.formulario, pendiente.alta_cliente, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.generar_lpoa, pendiente.instrucciones_bancarias_mam, pendiente.transferencia, pendiente.conexion_mampool, pendiente.generar_convenio, pendiente.primer_reporte, pendiente.ultima_modificacion"))
                 ->orderBy("ultima_modificacion", "desc")
                 ->where("codigo_oficina", "like", $codigo)
                 ->get();
@@ -78,7 +78,7 @@ class PendienteController extends Controller
     {
         $pendientes = DB::table('pendiente')
             ->join('ps', 'ps.id', '=', 'pendiente.ps_id')
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.intencion_inversion, pendiente.formulario, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.transferencia, pendiente.contrato, pendiente.conexion_mampool, pendiente.primer_pago, pendiente.tarjeta_swissquote, pendiente.tarjeta_uptrading, pendiente.ultima_modificacion, memo_introduccion, memo_intencion_inversion, memo_formulario, memo_videoconferencia, memo_apertura, memo_instrucciones_bancarias, memo_transferencia, memo_contrato, memo_conexion_mampool, memo_tarjeta_swissquote, memo_tarjeta_uptrading, memo_primer_pago, fecha_introduccion, fecha_intencion_inversion, fecha_formulario, fecha_videoconferencia, fecha_apertura, fecha_instrucciones_bancarias, fecha_transferencia, fecha_contrato, fecha_conexion_mampool, fecha_tarjeta_swissquote, fecha_tarjeta_uptrading, fecha_primer_pago"))
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.formulario, pendiente.alta_cliente, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.generar_lpoa, pendiente.memo_generar_lpoa, pendiente.instrucciones_bancarias_mam, pendiente.transferencia, pendiente.memo_transferencia, pendiente.conexion_mampool, memo_conexion_mampool, pendiente.generar_convenio, pendiente.memo_generar_convenio, pendiente.primer_reporte, pendiente.ultima_modificacion, fecha_introduccion, fecha_formulario, fecha_alta_cliente, fecha_videoconferencia, fecha_apertura, fecha_instrucciones_bancarias, fecha_generar_lpoa, fecha_instrucciones_bancarias_mam, fecha_transferencia, fecha_conexion_mampool, fecha_generar_convenio, fecha_primer_reporte"))
             ->where("pendiente.id", "=", $request->id)
             ->first();
 
@@ -88,16 +88,12 @@ class PendienteController extends Controller
 
     public function listaClientes()
     {
+        $codigo = session('codigo_oficina');
 
-        if(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
-            $codigo = session('codigo_oficina');
-        }else{
-            $codigo = "%";
-        }
-        
         $pendientes = DB::table('pendiente')
             ->join('ps', 'ps.id', '=', 'pendiente.ps_id')
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.intencion_inversion, pendiente.formulario, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.transferencia, pendiente.contrato, pendiente.conexion_mampool, pendiente.primer_pago, pendiente.tarjeta_swissquote, pendiente.tarjeta_uptrading, pendiente.ultima_modificacion"))
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.formulario, pendiente.alta_cliente, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.generar_lpoa, pendiente.instrucciones_bancarias_mam, pendiente.transferencia, pendiente.conexion_mampool, pendiente.generar_convenio, pendiente.primer_reporte, pendiente.ultima_modificacion"))
             ->orderBy("ultima_modificacion", "desc")
             ->where("codigo_oficina", "like", $codigo)
             ->get();
@@ -118,24 +114,31 @@ class PendienteController extends Controller
 
         if (!empty($request->introduccion)) {
             $pendiente->introduccion = "Hecho";
+            $pendiente->fecha_introduccion = date("Y-m-d H:i:s");
         } else {
             $pendiente->introduccion = "Pendiente";
-        }
-
-        if (!empty($request->intencion_inversion)) {
-            $pendiente->intencion_inversion = "Hecho";
-        } else {
-            $pendiente->intencion_inversion = "Pendiente";
+            $pendiente->fecha_introduccion = date("Y-m-d H:i:s");
         }
 
         if (!empty($request->formulario)) {
             $pendiente->formulario = "Hecho";
+            $pendiente->fecha_formulario = date("Y-m-d H:i:s");
         } else {
             $pendiente->formulario = "Pendiente";
+            $pendiente->fecha_formulario = date("Y-m-d H:i:s");
+        }
+
+        if (!empty($request->alta_cliente)) {
+            $pendiente->alta_cliente = "Hecho";
+            $pendiente->fecha_alta_cliente = date("Y-m-d H:i:s");
+        } else {
+            $pendiente->alta_cliente = "Pendiente";
+            $pendiente->fecha_alta_cliente = date("Y-m-d H:i:s");
         }
 
         if (!empty($request->videoconferencia)) {
             $pendiente->videoconferencia = "Hecho";
+            $pendiente->fecha_videoconferencia = date("Y-m-d H:i:s");
         } else {
             $pendiente->videoconferencia = "Pendiente";
         }
@@ -148,8 +151,24 @@ class PendienteController extends Controller
 
         if (!empty($request->instrucciones_bancarias)) {
             $pendiente->instrucciones_bancarias = "Hecho";
+            $pendiente->fecha_instrucciones_bancarias = date("Y-m-d H:i:s");
         } else {
             $pendiente->instrucciones_bancarias = "Pendiente";
+            $pendiente->fecha_instrucciones_bancarias = date("Y-m-d H:i:s");
+        }
+
+        if (!empty($request->generar_lpoa)) {
+            $pendiente->generar_lpoa = "Hecho";
+        } else {
+            $pendiente->generar_lpoa = "Pendiente";
+        }
+
+        if (!empty($request->instrucciones_bancarias_mam)) {
+            $pendiente->instrucciones_bancarias_mam = "Hecho";
+            $pendiente->fecha_instrucciones_bancarias_mam = date("Y-m-d H:i:s");
+        } else {
+            $pendiente->instrucciones_bancarias_mam = "Pendiente";
+            $pendiente->fecha_instrucciones_bancarias_mam = date("Y-m-d H:i:s");
         }
 
         if (!empty($request->transferencia)) {
@@ -158,85 +177,47 @@ class PendienteController extends Controller
             $pendiente->transferencia = "Pendiente";
         }
 
-        if (!empty($request->contrato)) {
-            $pendiente->contrato = "Hecho";
-        } else {
-            $pendiente->contrato = "Pendiente";
-        }
-
         if (!empty($request->conexion_mampool)) {
             $pendiente->conexion_mampool = "Hecho";
         } else {
             $pendiente->conexion_mampool = "Pendiente";
         }
 
-        if (!empty($request->tarjeta_swissquote)) {
-            $pendiente->tarjeta_swissquote = "Hecho";
+        if (!empty($request->generar_convenio)) {
+            $pendiente->generar_convenio = "Hecho";
         } else {
-            $pendiente->tarjeta_swissquote = "Pendiente";
+            $pendiente->generar_convenio = "Pendiente";
         }
 
-        if (!empty($request->tarjeta_uptrading)) {
-            $pendiente->tarjeta_uptrading = "Hecho";
+        if (!empty($request->primer_reporte)) {
+            $pendiente->primer_reporte = "Hecho";
+            $pendiente->fecha_primer_reporte = date("Y-m-d H:i:s");
         } else {
-            $pendiente->tarjeta_uptrading = "Pendiente";
+            $pendiente->primer_reporte = "Pendiente";
+            $pendiente->fecha_primer_reporte = date("Y-m-d H:i:s");
         }
 
-        if (!empty($request->primer_pago)) {
-            $pendiente->primer_pago = "Hecho";
-        } else {
-            $pendiente->primer_pago = "Pendiente";
-        }
-
-        if($pendiente->memo_introduccion != $request->memo_introduccion){
-            $pendiente->fecha_introduccion = date("Y-m-d H:i:s");
-        }
-        if($pendiente->memo_intencion_inversion != $request->memo_intencion){
-            $pendiente->fecha_intencion_inversion = date("Y-m-d H:i:s");
-        }
-        if($pendiente->memo_formulario != $request->memo_formulario){
-            $pendiente->fecha_formulario = date("Y-m-d H:i:s");
-        }
-        if($pendiente->memo_videoconferencia != $request->memo_videoconferencia){
-            $pendiente->fecha_videoconferencia = date("Y-m-d H:i:s");
-        }
         if($pendiente->memo_apertura != $request->memo_apertura){
             $pendiente->fecha_apertura = date("Y-m-d H:i:s");
         }
-        if($pendiente->memo_instrucciones_bancarias != $request->memo_instrucciones){
-            $pendiente->fecha_instrucciones_bancarias = date("Y-m-d H:i:s");
+        if($pendiente->memo_generar_lpoa != $request->memo_generar_lpoa){
+            $pendiente->fecha_generar_lpoa = date("Y-m-d H:i:s");
         }
         if($pendiente->memo_transferencia != $request->memo_transferencia){
             $pendiente->fecha_transferencia = date("Y-m-d H:i:s");
         }
-        if($pendiente->memo_contrato != $request->memo_contrato){
-            $pendiente->fecha_contrato = date("Y-m-d H:i:s");
-        }
         if($pendiente->memo_conexion_mampool != $request->memo_mam_pool){
             $pendiente->fecha_conexion_mampool = date("Y-m-d H:i:s");
-        }        
-        if($pendiente->memo_tarjeta_swissquote != $request->memo_tarjeta_swiss){
-            $pendiente->fecha_tarjeta_swissquote = date("Y-m-d H:i:s");
         }
-        if($pendiente->memo_tarjeta_uptrading != $request->memo_tarjeta_uptrading){
-            $pendiente->fecha_tarjeta_uptrading = date("Y-m-d H:i:s");
-        }
-        if($pendiente->memo_primer_pago != $request->memo_primer_pago){
-            $pendiente->fecha_primer_pago = date("Y-m-d H:i:s");
+        if($pendiente->memo_generar_convenio != $request->memo_generar_convenio){
+            $pendiente->fecha_generar_convenio = date("Y-m-d H:i:s");
         }
 
-        $pendiente->memo_introduccion = $request->memo_introduccion;
-        $pendiente->memo_intencion_inversion = $request->memo_intencion;
-        $pendiente->memo_formulario = $request->memo_formulario;
-        $pendiente->memo_videoconferencia = $request->memo_videoconferencia;
         $pendiente->memo_apertura = $request->memo_apertura;
-        $pendiente->memo_instrucciones_bancarias = $request->memo_instrucciones;
+        $pendiente->memo_generar_lpoa = $request->memo_generar_lpoa;
         $pendiente->memo_transferencia = $request->memo_transferencia;
-        $pendiente->memo_contrato = $request->memo_contrato;
         $pendiente->memo_conexion_mampool = $request->memo_mam_pool;
-        $pendiente->memo_tarjeta_swissquote = $request->memo_tarjeta_swiss;
-        $pendiente->memo_tarjeta_uptrading = $request->memo_tarjeta_uptrading;
-        $pendiente->memo_primer_pago = $request->memo_primer_pago;
+        $pendiente->memo_generar_convenio = $request->memo_generar_convenio;
 
         $pendiente->ultima_modificacion = date("Y-m-d H:i:s");
 
@@ -281,16 +262,12 @@ class PendienteController extends Controller
 
     public function generateList()
     {
-        if(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
-            $codigo = session('codigo_oficina');
-        }else{
-            $codigo = "%";
-        }
+        $codigo = session('codigo_oficina');
 
         $pendientes = DB::table("pendiente")
             ->join('ps', 'ps.id', '=', 'pendiente.ps_id')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.intencion_inversion, pendiente.formulario, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.transferencia, pendiente.contrato, pendiente.conexion_mampool, pendiente.primer_pago, pendiente.tarjeta_swissquote, pendiente.tarjeta_uptrading, pendiente.ultima_modificacion"))
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, pendiente.ps_id, pendiente.id AS pendienteid, pendiente.nombre, pendiente.memo_nombre, pendiente.introduccion, pendiente.formulario, pendiente.alta_cliente, pendiente.videoconferencia, pendiente.apertura, pendiente.memo_apertura, pendiente.instrucciones_bancarias, pendiente.generar_lpoa, pendiente.instrucciones_bancarias_mam, pendiente.transferencia, pendiente.conexion_mampool, pendiente.generar_convenio, pendiente.primer_reporte, pendiente.ultima_modificacion"))
             ->orderBy("ultima_modificacion", "desc")
             ->where("codigo_oficina", "like", $codigo)
             ->get();

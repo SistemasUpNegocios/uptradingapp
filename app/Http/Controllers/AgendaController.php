@@ -24,7 +24,7 @@ class AgendaController extends Controller
     
     public function index()
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
             $users = User::where('privilegio', 'root')
                     ->orWhere('privilegio', 'admin')
                     ->orWhere('privilegio', 'procesos')
