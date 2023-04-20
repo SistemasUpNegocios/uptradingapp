@@ -35,7 +35,7 @@ class ContratoController extends Controller
     public function index()
     {
 
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_cliente){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente){
             $codigo = session('codigo_oficina');
             $numeroCliente = "MXN-" . $codigo . "-";
 
@@ -557,10 +557,10 @@ class ContratoController extends Controller
                         $filename = $request->contrato . "_comprobante_" . $i . $ext;
                     }
 
-                    $comprobante_pago->move(public_path("documentos/comprobantes_pagos/$request->contrato/"), $filename);
+                    $comprobante_pago->move(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/"), $filename);
                     $comprobantes_pagos .= $filename.',';
 
-                    $public_dir = public_path("documentos/comprobantes_pagos/$request->contrato");
+                    $public_dir = public_path("documentos/comprobantes_pagos/contratos/$request->contrato");
                     $zipFileName = $request->contrato.'.zip';
                     $zip = new ZipArchive;
     
@@ -1023,9 +1023,9 @@ class ContratoController extends Controller
                 $contrato->referencia_pago = $referencias_pagos;
             }
 
-            if (is_file(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip')) {
-                chmod(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip', 0777);
-                unlink(public_path("documentos/comprobantes_pagos/$request->contrato/") . $request->contrato.'.zip');
+            if (is_file(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $request->contrato.'.zip')) {
+                chmod(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $request->contrato.'.zip', 0777);
+                unlink(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $request->contrato.'.zip');
             }
 
             if ($request->hasFile('comprobante_pago')) {
@@ -1043,15 +1043,15 @@ class ContratoController extends Controller
                         $filename = $request->contrato . "_comprobante_" . $i . $ext;
                     }
 
-                    if (is_file(public_path("documentos/comprobantes_pagos/$request->contrato/") . $filename)) {
-                        chmod(public_path("documentos/comprobantes_pagos/$request->contrato/") . $filename, 0777);
-                        unlink(public_path("documentos/comprobantes_pagos/$request->contrato/") . $filename);
+                    if (is_file(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $filename)) {
+                        chmod(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $filename, 0777);
+                        unlink(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/") . $filename);
                     }
 
-                    $comprobante_pago->move(public_path("documentos/comprobantes_pagos/$request->contrato/"), $filename);
+                    $comprobante_pago->move(public_path("documentos/comprobantes_pagos/contratos/$request->contrato/"), $filename);
                     $comprobantes_pagos .= $filename.',';
 
-                    $public_dir = public_path("documentos/comprobantes_pagos/$request->contrato");
+                    $public_dir = public_path("documentos/comprobantes_pagos/contratos/$request->contrato");
                     $zipFileName = $request->contrato.'.zip';
                     $zip = new ZipArchive;
     

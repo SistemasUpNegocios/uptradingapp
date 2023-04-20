@@ -350,9 +350,13 @@ class ConvenioController extends Controller
                 }
             }
 
-            // if ($pagoPSConvenio->save()) {
+            \Telegram::sendMessage([
+                'chat_id' => '-1001976160071',
+                'parse_mode' => 'HTML',
+                'text' => "Se creó un contrato con folio: $request->folio. A espera de su activación."
+            ]);
+
             return response($convenio);
-            // }
         }
     }
 

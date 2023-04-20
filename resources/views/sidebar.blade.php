@@ -268,27 +268,10 @@
                             <i class="bi bi-circle"></i><span>Agenda</span>
                         </a>
                     </li>
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold)
                         <li>
-                            <a href="{{ URL::to('admin/flujodinero') }}">
-                                <i class="bi bi-circle"></i><span>Flujo de dinero</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/concentrado') }}">
-                                <i class="bi bi-circle"></i><span>Concentrados</span>
-                            </a>
-                        </li>
-                    @endif
-                    <li>
-                        <a href="{{ URL::to('admin/intencionInversion') }}">
-                            <i class="bi bi-circle"></i><span>Intención de inversión</span>
-                        </a>
-                    </li>
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
-                        <li>
-                            <a href="{{ URL::to('admin/checklist') }}">
-                                <i class="bi bi-circle"></i><span>Checklist de nuevos clientes</span>
+                            <a href="{{ URL::to('admin/notas') }}">
+                                <i class="bi bi-circle"></i><span>Notas MAM</span>
                             </a>
                         </li>
                     @endif
@@ -297,11 +280,33 @@
                             <i class="bi bi-circle"></i><span>Documentos</span>
                         </a>
                     </li>
+                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                        <li>
+                            <a href="{{ URL::to('admin/concentrado') }}">
+                                <i class="bi bi-circle"></i><span>Concentrados</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/flujodinero') }}">
+                                <i class="bi bi-circle"></i><span>Flujo de dinero</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li>
+                        <a href="{{ URL::to('admin/intencionInversion') }}">
+                            <i class="bi bi-circle"></i><span>Intención de inversión</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/checklist') }}">
+                            <i class="bi bi-circle"></i><span>Checklist de nuevos clientes</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif
 
-        @if (!auth()->user()->is_ps_bronze)
+        @if (!auth()->user()->is_ps_bronze && !auth()->user()->is_ps_diamond)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#contratos-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-file-earmark-richtext"></i><span>Contratos</span><i
@@ -346,7 +351,9 @@
                     @endif
                 </ul>
             </li>
+        @endif
 
+        @if (!auth()->user()->is_ps_bronze)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-file-earmark-text"></i><span>Convenios MAM</span><i
@@ -389,7 +396,6 @@
                     @endif
                 </ul>
             </li>
-            
         @endif
         
         @if (!auth()->user()->is_ps_bronze && !auth()->user()->is_cliente)
@@ -426,14 +432,6 @@
                     </li>
                 @endif
                 </ul>
-            </li>
-
-            <li class="nav-item">
-                <a class="@if (request()->is('admin/pagos')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/pagos') }}">
-                    <i class="bi bi-credit-card"></i>
-                    <span>Gestión de todos los pagos</span>
-                </a>
             </li>
         @endif
         
@@ -493,11 +491,16 @@
                             <a href="{{ URL::to('admin/preguntas') }}">
                                 <i class="bi bi-circle"></i><span>Preguntas</span>
                             </a>
-                        </li>                        
-                    @endif                    
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ URL::to('admin/tipocambio') }}">
                             <i class="bi bi-circle"></i><span>Tipo de cambio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/pagos') }}">
+                            <i class="bi bi-circle"></i><span>Todos los pagos</span>
                         </a>
                     </li>
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)

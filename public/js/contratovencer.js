@@ -892,7 +892,6 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
-                console.log("success");
                 $("#formModalNota").modal("hide");
                 $("#contratoFormNota")[0].reset();
                 table.ajax.reload(null, false);
@@ -927,7 +926,7 @@ $(document).ready(function () {
             $("#comprobantePagoDesc").attr("download", `${contrato}.zip`);
             $("#comprobantePagoDesc").attr(
                 "href",
-                `../documentos/comprobantes_pagos/${contrato}/${contrato}.zip`
+                `../documentos/comprobantes_pagos/contratos/${contrato}/${contrato}.zip`
             );
 
             $("#comprobantePagoDesc").removeClass("d-none");

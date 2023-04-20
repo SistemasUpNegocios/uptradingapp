@@ -51,6 +51,7 @@ Route::post('/admin/deleteCliente', [App\Http\Controllers\ClienteController::cla
 Route::get('/admin/showNumCliente', [App\Http\Controllers\ClienteController::class, 'numCliente']);
 Route::get('/admin/showFormCliente', [App\Http\Controllers\ClienteController::class, 'getFormulario']);
 Route::get('/admin/enviarCorreo', [App\Http\Controllers\ClienteController::class, 'enviarCorreoCumpleanios']);
+Route::post('/admin/cliente/notaMam', [App\Http\Controllers\ClienteController::class, 'notaMam']);
 
 // Rutas para gestión de menú para pagos a cliente (rendimiento compuesto y mensual)
 Route::get('/admin/pagosCliente', [App\Http\Controllers\PagoClienteController::class, 'index'])->name('pagocliente');
@@ -384,3 +385,9 @@ Route::post('/admin/deleteFolio', [App\Http\Controllers\FolioController::class, 
 Route::get('/admin/concentrado', [App\Http\Controllers\ConcentradoController::class, 'index'])->name('concentrado');
 Route::get('/admin/showConcentrado', [App\Http\Controllers\ConcentradoController::class, 'getConcentrado']);
 Route::get('/admin/reporteConcentrado/{id}', [App\Http\Controllers\ConcentradoController::class, 'reporteConcentrado']);
+
+// Rutas para gestión de notas MAM
+Route::get('/admin/notas', [App\Http\Controllers\NotaController::class, 'index'])->name('notas');
+Route::post('/admin/addNota', [App\Http\Controllers\NotaController::class, 'addNota']);
+Route::post('/admin/editNota', [App\Http\Controllers\NotaController::class, 'editNota']);
+Route::post('/admin/deleteNota', [App\Http\Controllers\NotaController::class, 'deleteNota']);

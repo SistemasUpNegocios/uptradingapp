@@ -1,4 +1,4 @@
-@if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+@if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
     <div class="d-flex align-items-center">
         <a href="" data-id="{{ $id }}" data-nombrecliente="{{ $clientenombre }}" data-operador="{{ $operador }}"
             data-operadorine="{{ $operador_ine }}" data-lugarfirma="{{ $lugar_firma }}" data-periodo="{{ $periodo }}"

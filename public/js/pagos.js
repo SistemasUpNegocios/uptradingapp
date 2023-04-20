@@ -46,7 +46,6 @@ $(document).ready(function () {
                 },
             },
             {
-                //233 laura
                 data: "monto",
                 render: function (data) {
                     let montos = "";

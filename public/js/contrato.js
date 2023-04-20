@@ -4442,7 +4442,7 @@ $(document).ready(function () {
             $("#comprobantePagoDesc").attr("download", `${contrato}.zip`);
             $("#comprobantePagoDesc").attr(
                 "href",
-                `../documentos/comprobantes_pagos/${contrato}/${contrato}.zip`
+                `../documentos/comprobantes_pagos/contratos/${contrato}/${contrato}.zip`
             );
 
             $("#comprobantePagoDesc").removeClass("d-none");
