@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Oficina;
 use App\Models\Ps;
 use App\Models\Cliente;
+use App\Models\Formulario;
 use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -232,6 +233,87 @@ class PsController extends Controller
             if ($request->ajax()) {
                 Ps::destroy($request->id);
             }
+        }
+    }
+
+    public function numPS(Request $request)
+    {
+
+        $numeroOficina = session('codigo_oficina');
+
+        if ($numeroOficina == "%") {
+            $numeroOficina = "001";
+        }
+
+        $codigoPS = Ps::select('codigoPs')->where("codigoPs", "like", "$numeroOficina%")->orderBy('codigoPs', 'DESC')->first();
+        
+        if (!empty($codigoPS)) {
+
+            $codigoPS = explode("-", $codigoPS);
+            $ps = intval($codigoPS[1]) + 1;
+
+            $numeroPS = str_pad($ps, 3, "0", STR_PAD_LEFT);
+            $numeroPSCompleto = "$numeroOficina-$numeroPS";
+
+            $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+            $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+            if (!empty($codigoForm) && !empty($codigoCliente)) {
+                $codigoForm = explode("-", $codigoForm);            
+                $codigoCliente = explode("-", $codigoCliente);
+                if($codigoForm[2] >= $codigoCliente[2]){
+                    $cliente = intval($codigoForm[2]) + 1;
+                }else if($codigoForm[2] < $codigoCliente[2]){
+                    $cliente = intval($codigoCliente[2]) + 1;
+                }else{
+                    $cliente = intval($codigoForm[2]) + 1;
+                }        
+                $numeroCliente = str_pad($cliente, 5, "0", STR_PAD_LEFT);
+                $correoPS = "mxa_" . $numeroCliente . "@uptradingexperts.com";
+            } else {
+                $correoPS = "mxa_00001@uptradingexperts.com";
+            }
+
+            $data = array(
+                "numeroPS" => $numeroPSCompleto,
+                "correoPS" => $correoPS
+            );
+
+            return response($data);
+        } else {
+            $numeroPS = "001-001";
+
+            $data = array(
+                "numeroPS" => $numeroPS,
+                "correoPS" => "ps_mx00001@uptradingexperts.com"
+            );
+            return response($data);
+        }
+    }
+
+    public function numPSOficina(Request $request)
+    {
+        $oficina = Oficina::find($request->id);
+        $numeroOficina = $oficina->codigo_oficina;
+        $codigoPS = Ps::select('codigoPs')->where("codigoPs", "like", "$numeroOficina%")->orderBy('codigoPs', 'DESC')->first();
+        
+        if (!empty($codigoPS)) {
+
+            $codigoPS = explode("-", $codigoPS);
+            $ps = intval($codigoPS[1]) + 1;
+
+            $numeroPS = str_pad($ps, 3, "0", STR_PAD_LEFT);
+            $numeroPSCompleto = "$numeroOficina-$numeroPS";
+            
+            $data = array(
+                "numeroPS" => $numeroPSCompleto,
+            );
+
+            return response($data);
+        } else {
+            $data = array(
+                "numeroPS" => "001-001",
+            );
+            return response($data);
         }
     }
 }

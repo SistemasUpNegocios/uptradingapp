@@ -163,6 +163,8 @@ Route::post('/admin/deleteModelo', [App\Http\Controllers\ModeloController::class
 // Rutas para gestión de PS
 Route::get('/admin/ps', [App\Http\Controllers\PsController::class, 'index'])->name('ps');
 Route::get('/admin/showPs', [App\Http\Controllers\PsController::class, 'getPs']);
+Route::get('/admin/showNumPS', [App\Http\Controllers\PsController::class, 'numPS']);
+Route::get('/admin/showNumPSOficina', [App\Http\Controllers\PsController::class, 'numPSOficina']);
 Route::post('/admin/addPs', [App\Http\Controllers\PsController::class, 'addPs']);
 Route::post('/admin/editPs', [App\Http\Controllers\PsController::class, 'editPs']);
 Route::post('/admin/deletePs', [App\Http\Controllers\PsController::class, 'deletePs']);

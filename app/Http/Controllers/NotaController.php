@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\Nota;
 use App\Models\Formulario;
-use App\Models\PS;
+use App\Models\Ps;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -19,7 +19,7 @@ class NotaController extends Controller
 
     public function index()
     {
-        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold){
+        if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond){
             if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
                 $lista_form = Formulario::all();
                 $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
@@ -27,7 +27,7 @@ class NotaController extends Controller
                     ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                     ->get();
             }else{
-                $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                 $psid = $ps_cons->id;
                 $lista_form = Formulario::where("ps_id", $psid)->get();
                 $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
@@ -45,7 +45,7 @@ class NotaController extends Controller
 
     public function addNota(Request $request)
     {
-        $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
+        $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
         $psid = $ps_cons->id;
         $codigoPS = $ps_cons->codigoPS;
 
@@ -128,7 +128,7 @@ class NotaController extends Controller
                         ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                         ->get();
                 }else{
-                    $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
+                    $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                     $psid = $ps_cons->id;
                     $lista_form = Formulario::where("ps_id", $psid)->get();
                     $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')

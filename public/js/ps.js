@@ -275,6 +275,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".new", function (e) {
+        $("#psForm")[0].reset();
         $("#alertMessage").text("");
         acc = "new";
         $("#psForm").attr("action", "/admin/addPs");
@@ -315,9 +316,21 @@ $(document).ready(function () {
 
         $("#btnSubmit").show();
         $("#btnCancel").text("Cancelar");
+
+        $.get({
+            url: "/admin/showNumPS",
+            success: function (response) {
+                $("#codigoPsInput").val(response.numeroPS);
+                $("#correoiInput").val(response.correoPS);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
     });
 
     $(document).on("click", ".view", function (e) {
+        $("#psForm")[0].reset();
         $("#alertMessage").text("");
         acc = "view";
         e.preventDefault();
@@ -424,6 +437,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".edit", function (e) {
+        $("#psForm")[0].reset();
         $("#alertMessage").text("");
         acc = "edit";
         e.preventDefault();
@@ -570,6 +584,24 @@ $(document).ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             }
+        });
+    });
+
+    $("#oficinaIdInput").change(function (e) {
+        var idOficina = $("#oficinaIdInput").val();
+        e.preventDefault();
+
+        $.get({
+            url: "/admin/showNumPSOficina",
+            data: {
+                id: idOficina,
+            },
+            success: function (response) {
+                $("#codigoPsInput").val(response.numeroPS);
+            },
+            error: function (error) {
+                console.log(error);
+            },
         });
     });
 });
