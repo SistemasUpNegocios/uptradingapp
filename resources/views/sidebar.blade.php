@@ -366,6 +366,13 @@
                         </a>
                     </li>
                 </ul>
+                <ul id="convenios-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ URL::to('admin/incrementoConvenio') }}">
+                            <i class="bi bi-circle"></i><span>Incremento cuenta MAM</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="nav-item">

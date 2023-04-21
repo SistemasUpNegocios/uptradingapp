@@ -140,6 +140,18 @@ Route::get('/admin/validateClaveConvenio', [App\Http\Controllers\ConvenioControl
 Route::get('/admin/editStatusConvenio', [App\Http\Controllers\ConvenioController::class, 'editStatus']);
 Route::get('/admin/getFolioConvenio', [App\Http\Controllers\ConvenioController::class, 'getFolioConvenio']);
 Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioController::class, 'enviarTelegram']);
+Route::get('/admin/incrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'index']);
+Route::get('/admin/showIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenio']);
+Route::get('/admin/showIncrementoConvenioActivados', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenioActivado']);
+Route::get('/admin/showIncrementoConvenioPendientes', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenioPendiente']);
+Route::post('/admin/addIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'addConvenio']);
+Route::post('/admin/editIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'editConvenio']);
+Route::post('/admin/deleteIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'deleteConvenio']);
+Route::get('/admin/validateClaveIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'validateClave']);
+Route::get('/admin/editStatusIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'editStatus']);
+Route::get('/admin/getFolioIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'getFolioConvenio']);
+Route::get('/admin/getConvenioUsuario', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenioUsuario']);
+Route::get('/admin/enviarTelegramIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'enviarTelegram']);
 
 // Rutas para gestión de modelo
 Route::get('/admin/modelo', [App\Http\Controllers\ModeloController::class, 'index'])->name('modelo');
