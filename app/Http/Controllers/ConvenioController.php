@@ -353,7 +353,7 @@ class ConvenioController extends Controller
             \Telegram::sendMessage([
                 'chat_id' => '-1001976160071',
                 'parse_mode' => 'HTML',
-                'text' => "Se creó un contrato con folio: $request->folio. A espera de su activación."
+                'text' => "Se creó un convenio con folio: $request->folio. A espera de su activación."
             ]);
 
             return response($convenio);
@@ -405,133 +405,6 @@ class ConvenioController extends Controller
                 $convenio->folio = strtoupper($request->folio);
                 $convenio->status = $request->status;
             }
-
-            // if ($request->status == "Refrendado") {
-            //     $monto_ant = $convenio->monto;
-            //     $monto_nvo = $request->monto;
-            //     $folio_nvo = "";
-
-            //     $folio_ant = $convenio->folio;
-
-            //     $partes_folio = explode("-", $folio_ant);
-
-            //     $num_items = count($partes_folio);
-            //     $i = 0;
-
-            //     foreach ($partes_folio as $parte_folio) {
-            //         if (++$i === $num_items) {
-            //             $num_refrendo = $parte_folio;
-            //             $num_refrendo = intval($num_refrendo);
-            //             $num_refrendo++;
-                        
-            //             if (strlen(strval($num_refrendo)) == 1) {
-            //                 $num_refrendo = "0" . $num_refrendo;
-            //             }
-
-            //             $folio_nvo .= $num_refrendo;
-            //         } else {
-            //             $folio_nvo .= $parte_folio . '-';
-            //         }
-            //     }
-
-            //     $convenio_new = new Convenio;
-
-            //     $convenio_new->folio = $folio_nvo;
-            //     $convenio_new->monto = $monto_nvo;
-            //     $convenio_new->monto_letra = $request->monto_letra;
-            //     $convenio_new->fecha_inicio = $request->fecha_fin;
-
-            //     $fecha_fin_nvo = \Carbon\Carbon::parse($request->fecha_fin)->addYear()->toDateString();
-
-            //     $convenio_new->fecha_fin = $fecha_fin_nvo;
-            //     $convenio_new->capertura = $request->capertura;
-            //     $convenio_new->cmensual = $request->cmensual;
-            //     $convenio_new->ctrimestral = $request->ctrimestral;
-
-            //     $convenio_new->status = "Pendiente de activación";
-
-            //     $convenio_new->numerocuenta = $request->input('numerocuenta');
-            //     $convenio_new->ps_id = $request->input('ps_id');
-            //     $convenio_new->cliente_id = $request->input('cliente_id');
-            //     $convenio_new->banco_id = $request->input('banco_id');
-
-            //     $convenio_new->save();
-
-            //     $convenionew_id = $convenio_new->id;
-
-            //     // for ($i = 0; $i < 13; $i++) {
-            //     //     $serie = "serie-pagops" . $i;
-            //     //     $fechaPago = "fecha-pagops" . $i;
-            //     //     $fechaLimite = "fecha-limitepagops" . $i;
-            //     //     $pago = "pago-pagops" . $i;
-    
-            //     //     $pagoPSConvenio_new = new PagoPSConvenio;
-            //     //     $pagoPSConvenio_new->tipo_pago = 'Pendiente';
-    
-            //     //     if ($i == 3 || $i == 6 || $i == 9 || $i == 12) {
-            //     //         $pagoPSConvenio_new->convenio_id = $convenionew_id;
-            //     //         $pagoPSConvenio_new->serie = $request->input($serie);
-            //     //         $pagoPSConvenio_new->fecha_pago = $request->input($fechaPago);
-            //     //         $pagoPSConvenio_new->fecha_limite = $request->input($fechaLimite);
-            //     //         $pagoPSConvenio_new->pago = $request->input($pago);
-            //     //         $pagoPSConvenio_new->status = "Pendiente";
-            //     //         $pagoPSConvenio_new->memo = "Comisión mensual";
-    
-            //     //         $pagoPSConvenio_new->save();
-    
-            //     //         $pagoPSConvenio_new = new PagoPSConvenio;
-            //     //         $pagoPSConvenio_new->tipo_pago = 'Pendiente';
-            //     //         $pagoPSConvenio_new->convenio_id = $convenionew_id;
-            //     //         $pagoPSConvenio_new->serie = $request->input("serie-pagops" . $i . "trimestral");
-            //     //         $pagoPSConvenio_new->fecha_pago = $request->input("fecha-pagops" . $i . "trimestral");
-            //     //         $pagoPSConvenio_new->fecha_limite = $request->input("fecha-limitepagops" . $i . "trimestral");
-            //     //         $pagoPSConvenio_new->pago = 0;
-            //     //         $pagoPSConvenio_new->status = "Pendiente";
-            //     //         $pagoPSConvenio_new->memo = "Comisión por rédito trimestral";
-    
-            //     //         $pagoPSConvenio_new->save();
-            //     //     } elseif ($i == 0) {
-            //     //         $serie = intval($request->input($serie));
-            //     //         $pagoPSConvenio_new->convenio_id = $convenionew_id;
-            //     //         $pagoPSConvenio_new->serie = ($serie + 1);
-            //     //         $pagoPSConvenio_new->fecha_pago = $request->input($fechaPago);
-            //     //         $pagoPSConvenio_new->fecha_limite = $request->input($fechaLimite);
-            //     //         $pagoPSConvenio_new->pago = $request->input($pago);
-            //     //         $pagoPSConvenio_new->status = "Pendiente";
-            //     //         $pagoPSConvenio_new->memo = "Comisión por apertura";
-    
-            //     //         $pagoPSConvenio_new->save();
-            //     //     } else {
-            //     //         $pagoPSConvenio_new->convenio_id = $convenionew_id;
-            //     //         $pagoPSConvenio_new->serie = $request->input($serie);
-            //     //         $pagoPSConvenio_new->fecha_pago = $request->input($fechaPago);
-            //     //         $pagoPSConvenio_new->fecha_limite = $request->input($fechaLimite);
-            //     //         $pagoPSConvenio_new->pago = $request->input($pago);
-            //     //         $pagoPSConvenio_new->status = "Pendiente";
-            //     //         $pagoPSConvenio_new->memo = "Comisión mensual";
-    
-            //     //         $pagoPSConvenio_new->save();
-            //     //     }
-            //     // }
-            // } else {
-            //     $convenio->monto = $request->input('monto');
-            //     $convenio->monto_letra = $request->input('monto_letra');
-            // }
-            // $convenio->folio = $request->input('folio');
-            // $convenio->fecha_inicio = $request->input('fecha_inicio');
-            // $convenio->fecha_fin = $request->input('fecha_fin');
-            // $convenio->capertura = $request->input('capertura');
-            // $convenio->cmensual = $request->input('cmensual');
-            // $convenio->ctrimestral = $request->input('ctrimestral');
-            // if (empty($request->status)) {
-            //     $convenio->status = "Pendiente de activación";
-            // } else {
-            //     $convenio->status = $request->input('status');
-            // }
-            // $convenio->numerocuenta = $request->input('numerocuenta');
-            // $convenio->ps_id = $request->input('ps_id');
-            // $convenio->cliente_id = $request->input('cliente_id');
-            // $convenio->banco_id = $request->input('banco_id');
 
             $convenio_id = $convenio->id;
 
@@ -594,7 +467,6 @@ class ConvenioController extends Controller
 
             $convenio->update();
 
-            // $convenio_id = $convenio->id;
             $bitacora_id = session('bitacora_id');
 
             $log = new Log;

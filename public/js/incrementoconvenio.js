@@ -6,7 +6,6 @@ $(document).ready(function () {
     dselect(document.querySelector("#clienteIdInput"), config);
     dselect(document.querySelector("#psIdInput"), config);
 
-
     $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
     $(".dselect-no-results").text("No se encontraron resultados...");
 
@@ -1041,7 +1040,6 @@ $(document).ready(function () {
 
     $("#convenioForm").on("submit", function (e) {
         e.preventDefault();
-        var form = $(this).serialize();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
 
@@ -1106,12 +1104,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".new", function (e) {
-        
-        
         $("#convenioForm")[0].reset();
-
-        
-        
         $("#alertMessage").text("");
         $("#contPagos").empty();
 
@@ -1130,27 +1123,23 @@ $(document).ready(function () {
         $("#psIdInput").next().children().first().attr("disabled", false);
 
         acc = "new";
-        var today = new Date().toISOString().split('T')[0];
-        console.log(today)
+        var today = new Date().toISOString().split("T")[0];
         $("#fechaInicioInput").val(today);
 
         $("#convenioForm").attr("action", "/admin/addIncrementoConvenio");
         $("#idInput").val("");
 
-        $("#clienteIdInput").prop("disabled", false);
         $("#gerenteInput").prop("disabled", false);
         $("#representanteInput").prop("disabled", false);
-        $("#psIdInput").prop("disabled", false);
-        $("#bancoIdInput").prop("disabled", false);
-        $("#fechaInicioInput").prop("readonly", false);
-        $("#fechaFinInput").prop("readonly", false);
-        $("#cAperturaInput").prop("readonly", false);
-        $("#cMensualInput").prop("readonly", false);
-        $("#montoInput").prop("readonly", false);
-        $("#montoLetraInput").prop("readonly", false);
-        $("#statusInput").prop("disabled", false);
-        $("#numeroCuentaInput").prop("readonly", false);
         $("#modifySwitch").prop("disabled", false);
+
+        $("#clienteIdInput").prop("disabled", false);
+        $("#convenioIdInput").prop("disabled", false);
+        $("#psIdInput").prop("disabled", false);
+        $("#fechaInicioInput").prop("disabled", false);
+        $("#montoIncrementoInput").prop("readonly", false);
+        $("#montoLetraIncrementoInput").prop("readonly", false);
+        $("#statusInput").prop("disabled", false);
 
         $("#modalTitle").text("Añadir convenio");
         $("#btnSubmit").text("Añadir convenio");
@@ -1160,9 +1149,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".view", function (e) {
-        
         $("#convenioForm")[0].reset();
-
         $("#alertMessage").text("");
         acc = "view";
         e.preventDefault();
@@ -1171,9 +1158,7 @@ $(document).ready(function () {
         var nombrecliente = $(this).data("nombrecliente");
         var monto_letra = $(this).data("monto_letra");
         var fecha_inicio = $(this).data("fecha_inicio");
-        var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
-        var numerocuenta = $(this).data("numerocuenta");
         var ps_id = $(this).data("ps_id");
         var psnombre = $(this).data("psnombre");
         var firma = $(this).data("firma");
@@ -1200,11 +1185,9 @@ $(document).ready(function () {
 
         $("#formModal").modal("show");
 
-
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
-        console.log(firma);
         if (firma == "MARIA EUGENIA RINCON ACEVAL") {
             $("#gerenteInput").prop("checked", true);
             $("#representanteInput").prop("checked", false);
@@ -1216,44 +1199,23 @@ $(document).ready(function () {
         $("#representanteInput").prop("disabled", true);
 
         monto = monto.toString().replace(",", ".");
-        $("#montoInput").val(monto);
-        $("#montoInput").prop("readonly", true);
+        $("#montoIncrementoInput").val(monto);
+        $("#montoIncrementoInput").prop("readonly", true);
 
-        $("#montoLetraInput").val(monto_letra);
-        $("#montoLetraInput").prop("readonly", true);
+        $("#montoLetraIncrementoInput").val(monto_letra);
+        $("#montoLetraIncrementoInput").prop("readonly", true);
 
         $("#fechaInicioInput").val(fecha_inicio);
         $("#fechaInicioInput").prop("readonly", true);
 
-        $("#fechaFinInput").val(fecha_fin);
-        $("#fechaFinInput").prop("readonly", true);
-
-        capertura = capertura.toString().replace(",", ".");
-        $("#cAperturaInput").val(capertura);
-        $("#cAperturaInput").prop("readonly", true);
-
-        cmensual = cmensual.toString().replace(",", ".");
-        $("#cMensualInput").val(cmensual);
-        $("#cMensualInput").prop("readonly", true);
-
-        ctrimestral = ctrimestral.toString().replace(",", ".");
-        $("#cTrimestralInput").val(ctrimestral);
-        $("#cTrimestralInput").prop("readonly", true);
-
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
-
-        $("#numeroCuentaInput").val(numerocuenta);
-        $("#numeroCuentaInput").prop("readonly", true);
 
         $("#psIdInput").val(ps_id);
         $("#psIdInput").prop("disabled", true);
 
         $("#clienteIdInput").val(cliente_id);
         $("#clienteIdInput").prop("disabled", true);
-
-        $("#bancoIdInput").val(banco_id);
-        $("#bancoIdInput").prop("disabled", true);
 
         $("#modifySwitch").prop("disabled", true);
 
@@ -1277,21 +1239,11 @@ $(document).ready(function () {
         var monto = $(this).data("monto");
         var monto_letra = $(this).data("monto_letra");
         var fecha_inicio = $(this).data("fecha_inicio");
-        var fecha_fin = $(this).data("fecha_fin");
-        var capertura = $(this).data("capertura");
-        var cmensual = $(this).data("cmensual");
-        var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
-        var numerocuenta = $(this).data("numerocuenta");
         var ps_id = $(this).data("ps_id");
         var cliente_id = $(this).data("cliente_id");
         var psnombre = $(this).data("psnombre");
-        var banco_id = $(this).data("banco_id");
         var firma = $(this).data("firma");
-
-        if (cmensual.toString().charAt(1) == ",") {
-            cmensual = cmensual.replace(",", ".");
-        }
 
         dataInversionUS = $(this).data("monto");
         dataFechaInicio = $(this).data("fecha_inicio");
@@ -1333,35 +1285,17 @@ $(document).ready(function () {
         $("#representanteInput").prop("disabled", false);
 
         monto = monto.toString().replace(",", ".");
-        $("#montoInput").val(monto);
-        $("#montoInput").prop("readonly", false);
+        $("#montoIncrementoInput").val(monto);
+        $("#montoIncrementoInput").prop("readonly", false);
 
-        $("#montoLetraInput").val(monto_letra);
-        $("#montoLetraInput").prop("readonly", false);
+        $("#montoLetraIncrementoInput").val(monto_letra);
+        $("#montoLetraIncrementoInput").prop("readonly", false);
 
         $("#fechaInicioInput").val(fecha_inicio);
         $("#fechaInicioInput").prop("readonly", false);
 
-        $("#fechaFinInput").val(fecha_fin);
-        $("#fechaFinInput").prop("readonly", false);
-
-        capertura = capertura.toString().replace(",", ".");
-        $("#cAperturaInput").val(capertura);
-        $("#cAperturaInput").prop("readonly", false);
-
-        cmensual = cmensual.toString().replace(",", ".");
-        $("#cMensualInput").val(cmensual);
-        $("#cMensualInput").prop("readonly", false);
-
-        ctrimestral = ctrimestral.toString().replace(",", ".");
-        $("#cTrimestralInput").val(ctrimestral);
-        $("#cTrimestralInput").prop("readonly", false);
-
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", false);
-
-        $("#numeroCuentaInput").val(numerocuenta);
-        $("#numeroCuentaInput").prop("readonly", false);
 
         $("#psIdInput").val(ps_id);
         $("#psIdInput").prop("disabled", false);
@@ -1369,188 +1303,12 @@ $(document).ready(function () {
         $("#clienteIdInput").val(cliente_id);
         $("#clienteIdInput").prop("disabled", false);
 
-        $("#bancoIdInput").val(banco_id);
-        $("#bancoIdInput").prop("disabled", false);
-
         $("#modifySwitch").prop("disabled", false);
 
         $("#modalTitle").text(`Editar convenio de: ${nombrecliente}`);
         $("#btnSubmit").show();
         $("#btnSubmit").text("Editar convenio");
         $("#btnCancel").text("Cancelar");
-
-        $("#contPagos").empty();
-        var meses = 12;
-
-        if ($("#fechaInicioInput").val()) {
-            var fechaInicio = $("#fechaInicioInput").val();
-            fechaInicio = new Date(fechaInicio);
-            fechaInicio = fechaInicio.addDays(1);
-
-            var fechaFin = new Date(
-                fechaInicio.setMonth(fechaInicio.getMonth() + parseInt(meses))
-            );
-
-            fechaFin = formatDate(fechaFin).split("/").reverse().join("-");
-
-            $("#fechaFinInput").val(fechaFin);
-        }
-        if (
-            $("#montoInput").val() &&
-            $("#fechaInicioInput").val() &&
-            $("#fechaFinInput").val()
-        ) {
-            $("#contPagos").empty();
-
-            var capertura = $("#cAperturaInput").val();
-            if (capertura.length < 3 && capertura.length > 0) {
-                var posicion = capertura.indexOf(".");
-                if (posicion > 0) {
-                    capertura = capertura.replace(".", "");
-                    capertura = `0.0${capertura}`;
-                } else {
-                    var capertura = `0.0${capertura}`;
-                }
-            } else if (capertura.length == 3) {
-                var posicion = capertura.indexOf(".");
-                if (posicion > 0) {
-                    capertura = capertura.replace(".", "");
-                    capertura = `0.0${capertura}`;
-                } else {
-                    var capertura = `${capertura}`;
-                }
-            }
-            capertura = parseFloat(capertura);
-
-            var cmensual = $("#cMensualInput").val();
-            if (cmensual.length < 3 && cmensual.length > 0) {
-                var posicion = cmensual.indexOf(".");
-                if (posicion > 0) {
-                    cmensual = cmensual.replace(".", "");
-                    cmensual = `0.0${cmensual}`;
-                } else {
-                    var cmensual = `0.0${cmensual}`;
-                }
-            } else if (cmensual.length == 3) {
-                var posicion = cmensual.indexOf(".");
-                if (posicion > 0) {
-                    cmensual = cmensual.replace(".", "");
-                    cmensual = `0.0${cmensual}`;
-                } else {
-                    var cmensual = `${cmensual}`;
-                }
-            }
-            cmensual = parseFloat(cmensual);
-
-            var ctrimestral = $("#cTrimestralInput").val();
-            if (ctrimestral.length < 3 && ctrimestral.length > 0) {
-                var posicion = ctrimestral.indexOf(".");
-                if (posicion > 0) {
-                    ctrimestral = ctrimestral.replace(".", "");
-                    ctrimestral = `0.0${ctrimestral}`;
-                } else {
-                    var ctrimestral = `0.0${ctrimestral}`;
-                }
-            } else if (ctrimestral.length == 3) {
-                var posicion = ctrimestral.indexOf(".");
-                if (posicion > 0) {
-                    ctrimestral = ctrimestral.replace(".", "");
-                    ctrimestral = `0.0${ctrimestral}`;
-                } else {
-                    var ctrimestral = `${ctrimestral}`;
-                }
-            }
-            ctrimestral = parseFloat(ctrimestral);
-
-            var monto = $("#montoInput").val();
-            monto = parseFloat(monto);
-
-            var fecha = $("#fechaInicioInput").val();
-            fecha = new Date(fecha);
-            fecha = fecha.addDays(1);
-
-            for (var i = 1; i < 13; i++) {
-                monto = $("#montoInput").val();
-                var monto2 = monto;
-
-                var fechaPago = fecha;
-                fechaPago.setMonth(fechaPago.getMonth() + 1);
-                var añoPago = fechaPago.getFullYear();
-                var mesPago = fechaPago.getMonth();
-
-                fechaPago = lastDay(añoPago, mesPago);
-                fechaPago = formatDate(fechaPago);
-                fechaPago = fechaPago.split("/").reverse().join("-");
-
-                var fechaLimite = fecha;
-                fechaLimite.setMonth(fechaLimite.getMonth() + 1);
-                fechaLimite.setDate(10);
-                fechaLimite = formatDate(fechaLimite);
-                fechaLimite = fechaLimite.split("/").reverse().join("-");
-
-                if (i == 1) {
-                    monto = monto * capertura;
-                    monto2 = monto2 * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops0" id="seriePagoPS0Input" value="0">
-                            <input type="hidden" name="fecha-pagops0" id="fechaPago0Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops0" id="fechaLimite0Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops0" id="montoReintegro0Input" value="${monto.toFixed(
-                                2
-                            )}">
-                            `
-                    );
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto2.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                } else if (i == 3 || i == 6 || i == 9 || i == 12) {
-                    monto2 = monto * ctrimestral;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}trimestral" id="seriePagoPS${i}TrimestralInput" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}trimestral" id="fechaPago${i}TrimestralInput" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}trimestral" id="fechaLimite${i}TrimestralInput" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}trimestral" id="montoReintegro${i}TrimestralInput" value="${monto2.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                    monto = monto * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                } else {
-                    monto = monto * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                }
-
-                fecha = new Date(fechaPago);
-            }
-        }
 
         Swal.fire({
             title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar convenio</h1>',
@@ -1698,604 +1456,13 @@ $(document).ready(function () {
         window.location.href = "/admin/convenio/verConvenio?id=" + id;
     });
 
-    $("#formModal").on("keyup change", function (event) {
-        var meses = 12;
+    var convenios = [];
 
-        var target = $(event.target);
+    $("#montoIncrementoInput").on("keyup", function (event) {
         $("#montoLetraIncrementoInput").val(
             numeroALetrasUSD($("#montoIncrementoInput").val())
         );
-
-        if (target.is("#montoInput")) {
-            $("#montoLetraInput").val(numeroALetrasUSD($("#montoInput").val()));
-
-            //Condicional para refrendo
-            if (acc == "edit") {
-                if (
-                    $("#statusInput").val() == "Refrendado" &&
-                    dataInversionUS != $("#montoInput").val()
-                ) {
-                    $("#convenioForm").attr(
-                        "action",
-                        "/admin/addIncrementoConvenio"
-                    );
-                }
-            }
-        }
-
-        if ($("#fechaInicioInput").val()) {
-            var fechaInicio = $("#fechaInicioInput").val();
-            fechaInicio = new Date(fechaInicio);
-            fechaInicio = fechaInicio.addDays(1);
-
-            var fechaFin = new Date(
-                fechaInicio.setMonth(fechaInicio.getMonth() + parseInt(meses))
-            );
-
-            fechaFin = formatDate(fechaFin).split("/").reverse().join("-");
-
-            $("#fechaFinInput").val(fechaFin);
-        }
-
-        if (acc == "edit") {
-            console.log(dataInversionUS);
-            console.log($("#montoInput").val());
-            if (
-                $("#statusInput").val() == "Refrendado" &&
-                dataInversionUS != $("#montoInput").val()
-            ) {
-                $("#convenioForm").attr(
-                    "action",
-                    "/admin/addIncrementoConvenio"
-                );
-            } else {
-                $("#convenioForm").attr(
-                    "action",
-                    "/admin/editIncrementoConvenio"
-                );
-            }
-        }
-
-        if (
-            $("#montoInput").val() &&
-            $("#fechaInicioInput").val() &&
-            $("#fechaFinInput").val()
-        ) {
-            $("#contPagos").empty();
-
-            var capertura = $("#cAperturaInput").val();
-            if (capertura.length < 3 && capertura.length > 0) {
-                var posicion = capertura.indexOf(".");
-                if (posicion > 0) {
-                    capertura = capertura.replace(".", "");
-                    capertura = `0.0${capertura}`;
-                } else {
-                    var capertura = `0.0${capertura}`;
-                }
-            } else if (capertura.length == 3) {
-                var posicion = capertura.indexOf(".");
-                if (posicion > 0) {
-                    capertura = capertura.replace(".", "");
-                    capertura = `0.0${capertura}`;
-                } else {
-                    var capertura = `${capertura}`;
-                }
-            }
-            capertura = parseFloat(capertura);
-
-            var cmensual = $("#cMensualInput").val();
-            if (cmensual.length < 3 && cmensual.length > 0) {
-                var posicion = cmensual.indexOf(".");
-                if (posicion > 0) {
-                    cmensual = cmensual.replace(".", "");
-                    cmensual = `0.0${cmensual}`;
-                } else {
-                    var cmensual = `0.0${cmensual}`;
-                }
-            } else if (cmensual.length == 3) {
-                var posicion = cmensual.indexOf(".");
-                if (posicion > 0) {
-                    cmensual = cmensual.replace(".", "");
-                    cmensual = `0.0${cmensual}`;
-                } else {
-                    var cmensual = `${cmensual}`;
-                }
-            }
-            cmensual = parseFloat(cmensual);
-
-            var ctrimestral = $("#cTrimestralInput").val();
-            if (ctrimestral.length < 3 && ctrimestral.length > 0) {
-                var posicion = ctrimestral.indexOf(".");
-                if (posicion > 0) {
-                    ctrimestral = ctrimestral.replace(".", "");
-                    ctrimestral = `0.0${ctrimestral}`;
-                } else {
-                    var ctrimestral = `0.0${ctrimestral}`;
-                }
-            } else if (ctrimestral.length == 3) {
-                var posicion = ctrimestral.indexOf(".");
-                if (posicion > 0) {
-                    ctrimestral = ctrimestral.replace(".", "");
-                    ctrimestral = `0.0${ctrimestral}`;
-                } else {
-                    var ctrimestral = `${ctrimestral}`;
-                }
-            }
-            ctrimestral = parseFloat(ctrimestral);
-
-            var monto = $("#montoInput").val();
-            monto = parseFloat(monto);
-
-            var fecha = $("#fechaInicioInput").val();
-            var fechaFeb = $("#fechaInicioInput").val();
-            fechaFeb = fechaFeb.split("-");
-
-            for (var i = 1; i < 13; i++) {
-                monto = $("#montoInput").val();
-                var monto2 = monto;
-
-                fecha = fecha.split("-");
-                var fechaLimite = new Date(
-                    fecha[0],
-                    parseInt(fecha[1]) + 1,
-                    10
-                );
-                fechaLimite = formatDate(fechaLimite);
-                fechaLimite = fechaLimite.split("/").reverse().join("-");
-
-                if (
-                    fecha[1] == 3 ||
-                    fecha[1] == 5 ||
-                    fecha[1] == 8 ||
-                    fecha[1] == 10
-                ) {
-                    fecha = new Date(fecha[0], fecha[1], 30);
-                    fecha = formatDate(fecha);
-                } else if (parseInt(fecha[1]) + 1 == 2) {
-                    fecha = `28/02/${fecha[0]}`;
-                } else {
-                    fecha = new Date(fecha[0], fecha[1], 31);
-                    fecha = formatDate(fecha);
-                }
-
-                var fechaPago = fecha.split("/").reverse().join("-");
-
-                if (i == 1) {
-                    monto = monto * capertura;
-                    monto2 = monto2 * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops0" id="seriePagoPS0Input" value="0">
-                            <input type="hidden" name="fecha-pagops0" id="fechaPago0Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops0" id="fechaLimite0Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops0" id="montoReintegro0Input" value="${monto.toFixed(
-                                2
-                            )}">
-                            `
-                    );
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto2.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                } else if (i == 3 || i == 6 || i == 9 || i == 12) {
-                    monto2 = monto * ctrimestral;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}trimestral" id="seriePagoPS${i}TrimestralInput" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}trimestral" id="fechaPago${i}TrimestralInput" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}trimestral" id="fechaLimite${i}TrimestralInput" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}trimestral" id="montoReintegro${i}TrimestralInput" value="${monto2.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                    monto = monto * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                } else {
-                    monto = monto * cmensual;
-                    $("#contPagos").append(
-                        `
-                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                            2
-                        )}">
-                            `
-                    );
-                }
-
-                fecha = fecha.split("/").reverse().join("-");
-            }
-        }
-
-        //condicional de refrendo con nuevas fechas
-        if (target.is("#statusInput") && event.type == "change") {
-            if ($("#statusInput").val() == "Refrendado") {
-                if (acc == "new") {
-                    dataInversionUS = $("#monto").val();
-                    dataInversionUS = parseFloat(dataInversionUS);
-
-                    dataFechaInicio = $("#fechaInicioInput").val();
-                }
-
-                $("#contPagos").empty();
-                $("#contMemoCan").addClass("d-none");
-
-                var capertura = $("#cAperturaInput").val();
-                if (capertura.length < 3 && capertura.length > 0) {
-                    var posicion = capertura.indexOf(".");
-                    if (posicion > 0) {
-                        capertura = capertura.replace(".", "");
-                        capertura = `0.0${capertura}`;
-                    } else {
-                        var capertura = `0.0${capertura}`;
-                    }
-                } else if (capertura.length == 3) {
-                    var posicion = capertura.indexOf(".");
-                    if (posicion > 0) {
-                        capertura = capertura.replace(".", "");
-                        capertura = `0.0${capertura}`;
-                    } else {
-                        var capertura = `${capertura}`;
-                    }
-                }
-                capertura = parseFloat(capertura);
-
-                var cmensual = $("#cMensualInput").val();
-                if (cmensual.length < 3 && cmensual.length > 0) {
-                    var posicion = cmensual.indexOf(".");
-                    if (posicion > 0) {
-                        cmensual = cmensual.replace(".", "");
-                        cmensual = `0.0${cmensual}`;
-                    } else {
-                        var cmensual = `0.0${cmensual}`;
-                    }
-                } else if (cmensual.length == 3) {
-                    var posicion = cmensual.indexOf(".");
-                    if (posicion > 0) {
-                        cmensual = cmensual.replace(".", "");
-                        cmensual = `0.0${cmensual}`;
-                    } else {
-                        var cmensual = `${cmensual}`;
-                    }
-                }
-                cmensual = parseFloat(cmensual);
-
-                var ctrimestral = $("#cTrimestralInput").val();
-                if (ctrimestral.length < 3 && ctrimestral.length > 0) {
-                    var posicion = ctrimestral.indexOf(".");
-                    if (posicion > 0) {
-                        ctrimestral = ctrimestral.replace(".", "");
-                        ctrimestral = `0.0${ctrimestral}`;
-                    } else {
-                        var ctrimestral = `0.0${ctrimestral}`;
-                    }
-                } else if (ctrimestral.length == 3) {
-                    var posicion = ctrimestral.indexOf(".");
-                    if (posicion > 0) {
-                        ctrimestral = ctrimestral.replace(".", "");
-                        ctrimestral = `0.0${ctrimestral}`;
-                    } else {
-                        var ctrimestral = `${ctrimestral}`;
-                    }
-                }
-                ctrimestral = parseFloat(ctrimestral);
-
-                var monto = $("#montoInput").val();
-                monto = parseFloat(monto);
-
-                $("#fechaInicioInput").val(dataFechaFin);
-                var fecha = dataFechaFin;
-                fecha = new Date(fecha);
-                fecha = fecha.addDays(1);
-
-                var fechaInicio = $("#fechaInicioInput").val();
-                fechaInicio = new Date(fechaInicio);
-                fechaInicio = fechaInicio.addDays(1);
-
-                var fechaInicioRef = $("#fechaInicioInput").val();
-                fechaInicioRef = new Date(fechaInicioRef);
-                fechaInicioRef = fechaInicioRef.addDays(1);
-
-                var fechaFinRef = new Date(
-                    fechaInicioRef.setMonth(
-                        fechaInicioRef.getMonth() + parseInt(meses)
-                    )
-                );
-
-                fechaFinRef = formatDate(fechaFinRef)
-                    .split("/")
-                    .reverse()
-                    .join("-");
-
-                $("#fechaFinInput").val(fechaFinRef);
-
-                for (var i = 1; i < 13; i++) {
-                    monto = $("#montoInput").val();
-                    var monto2 = monto;
-
-                    var fechaPago = fecha;
-                    fechaPago.setMonth(fechaPago.getMonth() + 1);
-                    var añoPago = fechaPago.getFullYear();
-                    var mesPago = fechaPago.getMonth();
-
-                    fechaPago = lastDay(añoPago, mesPago);
-                    fechaPago = formatDate(fechaPago);
-                    fechaPago = fechaPago.split("/").reverse().join("-");
-
-                    var fechaLimite = fecha;
-                    fechaLimite.setMonth(fechaLimite.getMonth() + 1);
-                    fechaLimite.setDate(10);
-                    fechaLimite = formatDate(fechaLimite);
-                    fechaLimite = fechaLimite.split("/").reverse().join("-");
-
-                    if (i == 1) {
-                        monto = monto * capertura;
-                        monto2 = monto2 * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops0" id="seriePagoPS0Input" value="0">
-                                <input type="hidden" name="fecha-pagops0" id="fechaPago0Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops0" id="fechaLimite0Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops0" id="montoReintegro0Input" value="${monto.toFixed(
-                                    2
-                                )}">
-                                `
-                        );
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto2.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    } else if (i == 3 || i == 6 || i == 9 || i == 12) {
-                        monto2 = monto * ctrimestral;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}trimestral" id="seriePagoPS${i}TrimestralInput" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}trimestral" id="fechaPago${i}TrimestralInput" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}trimestral" id="fechaLimite${i}TrimestralInput" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}trimestral" id="montoReintegro${i}TrimestralInput" value="${monto2.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                        monto = monto * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    } else {
-                        monto = monto * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    }
-
-                    fecha = new Date(fechaPago);
-                }
-            } else if ($("#statusInput").val() == "Activado") {
-                if (acc == "new") {
-                    dataInversionMXN = $("#inversionInput").val();
-                    dataInversionMXN = parseFloat(dataInversionMXN);
-
-                    dataInversionUS = $("#montoInput").val();
-                    dataInversionUS = parseFloat(dataInversionUS);
-
-                    dataFechaInicio = $("#fechaInicioInput").val();
-                }
-
-                $("#contPagos").empty();
-                $("#contMemoCan").addClass("d-none");
-
-                var capertura = $("#cAperturaInput").val();
-                if (capertura.length < 3 && capertura.length > 0) {
-                    var posicion = capertura.indexOf(".");
-                    if (posicion > 0) {
-                        capertura = capertura.replace(".", "");
-                        capertura = `0.0${capertura}`;
-                    } else {
-                        var capertura = `0.0${capertura}`;
-                    }
-                } else if (capertura.length == 3) {
-                    var posicion = capertura.indexOf(".");
-                    if (posicion > 0) {
-                        capertura = capertura.replace(".", "");
-                        capertura = `0.0${capertura}`;
-                    } else {
-                        var capertura = `${capertura}`;
-                    }
-                }
-                capertura = parseFloat(capertura);
-
-                var cmensual = $("#cMensualInput").val();
-                if (cmensual.length < 3 && cmensual.length > 0) {
-                    var posicion = cmensual.indexOf(".");
-                    if (posicion > 0) {
-                        cmensual = cmensual.replace(".", "");
-                        cmensual = `0.0${cmensual}`;
-                    } else {
-                        var cmensual = `0.0${cmensual}`;
-                    }
-                } else if (cmensual.length == 3) {
-                    var posicion = cmensual.indexOf(".");
-                    if (posicion > 0) {
-                        cmensual = cmensual.replace(".", "");
-                        cmensual = `0.0${cmensual}`;
-                    } else {
-                        var cmensual = `${cmensual}`;
-                    }
-                }
-                cmensual = parseFloat(cmensual);
-
-                var ctrimestral = $("#cTrimestralInput").val();
-                if (ctrimestral.length < 3 && ctrimestral.length > 0) {
-                    var posicion = ctrimestral.indexOf(".");
-                    if (posicion > 0) {
-                        ctrimestral = ctrimestral.replace(".", "");
-                        ctrimestral = `0.0${ctrimestral}`;
-                    } else {
-                        var ctrimestral = `0.0${ctrimestral}`;
-                    }
-                } else if (ctrimestral.length == 3) {
-                    var posicion = ctrimestral.indexOf(".");
-                    if (posicion > 0) {
-                        ctrimestral = ctrimestral.replace(".", "");
-                        ctrimestral = `0.0${ctrimestral}`;
-                    } else {
-                        var ctrimestral = `${ctrimestral}`;
-                    }
-                }
-                ctrimestral = parseFloat(ctrimestral);
-
-                var monto = $("#montoInput").val();
-                monto = parseFloat(monto);
-
-                $("#fechaInicioInput").val(dataFechaInicio);
-                var fecha = $("#fechaInicioInput").val();
-                fecha = new Date(fecha);
-                fecha = fecha.addDays(1);
-
-                var fechaInicioRef = $("#fechaInicioInput").val();
-                fechaInicioRef = new Date(fechaInicioRef);
-                fechaInicioRef = fechaInicioRef.addDays(1);
-
-                var fechaFinRef = new Date(
-                    fechaInicioRef.setMonth(
-                        fechaInicioRef.getMonth() + parseInt(meses)
-                    )
-                );
-
-                fechaFinRef = formatDate(fechaFinRef)
-                    .split("/")
-                    .reverse()
-                    .join("-");
-
-                $("#fechaFinInput").val(fechaFinRef);
-
-                for (var i = 1; i < 13; i++) {
-                    monto = $("#montoInput").val();
-                    var monto2 = monto;
-
-                    var fechaPago = fecha;
-                    fechaPago.setMonth(fechaPago.getMonth() + 1);
-                    var añoPago = fechaPago.getFullYear();
-                    var mesPago = fechaPago.getMonth();
-
-                    fechaPago = lastDay(añoPago, mesPago);
-                    fechaPago = formatDate(fechaPago);
-                    fechaPago = fechaPago.split("/").reverse().join("-");
-
-                    var fechaLimite = fecha;
-                    fechaLimite.setMonth(fechaLimite.getMonth() + 1);
-                    fechaLimite.setDate(10);
-                    fechaLimite = formatDate(fechaLimite);
-                    fechaLimite = fechaLimite.split("/").reverse().join("-");
-
-                    if (i == 1) {
-                        monto = monto * capertura;
-                        monto2 = monto2 * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops0" id="seriePagoPS0Input" value="0">
-                                <input type="hidden" name="fecha-pagops0" id="fechaPago0Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops0" id="fechaLimite0Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops0" id="montoReintegro0Input" value="${monto.toFixed(
-                                    2
-                                )}">
-                                `
-                        );
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto2.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    } else if (i == 3 || i == 6 || i == 9 || i == 12) {
-                        monto2 = monto * ctrimestral;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}trimestral" id="seriePagoPS${i}TrimestralInput" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}trimestral" id="fechaPago${i}TrimestralInput" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}trimestral" id="fechaLimite${i}TrimestralInput" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}trimestral" id="montoReintegro${i}TrimestralInput" value="${monto2.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                        monto = monto * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    } else {
-                        monto = monto * cmensual;
-                        $("#contPagos").append(
-                            `
-                                <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
-                                <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
-                                <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
-                                <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
-                                2
-                            )}">
-                                `
-                        );
-                    }
-
-                    fecha = new Date(fechaPago);
-                }
-            } else if ($("#statusInput").val() == "Cancelado") {
-                $("#contMemoCan").removeClass("d-none");
-            } else {
-                $("#contMemoCan").addClass("d-none");
-            }
-        }
     });
-
-    var convenios = [];
 
     $("#clienteIdInput").change(function () {
         var cliente_id = $("#clienteIdInput").val();
@@ -2335,25 +1502,23 @@ $(document).ready(function () {
                 id: cliente_id,
             },
             success: function (res) {
-                convenios=[];
+                convenios = [];
                 convenios = res;
                 $("#convenioIdInput").empty();
-                $("#convenioIdInput").append($('<option>',{
-                    value: '',
-                    text:'Seleciona...'
-                }));
-                $("#fechaInicioConvenioInput").val('');
-                $("#montoInput").val('');
-                $("#montoLetraInput").val('');
-               
-
-                $.each(convenios, function(key,item){ 
-                    $("#convenioIdInput").append($('<option>',{
-                        value: item.folio,
-                        text: item.folio
-                    }));
+                $("#convenioIdInput").append(
+                    $("<option>", {
+                        value: "",
+                        text: "Seleciona...",
+                    })
+                );
+                $.each(convenios, function (key, item) {
+                    $("#convenioIdInput").append(
+                        $("<option>", {
+                            value: item.id,
+                            text: item.folio,
+                        })
+                    );
                 });
-
             },
             error: function (res) {
                 console.log(res);
@@ -2362,15 +1527,38 @@ $(document).ready(function () {
     });
 
     $("#convenioIdInput").change(function () {
-        let value = $("#convenioIdInput option:selected").val();
-        let convenio = convenios.find(x => x.folio === value);
-        $("#fechaInicioConvenioInput").val(convenio.fecha_inicio);
-        $("#montoInput").val(convenio.monto);
-        $("#montoLetraInput").val(convenio.monto_letra);
-        $("#statusInput option[value = '"+convenio.status+"']").attr('selected', true);
-    });
+        var cliente_id = $("#clienteIdInput").val();
+        var convenio_id = $("#convenioIdInput").val();
 
-   
+        $.get({
+            type: "GET",
+            url: "/admin/getFolioIncrementoConvenio",
+            data: {
+                id: cliente_id,
+                id_convenio: convenio_id,
+                opc: 3,
+            },
+            success: function (res) {
+                var current_num = res.folio;
+                current_num = current_num.split("-");
+
+                let new_conv = parseInt(current_num[3]) + 1;
+                new_conv = new_conv.toString().padStart(2, 0);
+
+                let new_num = parseInt(current_num[4]) + 1;
+                new_num = new_num.toString().padStart(2, 0);
+                new_num = `${current_num[0]}-${current_num[1]}-${current_num[2]}-${new_conv}-${new_num}`;
+                $("#folioInput").val(new_num);
+
+                $("#fechaInicioConvenioInput").val(res.convenio.fecha_inicio);
+                $("#montoInput").val(res.convenio.monto);
+                $("#montoLetraInput").val(res.convenio.monto_letra);
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
+    });
 
     $("#psIdInput").change(function () {
         var ps_id = $("#psIdInput").val();

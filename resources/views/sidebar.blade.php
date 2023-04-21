@@ -357,7 +357,6 @@
             </li>
         @endif
 
-<<<<<<< HEAD
         @if (!auth()->user()->is_ps_bronze)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
@@ -379,21 +378,7 @@
                     </li>
                 </ul>
             </li>
-=======
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-file-earmark-text"></i><span>Convenios MAM</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="convenios-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ URL::to('admin/convenio') }}">
-                        <i class="bi bi-circle"></i><span>Convenios</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
->>>>>>> 5c24980ac551ba3b6c4ce812120eb9c772faa932
+        @endif
 
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente)
             <li class="nav-item">
