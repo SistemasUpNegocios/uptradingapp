@@ -169,65 +169,65 @@
                                     <label for="fechaInicioInput">Fecha de incremento en cuenta MAM</label>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="row">
-                                @if (auth()->user()->is_root)
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-floating mb-3">
-                                            <select name="status" class="form-control" id="statusInput" required>
-                                                <option value="" disabled>Selecciona...</option>
-                                                <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                                <option value="Activado">Activado</option>
-                                                <option value="Finiquitado">Finiquitado</option>
-                                                <option value="Refrendado">Refrendado</option>
-                                                <option value="Cancelado">Cancelado</option>
-                                            </select>
-                                            <label for="statusInput">Status del convenio</label>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-floating mb-3">
-                                            <select name="status" class="form-control" id="statusInput" required>
-                                                <option value="" disabled>Selecciona...</option>
-                                                <option value="Pendiente de activación" selected>Pendiente de activación</option>
-                                                <option value="Activado" disabled>Activado</option>
-                                                <option value="Finiquitado" disabled>Finiquitado</option>
-                                                <option value="Refrendado" disabled>Refrendado</option>
-                                                <option value="Cancelado" disabled>Cancelado</option>
-                                            </select>
-                                            <label for="statusInput">Estatus del convenio</label>
-                                        </div>
-                                    </div>
-                                @endif
-
+                        <div class="row">
+                            @if (auth()->user()->is_root)
                                 <div class="col-md-6 col-12">
                                     <div class="form-floating mb-3">
-                                        <input type="number" step="any" class="form-control"
-                                            placeholder="Ingresa la cantidad de inversión en USD" id="montoIncrementoInput" name="monto_incremento"
-                                            required>
-                                        <label for="montoIncrementoInput">Cantidad a incrementar (USD)</label>
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado">Activado</option>
+                                            <option value="Finiquitado">Finiquitado</option>
+                                            <option value="Refrendado">Refrendado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Status del convenio</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-12">
+                            @else
+                                <div class="col-md-6 col-12">
                                     <div class="form-floating mb-3">
-                                        <textarea type="text" class="form-control"
-                                            placeholder="Ingresa la cantidad de incremento en letra" id="montoLetraIncrementoInput"
-                                            name="montoincremento_letra" style="height: 100px" required></textarea>
-                                        <label for="montoLetraIncrementoInput">Cantidad de incremento en letra (USD)</label>
+                                        <select name="status" class="form-control" id="statusInput" required>
+                                            <option value="" disabled>Selecciona...</option>
+                                            <option value="Pendiente de activación" selected>Pendiente de activación</option>
+                                            <option value="Activado" disabled>Activado</option>
+                                            <option value="Finiquitado" disabled>Finiquitado</option>
+                                            <option value="Refrendado" disabled>Refrendado</option>
+                                            <option value="Cancelado" disabled>Cancelado</option>
+                                        </select>
+                                        <label for="statusInput">Estatus del convenio</label>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
 
-                            <div class="row d-none" id="contMemoCan">
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
-                                            id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
-                                        <label for="memoCanInput">Memo de cancelacion</label>
-                                    </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control"
+                                        placeholder="Ingresa la cantidad de inversión en USD" id="montoIncrementoInput" name="monto_incremento"
+                                        required>
+                                    <label for="montoIncrementoInput">Cantidad a incrementar (USD)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-12">
+                                <div class="form-floating mb-3">
+                                    <textarea type="text" class="form-control"
+                                        placeholder="Ingresa la cantidad de incremento en letra" id="montoLetraIncrementoInput"
+                                        name="montoincremento_letra" style="height: 100px" required></textarea>
+                                    <label for="montoLetraIncrementoInput">Cantidad de incremento en letra (USD)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-none" id="contMemoCan">
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
+                                        id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
+                                    <label for="memoCanInput">Memo de cancelacion</label>
                                 </div>
                             </div>
                         </div>

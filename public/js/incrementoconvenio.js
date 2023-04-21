@@ -1155,10 +1155,14 @@ $(document).ready(function () {
         e.preventDefault();
 
         var folio = $(this).data("folio");
+        var convenio_id = $(this).data("convenio_id");
+        var fecha_inicio = $(this).data("fecha_inicio");
         var nombrecliente = $(this).data("nombrecliente");
+        var monto = $(this).data("monto");
         var monto_letra = $(this).data("monto_letra");
         var fecha_inicio = $(this).data("fecha_inicio");
         var status = $(this).data("status");
+        var cliente_id = $(this).data("cliente_id");
         var ps_id = $(this).data("ps_id");
         var psnombre = $(this).data("psnombre");
         var firma = $(this).data("firma");
@@ -1217,6 +1221,57 @@ $(document).ready(function () {
         $("#clienteIdInput").val(cliente_id);
         $("#clienteIdInput").prop("disabled", true);
 
+        $.get({
+            type: "GET",
+            url: "/admin/getConvenioUsuario",
+            data: {
+                id: cliente_id,
+            },
+            success: function (res) {
+                convenios = [];
+                convenios = res;
+                $("#convenioIdInput").empty();
+                $("#convenioIdInput").append(
+                    $("<option>", {
+                        value: "",
+                        text: "Seleciona...",
+                    })
+                );
+                $.each(convenios, function (key, item) {
+                    $("#convenioIdInput").append(
+                        $("<option>", {
+                            value: item.id,
+                            text: item.folio,
+                        })
+                    );
+                });
+
+                $("#convenioIdInput").val(convenio_id);
+                $("#convenioIdInput").prop("disabled", true);
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
+
+        $.get({
+            type: "GET",
+            url: "/admin/getFolioIncrementoConvenio",
+            data: {
+                id: cliente_id,
+                id_convenio: convenio_id,
+                opc: 3,
+            },
+            success: function (res) {
+                $("#fechaInicioConvenioInput").val(res.convenio.fecha_inicio);
+                $("#montoInput").val(res.convenio.monto);
+                $("#montoLetraInput").val(res.convenio.monto_letra);
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
+
         $("#modifySwitch").prop("disabled", true);
 
         $("#btnCancel").text("Cerrar vista previa");
@@ -1242,6 +1297,7 @@ $(document).ready(function () {
         var status = $(this).data("status");
         var ps_id = $(this).data("ps_id");
         var cliente_id = $(this).data("cliente_id");
+        var convenio_id = $(this).data("convenio_id");
         var psnombre = $(this).data("psnombre");
         var firma = $(this).data("firma");
 
@@ -1297,11 +1353,65 @@ $(document).ready(function () {
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", false);
 
+        $("#fechaInicioInput").val(fecha_inicio);
+        $("#fechaInicioInput").prop("readonly", false);
+
         $("#psIdInput").val(ps_id);
         $("#psIdInput").prop("disabled", false);
 
         $("#clienteIdInput").val(cliente_id);
         $("#clienteIdInput").prop("disabled", false);
+
+        $.get({
+            type: "GET",
+            url: "/admin/getConvenioUsuario",
+            data: {
+                id: cliente_id,
+            },
+            success: function (res) {
+                convenios = [];
+                convenios = res;
+                $("#convenioIdInput").empty();
+                $("#convenioIdInput").append(
+                    $("<option>", {
+                        value: "",
+                        text: "Seleciona...",
+                    })
+                );
+                $.each(convenios, function (key, item) {
+                    $("#convenioIdInput").append(
+                        $("<option>", {
+                            value: item.id,
+                            text: item.folio,
+                        })
+                    );
+                });
+
+                $("#convenioIdInput").val(convenio_id);
+                $("#convenioIdInput").prop("disabled", false);
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
+
+        $.get({
+            type: "GET",
+            url: "/admin/getFolioIncrementoConvenio",
+            data: {
+                id: cliente_id,
+                id_convenio: convenio_id,
+                opc: 3,
+            },
+            success: function (res) {
+                $("#fechaInicioConvenioInput").val(res.convenio.fecha_inicio);
+                $("#montoInput").val(res.convenio.monto);
+                $("#montoLetraInput").val(res.convenio.monto_letra);
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
 
         $("#modifySwitch").prop("disabled", false);
 
