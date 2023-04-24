@@ -357,7 +357,7 @@
             </li>
         @endif
 
-        @if (!auth()->user()->is_ps_bronze)
+        {{-- @if (!auth()->user()->is_ps_bronze) --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#convenios-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-file-earmark-text"></i><span>Convenios MAM</span><i
@@ -378,7 +378,7 @@
                     </li>
                 </ul>
             </li>
-        @endif
+        {{-- @endif --}}
 
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente)
             <li class="nav-item">

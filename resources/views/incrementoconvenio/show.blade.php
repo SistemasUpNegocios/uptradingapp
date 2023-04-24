@@ -45,7 +45,7 @@
                             <div id="titulo_filtro">Mostrando todos los incrementos de cuenta MAM</div>
                         </div>
 
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo incremento</a>
                         @endif
                         <table class="table table-striped table-bordered nowrap text-center" id="convenio">

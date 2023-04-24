@@ -59,7 +59,7 @@
                                 <li class="nav-item">
                                     <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="note-cargados"> <i class="icon-share-alt me-1"></i><span class="d-none d-md-block">Cargados</span></a>
                                 </li>
-                                @if(auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
+                                @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
                                     <li class="nav-item ml-auto">
                                         <a href="javascript:void(0)" class="nav-link btn-primary rounded-pill d-flex align-items-center px-3" id="add-notes"> <i class="icon-note m-1"></i><span class="d-none d-md-block font-14">Añadir nota</span></a>
                                     </li>
@@ -128,7 +128,7 @@
                                                         <use xlink:href="#info-fill" />
                                                     </svg>
                                                     <div>
-                                                        No tienes niguna nota
+                                                        No tienes ninguna nota
                                                     </div>
                                                 </div>
                                             </div>

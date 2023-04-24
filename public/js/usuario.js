@@ -30,6 +30,8 @@ $(document).ready(function () {
                         return "PS GOLD";
                     } else if (privilegio == "ps_silver") {
                         return "PS SILVER";
+                    } else if (privilegio == "ps_bronze") {
+                        return "PS BRONZE";
                     } else if (privilegio == "cliente") {
                         return "CLIENTE";
                     }

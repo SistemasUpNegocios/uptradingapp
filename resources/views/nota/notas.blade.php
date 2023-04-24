@@ -59,7 +59,7 @@
                     <use xlink:href="#info-fill" />
                 </svg>
                 <div>
-                    No tienes niguna nota
+                    No tienes ninguna nota
                 </div>
             </div>
         </div>

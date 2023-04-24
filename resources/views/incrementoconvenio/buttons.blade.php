@@ -13,6 +13,6 @@
         @endif
     </div>
 @endif
-@if (auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente || auth()->user()->is_ps_diamond)
+@if (auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
     <a href="" ddata-folio="{{ $folio }}" data-firma="{{$firma}}" data-nombrecliente="{{ $clientenombre }}" data-psnombre="{{ $psnombre }}" data-monto="{{ $cantidad_incremento }}" data-monto_letra="{{ $cantidad_incrementoletra }}" data-fecha_inicio="{{ $fecha_inicio_incremento }}" data-status="{{ $status }}" data-ps_id="{{ $ps_id }}" data-cliente_id="{{ $cliente_id }}" data-convenio_id="{{ $convenioid }}" type="button" title="Vista previa" class="ms-1 btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i> Ver convenio</a>
 @endif

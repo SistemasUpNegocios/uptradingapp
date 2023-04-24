@@ -97,6 +97,7 @@
                                             <option value="admin">Admin</option>
                                             <option value="procesos">Procesos</option>
                                             <option value="ps_gold">PS Gold</option>
+                                            <option value="ps_bronze">PS Bronze</option>
                                             <option value="ps_silver">PS Silver</option>
                                             <option value="contabilidad">Contabilidad</option>
                                             <option value="egresos">Egresos</option>
@@ -111,6 +112,7 @@
                                         <select name="privilegio" class="form-control" id="privilegioInput" required>
                                             <option value="" disabled selected>Selecciona...</option>
                                             <option value="ps_gold">PS Gold</option>
+                                            <option value="ps_bronze">PS Bronze</option>
                                             <option value="ps_silver">PS Silver</option>
                                         </select>
                                         <label for="privilegioInput">Privilegio</label>
