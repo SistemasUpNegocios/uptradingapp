@@ -37,7 +37,7 @@
 
 @section('preloader')
 <div id="loader" class="loader">
-    <h1>Generando convenio, espera..</h1>
+    <h1>Generando incremento de convenio, espera..</h1>
     <span></span>
     <span></span>
     <span></span>
