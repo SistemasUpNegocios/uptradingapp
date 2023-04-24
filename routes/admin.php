@@ -52,6 +52,7 @@ Route::get('/admin/showNumCliente', [App\Http\Controllers\ClienteController::cla
 Route::get('/admin/showFormCliente', [App\Http\Controllers\ClienteController::class, 'getFormulario']);
 Route::get('/admin/enviarCorreo', [App\Http\Controllers\ClienteController::class, 'enviarCorreoCumpleanios']);
 Route::post('/admin/cliente/notaMam', [App\Http\Controllers\ClienteController::class, 'notaMam']);
+Route::get('/admin/cliente/lpoaEmail', [App\Http\Controllers\ClienteController::class, 'pdfLpoaSwiss']);
 
 // Rutas para gestión de menú para pagos a cliente (rendimiento compuesto y mensual)
 Route::get('/admin/pagosCliente', [App\Http\Controllers\PagoClienteController::class, 'index'])->name('pagocliente');

@@ -410,6 +410,53 @@
             </div>
         </div>
     </div>
+
+    
+    <div class="modal fade" id="formModalLPOASWISS" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleNota">Enviar LPOA a Swissquote </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formLPOA" method="post">
+                        @csrf
+                        <input type="hidden" name="id" id="idInputLPOASWISS">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="justify-content-between">
+                                    <p for="LPOASWISSInput" class="form-label text-center"><b>¿Desea enviar el siguiente LPOA?</b></p>
+                                </div>
+
+                                </br>
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-floating mb-3">
+                                            <input id="nombre_completo" class="form-control" type="text" disabled> </input>
+                                            <label for="nombre_completo">Nombre del Cliente </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-floating mb-3">
+                                            <input id="lpoa_firmado" class="form-control" type="text" disabled> </input>
+                                            <label for="nombre_completo">Documento LPOA:</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </br>
+                            </div>
+                        </div>
+                        <div id="alertMessageNota"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btnCancelNota" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn principal-button" id="btnSubmitLPOASwiss">Enviar LPOA a Swissquote</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('preloader')
