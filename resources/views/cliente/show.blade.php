@@ -41,16 +41,6 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-12 d-none" id="alertaNota">
-                            <div class="alert alert-primary d-flex align-items-center" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                                    <use xlink:href="#info-fill" />
-                                </svg>
-                                <div>
-                                    Si el color del botón de <b>"NOTA"</b> está en gris es que existe una nota, y si está negro es que está vacía.
-                                </div>
-                            </div>
-                        </div>
                         <table class="table table-striped table-bordered nowrap text-center" id="cliente">
                             <thead>
                                 <tr>
@@ -371,46 +361,6 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="formModalNota" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleNota">Añadir nota</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formNota" method="post">
-                        @csrf
-                        <input type="hidden" name="id" id="idInputNota">
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <label for="comprobanteInput" class="form-label">Comprobante de pago</label>
-                                    <a id="comprobanteDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
-                                </div>
-                                <input type="file" id="comprobanteInput" class="form-control" name="comprobante_pago" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control" placeholder="Ingresa la nota" id="notaInput" name="nota_contrato" title="Ingresa la nota" style="height: 200px; text-transform: none !important;" required></textarea>
-                                    <label for="notaInput">Nota</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="alertMessageNota"></div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="btnCancelNota" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn principal-button" id="btnSubmitNota">Añadir nota</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     
     <div class="modal fade" id="formModalLPOASWISS" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-lg-down">

@@ -56,47 +56,45 @@
                         </div>
                     @endif
                     
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
-                        {{-- agenda --}}
-                        <div class="datos col-md-12">
-                            <div class="card info-card machines-card">
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title mb-0"><a class="card-title mb-0" href="{{ url('/admin/agenda') }}">Agenda</a> <span>| citas para hoy</span></h5>
-                                    <div class="d-flex align-items-center">
-                                        <div class="ps-0">
-                                            <ul>
-                                                @if (sizeof($agenda) > 0)                                                
-                                                    @foreach ($agenda as $cita)
-                                                        @php
-                                                            $horario = \Carbon\Carbon::parse($cita->start)->format('h:i a');
-                                                            $hora = explode(':', $horario);
-                                                            $nombre = ucwords(strtolower($cita->nombre));
-                                                            $apellidop = ucwords(strtolower($cita->apellido_p));
-                                                            $apellidom = ucwords(strtolower($cita->apellido_m));
-                                                        @endphp
-                                                        <li style="text-align: justify">
-                                                            @if ($hora[0] == "01")
-                                                                {{ $cita->title }} a la {{ $horario }}
-                                                            @else
-                                                                {{ $cita->title }} a las {{ $horario }}
-                                                            @endif
-                                                            @if (auth()->user()->is_admin || auth()->user()->is_procesos)                                                                
-                                                                para {{ $nombre }} {{ $apellidop }} {{ $apellidom }}.
-                                                            @endif
-                                                        </li>
-                                                    @endforeach
-                                                @else
-                                                    <li>No hay citas para ti hoy.</li>
-                                                @endif
-                                            </ul>
-                                        </div>
+                    {{-- agenda --}}
+                    <div class="datos col-md-12">
+                        <div class="card info-card machines-card">
+                            <div class="card-body pb-0">
+                                <h5 class="card-title mb-0"><a class="card-title mb-0" href="{{ url('/admin/agenda') }}">Agenda</a> <span>| citas para hoy</span></h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="ps-0">
+                                        <ul>
+                                            @if (sizeof($agenda) > 0)                                                
+                                                @foreach ($agenda as $cita)
+                                                    @php
+                                                        $horario = \Carbon\Carbon::parse($cita->start)->format('h:i a');
+                                                        $hora = explode(':', $horario);
+                                                        $nombre = ucwords(strtolower($cita->nombre));
+                                                        $apellidop = ucwords(strtolower($cita->apellido_p));
+                                                        $apellidom = ucwords(strtolower($cita->apellido_m));
+                                                    @endphp
+                                                    <li style="text-align: justify">
+                                                        @if ($hora[0] == "01")
+                                                            {{ $cita->title }} a la {{ $horario }}
+                                                        @else
+                                                            {{ $cita->title }} a las {{ $horario }}
+                                                        @endif
+                                                        @if (auth()->user()->is_admin || auth()->user()->is_procesos)                                                                
+                                                            para {{ $nombre }} {{ $apellidop }} {{ $apellidom }}.
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li>No hay citas para ti hoy.</li>
+                                            @endif
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
 
-                    @if(auth()->user()->is_ps_bronze)
+                    @if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
                         {{-- hora --}}
                         <div class="datos col-md-6 col-12">
                             <div class="card info-card hour-card">
@@ -116,35 +114,78 @@
                             </div>
                         </div>
 
-                        <div class="datos col-md-6 col-12">
-                            <div class="card info-card locations-card">
+                        {{-- convenios --}}
+                        <div class="datos col-md-6">
+                            <div class="card info-card machines-card">
+        
                                 <div class="filter">
                                     <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                         <li class="dropdown-header text-start">
                                             <h6>Opciones</h6>
                                         </li>
-        
-                                        <li><a class="dropdown-item" href="{{ url('/admin/cliente') }}">Gestionar clientes</a></li>
+                                        <li><a class="dropdown-item" href="{{ url('/admin/contrato') }}">Gestionar convenios</a></li>
                                     </ul>
                                 </div>
-        
                                 <div class="card-body">
-                                    <h5 class="card-title">Clientes <span>| Total</span></h5>
+                                    <h5 class="card-title">Convenios <span>| Total</span></h5>
         
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-person-video2"></i>
+                                            <i class="bi bi-file-earmark-text"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <p>{{ $clientesCountBronze }}</p>
-                                            <a href="{{ url('/admin/cliente') }}"><span class="text-yellow small pt-1 fw-bold">Gestionar</span></a>
+                                            <p class="num-card">{{ $convenios }}</p>
+                                            <a href="{{ url('/admin/convenio') }}"><span class="text-success small pt-1 fw-bold">Gestionar</span></a>
                                         </div>
                                     </div>
-        
                                 </div>
                             </div>
+                        </div>
+
+                        {{-- incrementos --}}
+                        <div class="datos col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">Incrementos <span>| MAM</span></h5>
         
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $convenio_incremento }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- PS --}}
+                        <div class="datos col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">PS <span>| Total</span></h5>
+        
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $ps }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- clientes --}}
+                        <div class="datos col-md-4">
+                            <div class="card info-card machines-card">
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title mb-0">Clientes <span>| Total</span></h5>
+        
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-0">
+                                            <p class="num-card">{{ $clientesCountBronze }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @else
                         {{-- hora --}}

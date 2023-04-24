@@ -6,6 +6,8 @@ use App\Models\Log;
 use App\Models\Nota;
 use App\Models\Formulario;
 use App\Models\Ps;
+use App\Models\Cliente;
+use App\Models\Oficina;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -20,16 +22,33 @@ class NotaController extends Controller
     public function index()
     {
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond){
+
             if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
                 $lista_form = Formulario::all();
+                $lista_ps = Ps::all();
                 $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
                     ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                     ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                     ->get();
-            }else{
+            }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+                $numeroCliente = "MXN-" . $codigo . "-";
+                $lista_form = Formulario::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
+                $lista_ps = Ps::where("oficina_id", $ps_cons->oficina_id)->get();
+                $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
+                    ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
+                    ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
+                    ->where("ps.oficina_id", $ps_cons->oficina_id)
+                    ->get();
+            }else if(auth()->user()->is_ps_gold) {
                 $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                 $psid = $ps_cons->id;
                 $lista_form = Formulario::where("ps_id", $psid)->get();
+                $lista_ps = (object) [
+                    'psid' => $psid,
+                    'nombrecompleto' => $ps_cons->nombre." ".$ps_cons->apellido_p." ".$ps_cons->apellido_m,
+                ];
                 $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
                     ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                     ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
@@ -37,7 +56,7 @@ class NotaController extends Controller
                     ->get();
             }
             
-            return view('nota.show', compact("notas", "lista_form"));
+            return view('nota.show', compact("notas", "lista_form", "lista_ps"));
         }else{
             return redirect()->to('/admin/dashboard');
         }
@@ -45,17 +64,20 @@ class NotaController extends Controller
 
     public function addNota(Request $request)
     {
-        $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
-        $psid = $ps_cons->id;
-        $codigoPS = $ps_cons->codigoPS;
 
+        $codigoPS = Ps::find($request->ps_id);
+        $nombreps = $codigoPS->nombre.' '.$codigoPS->apellido_p.' '.$codigoPS->apellido_m;
+
+        $codigoCliente = Formulario::find($request->cliente_id);
+        $codigoCliente = $codigoCliente->codigoCliente;
+        
         $nota = new Nota;
-        $nota->ps_id = $psid;
+        $nota->ps_id = $request->ps_id;
         $nota->cliente_id = $request->cliente_id;
         $nota->comentario = $request->comentario;
         $file = $request->file('comprobante_pago');
         $filename = $file->getClientOriginalName();
-        $file->move(public_path("documentos/comprobantes_pagos/ps_convenios/$codigoPS/"), $filename);
+        $file->move(public_path("documentos/comprobantes_pagos/convenios/$nombreps/$codigoCliente/"), $filename);
         $nota->comprobante = $filename;
         $nota->estatus = "pendiente";
         $nota->fecha = Carbon::now()->toDateTimeString();
@@ -71,14 +93,40 @@ class NotaController extends Controller
         $log->bitacora_id = $bitacora_id;
         $log->save();
 
-        $lista_form = Formulario::where("ps_id", $psid)->get();
-        $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
-            ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
-            ->where("notas.ps_id", $psid)
-            ->get();
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+            $lista_form = Formulario::all();
+            $lista_ps = Ps::all();
+            $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
+                ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
+                ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
+                ->get();
+        }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+            $numeroCliente = "MXN-" . $codigo . "-";
+            $lista_form = Formulario::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
+            $lista_ps = Ps::where("oficina_id", $ps_cons->oficina_id)->get();
+            $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
+                ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
+                ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
+                ->where("ps.oficina_id", $ps_cons->oficina_id)
+                ->get();
+        }else if(auth()->user()->is_ps_gold) {
+            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+            $psid = $ps_cons->id;
+            $lista_form = Formulario::where("ps_id", $psid)->get();
+            $lista_ps = (object) [
+                'psid' => $psid,
+                'nombrecompleto' => $ps_cons->nombre." ".$ps_cons->apellido_p." ".$ps_cons->apellido_m,
+            ];
+            $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
+                ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
+                ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
+                ->where("notas.ps_id", $psid)
+                ->get();
+        }
         
-        return view('nota.notas', compact("notas", "lista_form"));
+        return view('nota.notas', compact("notas", "lista_form", "lista_ps"));
     }
 
     public function editNota(Request $request)
@@ -98,12 +146,13 @@ class NotaController extends Controller
         $log->save();
 
         $lista_form = Formulario::all();
+        $lista_ps = Ps::all();
         $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
             ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
             ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
             ->get();
 
-        return view('nota.notas', compact("notas", "lista_form"));
+        return view('nota.notas', compact("notas", "lista_form", "lista_ps"));
     }
 
     public function deleteNota(Request $request)
@@ -123,21 +172,38 @@ class NotaController extends Controller
                 
                 if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
                     $lista_form = Formulario::all();
+                    $lista_ps = Ps::all();
                     $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
                         ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                         ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                         ->get();
-                }else{
+                }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+                    $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
+                    $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
+                    $numeroCliente = "MXN-" . $codigo . "-";
+                    $lista_form = Formulario::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
+                    $lista_ps = Ps::where("oficina_id", $ps_cons->oficina_id)->get();
+                    $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
+                        ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
+                        ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
+                        ->where("ps.oficina_id", $ps_cons->oficina_id)
+                        ->get();
+                }else if(auth()->user()->is_ps_gold) {
                     $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                     $psid = $ps_cons->id;
                     $lista_form = Formulario::where("ps_id", $psid)->get();
+                    $lista_ps = (object) [
+                        'psid' => $psid,
+                        'nombrecompleto' => $ps_cons->nombre." ".$ps_cons->apellido_p." ".$ps_cons->apellido_m,
+                    ];
                     $notas = Nota::join('ps', 'ps.id', '=', 'notas.ps_id')
                         ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                         ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                         ->where("notas.ps_id", $psid)
                         ->get();
                 }
-                return view('nota.notas', compact("notas", "lista_form"));
+                
+                return view('nota.notas', compact("notas", "lista_form", "lista_ps"));
             }
         }
     }

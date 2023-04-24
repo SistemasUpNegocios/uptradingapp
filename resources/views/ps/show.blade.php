@@ -114,14 +114,14 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" minlength="3" maxlength="50"
+                                    <input type="text" class="form-control" 
                                         placeholder="Ingresa la dirección" id="direccionInput" name="direccion" required>
                                     <label for="floatingInput">Dirección</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" minlength="3" maxlength="30"
+                                    <input type="text" class="form-control"
                                         placeholder="Ingresa la colonia/fraccionamiento" id="colFraccInput" name="colonia"
                                         required>
                                     <label for="floatingInput">Colonia/Fraccionamiento</label>

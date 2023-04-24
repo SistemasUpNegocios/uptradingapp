@@ -13,7 +13,7 @@
                 <div class="d-flex align-items-center mt-2">
                     <span class="me-1 delete" data-id="{{$nota->notaid}}"><i class="bi bi-trash-fill"></i></span>
                     @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                        <a class="me-1 download" download="{{$nota->psnombre}}_{{$nota->comprobante}}" href="{{asset("documentos/comprobantes_pagos/ps_convenios/$nota->codigoPS/$nota->comprobante")}}"><i class="bi bi-download"></i></a>
+                        <a class="me-1 download" download="{{$nota->psnombre}}_{{$nota->comprobante}}" href="{{asset("documentos/comprobantes_pagos/convenios/$nota->psnombre/$nota->codigoCliente/$nota->comprobante")}}"><i class="bi bi-download"></i></a>
                         <div class="ms-auto">
                             <div class="category-selector btn-group">
                                 <a class="nav-link dropdown-toggle dropdown-toggle category-dropdown label-group p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">

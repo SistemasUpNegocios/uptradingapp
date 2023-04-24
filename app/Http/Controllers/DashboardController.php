@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Contrato;
 use App\Models\Convenio;
+use App\Models\IncrementoConvenio;
 use App\Models\Oficina;
 use App\Models\Formulario;
 use App\Models\Amortizacion;
@@ -37,7 +38,7 @@ class DashboardController extends Controller
             $psid = $ps_cons->id;
         }
 
-        if(auth()->user()->is_ps_bronze){
+        if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond){
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
             
@@ -97,6 +98,19 @@ class DashboardController extends Controller
             ->where("oficina.codigo_oficina", "like", $codigo)
             ->where('status', 'Activado')
             ->count();
+
+            $convenio_incremento = IncrementoConvenio::join("convenio", "convenio.id", "=", "incremento_convenio.convenio_id")
+            ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where(function ($query) use ($psid, $clienteid) {
+                $query->where("convenio.ps_id", "like", $psid)
+                ->orWhere("convenio.cliente_id", "like", $clienteid);
+            })
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('incremento_convenio.status', 'Activado')
+            ->count();
+            
         }else{
             $contratos_compuestos = Contrato::join('ps', 'ps.id', '=', 'contrato.ps_id')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -135,6 +149,16 @@ class DashboardController extends Controller
             ->where("oficina.codigo_oficina", "like", $codigo)
             ->where('status', 'Activado')
             ->count();
+
+            $convenio_incremento = IncrementoConvenio::join("convenio", "convenio.id", "=", "incremento_convenio.convenio_id")
+            ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+            ->join('oficina', "oficina.id", "=", "ps.oficina_id")
+            ->where("convenio.ps_id", "like", $psid)
+            ->where("convenio.cliente_id", "like", $clienteid)
+            ->where("oficina.codigo_oficina", "like", $codigo)
+            ->where('incremento_convenio.status', 'Activado')
+            ->count();
         }
         
         $fecha = Carbon::now()->format('Y-m-d');
@@ -164,6 +188,7 @@ class DashboardController extends Controller
             "agenda" => $agenda,
 
             "clientesCountBronze" => $clientesCountBronze,
+            "convenio_incremento" => $convenio_incremento,
         );
 
         return response()->view('dashboard.show', $data, 200);

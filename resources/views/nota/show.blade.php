@@ -82,7 +82,7 @@
                                                     <div class="d-flex align-items-center mt-2">
                                                         <span class="me-1 delete" data-id="{{$nota->notaid}}"><i class="bi bi-trash-fill"></i></span>
                                                         @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                                                            <a class="me-1 download" download="{{$nota->psnombre}}_{{$nota->comprobante}}" href="{{asset("documentos/comprobantes_pagos/ps_convenios/$nota->codigoPS/$nota->comprobante")}}"><i class="bi bi-download"></i></a>
+                                                            <a class="me-1 download" download="{{$nota->psnombre}}_{{$nota->comprobante}}" href="{{asset("documentos/comprobantes_pagos/convenios/$nota->psnombre/$nota->codigoCliente/$nota->comprobante")}}"><i class="bi bi-download"></i></a>
                                                             <div class="ms-auto">
                                                                 <div class="category-selector btn-group">
                                                                     <a class="nav-link dropdown-toggle dropdown-toggle category-dropdown label-group p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -155,12 +155,29 @@
                         @csrf
                         <input type="hidden" name="id" id="idInputNota">
                         <div class="row align-items-center">
-                            <div class="col-md-6 col-12 mb-3">
+                            <div class="col-md-12 col-12 mb-3">
                                 <div class="d-flex justify-content-between">
                                     <label for="comprobanteInput" class="form-label">Comprobante de pago</label>
                                     <a id="comprobanteDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
                                 </div>
-                                <input type="file" id="comprobanteInput" class="form-control" name="comprobante_pago" required>
+                                <input type="file" id="comprobanteInput" class="form-control" name="comprobante_pago" required accept="image/*">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select name="ps_id" class="form-select selectSearch" id="psIdInput">
+                                        <option value="" disabled selected>Selecciona...</option>
+                                        @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
+                                            @foreach($lista_ps as $ps)
+                                                <option value="{{ $ps->id }}">{{ $ps->apellido_p }} {{ $ps->apellido_m }} {{ $ps->nombre }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="{{ $lista_ps->psid }}">{{ $lista_ps->nombrecompleto }}</option>
+                                        @endif
+                                    </select>
+                                    <label for="psIdInput">PS</label>
+                                </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">

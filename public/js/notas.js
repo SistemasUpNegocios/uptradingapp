@@ -3,6 +3,7 @@ $(document).ready(function () {
         search: true,
     };
     dselect(document.querySelector("#clienteIdInput"), config);
+    dselect(document.querySelector("#psIdInput"), config);
 
     $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
     $(".dselect-no-results").text("No se encontraron resultados...");
@@ -25,6 +26,7 @@ $(document).ready(function () {
 
     $("#add-notes").on("click", function (event) {
         $("#addnotesmodal").modal("show");
+        $("#formNota")[0].reset();
     });
 
     $(document).on("click", ".editar", function (e) {

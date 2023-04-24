@@ -833,61 +833,30 @@ $(document).ready(function () {
         window.open(docUrl, "_blank");
     });
 
-    $(document).on("click", ".nota", function (e) {
-        e.preventDefault();
-
-        let id = $(this).data("id");
-        let codigo = $(this).data("codigo");
-        let nota = $(this).data("comprobantenota");
-        let img = $(this).data("comprobanteimg");
-        if (img.length > 0) {
-            $("#comprobanteInput").addClass("is-valid");
-            $("#comprobanteInput").removeClass("is-invalid");
-
-            $("#comprobanteDesc").attr("download", `${img}`);
-            $("#comprobanteDesc").attr(
-                "href",
-                `../documentos/comprobantes_pagos/convenios/${codigo}/${img}`
-            );
-
-            $("#comprobanteDesc").removeClass("d-none");
-        } else {
-            $("#comprobanteInput").addClass("is-invalid");
-            $("#comprobanteInput").removeClass("is-valid");
-
-            $("#comprobanteDesc").addClass("d-none");
-        }
-
-        $("#idInputNota").val(id);
-        $("#notaInput").val(nota);
-        $("#formModalNota").modal("show");
-    });
-
     $(document).on("click", ".lpoaswiss", function (e) {
         e.preventDefault();
 
-        let id = $(this).data("id");  
-        let nombre = $(this).data("nombre") + " " +$(this).data("apellidop") ;
-        let lpoadocumento = $(this).data("lpoadocumento");   
-        let codigocliente = $(this).data("codigocliente");   
-
+        let id = $(this).data("id");
+        let nombre = $(this).data("nombre") + " " + $(this).data("apellidop");
+        let lpoadocumento = $(this).data("lpoadocumento");
+        let codigocliente = $(this).data("codigocliente");
 
         $("#nombre_completo").val(nombre);
         $("#lpoa_firmado").val(lpoadocumento);
 
-        $("#btnSubmitLPOASwiss").attr('data-id',id);
-        $("#btnSubmitLPOASwiss").attr('data-nombre', nombre);
-        $("#btnSubmitLPOASwiss").attr('data-doc', lpoadocumento);
-        $("#btnSubmitLPOASwiss").attr('data-codigocliente', codigocliente);
+        $("#btnSubmitLPOASwiss").attr("data-id", id);
+        $("#btnSubmitLPOASwiss").attr("data-nombre", nombre);
+        $("#btnSubmitLPOASwiss").attr("data-doc", lpoadocumento);
+        $("#btnSubmitLPOASwiss").attr("data-codigocliente", codigocliente);
 
-        if (lpoadocumento==""){
+        if (lpoadocumento == "") {
             Swal.fire({
-                icon: 'error',
-                title: '',
-                text: nombre + ' no tiene registrado su LPOA',
-                footer: '<p class="text-center">Favor de editar el cliente y cargar LPOA (en formato PDF) en el apartado "Documentos del cliente"</p>'
-              })    
-        }else {
+                icon: "error",
+                title: "",
+                text: nombre + " no tiene registrado su LPOA",
+                footer: '<p class="text-center">Favor de editar el cliente y cargar LPOA (en formato PDF) en el apartado "Documentos del cliente"</p>',
+            });
+        } else {
             $("#formModalLPOASWISS").modal("show");
         }
     });
@@ -895,11 +864,11 @@ $(document).ready(function () {
     $(document).on("click", "#btnSubmitLPOASwiss", function (e) {
         e.preventDefault();
         $("#alertMessage").text("");
-        let id = $(this).data("id");   
-        let nombre = $(this).data("nombre");   
-        let doc = $(this).data("doc"); 
-        let codigocliente = $(this).data("codigocliente");   
-  
+        let id = $(this).data("id");
+        let nombre = $(this).data("nombre");
+        let doc = $(this).data("doc");
+        let codigocliente = $(this).data("codigocliente");
+
         console.log(id, nombre, doc, codigocliente);
         $.ajax({
             type: "GET",
@@ -923,55 +892,9 @@ $(document).ready(function () {
                     confirmButtonColor: "#01bbcc",
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 var err = JSON.parse(xhr.responseText);
                 alert(err.Message);
-              }
-        });
-    });
-
-    $(document).on("change", "#comprobanteInput", function () {
-        if ($("#comprobanteInput")[0].files[0]?.name) {
-            $("#comprobanteInput").removeClass("is-invalid");
-            $("#comprobanteInput").addClass("is-valid");
-        } else {
-            $("#comprobanteInput").removeClass("is-valid");
-            $("#comprobanteInput").addClass("is-invalid");
-        }
-    });
-
-    $("#formNota").on("submit", function (e) {
-        e.preventDefault();
-        $("#alertMessage").text("");
-        $.ajax({
-            type: "POST",
-            url: "/admin/cliente/notaMam",
-            data: new FormData(this),
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function () {
-                $("#formModalNota").modal("hide");
-                $("#formNota")[0].reset();
-                $("#lpoaSwitch").prop("checked", false);
-                table.ajax.reload(null, false);
-                Swal.fire({
-                    icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Nota agregada</h1>',
-                    html: '<p style="font-family: Poppins">La nota ha sido agregada correctamente</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            },
-            error: function (err, exception) {
-                var validacion = err.responseJSON.errors;
-                for (let clave in validacion) {
-                    $("#alertMessage").append(
-                        `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
-                    );
-                }
             },
         });
     });

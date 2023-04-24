@@ -891,7 +891,8 @@ $(document).ready(function () {
 
         let monto = $(this).data("monto");
         pesos = $(this).data("pesos").toString().replaceAll(",", "");
-        dolares = parseFloat($(this).data("dolares"));
+        dolares = $(this).data("dolares").toString().replaceAll(",", ".");
+        dolares = parseFloat(dolares);
         let tipopago = $(this).data("tipopago");
 
         let checkbox = [

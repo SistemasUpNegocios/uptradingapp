@@ -1096,41 +1096,6 @@ class ClienteController extends Controller
 
     }
 
-    public function notaMam(Request $request)
-    {
-        $cliente = Cliente::find($request->id);
-
-        $cliente->comprobante_mam_nota = $request->nota_contrato;
-
-        $nombreDocs = explode("-", $cliente->codigoCliente);
-        $nombreDocs = $nombreDocs[1] . "-" . $nombreDocs[2];
-        if ($request->hasFile('comprobante_pago')) {
-            $file = $request->file('comprobante_pago');
-            $filename = $file->getClientOriginalName();
-            $file->move(public_path("documentos/comprobantes_pagos/convenios/$nombreDocs"), $filename);
-            $cliente->comprobante_mam_img = $filename;
-        }
-
-        $cliente->update();
-
-        $cliente_id = $cliente->id;
-        $bitacora_id = session('bitacora_id');
-
-        $log = new Log;
-        $log->tabla = "Cliente";
-        $log->id_tabla = $cliente_id;
-        $log->bitacora_id = $bitacora_id;
-        $log->save();
-
-        \Telegram::sendMessage([
-            'chat_id' => '-1001976160071',
-            'parse_mode' => 'HTML',
-            'text' => "Se aperturó una cuenta MAM para el cliente $cliente->codigoCliente y ya se subió el comprobante de pago."
-        ]);
-
-        return response($cliente);
-    }
-
     public function pdfLpoaSwiss(Request $request)
     {
             $id = $request->id;
@@ -1430,4 +1395,3 @@ class ClienteController extends Controller
             return response()->json(['data']);
                 }
     }
-
