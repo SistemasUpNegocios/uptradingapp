@@ -863,6 +863,73 @@ $(document).ready(function () {
         $("#formModalNota").modal("show");
     });
 
+    $(document).on("click", ".lpoaswiss", function (e) {
+        e.preventDefault();
+
+        let id = $(this).data("id");  
+        let nombre = $(this).data("nombre") + " " +$(this).data("apellidop") ;
+        let lpoadocumento = $(this).data("lpoadocumento");   
+        let codigocliente = $(this).data("codigocliente");   
+
+
+        $("#nombre_completo").val(nombre);
+        $("#lpoa_firmado").val(lpoadocumento);
+
+        $("#btnSubmitLPOASwiss").attr('data-id',id);
+        $("#btnSubmitLPOASwiss").attr('data-nombre', nombre);
+        $("#btnSubmitLPOASwiss").attr('data-doc', lpoadocumento);
+        $("#btnSubmitLPOASwiss").attr('data-codigocliente', codigocliente);
+
+        if (lpoadocumento==""){
+            Swal.fire({
+                icon: 'error',
+                title: '',
+                text: nombre + ' no tiene registrado su LPOA',
+                footer: '<p class="text-center">Favor de editar el cliente y cargar LPOA (en formato PDF) en el apartado "Documentos del cliente"</p>'
+              })    
+        }else {
+            $("#formModalLPOASWISS").modal("show");
+        }
+    });
+
+    $(document).on("click", "#btnSubmitLPOASwiss", function (e) {
+        e.preventDefault();
+        $("#alertMessage").text("");
+        let id = $(this).data("id");   
+        let nombre = $(this).data("nombre");   
+        let doc = $(this).data("doc"); 
+        let codigocliente = $(this).data("codigocliente");   
+  
+        console.log(id, nombre, doc, codigocliente);
+        $.ajax({
+            type: "GET",
+            url: "/admin/cliente/lpoaEmail",
+            data: {
+                id: id,
+                nombre: nombre,
+                doc: doc,
+                codigocliente: codigocliente,
+            },
+            success: function () {
+                $("#formModalLPOASWISS").modal("hide");
+                $("#lpoaSwitch").prop("checked", false);
+                table.ajax.reload(null, false);
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">LPOA agregada</h1>',
+                    html: '<p style="font-family: Poppins">El envío del LPOA a Swissquote ha sido exitoso</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function(xhr, status, error) {
+                var err = JSON.parse(xhr.responseText);
+                alert(err.Message);
+              }
+        });
+    });
+
     $(document).on("change", "#comprobanteInput", function () {
         if ($("#comprobanteInput")[0].files[0]?.name) {
             $("#comprobanteInput").removeClass("is-invalid");
