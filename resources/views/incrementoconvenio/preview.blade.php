@@ -25,7 +25,7 @@
 
             <div class="card p-0 rounded">
                 <div class="card-body p-0 rounded" style="height: 100vh">
-                    <iframe src="/admin/imprimirConvenio?id={{ $convenio[0]->id }}" download="prueba.pdf" class="rounded" title="Ficha" style="width: 100%; height: 100%;">
+                    <iframe src="/admin/imprimirConvenioIncrementado?id={{ $convenio[0]->id }}" download="prueba.pdf" class="rounded" title="Ficha" style="width: 100%; height: 100%;">
                     </iframe>
                 </div>
             </div>

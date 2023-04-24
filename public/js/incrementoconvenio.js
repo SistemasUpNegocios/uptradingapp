@@ -1563,7 +1563,8 @@ $(document).ready(function () {
         e.preventDefault();
         var id = $(this).data("id");
 
-        window.location.href = "/admin/convenio/verConvenio?id=" + id;
+        window.location.href =
+            "/admin/incrementoConvenio/verConvenioIncrementado?id=" + id;
     });
 
     var convenios = [];

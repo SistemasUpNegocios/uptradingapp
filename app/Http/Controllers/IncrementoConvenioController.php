@@ -405,20 +405,21 @@ class IncrementoConvenioController extends Controller
     {
         $id = $request->id;
 
-        $incremento_convenio = DB::table('incremento_convenio')
+        $convenio = DB::table('incremento_convenio')
             ->where('id', '=', $id)
             ->get();
 
-        return view('incremento_convenio.preview', compact('incremento_convenio'));
+        return view('incrementoconvenio.preview', compact('convenio'));
     }
 
     public function imprimirConvenio(Request $request)
     {
 
         $incremento_convenio = DB::table('incremento_convenio')
-            ->join('ps', 'ps.id', '=', 'ps.id')
-            ->join('cliente', 'cliente.id', '=', 'cliente.id')
-            ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+            ->join('convenio', 'convenio.id', '=', 'incremento_convenio.convenio_id')
+            ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+            ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, convenio.fecha_inicio, convenio.monto, convenio.folio AS folioinicio"))
             ->where('incremento_convenio.id', '=', $request->id)
             ->get();
 
@@ -436,7 +437,7 @@ class IncrementoConvenioController extends Controller
             $holograma2 = "";
         }
 
-        $pdf = PDF::loadView('incremento_convenio.imprimir', ['incremento_convenio' => $incremento_convenio, 'convenio2' => $incremento_convenio, 'holograma2' => $holograma2]);
+        $pdf = PDF::loadView('incrementoconvenio.imprimir', ['convenio' => $incremento_convenio, 'convenio2' => $incremento_convenio, 'holograma2' => $holograma2]);
 
         $fecha_hoy = Carbon::now();
         $nombreDescarga = $incremento_convenio[0]->folio.'_'.$incremento_convenio[0]->clientenombre.'_'.$fecha_hoy->format('d-m-Y').'.pdf';

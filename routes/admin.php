@@ -242,6 +242,10 @@ Route::get('/admin/imprimir', [App\Http\Controllers\ImprimirController::class, '
 Route::get('/admin/convenio/verConvenio', [App\Http\Controllers\ConvenioController::class, 'getPreview']);
 Route::get('/admin/imprimirConvenio', [App\Http\Controllers\ConvenioController::class, 'imprimirConvenio']);
 
+//Ruta para imprimir los convenios incrementadps
+Route::get('/admin/incrementoConvenio/verConvenioIncrementado', [App\Http\Controllers\IncrementoConvenioController::class, 'getPreview']);
+Route::get('/admin/imprimirConvenioIncrementado', [App\Http\Controllers\IncrementoConvenioController::class, 'imprimirConvenio']);
+
 //Rutas para cláusulas de tipo de contrato
 Route::post('/admin/existClausulas', [App\Http\Controllers\ClausulaController::class, 'ifExists']);
 Route::get('/admin/showClausulas', [App\Http\Controllers\ClausulaController::class, 'getClausulas']);
