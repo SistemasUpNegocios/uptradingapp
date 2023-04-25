@@ -67,7 +67,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.status_oficina, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("convenio.ps_id", "like", $psid)
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
@@ -80,7 +80,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.status_oficina, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -94,7 +94,7 @@ class ConvenioController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('banco', 'banco.id', '=', 'convenio.banco_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
+                ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.status_oficina, convenio.numerocuenta, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -281,7 +281,11 @@ class ConvenioController extends Controller
             $convenio->ps_id = $request->input('ps_id');
             $convenio->cliente_id = $request->input('cliente_id');
             $convenio->banco_id = $request->input('banco_id');
-
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+                $convenio->status_oficina = "Activado";
+            }else{
+                $convenio->status_oficina = "Pendiente";
+            }
             $convenio->save();
             $convenio_id = $convenio->id;
             $bitacora_id = session('bitacora_id');
@@ -350,11 +354,13 @@ class ConvenioController extends Controller
                 }
             }
 
-            \Telegram::sendMessage([
-                'chat_id' => '-1001976160071',
-                'parse_mode' => 'HTML',
-                'text' => "Se creó un convenio con folio: $request->folio. A espera de su activación."
-            ]);
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+                \Telegram::sendMessage([
+                    'chat_id' => '-1001976160071',
+                    'parse_mode' => 'HTML',
+                    'text' => "Se creó un convenio con folio: $request->folio. A espera de tu activación."
+                ]);
+            }
 
             return response($convenio);
         }
@@ -659,5 +665,25 @@ class ConvenioController extends Controller
                 return response($codigo_oficina, 200);
             }
         }
+    }
+
+    public function validateClaveOficina(Request $request)
+    {
+        $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+
+        if (\Hash::check($request->clave, $clave->password)) {
+            return response("success");
+        }else{
+            return response("error");
+        }
+    }
+
+    public function editStatusOficina(Request $request)
+    {
+        $convenio = Convenio::find($request->id);
+        $convenio->status_oficina = $request->status;
+        $convenio->update();
+
+        return response($convenio);
     }
 }

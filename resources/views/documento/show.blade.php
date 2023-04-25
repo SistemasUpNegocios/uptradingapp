@@ -30,14 +30,6 @@
                             <ol class="ps-3 mt-2">
                                 <li>
                                     <div class="ps-2 row align-items-center mb-2">
-                                        <div class="col-md-6"><p>Presentación Up (uptrading)</p></div>
-                                        <div class="col-md-6 text-end accion_documentos">
-                                            <a href="https://www.canva.com/design/DAFOLoI_efc/rUbvDzBeM71aRgWbszQ34g/view?utm_content=DAFOLoI_efc&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink" class="btn btn-primary btn-lg btn-icon viewup" target="_blank"><i class="bi bi-eye"></i> Visualizar presentación</a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="ps-2 row align-items-center mb-2">
                                         <div class="col-md-6"><p>Presentación Cuentas MAM (uptrading)</p></div>
                                         <div class="col-md-6 text-end accion_documentos">
                                             <a href="https://www.canva.com/design/DAFbJrsICSE/9nj5F0xv-yDVqtyY2jsR9A/view?utm_content=DAFbJrsICSE&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink" class="btn btn-primary btn-lg btn-icon viewup" target="_blank"><i class="bi bi-eye"></i> Visualizar presentación</a>
@@ -57,7 +49,6 @@
                                                 </div>
                                             </div>
                                         </li>
-                                      
                                     @elseif (auth()->user()->is_cliente && $documento->tipo_documento == "cliente")
                                         <li>
                                             <div class="ps-2 row align-items-center mb-2">
@@ -67,7 +58,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                    @elseif (auth()->user()->is_ps_gold || auth()->user()->is_egresos)
+                                    @elseif (auth()->user()->is_ps_gold || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                         <li>
                                             <div class="ps-2 row align-items-center mb-2">
                                                 <div class="col-md-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
