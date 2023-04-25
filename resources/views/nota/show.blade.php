@@ -160,7 +160,7 @@
                                     <label for="comprobanteInput" class="form-label">Comprobante de pago</label>
                                     <a id="comprobanteDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
                                 </div>
-                                <input type="file" id="comprobanteInput" class="form-control" name="comprobante_pago" required accept="image/*">
+                                <input type="file" id="comprobanteInput" class="form-control" name="comprobante_pago" required>
                             </div>
                         </div>
                         <div class="row">
