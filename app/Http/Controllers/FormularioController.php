@@ -23,12 +23,6 @@ class FormularioController extends Controller
 
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
             $codigo = session("codigo_oficina");
-            if(auth()->user()->is_ps_bronze){
-                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
-                $psid = $ps_cons->id;
-                    
-                $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
-            }
             $lista_ps = Ps::select()->where('codigoPS', 'like', "$codigo%")->get();
             return response()->view('formulario.show', compact("lista_ps"));
         }else{
@@ -43,15 +37,9 @@ class FormularioController extends Controller
         $codigo = session('codigo_oficina');
         $numeroCliente = "MXN-" . $codigo . "-";
 
-        if (auth()->user()->is_ps_gold) {
+        if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze) {
             $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
-        }
-
-        if(auth()->user()->is_ps_bronze){
-            $ps_cons = PS::select()->where("correo_institucional", auth()->user()->correo)->first();
-            $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
-            $numeroCliente = "MXN-" . $codigo . "-";
         }
 
         $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
@@ -325,11 +313,6 @@ class FormularioController extends Controller
 
         if ($numeroOficina == "%") {
             $numeroOficina = "001";
-        }
-
-        if(auth()->user()->is_ps_bronze){
-            $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
-            $numeroOficina = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
         }
 
         $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();

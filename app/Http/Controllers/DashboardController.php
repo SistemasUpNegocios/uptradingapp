@@ -33,12 +33,12 @@ class DashboardController extends Controller
         $psid = session("psid");
         $codigo = session("codigo_oficina");
 
-        if (auth()->user()->is_ps_gold) {
+        if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze) {
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
         }
 
-        if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond){
+        if(auth()->user()->is_ps_diamond){
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
             

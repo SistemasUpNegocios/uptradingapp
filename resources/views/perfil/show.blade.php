@@ -73,14 +73,12 @@
                                         SUPERUSUARIO
                                     @elseif(auth()->user()->is_admin || auth()->user()->is_procesos)
                                         ADMINISTRADORA
-                                    @elseif(auth()->user()->is_admin || auth()->user()->is_procesos)
+                                    @elseif(auth()->user()->is_contabilidad)
                                         CONTADORA
                                     @elseif (auth()->user()->is_ps_diamond)
                                         PS DIAMOND
-                                    @elseif(auth()->user()->is_ps_gold)
+                                    @elseif(auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                                         PS GOLD
-                                    @elseif(auth()->user()->is_ps_bronze)
-                                        USUARIO
                                     @elseif(auth()->user()->is_cliente)
                                         CLIENTE                                                      
                                     @else

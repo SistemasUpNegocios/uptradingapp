@@ -1,4 +1,4 @@
-@if (auth()->user()->is_ps_gold)
+@if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="generados-tab-pane" role="tabpanel" aria-labelledby="generados-tab" tabindex="0">
             @foreach ($tickets_generado as $ticket_generado)

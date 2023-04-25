@@ -135,7 +135,7 @@
                 <div class="card-body mt-3">
                     <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
 
-                    @if (auth()->user()->is_ps_gold)
+                    @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                         <ul class="nav nav-tabs" id="myTab" role="tablist">                            
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Tickets generados</button>

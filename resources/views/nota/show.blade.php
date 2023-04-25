@@ -168,7 +168,7 @@
                                 <div class="form-floating mb-3">
                                     <select name="ps_id" class="form-select selectSearch" id="psIdInput">
                                         <option value="" disabled selected>Selecciona...</option>
-                                        @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
+                                        @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                                             @foreach($lista_ps as $ps)
                                                 <option value="{{ $ps->id }}">{{ $ps->apellido_p }} {{ $ps->apellido_m }} {{ $ps->nombre }}</option>
                                             @endforeach

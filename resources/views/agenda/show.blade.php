@@ -109,7 +109,7 @@
                                             @foreach($users as $user)
                                             <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
                                             @endforeach                                            
-                                        @elseif(auth()->user()->is_ps_gold)
+                                        @elseif(auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                                             <option value="{{ auth()->user()->id }}"> {{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}</option>
                                         @endif
                                     </select>

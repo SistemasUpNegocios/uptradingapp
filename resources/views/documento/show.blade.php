@@ -58,7 +58,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                    @elseif (auth()->user()->is_ps_gold || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+                                    @elseif (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
                                         <li>
                                             <div class="ps-2 row align-items-center mb-2">
                                                 <div class="col-md-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>

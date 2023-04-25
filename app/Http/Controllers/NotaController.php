@@ -30,7 +30,7 @@ class NotaController extends Controller
                     ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                     ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                     ->get();
-            }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+            }else if(auth()->user()->is_ps_diamond) {
                 $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                 $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
                 $numeroCliente = "MXN-" . $codigo . "-";
@@ -41,7 +41,7 @@ class NotaController extends Controller
                     ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                     ->where("ps.oficina_id", $ps_cons->oficina_id)
                     ->get();
-            }else if(auth()->user()->is_ps_gold) {
+            }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_gold) {
                 $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                 $psid = $ps_cons->id;
                 $lista_form = Formulario::where("ps_id", $psid)->get();
@@ -79,7 +79,11 @@ class NotaController extends Controller
         $filename = $file->getClientOriginalName();
         $file->move(public_path("documentos/comprobantes_pagos/convenios/$nombreps/$codigoCliente/"), $filename);
         $nota->comprobante = $filename;
-        $nota->estatus = "pendiente";
+        if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+            $nota->estatus = "pendiente";
+        }else{
+            $nota->estatus = "Cargado";
+        }
         $nota->fecha = Carbon::now()->toDateTimeString();
         $nota->save();
         
@@ -100,7 +104,7 @@ class NotaController extends Controller
                 ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                 ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                 ->get();
-        }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+        }else if(auth()->user()->is_ps_diamond) {
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
             $numeroCliente = "MXN-" . $codigo . "-";
@@ -111,7 +115,7 @@ class NotaController extends Controller
                 ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                 ->where("ps.oficina_id", $ps_cons->oficina_id)
                 ->get();
-        }else if(auth()->user()->is_ps_gold) {
+        }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_gold) {
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $psid = $ps_cons->id;
             $lista_form = Formulario::where("ps_id", $psid)->get();
@@ -177,7 +181,7 @@ class NotaController extends Controller
                         ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                         ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                         ->get();
-                }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond) {
+                }else if(auth()->user()->is_ps_diamond) {
                     $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                     $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;
                     $numeroCliente = "MXN-" . $codigo . "-";
@@ -188,7 +192,7 @@ class NotaController extends Controller
                         ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                         ->where("ps.oficina_id", $ps_cons->oficina_id)
                         ->get();
-                }else if(auth()->user()->is_ps_gold) {
+                }else if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_gold) {
                     $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                     $psid = $ps_cons->id;
                     $lista_form = Formulario::where("ps_id", $psid)->get();

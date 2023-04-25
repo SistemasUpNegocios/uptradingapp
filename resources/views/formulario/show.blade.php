@@ -583,7 +583,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    @if (auth()->user()->is_ps_gold)
+                                    @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                                         @php 
                                             $ps = \App\Models\Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
                                         @endphp
@@ -594,7 +594,7 @@
                                                 {{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}
                                             </option>
                                         </select>
-                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
+                                    @elseif(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                                         <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psInput">
                                             <option value="" disabled selected>Selecciona..</option>
                                             @foreach($lista_ps as $ps)

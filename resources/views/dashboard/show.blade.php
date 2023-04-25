@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    @if(auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
+                    @if(auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
                         {{-- hora --}}
                         <div class="datos col-md-6 col-12">
                             <div class="card info-card hour-card">
@@ -144,49 +144,67 @@
                         </div>
 
                         {{-- incrementos --}}
-                        <div class="datos col-md-4">
-                            <div class="card info-card machines-card">
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title mb-0">Incrementos <span>| MAM</span></h5>
-        
-                                    <div class="d-flex align-items-center">
-                                        <div class="ps-0">
-                                            <p class="num-card">{{ $convenio_incremento }}</p>
+                        @if (auth()->user()->is_ps_bronze)
+                            <div class="datos col-md-12">
+                                <div class="card info-card machines-card">
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title mb-0">Incrementos <span>| MAM</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="ps-0">
+                                                <p class="num-card">{{ $convenio_incremento }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="datos col-md-4">
+                                <div class="card info-card machines-card">
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title mb-0">Incrementos <span>| MAM</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="ps-0">
+                                                <p class="num-card">{{ $convenio_incremento }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
-                        {{-- PS --}}
-                        <div class="datos col-md-4">
-                            <div class="card info-card machines-card">
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title mb-0">PS <span>| Total</span></h5>
-        
-                                    <div class="d-flex align-items-center">
-                                        <div class="ps-0">
-                                            <p class="num-card">{{ $ps }}</p>
+                        @if (!auth()->user()->is_ps_bronze)
+                            {{-- PS --}}
+                            <div class="datos col-md-4">
+                                <div class="card info-card machines-card">
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title mb-0">PS <span>| Total</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="ps-0">
+                                                <p class="num-card">{{ $ps }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {{-- clientes --}}
-                        <div class="datos col-md-4">
-                            <div class="card info-card machines-card">
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title mb-0">Clientes <span>| Total</span></h5>
-        
-                                    <div class="d-flex align-items-center">
-                                        <div class="ps-0">
-                                            <p class="num-card">{{ $clientesCountBronze }}</p>
+                            {{-- clientes --}}
+                            <div class="datos col-md-4">
+                                <div class="card info-card machines-card">
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title mb-0">Clientes <span>| Total</span></h5>
+            
+                                        <div class="d-flex align-items-center">
+                                            <div class="ps-0">
+                                                <p class="num-card">{{ $clientesCountBronze }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     @else
                         {{-- hora --}}
                         <div class="datos col-md-6">
