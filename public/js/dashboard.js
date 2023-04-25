@@ -6,7 +6,6 @@ const day = moment.weekdays(date.day());
 const date2 = moment("06/02/2023", "DD/MM/YYYY");
 const day2 = moment.weekdays(date2.day());
 //día del trabajo
-const date3 = moment("01/05/2023", "DD/MM/YYYY");
 const day3 = moment.weekdays(date2.day());
 
 let fechaDash = "";

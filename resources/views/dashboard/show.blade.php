@@ -447,5 +447,8 @@
         <script src="{{ asset('js/graficas.js') }}"></script>
         <script src="{{ asset('js/dashboard.js') }}"></script>        
     @endif
+    @if (auth()->user()->is_root && auth()->user()->id != 1 && auth()->user()->id != 2 && auth()->user()->id != 4)
+        <script src="{{ asset('js/alertas-convenios.js') }}"></script>
+    @endif
 
 @endsection

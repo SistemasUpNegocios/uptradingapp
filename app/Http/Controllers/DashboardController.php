@@ -197,8 +197,13 @@ class DashboardController extends Controller
     public function getAlerta(Request $request)
     {
         $contrato = Contrato::where("fecha_renovacion", $request->fecha)->get();
-
         return response($contrato);
+    }
+
+    public function getAlertaConvenio(Request $request)
+    {
+        $convenio = Convenio::where("status", "Pendiente de activación")->where("status_oficina", "Activado")->count();
+        return response($convenio);
     }
 
     public function getContConvCount()

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 //Ruta principal
 Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 Route::get('/admin/getAlerta', [App\Http\Controllers\DashboardController::class, 'getAlerta']);
+Route::get('/admin/getAlertaConvenio', [App\Http\Controllers\DashboardController::class, 'getAlertaConvenio']);
 Route::get('/admin/getContConvCount', [App\Http\Controllers\DashboardController::class, 'getContConvCount']);
 Route::get('/admin/getContMensCompCount', [App\Http\Controllers\DashboardController::class, 'getContMensCompCount']);
 Route::get('/admin/getFormClientCount', [App\Http\Controllers\DashboardController::class, 'getFormClientCount']);
