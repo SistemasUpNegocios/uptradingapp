@@ -238,26 +238,26 @@
         @endif
 
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond|| auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
-        <li class="nav-item">
-            <a class="@if (request()->is('admin/formulario')) nav-link @else nav-link collapsed @endif"
-                data-bs-toggle="collapse" href="{{ URL::to('admin/formulario') }}" data-bs-target="#formulario-nav">
-                <i class="bi bi-ui-checks"></i>
-                <span>Formulario cuenta Forex</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="formulario-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ URL::to('admin/formulario') }}">
-                        <i class="bi bi-circle"></i><span>Formulario Forex</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ URL::to('https://trade.swissquote.ch/signup/public/form/full/fx/com/individual?lang=es&partnerid=61f9eacc-7353-43d3-9b4f-bd965c7e8419#full/fx/com/individual/step1') }}" target="_blank">
-                        <i class="bi bi-circle"></i><span>Formulario Swissquote</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    @endif
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/formulario')) nav-link @else nav-link collapsed @endif"
+                    data-bs-toggle="collapse" href="{{ URL::to('admin/formulario') }}" data-bs-target="#formulario-nav">
+                    <i class="bi bi-ui-checks"></i>
+                    <span>Formulario cuenta Forex</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="formulario-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ URL::to('admin/formulario') }}">
+                            <i class="bi bi-circle"></i><span>Formulario Forex</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('https://trade.swissquote.ch/signup/public/form/full/fx/com/individual?lang=es&partnerid=61f9eacc-7353-43d3-9b4f-bd965c7e8419#full/fx/com/individual/step1') }}" target="_blank">
+                            <i class="bi bi-circle"></i><span>Formulario Swissquote</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
 
         @if (auth()->user()->is_root)
             <li class="nav-item">
@@ -287,13 +287,11 @@
                             </a>
                         </li>
                     @endif
-                    @if (!auth()->user()->is_ps_diamond && !auth()->user()->is_ps_bronze)
-                        <li>
-                            <a href="{{ URL::to('admin/documentos') }}">
-                                <i class="bi bi-circle"></i><span>Documentos</span>
-                            </a>
-                        </li>
-                    @endif
+                    <li>
+                        <a href="{{ URL::to('admin/documentos') }}">
+                            <i class="bi bi-circle"></i><span>Documentos</span>
+                        </a>
+                    </li>
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                         <li>
                             <a href="{{ URL::to('admin/concentrado') }}">

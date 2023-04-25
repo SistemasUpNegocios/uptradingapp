@@ -141,6 +141,9 @@ Route::get('/admin/editStatusConvenio', [App\Http\Controllers\ConvenioController
 Route::get('/admin/getFolioConvenio', [App\Http\Controllers\ConvenioController::class, 'getFolioConvenio']);
 Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioController::class, 'enviarTelegram']);
 
+Route::get('/admin/validateClaveConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'validateClaveOficina']);
+Route::get('/admin/editStatusConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'editStatusOficina']);
+
 //Rutas para gestión de incrementos convenio MAM
 Route::get('/admin/incrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'index']);
 Route::get('/admin/showIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenio']);
