@@ -129,3 +129,50 @@ $.ajax({
         localStorage.clear();
     },
 });
+
+$.ajax({
+    type: "GET",
+    url: `/admin/getTicketsAbiertos`,
+    success: function (data) {
+        if (
+            window.localStorage.getItem("Tickets pendientes") !== undefined &&
+            window.localStorage.getItem("Tickets pendientes")
+        ) {
+            if (data > 1) {
+                Swal.fire({
+                    title: "Tickets abiertos",
+                    html: `Tienes ${data} tickets sin atender.`,
+                    icon: "warning",
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Ir a los tickets",
+                    cancelButtonText: "Posponer alerta",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem("Tickets pendientes");
+                        window.location.href = "./convenio";
+                    }
+                });
+            } else if ((data = 1)) {
+                Swal.fire({
+                    title: "Ticket abierto",
+                    html: `Tienes ${data} ticket sin atender.`,
+                    icon: "warning",
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Ir a los tickets",
+                    cancelButtonText: "Posponer alerta",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem("Tickets pendientes");
+                        window.location.href = "./tickets";
+                    }
+                });
+            }
+        }
+    },
+    error: function (data) {
+        console.log("Error:", data);
+        localStorage.clear();
+    },
+});

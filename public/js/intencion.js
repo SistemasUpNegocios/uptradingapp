@@ -230,6 +230,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ intenciones",
         },
+        aaSorting: [],
     });
 
     $.ajaxSetup({

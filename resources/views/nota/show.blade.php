@@ -47,23 +47,21 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <div class="page-content container note-has-grid">
-                            <ul class="nav nav-pills p-3 bg-white mb-3 rounded-pill align-items-center">
+                            <ul class="nav nav-pills p-3 bg-white mb-3 align-items-center">
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2 active" id="all-category">
-                                        <i class="icon-layers me-1"></i><span class="d-none d-md-block">Todas las notas</span>
+                                    <a href="javascript:void(0)" class="nav-link note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2 active" id="all-category">
+                                        <i class="icon-layers"></i><span class="d-md-block">Todas las notas</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="note-pendientes"> <i class="icon-briefcase me-1"></i><span class="d-none d-md-block">Pendientes de carga</span></a>
+                                    <a href="javascript:void(0)" class="nav-link note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="note-pendientes"> <i class="icon-briefcase"></i><span class="d-md-block">Pendientes de carga</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="note-cargados"> <i class="icon-share-alt me-1"></i><span class="d-none d-md-block">Cargados</span></a>
+                                    <a href="javascript:void(0)" class="nav-link note-link d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="note-cargados"> <i class="icon-share-alt"></i><span class="d-md-block">Cargados</span></a>
                                 </li>
-                                @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
-                                    <li class="nav-item ml-auto">
-                                        <a href="javascript:void(0)" class="nav-link btn-primary rounded-pill d-flex align-items-center px-3" id="add-notes"> <i class="icon-note m-1"></i><span class="d-none d-md-block font-14">Añadir nota</span></a>
-                                    </li>
-                                @endif
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" class="nav-link btn-primary d-flex align-items-center px-2 px-md-3 me-0 mr-md-2" id="add-notes"> <i class="icon-note"></i><span class="d-md-block font-14">Añadir nota</span></a>
+                                </li>
                             </ul>
                             <div class="tab-content bg-transparent">
                                 <div id="note-full-container" class="note-has-grid row align-items-center justify-content-center">

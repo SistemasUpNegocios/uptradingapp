@@ -117,7 +117,7 @@
                                             <div class="col-md-6 col-12 mb-2 text-center">
                                                 <img src="" id="imgPerfil" alt="" srcset="">
                                             </div>
-                                            <div class="col-md-6 col-12 mb-2">
+                                            <div class="col-md-6 col-12 mb-2 text-center">
                                                     <div class="mb-2">
                                                     <b>Nombre</b>: <span id="no"></span>
                                                     </div>
@@ -127,7 +127,7 @@
                                                     <div class="mb-2">
                                                         <b>Apellido materno</b>: <span id="am"></span>
                                                     </div>
-                                                    <div class="mb-2">
+                                                    <div class="mb-2" style="word-break: break-word;">
                                                         <b>Correo electrónico</b>: <span id="ce"></span>
                                                     </div>
                                                     <div class="mb-2">

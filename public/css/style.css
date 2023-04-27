@@ -1763,6 +1763,10 @@ h6 {
 #utilities th,
 #locations td,
 #locations th,
+#tipoCambio td,
+#tipoCambio th,
+#ps td,
+#ps th,
 #cliente td,
 #cliente th {
     width: auto !important;
@@ -2955,14 +2959,47 @@ pre {
     color: #444444;
 }
 
-@media (max-width: 767.98px) {
-    .note-has-grid .single-note-item {
-        max-width: 100%;
+@media screen and (max-width: 500px) {
+    .dselect-wrapper .form-select {
+        font-size: 15px;
     }
 }
 
-@media (max-width: 991.98px) {
-    .note-has-grid .single-note-item {
-        max-width: 216px;
+@media screen and (max-width: 468px) {
+    .dselect-wrapper .form-select {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .dselect-wrapper .form-select {
+        font-size: 12px;
+    }
+}
+
+.horizontal-card-bg-img2 {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: 30px solid #01bbcc;
+}
+
+.ticket_body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px 20px !important;
+}
+
+.ticket_body span.badge {
+    white-space: normal !important;
+}
+
+@media screen and (max-width: 520px) {
+    .boton_auto_ticket {
+        margin: 30px auto 0 auto;
+    }
+    .boton_auto_ticket a {
+        margin-bottom: 10px;
     }
 }

@@ -95,9 +95,9 @@
 
                         <div class="row">
                             <div class="col-12 mt-3 px-2 text-center">
-                                <a class="btn btn-primary" id="filtroMensual">Mensuales</a>
-                                <a class="btn btn-outline-primary" id="filtroCompuesto">Compuestos</a>
-                                <a class="btn btn-outline-primary" id="filtroLiquidacion">Liquidación</a>
+                                <a class="btn btn-primary mt-1 mb-1" id="filtroMensual">Mensuales</a>
+                                <a class="btn btn-outline-primary mt-1 mb-1" id="filtroCompuesto">Compuestos</a>
+                                <a class="btn btn-outline-primary mt-1 mb-1" id="filtroLiquidacion">Liquidación</a>
                             </div>
                         </div>
 

@@ -134,7 +134,6 @@
             <div class="card">
                 <div class="card-body mt-3">
                     <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
-
                     @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                         <ul class="nav nav-tabs" id="myTab" role="tablist">                            
                             <li class="nav-item" role="presentation">
@@ -146,10 +145,9 @@
                                 @foreach ($tickets_generado as $ticket_generado)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_generado->fecha_limite)
                                                             @php
                                                                 $now = Carbon\Carbon::now();
@@ -174,8 +172,7 @@
                                                                 <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
                                                             @endif
                                                         @endif
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_generado->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_generado->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_generado->descripcion) >= 80)
                                                                 {{ substr($ticket_generado->descripcion, 0, 80) }}...
@@ -184,10 +181,9 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="btn btn-sm btn-success edit" data-id="{{$ticket_generado->id}}" data-generado="{{$ticket_generado->usuarionombre}}" data-asignado="{{$ticket_generado->asignado_a}}" data-fechagenerado="{{$ticket_generado->fecha_generado}}" data-fechalimite="{{$ticket_generado->fecha_limite}}" data-departamento="{{$ticket_generado->departamento}}" data-asunto="{{$ticket_generado->asunto}}" data-descripcion="{{$ticket_generado->descripcion}}" data-status="{{$ticket_generado->status}}" title="Editar ticket">Editar ticket</a>
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="btn btn-sm btn-success edit" data-id="{{$ticket_generado->id}}" data-generado="{{$ticket_generado->usuarionombre}}" data-asignado="{{$ticket_generado->asignado_a}}" data-fechagenerado="{{$ticket_generado->fecha_generado}}" data-fechalimite="{{$ticket_generado->fecha_limite}}" data-departamento="{{$ticket_generado->departamento}}" data-asunto="{{$ticket_generado->asunto}}" data-descripcion="{{$ticket_generado->descripcion}}" data-status="{{$ticket_generado->status}}" title="Editar ticket">Editar ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -218,10 +214,9 @@
                                 @foreach ($tickets_user_abiertos as $ticket_abierto)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_abierto->fecha_limite)
                                                             @php
                                                                 $now = Carbon\Carbon::now();
@@ -230,8 +225,7 @@
                                                             @endphp
                                                             <span class="badge bg-danger mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket venció {{ $diff }}</span>
                                                         @endif
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_abierto->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_abierto->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_abierto->descripcion) >= 80)
                                                                 {{ substr($ticket_abierto->descripcion, 0, 80) }}...
@@ -240,12 +234,11 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_abierto->ticketid}}" data-generado="{{$ticket_abierto->usuarionombre}}" data-asignado="{{$ticket_abierto->asignado_a}}" data-fechagenerado="{{$ticket_abierto->fecha_generado}}" data-fechalimite="{{$ticket_abierto->fecha_limite}}" data-departamento="{{$ticket_abierto->departamento}}" data-asunto="{{$ticket_abierto->asunto}}" data-descripcion="{{$ticket_abierto->descripcion}}" data-status="{{$ticket_abierto->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
-                                                    <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_abierto->ticketid}}" data-status="{{$ticket_abierto->status}}" title="Ver detalles del ticket">Editar estatus</a>
-                                                    <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_abierto->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_abierto->ticketid}}" data-generado="{{$ticket_abierto->usuarionombre}}" data-asignado="{{$ticket_abierto->asignado_a}}" data-fechagenerado="{{$ticket_abierto->fecha_generado}}" data-fechalimite="{{$ticket_abierto->fecha_limite}}" data-departamento="{{$ticket_abierto->departamento}}" data-asunto="{{$ticket_abierto->asunto}}" data-descripcion="{{$ticket_abierto->descripcion}}" data-status="{{$ticket_abierto->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
+                                                        <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_abierto->ticketid}}" data-status="{{$ticket_abierto->status}}" title="Ver detalles del ticket">Editar estatus</a>
+                                                        <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_abierto->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -256,10 +249,9 @@
                                 @foreach ($tickets_user_procesos as $ticket_proceso)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_proceso->fecha_limite)
                                                             @php
                                                                 $now = Carbon\Carbon::now();
@@ -268,8 +260,7 @@
                                                             @endphp
                                                             <span class="badge bg-danger mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket venció {{ $diff }}</span>
                                                         @endif
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_proceso->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_proceso->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_proceso->descripcion) >= 80)
                                                                 {{ substr($ticket_proceso->descripcion, 0, 80) }}...
@@ -278,12 +269,11 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_proceso->ticketid}}" data-generado="{{$ticket_proceso->usuarionombre}}" data-asignado="{{$ticket_proceso->asignado_a}}" data-fechagenerado="{{$ticket_proceso->fecha_generado}}" data-fechalimite="{{$ticket_proceso->fecha_limite}}" data-departamento="{{$ticket_proceso->departamento}}" data-asunto="{{$ticket_proceso->asunto}}" data-descripcion="{{$ticket_proceso->descripcion}}" data-status="{{$ticket_proceso->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
-                                                    <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_proceso->ticketid}}" data-status="{{$ticket_proceso->status}}" title="Ver detalles del ticket">Editar estatus</a>
-                                                    <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_proceso->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_proceso->ticketid}}" data-generado="{{$ticket_proceso->usuarionombre}}" data-asignado="{{$ticket_proceso->asignado_a}}" data-fechagenerado="{{$ticket_proceso->fecha_generado}}" data-fechalimite="{{$ticket_proceso->fecha_limite}}" data-departamento="{{$ticket_proceso->departamento}}" data-asunto="{{$ticket_proceso->asunto}}" data-descripcion="{{$ticket_proceso->descripcion}}" data-status="{{$ticket_proceso->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
+                                                        <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_proceso->ticketid}}" data-status="{{$ticket_proceso->status}}" title="Ver detalles del ticket">Editar estatus</a>
+                                                        <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_proceso->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -294,13 +284,11 @@
                                 @foreach ($tickets_user_cancelados as $ticket_cancelado)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">                                                    
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         <span class="badge bg-warning text-dark mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue cancelado</span>
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_cancelado->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_cancelado->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_cancelado->descripcion) >= 80)
                                                                 {{ substr($ticket_cancelado->descripcion, 0, 80) }}...
@@ -309,12 +297,12 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_cancelado->ticketid}}" data-generado="{{$ticket_cancelado->usuarionombre}}" data-asignado="{{$ticket_cancelado->asignado_a}}" data-fechagenerado="{{$ticket_cancelado->fecha_generado}}" data-fechalimite="{{$ticket_cancelado->fecha_limite}}" data-departamento="{{$ticket_cancelado->departamento}}" data-asunto="{{$ticket_cancelado->asunto}}" data-descripcion="{{$ticket_cancelado->descripcion}}" data-status="{{$ticket_cancelado->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
-                                                    <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_cancelado->ticketid}}" data-status="{{$ticket_cancelado->status}}" title="Ver detalles del ticket">Editar estatus</a>
-                                                    <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_cancelado->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_cancelado->ticketid}}" data-generado="{{$ticket_cancelado->usuarionombre}}" data-asignado="{{$ticket_cancelado->asignado_a}}" data-fechagenerado="{{$ticket_cancelado->fecha_generado}}" data-fechalimite="{{$ticket_cancelado->fecha_limite}}" data-departamento="{{$ticket_cancelado->departamento}}" data-asunto="{{$ticket_cancelado->asunto}}" data-descripcion="{{$ticket_cancelado->descripcion}}" data-status="{{$ticket_cancelado->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
+                                                        <a class="mx-2 btn btn-sm btn-success status" data-id="{{$ticket_cancelado->ticketid}}" data-status="{{$ticket_cancelado->status}}" title="Ver detalles del ticket">Editar estatus</a>
+                                                        <a class="mx-2 btn btn-sm btn-secondary traspasar" data-id="{{$ticket_cancelado->ticketid}}" title="Transpasar ticket">Traspasar ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -325,13 +313,11 @@
                                 @foreach ($tickets_user_terminados as $ticket_terminado)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_terminado->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_terminado->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_terminado->descripcion) >= 80)
                                                                 {{ substr($ticket_terminado->descripcion, 0, 80) }}...
@@ -340,10 +326,10 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="btn btn-sm principal-button detalles" data-id="{{$ticket_terminado->ticketid}}" data-generado="{{$ticket_terminado->usuarionombre}}" data-asignado="{{$ticket_terminado->asignado_a}}" data-fechagenerado="{{$ticket_terminado->fecha_generado}}" data-fechalimite="{{$ticket_terminado->fecha_limite}}" data-departamento="{{$ticket_terminado->departamento}}" data-asunto="{{$ticket_terminado->asunto}}" data-descripcion="{{$ticket_terminado->descripcion}}" data-status="{{$ticket_terminado->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
+
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="btn btn-sm principal-button detalles" data-id="{{$ticket_terminado->ticketid}}" data-generado="{{$ticket_terminado->usuarionombre}}" data-asignado="{{$ticket_terminado->asignado_a}}" data-fechagenerado="{{$ticket_terminado->fecha_generado}}" data-fechalimite="{{$ticket_terminado->fecha_limite}}" data-departamento="{{$ticket_terminado->departamento}}" data-asunto="{{$ticket_terminado->asunto}}" data-descripcion="{{$ticket_terminado->descripcion}}" data-status="{{$ticket_terminado->status}}" title="Ver detalles del ticket">Ver detalles del ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -354,10 +340,9 @@
                                 @foreach ($tickets_generado as $ticket_generado)
                                     <div class="col-lg-12 ps-3 pe-3">
                                         <div class="card border-0 mb-4 mt-4">
-                                            <div class="d-flex">
-                                                <div class="horizontal-card-bg-img"></div>
-                                                <div class="flex-fill">
-                                                    <div class="card-body">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
                                                         @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_generado->fecha_limite)
                                                             @php
                                                                 $now = Carbon\Carbon::now();
@@ -382,8 +367,7 @@
                                                                 <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
                                                             @endif
                                                         @endif
-                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_generado->asunto }}</b>
-                                                        </div>
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_generado->asunto }}</b></div>
                                                         <div class="mb-3">
                                                             @if (strlen($ticket_generado->descripcion) >= 80)
                                                                 {{ substr($ticket_generado->descripcion, 0, 80) }}...
@@ -392,10 +376,9 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                </div>
-                            
-                                                <div class="px-2 d-flex justify-content-center align-items-center">
-                                                    <a class="btn btn-sm btn-success edit" data-id="{{$ticket_generado->id}}" data-generado="{{$ticket_generado->usuarionombre}}" data-asignado="{{$ticket_generado->asignado_a}}" data-fechagenerado="{{$ticket_generado->fecha_generado}}" data-fechalimite="{{$ticket_generado->fecha_limite}}" data-departamento="{{$ticket_generado->departamento}}" data-asunto="{{$ticket_generado->asunto}}" data-descripcion="{{$ticket_generado->descripcion}}" data-status="{{$ticket_generado->status}}" title="Editar ticket">Editar ticket</a>
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="btn btn-sm btn-success edit" data-id="{{$ticket_generado->id}}" data-generado="{{$ticket_generado->usuarionombre}}" data-asignado="{{$ticket_generado->asignado_a}}" data-fechagenerado="{{$ticket_generado->fecha_generado}}" data-fechalimite="{{$ticket_generado->fecha_limite}}" data-departamento="{{$ticket_generado->departamento}}" data-asunto="{{$ticket_generado->asunto}}" data-descripcion="{{$ticket_generado->descripcion}}" data-status="{{$ticket_generado->status}}" title="Editar ticket">Editar ticket</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

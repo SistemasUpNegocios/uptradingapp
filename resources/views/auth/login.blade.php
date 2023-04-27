@@ -51,6 +51,7 @@
         localStorage.setItem("Contratos", "Contratos a vencer");
         localStorage.setItem("Convenios", "Convenios pendientes");
         localStorage.setItem("Ticket", "Ticket a punto de vencer");
+        localStorage.setItem("Tickets pendientes", "Tickets pendientes");
     </script>
     {!! htmlScriptTagJsApi([ 'callback_then' => 'callbackThen', 'callback_catch' => 'callbackCatch' ]) !!}
 @endsection

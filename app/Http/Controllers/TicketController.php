@@ -446,4 +446,12 @@ class TicketController extends Controller
 
         return response($tickets);
     }
+
+    public function getTicketsAbiertos(Request $request)
+    {
+        $id = auth()->user()->id;
+        $tickets = Ticket::where('status', 'Abierto')->where('asignado_a', 'like', "%,$id,%")->count();
+
+        return response($tickets);
+    }
 }
