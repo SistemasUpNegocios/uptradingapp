@@ -153,7 +153,7 @@ $.ajax({
                         window.location.href = "./convenio";
                     }
                 });
-            } else if ((data = 1)) {
+            } else if (data == 1) {
                 Swal.fire({
                     title: "Ticket abierto",
                     html: `Tienes ${data} ticket sin atender.`,

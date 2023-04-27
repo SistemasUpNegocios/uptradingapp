@@ -45,7 +45,7 @@ $(document).ready(function () {
                             window.location.href = "./convenio";
                         }
                     });
-                } else if ((data = 1)) {
+                } else if (data == 1) {
                     Swal.fire({
                         title: "Convenio pendiente",
                         html: `Hay ${data} convenio pendiente de activación.`,

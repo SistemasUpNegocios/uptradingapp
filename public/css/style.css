@@ -3003,3 +3003,20 @@ pre {
         margin-bottom: 10px;
     }
 }
+
+@media screen and (max-width: 370px) {
+    .msger-inputarea {
+        flex-wrap: wrap;
+    }
+
+    .msger-input {
+        width: 100%;
+        flex: 0;
+    }
+
+    .msger-send-btn {
+        margin-left: 0px !important;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
