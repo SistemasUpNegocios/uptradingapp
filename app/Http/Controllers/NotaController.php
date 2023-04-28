@@ -80,9 +80,9 @@ class NotaController extends Controller
         $file->move(public_path("documentos/comprobantes_pagos/convenios/$nombreps/$codigoCliente/"), $filename);
         $nota->comprobante = $filename;
         if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-            $nota->estatus = "pendiente";
+            $nota->estatus = "cargado";
         }else{
-            $nota->estatus = "Cargado";
+            $nota->estatus = "pendiente";
         }
         $nota->fecha = Carbon::now()->toDateTimeString();
         $nota->save();
@@ -104,6 +104,12 @@ class NotaController extends Controller
                 ->join('formulario', 'formulario.id', '=', 'notas.cliente_id')
                 ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, ps.codigoPS, CONCAT(formulario.nombre, ' ', formulario.apellido_p, ' ', formulario.apellido_m) AS clientenombre, formulario.codigoCliente, notas.id AS notaid, notas.comentario, notas.comprobante, notas.estatus, notas.fecha"))
                 ->get();
+
+            \Telegram::sendMessage([
+                'chat_id' => '-1001976160071',
+                'parse_mode' => 'HTML',
+                'text' => "Se aperturó una cuenta MAM para el cliente $cliente->codigoCliente y ya se subió el comprobante de pago."
+            ]);
         }else if(auth()->user()->is_ps_diamond) {
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();
             $codigo = Oficina::select()->where("id", $ps_cons->oficina_id)->first()->codigo_oficina;

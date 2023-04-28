@@ -150,6 +150,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 1)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "!=", "Refrendado")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
@@ -219,6 +220,7 @@ class ContratoController extends Controller
                 ->where("tipo_contrato.id", 2)
                 ->where("contrato.status", "!=", "Cancelado")
                 ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "!=", "Refrendado")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
@@ -285,9 +287,7 @@ class ContratoController extends Controller
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
                 })
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Pendiente de activación")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Activado")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
@@ -300,9 +300,7 @@ class ContratoController extends Controller
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Pendiente de activación")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Activado")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }
@@ -318,9 +316,7 @@ class ContratoController extends Controller
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Pendiente de activación")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Activado")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }
@@ -354,10 +350,7 @@ class ContratoController extends Controller
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
                 })
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Activado")
-                ->where("contrato.status", "!=", "Refrendado")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Pendiente de activación")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }else{
@@ -370,10 +363,7 @@ class ContratoController extends Controller
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Activado")
-                ->where("contrato.status", "!=", "Refrendado")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Pendiente de activación")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }
@@ -389,10 +379,7 @@ class ContratoController extends Controller
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
-                ->where("contrato.status", "!=", "Activado")
-                ->where("contrato.status", "!=", "Refrendado")
-                ->where("contrato.status", "!=", "Cancelado")
-                ->where("contrato.status", "!=", "Finiquitado")
+                ->where("contrato.status", "Pendiente de activación")
                 ->orderBy("contrato.id", "desc")
                 ->get();
         }

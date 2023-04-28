@@ -120,10 +120,22 @@ class PreguntaController extends Controller
 
     public function buscarPregunta(Request $request)
     {
-        $preguntas = Pregunta::select()
+        $info = $request->info;
+
+        if(auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze){
+            $preguntas = Pregunta::select()
+            ->where("id", "!=", 5)
+            ->where("id", "!=", 7)
+            ->where(function ($query) use ($info) {
+                $query->where("pregunta", "like", "%$info%")
+                ->orWhere("informacion", "like", "%$info%");
+            })->get();
+        }else{
+            $preguntas = Pregunta::select()
             ->where("pregunta", "like", "%$request->info%")
             ->orWhere("informacion", "like", "%$request->info%")
             ->get();
+        }
 
         return View::make("pregunta/vista", ["preguntas" => $preguntas, "info" => $request->info]);
     }

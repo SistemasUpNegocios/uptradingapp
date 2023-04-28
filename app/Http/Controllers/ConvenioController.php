@@ -354,13 +354,13 @@ class ConvenioController extends Controller
                 }
             }
 
-            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-                \Telegram::sendMessage([
-                    'chat_id' => '-1001976160071',
-                    'parse_mode' => 'HTML',
-                    'text' => "Se creó un convenio con folio: $request->folio. A espera de tu activación."
-                ]);
-            }
+            // if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+            //     \Telegram::sendMessage([
+            //         'chat_id' => '-1001976160071',
+            //         'parse_mode' => 'HTML',
+            //         'text' => "Se creó un convenio con folio: $request->folio. A espera de tu activación."
+            //     ]);
+            // }
 
             return response($convenio);
         }

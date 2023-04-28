@@ -1,6 +1,10 @@
 @php
     use App\Models\Pregunta;
-    $preguntas = Pregunta::all();
+    if(auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze){
+        $preguntas = Pregunta::where("id", "!=", 5)->where("id", "!=", 7)->get();
+    }else{
+        $preguntas = Pregunta::all();
+    }
 @endphp
 
 <div class="modal fade" id="formModalFaq" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">

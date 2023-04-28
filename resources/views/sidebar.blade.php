@@ -33,7 +33,7 @@
                 </a>
             </li>
 
-            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold)
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
                 <li class="nav-item" id="preguntas" title="Preguntas Frecuentes">
                     <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalFaq">
                         <i class="bi bi-question-octagon"></i>
