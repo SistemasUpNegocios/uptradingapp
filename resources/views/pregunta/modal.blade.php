@@ -21,17 +21,27 @@
                 </form>
                 <div id="listaPreguntas">
                     @foreach ($preguntas as $pregunta)
+                        @php
+                            $pregunta_info = str_replace(' ', '', $pregunta->pregunta);
+                            $pregunta_info = str_replace('/', '', $pregunta_info);
+                        @endphp
                         <div class="row mb-1 mt-1">
                             <div class="accordion accordion-flush mb-1" id="accordionFlushExample">
                                 <div class="accordion-item shadow p-3 bg-body rounded">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ str_replace(' ', '', $pregunta->pregunta) }}" aria-expanded="false" aria-controls="{{ str_replace(' ', '', $pregunta->pregunta) }}">
-                                        {{ $pregunta->pregunta }}
-                                    </button>
-                                </h2>
-                                <div id="{{ str_replace(' ', '', $pregunta->pregunta) }}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                    <div class="accordion-body" style="text-align: justify">{{ $pregunta->informacion }}</div>
-                                </div>
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $pregunta_info }}" aria-expanded="false" aria-controls="{{ $pregunta_info }}">
+                                            {{ $pregunta->pregunta }}
+                                        </button>
+                                    </h2>
+                                    <div id="{{ $pregunta_info }}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body" style="text-align: justify">
+                                            {{ $pregunta->informacion }}
+                                            <br>
+                                            <div class="mt-3 text-center">
+                                                <img src="{{asset("img/preguntas/$pregunta->imagen")}}" alt="{{$pregunta->pregunta}}" class="img-fluid" width="350px">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -108,7 +108,7 @@ class NotaController extends Controller
             \Telegram::sendMessage([
                 'chat_id' => '-1001976160071',
                 'parse_mode' => 'HTML',
-                'text' => "Se aperturó una cuenta MAM para el cliente $cliente->codigoCliente y ya se subió el comprobante de pago."
+                'text' => "Se aperturó una cuenta MAM para el cliente $codigoCliente y ya se subió el comprobante de pago."
             ]);
         }else if(auth()->user()->is_ps_diamond) {
             $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();

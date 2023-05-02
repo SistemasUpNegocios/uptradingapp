@@ -241,6 +241,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ preguntas",
         },
+        aaSorting: [],
     });
 
     $.ajaxSetup({
@@ -313,6 +314,7 @@ $(document).ready(function () {
         $(".file-upload-content").hide();
         $("#botonEliminarImagen").prop("disabled", false);
         $("#imgInput").prop("src", "");
+        $(".image-title").html("Eliminar imagen seleccionada");
 
         $("#modalTitle").text("Añadir pregunta");
         $("#btnSubmit").text("Añadir pregunta");

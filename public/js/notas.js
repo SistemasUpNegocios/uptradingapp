@@ -113,8 +113,8 @@ $(document).ready(function () {
                 $("#note-full-container").html(response);
                 Swal.fire({
                     icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Comentario agregado</h1>',
-                    html: '<p style="font-family: Poppins">El comentario ha sido agregado correctamente</p>',
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Nota agregada</h1>',
+                    html: '<p style="font-family: Poppins">La nota ha sido agregada correctamente</p>',
                     confirmButtonText:
                         '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",
