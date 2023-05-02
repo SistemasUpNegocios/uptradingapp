@@ -289,6 +289,38 @@ class IncrementoConvenioController extends Controller
                 $notificacion->status = "Pendiente";
                 $notificacion->user_id = 3;
                 $notificacion->save();
+
+            }else if (auth()->user()->is_ps_diamond) {
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
+                $oficina = Oficina::find($ps_cons->oficina_id);
+                $oficina = $oficina->ciudad;
+
+                \Telegram::sendMessage([
+                    'chat_id' => env('TELEGRAM_CHANNEL_ID_CONVENIOS'),
+                    'parse_mode' => 'HTML',
+                    'text' => "El incremento de convenio con folio $request->folio ha sido creado desde la oficina de $oficina"
+                ]);
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo incremento de convenio";
+                $notificacion->mensaje = "El incremento de convenio con folio $request->folio ha sido generado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 1;
+                $notificacion->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo incremento de convenio";
+                $notificacion->mensaje = "El incremento de convenio con folio $request->folio ha sido generado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 234;
+                $notificacion->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo incremento de convenio";
+                $notificacion->mensaje = "El incremento de convenio con folio $request->folio ha sido generado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
             }
 
             return response($incremento_convenio);

@@ -18,7 +18,8 @@
                 ->first();
 
             if(!empty($convenio_oficina)){
-                $ps_cons = App\Models\Ps::select()->where("correo_institucional", $convenio_oficina->correo)->first();            
+                $ps_cons = App\Models\Ps::select()->where("correo_institucional", strtolower($convenio_oficina->correo))->first();
+                // echo json_encode($ps_cons);
             }
         @endphp
         @if (auth()->user()->is_admin || auth()->user()->is_procesos)
@@ -38,4 +39,9 @@
 @endif
 @if (auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
     <a href="" data-id="{{ $id }}" data-folio="{{ $folio }}" data-firma="{{$firma}}" data-nombrecliente="{{ $clientenombre }}" data-psnombre="{{ $psnombre }}" data-monto="{{ $monto }}" data-monto_letra="{{ $monto_letra }}" data-fecha_inicio="{{ $fecha_inicio }}" data-fecha_fin="{{ $fecha_fin }}" data-capertura="{{ $capertura }}" data-cmensual="{{ $cmensual }}" data-ctrimestral="{{ $ctrimestral }}" data-status="{{ $status }}" data-numerocuenta="{{ $numerocuenta }}" data-ps_id="{{ $ps_id }}" data-cliente_id="{{ $cliente_id }}" data-banco_id="{{ $banco_id }}" type="button" title="Vista previa" class="ms-1 btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i> Ver convenio</a>
+@endif
+@if (auth()->user()->is_ps_diamond)
+    @if ($status == "Activado")
+        <a href="" data-id="{{ $id }}" type="button" title="Imprimir convenio" class="ms-1 btn btn-primary btn-sm btn-icon print"> <i class="bi bi-printer"></i></a> 
+    @endif
 @endif

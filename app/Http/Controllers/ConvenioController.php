@@ -368,6 +368,37 @@ class ConvenioController extends Controller
                 $notificacion->status = "Pendiente";
                 $notificacion->user_id = 3;
                 $notificacion->save();
+            }else if (auth()->user()->is_ps_diamond) {
+                $ps_cons = Ps::select()->where("correo_institucional", auth()->user()->correo)->first();            
+                $oficina = Oficina::find($ps_cons->oficina_id);
+                $oficina = $oficina->ciudad;
+
+                \Telegram::sendMessage([
+                    'chat_id' => env('TELEGRAM_CHANNEL_ID_CONVENIOS'),
+                    'parse_mode' => 'HTML',
+                    'text' => "El convenio con folio $request->folio ha sido creado desde la oficina de $oficina"
+                ]);
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo convenio";
+                $notificacion->mensaje = "El convenio con folio $request->folio ha sido creado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 1;
+                $notificacion->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo convenio";
+                $notificacion->mensaje = "El convenio con folio $request->folio ha sido creado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 234;
+                $notificacion->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "La oficina de $oficina generó un nuevo convenio";
+                $notificacion->mensaje = "El convenio con folio $request->folio ha sido creado desde la oficina de $oficina";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
             }
 
             return response($convenio);
@@ -691,6 +722,26 @@ class ConvenioController extends Controller
         $convenio = Convenio::find($request->id);
         $convenio->status_oficina = $request->status;
         $convenio->update();
+
+        \Telegram::sendMessage([
+            'chat_id' => '-1001976160071',
+            'parse_mode' => 'HTML',
+            'text' => "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación."
+        ]);
+
+        $notificacion = new Notificacion;
+        $notificacion->titulo = "La oficina central autorizó información";
+        $notificacion->mensaje = "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación";
+        $notificacion->status = "Pendiente";
+        $notificacion->user_id = 1;
+        $notificacion->save();
+
+        $notificacion = new Notificacion;
+        $notificacion->titulo = "La oficina central autorizó información";
+        $notificacion->mensaje = "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación";
+        $notificacion->status = "Pendiente";
+        $notificacion->user_id = 3;
+        $notificacion->save();
 
         return response($convenio);
     }
