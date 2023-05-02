@@ -71,7 +71,7 @@
                                                 <div class="card card-body">
                                                     <span class="side-stick"></span>
                                                     <h5 class="note-title mb-0">{{ucwords(strtolower($nota->psnombre))}} <i class="point fa fa-circle ml-1 font-10"></i></h5>
-                                                    <p class="note-date font-12 text-muted">{{\Carbon\Carbon::parse($nota->fecha)->format("d F Y")}}</p>
+                                                    <p class="note-date font-12 text-muted">{{\Carbon\Carbon::parse($nota->fecha)->formatLocalized("%d %b %Y")}}</p>
                                                     <div class="note-content">
                                                         <p class="note-inner-content text-muted mb-0 pb-0">Cliente: {{ucwords(strtolower($nota->clientenombre))}}</p>
                                                         <p class="note-inner-content text-muted">Número: {{$nota->codigoCliente}}</p>
@@ -79,6 +79,7 @@
                                                     </div>
                                                     <div class="d-flex align-items-center mt-2">
                                                         <span class="me-1 delete" data-id="{{$nota->notaid}}"><i class="bi bi-trash-fill"></i></span>
+                                                        <a class="me-1 visualizar" target="_blank" href="{{asset("documentos/comprobantes_pagos/convenios/$nota->psnombre/$nota->codigoCliente/$nota->comprobante")}}"><i class="bi bi-eye"></i></a>
                                                         @if(auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                                                             <a class="me-1 download" download="{{$nota->psnombre}}_{{$nota->comprobante}}" href="{{asset("documentos/comprobantes_pagos/convenios/$nota->psnombre/$nota->codigoCliente/$nota->comprobante")}}"><i class="bi bi-download"></i></a>
                                                             <div class="ms-auto">

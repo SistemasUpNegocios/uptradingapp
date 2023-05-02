@@ -2952,11 +2952,22 @@ pre {
     display: none;
 }
 
-.note-has-grid .delete,
 .note-has-grid .download {
     cursor: pointer;
     font-size: 16px;
     color: #444444;
+}
+
+.note-has-grid .delete {
+    cursor: pointer;
+    font-size: 16px;
+    color: #d21312;
+}
+
+.note-has-grid .visualizar {
+    cursor: pointer;
+    font-size: 16px;
+    color: #070a52;
 }
 
 @media screen and (max-width: 500px) {
