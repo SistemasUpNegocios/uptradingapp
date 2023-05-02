@@ -259,6 +259,7 @@ class IncrementoConvenioController extends Controller
             $incremento_convenio->folio = $request->folio;
             $incremento_convenio->firma = $request->firma;
             $incremento_convenio->fecha_inicio_incremento = $request->fecha_inicio;
+            $incremento_convenio->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
             $incremento_convenio->status = $request->status;
             $incremento_convenio->cantidad_incremento = $request->monto_incremento;
             $incremento_convenio->cantidad_incrementoletra = $request->montoincremento_letra;
@@ -274,6 +275,21 @@ class IncrementoConvenioController extends Controller
             $log->id_tabla = $convenio_id;
             $log->bitacora_id = $bitacora_id;
             $log->save();
+
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+                \Telegram::sendMessage([
+                    'chat_id' => '-1001976160071',
+                    'parse_mode' => 'HTML',
+                    'text' => "Se generó un incremento de convenio con folio: $request->folio. Desde oficina central, a espera de tu activación."
+                ]);
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Nuevo incremento de convenio";
+                $notificacion->mensaje = "El incremento de convenio con folio $request->folio ha sido generado";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 3;
+                $notificacion->save();
+            }
 
             return response($incremento_convenio);
         }
@@ -361,32 +377,32 @@ class IncrementoConvenioController extends Controller
                 'text' => "El incremento del convenio con folio $incremento_convenio->folio ha sido activado por Jorge"
             ]);
             
-            $incremento_convenio->memo_status = "IncrementoConvenio activado por id:1";
+            $incremento_convenio->memo_status = "Incremento de convenio activado por id:1";
 
             $notificacion = new Notificacion;
-            $notificacion->titulo = "Jorge activó un nuevo incremento del convenio";
-            $notificacion->mensaje = "El incremento del convenio con folio $incremento_convenio->folio ha sido activado";
+            $notificacion->titulo = "Jorge activó un nuevo incremento de convenio";
+            $notificacion->mensaje = "El incremento de convenio con folio $incremento_convenio->folio ha sido activado";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 1;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo incremento del convenio";
-            $notificacion->mensaje = "El incremento del convenio con folio $incremento_convenio->folio ha sido activado";
+            $notificacion->mensaje = "El incremento de convenio con folio $incremento_convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 4;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo incremento del convenio";
-            $notificacion->mensaje = "El incremento del convenio con folio $incremento_convenio->folio ha sido activado";
+            $notificacion->mensaje = "El incremento de convenio con folio $incremento_convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 234;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo incremento del convenio";
-            $notificacion->mensaje = "El incremento del convenio con folio $incremento_convenio->folio ha sido activado";
+            $notificacion->mensaje = "El incremento de convenio con folio $incremento_convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 235;
             $notificacion->save();

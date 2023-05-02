@@ -601,7 +601,7 @@ class ContratoController extends Controller
             $cliente->update();
 
             //agregar en la tabla beneficiarios
-            for ($i = 0; $i <= 3; $i++) {
+            for ($i = 0; $i <= 4; $i++) {
                 if ($request->input('nombre-ben' . $i)) {
                     $nombre = 'nombre-ben' . ($i);
                     $porcentaje = 'porcentaje-ben' . ($i);
@@ -1065,7 +1065,7 @@ class ContratoController extends Controller
 
             $periodo = $request->input('periodo');
 
-            for ($i = 0; $i <= 3; $i++) {
+            for ($i = 0; $i <= 4; $i++) {
                 if ($request->input('nombre-ben' . $i)) {
                     $nombre = 'nombre-ben' . ($i);
                     $porcentaje = 'porcentaje-ben' . ($i);

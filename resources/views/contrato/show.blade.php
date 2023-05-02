@@ -380,6 +380,7 @@
                                         <option value="1" selected>1 beneficiario</option>
                                         <option value="2">2 beneficiarios</option>
                                         <option value="3">3 beneficiarios</option>
+                                        <option value="4">4 beneficiarios</option>
                                     </select>
                                     <label for="invitadoInput">Número de beneficiarios</label>
                                 </div>

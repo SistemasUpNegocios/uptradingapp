@@ -2121,6 +2121,8 @@ $(document).ready(function () {
                             adjetivo = "segundo";
                         } else if (i == 3) {
                             adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
                         }
                         $("#contBeneficiarios").append(`             
                             <div class="col-12">
@@ -2247,6 +2249,28 @@ $(document).ready(function () {
                         $("#telefonoBen3Input").val("sin telefono de contácto");
                         $("#correoBen3Input").val("sin correo de contácto");
                         $("#curpBen3Input").val("sin curp");
+                    }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("sin beneficiario");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("sin telefono de contácto");
+                        $("#correoBen4Input").val("sin correo de contácto");
+                        $("#curpBen4Input").val("sin curp");
                     }
                 } else {
                     $("#beneficiariosInput").val(1);
@@ -2734,6 +2758,8 @@ $(document).ready(function () {
                             adjetivo = "segundo";
                         } else if (i == 3) {
                             adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
                         }
                         $("#contBeneficiarios").append(`             
                             <div class="col-12">
@@ -2860,6 +2886,28 @@ $(document).ready(function () {
                         $("#telefonoBen3Input").val("");
                         $("#correoBen3Input").val("");
                         $("#curpBen3Input").val("");
+                    }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("");
+                        $("#correoBen4Input").val("");
+                        $("#curpBen4Input").val("");
                     }
                 } else {
                     $("#beneficiariosInput").val(1);
@@ -4134,6 +4182,8 @@ $(document).ready(function () {
                         adjetivo = "segundo";
                     } else if (i == 3) {
                         adjetivo = "tercer";
+                    } else if (i == 4) {
+                        adjetivo = "cuarto";
                     }
                     $("#contBeneficiarios").append(`             
                         <div class="col-12">
@@ -4203,17 +4253,42 @@ $(document).ready(function () {
                     );
 
                     if (porcentajeben1 > 100 || porcentajeben1 < 0) {
-                        $("#porcentajeBen1Input").val(50);
-                        $("#porcentajeBen2Input").val(50);
-                        $("#porcentajeBen3Input").val(0);
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
                     } else {
                         if (beneficiarios == 2) {
                             var porcentajeRestante = 100 - porcentajeben1;
                             $("#porcentajeBen2Input").val(porcentajeRestante);
                         } else if (beneficiarios == 3) {
                             var porcentajeRestante = (100 - porcentajeben1) / 2;
-                            $("#porcentajeBen2Input").val(porcentajeRestante);
-                            $("#porcentajeBen3Input").val(porcentajeRestante);
+                            $("#porcentajeBen2Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen3Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                        } else if (beneficiarios == 4) {
+                            var porcentajeRestante = (100 - porcentajeben1) / 3;
+                            $("#porcentajeBen2Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen3Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen4Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
                         }
                     }
                 });
@@ -4225,15 +4300,26 @@ $(document).ready(function () {
                     var porcentajeben2 = parseInt(
                         $("#porcentajeBen2Input").val()
                     );
-
                     if (porcentajeben2 > 100 || porcentajeben2 < 0) {
-                        $("#porcentajeBen1Input").val(50);
-                        $("#porcentajeBen2Input").val(50);
-                        $("#porcentajeBen3Input").val(0);
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
                     } else {
                         if (beneficiarios == 2) {
                             var porcentajeRestante = 100 - porcentajeben2;
-                            $("#porcentajeBen1Input").val(porcentajeRestante);
+                            $("#porcentajeBen1Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
                         } else if (beneficiarios == 3) {
                             var porcentajeRestante =
                                 100 - (porcentajeben1 + porcentajeben2);
@@ -4243,14 +4329,40 @@ $(document).ready(function () {
                                 var porcentajeRestante =
                                     (100 - porcentajeben1) / 2;
                                 $("#porcentajeBen2Input").val(
-                                    porcentajeRestante
+                                    porcentajeRestante.toFixed(2)
                                 );
                                 $("#porcentajeBen3Input").val(
-                                    porcentajeRestante
+                                    porcentajeRestante.toFixed(2)
                                 );
                             } else {
                                 $("#porcentajeBen3Input").val(
-                                    porcentajeRestante
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            }
+                        } else if (beneficiarios == 4) {
+                            var porcentajeRestante =
+                                100 - (porcentajeben1 + porcentajeben2);
+                            var sumaPorcentajes =
+                                porcentajeben1 + porcentajeben2;
+                            if (sumaPorcentajes > 100) {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben1) / 3;
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            } else {
+                                porcentajeRestante = porcentajeRestante / 2;
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
                                 );
                             }
                         }
@@ -4269,21 +4381,147 @@ $(document).ready(function () {
                     );
 
                     if (porcentajeben3 > 100 || porcentajeben3 < 0) {
-                        $("#porcentajeBen1Input").val(33);
-                        $("#porcentajeBen2Input").val(33);
-                        $("#porcentajeBen3Input").val(33);
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                    } else {
+                        if (beneficiarios == 4) {
+                            // var sumaPorcentajes =
+                            //     porcentajeben1 +
+                            //     porcentajeben2 +
+                            //     porcentajeben3;
+
+                            // if (sumaPorcentajes > 100.0) {
+                            //     var porcentajeRestante =
+                            //         100 -
+                            //         (porcentajeben1 +
+                            //             porcentajeben2 +
+                            //             porcentajeben3);
+                            //     $("#porcentajeBen4Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            // } else {
+                            //     var porcentajeRestante =
+                            //         (100 - porcentajeben3) / 3;
+                            //     $("#porcentajeBen1Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            //     $("#porcentajeBen2Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            //     $("#porcentajeBen4Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            // }
+                            var porcentajeRestante =
+                                100 -
+                                (porcentajeben1 +
+                                    porcentajeben2 +
+                                    porcentajeben3);
+                            var sumaPorcentajes =
+                                porcentajeben1 +
+                                porcentajeben2 +
+                                porcentajeben3;
+                            if (sumaPorcentajes > 100) {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben1) / 3;
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            } else {
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            }
+                        } else {
+                            var sumaPorcentajes =
+                                porcentajeben1 +
+                                porcentajeben2 +
+                                porcentajeben3;
+
+                            if (sumaPorcentajes > 100.0) {
+                                var porcentajeRestante =
+                                    100 - (porcentajeben1 + porcentajeben2);
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante
+                                );
+                            } else {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben3) / 2;
+                                $("#porcentajeBen1Input").val(
+                                    porcentajeRestante
+                                );
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante
+                                );
+                            }
+                        }
+                    }
+                });
+                // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+                $("#porcentajeBen4Input").change(function () {
+                    var porcentajeben1 = parseInt(
+                        $("#porcentajeBen1Input").val()
+                    );
+                    var porcentajeben2 = parseInt(
+                        $("#porcentajeBen2Input").val()
+                    );
+                    var porcentajeben3 = parseInt(
+                        $("#porcentajeBen3Input").val()
+                    );
+                    var porcentajeben4 = parseInt(
+                        $("#porcentajeBen4Input").val()
+                    );
+
+                    if (porcentajeben4 > 100 || porcentajeben4 < 0) {
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
                     } else {
                         var sumaPorcentajes =
-                            porcentajeben1 + porcentajeben2 + porcentajeben3;
+                            porcentajeben1 +
+                            porcentajeben2 +
+                            porcentajeben3 +
+                            porcentajeben4;
 
                         if (sumaPorcentajes > 100.0) {
                             var porcentajeRestante =
-                                100 - (porcentajeben1 + porcentajeben2);
-                            $("#porcentajeBen3Input").val(porcentajeRestante);
+                                100 -
+                                (porcentajeben1 +
+                                    porcentajeben2 +
+                                    porcentajeben3);
+                            $("#porcentajeBen4Input").val(porcentajeRestante);
                         } else {
-                            var porcentajeRestante = (100 - porcentajeben3) / 2;
+                            var porcentajeRestante = (100 - porcentajeben4) / 3;
                             $("#porcentajeBen1Input").val(porcentajeRestante);
                             $("#porcentajeBen2Input").val(porcentajeRestante);
+                            $("#porcentajeBen3Input").val(porcentajeRestante);
                         }
                     }
                 });

@@ -251,6 +251,7 @@ class ConvenioController extends Controller
             $convenio->monto_letra = $request->input('monto_letra');
             $convenio->fecha_inicio = $request->input('fecha_inicio');
             $convenio->fecha_fin = $request->input('fecha_fin');
+            $convenio->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
             $convenio->capertura = $request->input('capertura');
             $convenio->cmensual = $request->input('cmensual');
             $convenio->ctrimestral = $request->input('ctrimestral');
@@ -354,13 +355,20 @@ class ConvenioController extends Controller
                 }
             }
 
-            // if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
-            //     \Telegram::sendMessage([
-            //         'chat_id' => '-1001976160071',
-            //         'parse_mode' => 'HTML',
-            //         'text' => "Se creó un convenio con folio: $request->folio. A espera de tu activación."
-            //     ]);
-            // }
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+                \Telegram::sendMessage([
+                    'chat_id' => '-1001976160071',
+                    'parse_mode' => 'HTML',
+                    'text' => "Se creó un convenio con folio: $request->folio. Desde oficina central, a espera de tu activación."
+                ]);
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Nuevo convenio creado";
+                $notificacion->mensaje = "El convenio con folio $request->folio ha sido creado";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 3;
+                $notificacion->save();
+            }
 
             return response($convenio);
         }
@@ -535,28 +543,28 @@ class ConvenioController extends Controller
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo convenio";
-            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 1;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo convenio";
-            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 4;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo convenio";
-            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 234;
             $notificacion->save();
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo convenio";
-            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado";
+            $notificacion->mensaje = "El convenio con folio $convenio->folio ha sido activado por Jorge";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 235;
             $notificacion->save();
