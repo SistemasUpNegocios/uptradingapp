@@ -1090,7 +1090,7 @@ class ClienteController extends Controller
             $query = Cliente::where('id', $id)->get();
             $nombre = $request->nombre;
             $nombreDoc = $request->doc;
-            $correo = "paolarosalesv2001@gmail.com";
+            $correo = "latam@swissquote.com";
             $nombreDescarga = $nombreDocs."/".$nombreDoc;
         
             $mail = new PHPMailer(true);

@@ -1240,10 +1240,10 @@ $(document).ready(function () {
         if ($("#LPOADocumentoInput")[0].files[0]?.name) {
             $("#LPOADocumentoInput").removeClass("is-invalid");
             $("#LPOADocumentoInput").addClass("is-valid");
-            ext = validarExtension(
-                $("#LPOADocumentoInput").val(),
-                "#LPOADocumentoInput"
-            );
+            // ext = validarExtension(
+            //     $("#LPOADocumentoInput").val(),
+            //     "#LPOADocumentoInput"
+            // );
         } else {
             if (datatarget < 1) {
                 $("#LPOADocumentoInput").removeClass("is-valid");
@@ -1251,22 +1251,22 @@ $(document).ready(function () {
             }
         }
 
-        let srcPath = event.target.files[0];
-        let objectURL = URL.createObjectURL(srcPath);
-        console.log(ext);
-        if (ext == "pdf" || ext == "PDF") {
-            validarDocumento(
-                objectURL,
-                "Poder limitado de representación",
-                "#LPOADocumentoInput"
-            );
-        } else {
-            validarImagen(
-                objectURL,
-                "Poder limitado de representación",
-                "#LPOADocumentoInput"
-            );
-        }
+        // let srcPath = event.target.files[0];
+        // let objectURL = URL.createObjectURL(srcPath);
+        // console.log(ext);
+        // if (ext == "pdf" || ext == "PDF") {
+        //     validarDocumento(
+        //         objectURL,
+        //         "Poder limitado de representación",
+        //         "#LPOADocumentoInput"
+        //     );
+        // } else {
+        //     validarImagen(
+        //         objectURL,
+        //         "Poder limitado de representación",
+        //         "#LPOADocumentoInput"
+        //     );
+        // }
     });
 
     $("#formAperturaInput").change(function (event) {
