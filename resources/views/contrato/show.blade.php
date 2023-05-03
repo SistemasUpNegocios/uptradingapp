@@ -540,7 +540,10 @@
                             <div class="col-12 mb-3">
                                 <div class="d-flex justify-content-between">
                                     <label for="comprobantePagoInput" class="form-label">Comprobante(s) de pago</label>
-                                    <a id="comprobantePagoDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
+                                    <div>
+                                        <a id="comprobantePagoView" target="_blank" class="d-none fs-5 text-secondary"><i class="bi bi-eye-fill"></i></a>
+                                        <a id="comprobantePagoDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
+                                    </div>
                                 </div>
                                 <input type="file" id="comprobantePagoInput" class="form-control" name="comprobante_pago[]" multiple>
                             </div>

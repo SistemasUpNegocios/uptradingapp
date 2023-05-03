@@ -4671,6 +4671,7 @@ $(document).ready(function () {
 
     const comprobantePago = (thiss) => {
         var comprobantepago = $(thiss).data("comprobantepago");
+        var documento = comprobantepago.split(",");
         var contrato = $(thiss).data("contrato");
 
         if (comprobantepago.length > 0) {
@@ -4682,13 +4683,19 @@ $(document).ready(function () {
                 "href",
                 `../documentos/comprobantes_pagos/contratos/${contrato}/${contrato}.zip`
             );
+            $("#comprobantePagoView").attr(
+                "href",
+                `../documentos/comprobantes_pagos/contratos/${contrato}/${documento[0]}`
+            );
 
             $("#comprobantePagoDesc").removeClass("d-none");
+            $("#comprobantePagoView").removeClass("d-none");
         } else {
             $("#comprobantePagoInput").addClass("is-invalid");
             $("#comprobantePagoInput").removeClass("is-valid");
 
             $("#comprobantePagoDesc").addClass("d-none");
+            $("#comprobantePagoView").addClass("d-none");
         }
     };
 
