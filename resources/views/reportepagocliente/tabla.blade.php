@@ -24,7 +24,7 @@
                         $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
                         $fecha = $resumen->fecha;
                         $pago_dolares = number_format($resumen->pago, 2);
-                        $pagos_bd = App\Models\Pago::where('id_contrato', $resumen->contratoid)->orderBy("id", "DESC")->first();
+                        $pagos_bd = App\Models\Pago::where('id_contrato', $resumen->contratoid)->where("memo", "Pago a cliente ($pago)")->orderBy("id", "DESC")->first();
                     @endphp
                     @if ($resumen->tipo_id == 1 && $resumen->serie_pago < 12)
                         <tr>

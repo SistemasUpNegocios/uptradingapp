@@ -279,7 +279,8 @@ class ReportePagoClienteController extends Controller
             "tipo" => $request->tipo,
             "total_dolares" => $total_dolares,
             "letra_total" => $request->letra_dolares,
-            "contratoid" => $request->contratoid
+            "contratoid" => $request->contratoid,
+            "dolares" => $request->dolar,
         );
 
         $pdf = PDF::loadView('reportepagocliente.reporte', $data);

@@ -80,8 +80,6 @@
                         }
                     }
 
-                    echo $consulta;
-
                 @endphp
                 @if ($comision_ps > 0)
                     <tr>
@@ -89,11 +87,11 @@
                         <td style="font-size: 14px">${{ $comision }}</td>
                         <td style="font-size: 14px">${{ $comision_dolares }}</td>
                         <td class="d-flex align-items-center">
-                            @if($consulta == "true")
+                            {{-- @if($consulta == "true")
                                 <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$pagos}}" data-contratoid="{{$contratoid}}" data-pesos="{{ $comision }}" data-dolares="{{$comision_dolares}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
                             @else
                                 <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$pagos}}" data-contratoid="{{$contratoid}}" data-pesos="{{ $comision }}" data-dolares="{{$comision_dolares}}"> <i class="bi bi-journal-text"></i></button>
-                            @endif
+                            @endif --}}
                             <button class="btn btn-warning ms-1" style="font-size: 13px; padding: 7px" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-fecha="{{ $fecha }}" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                             <button class="btn btn-success ms-1" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-fecha="{{ $fecha }}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
                             <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-ps="{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}" data-comision="{{$comision}}" data-comisiondolares="{{ $comision_dolares }}" data-psnumero="{{ $ps->celular }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%B') }}" title="Mandar whats para pesos"><i class="bi bi-whatsapp"></i></button>

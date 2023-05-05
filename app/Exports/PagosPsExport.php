@@ -23,15 +23,20 @@ class PagosPsExport implements FromCollection,WithHeadings
     {
         return [
             'Nombre del PS',
-            'Comisión (MXN)',
+            // 'Comisión (MXN)',
             'Comisión (USD)',
         ];
     }
     public function collection()
     {
         $fecha = $this->fecha;
+        // $lista_ps = DB::table("ps")
+        //     ->select(DB::raw("id, CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS ps, celular AS comision, codigoPS AS comision_dolares"))
+        //     ->orderBy('ps', "ASC")
+        //     ->get();
+
         $lista_ps = DB::table("ps")
-            ->select(DB::raw("id, CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS ps, celular AS comision, codigoPS AS comision_dolares"))
+            ->select(DB::raw("id, CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS ps, codigoPS AS comision_dolares"))
             ->orderBy('ps', "ASC")
             ->get();
 
@@ -52,12 +57,12 @@ class PagosPsExport implements FromCollection,WithHeadings
 
             if ($comision_ps > 0){
                 $ps->ps = $ps->ps;
-                $ps->comision = number_format($comision_ps * $this->dolar, 2);
+                // $ps->comision = number_format($comision_ps * $this->dolar, 2);
                 $ps->comision_dolares = number_format($comision_ps, 2);
             }else{
                 unset($ps->ps);
                 unset($ps->comision_dolares);
-                unset($ps->comision);
+                // unset($ps->comision);
             }
             unset($ps->id);
 
