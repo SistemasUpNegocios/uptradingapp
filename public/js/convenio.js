@@ -1290,7 +1290,6 @@ $(document).ready(function () {
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
-        console.log(firma);
         if (firma == "MARIA EUGENIA RINCON ACEVAL") {
             $("#gerenteInput").prop("checked", true);
             $("#representanteInput").prop("checked", false);

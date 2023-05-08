@@ -19,7 +19,6 @@
 
             if(!empty($convenio_oficina)){
                 $ps_cons = App\Models\Ps::select()->where("correo_institucional", strtolower($convenio_oficina->correo))->first();
-                // echo json_encode($ps_cons);
             }
         @endphp
         @if (auth()->user()->is_admin || auth()->user()->is_procesos)

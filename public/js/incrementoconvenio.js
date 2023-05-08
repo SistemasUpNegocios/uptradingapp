@@ -1032,6 +1032,97 @@ $(document).ready(function () {
         });
     });
 
+    table.on("change", ".status_oficina", function () {
+        var checked = $(this).is(":checked");
+
+        if (checked) {
+            $(this).val("Activado");
+        } else {
+            $(this).val("Pendiente");
+        }
+
+        var id = $(this).data("id");
+        var statusValor = $(this).val();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
+        Swal.fire({
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar status</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el status</p>',
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
+            cancelButtonColor: "#01bbcc",
+            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+            confirmButtonColor: "#198754",
+            input: "password",
+            showLoaderOnConfirm: true,
+            preConfirm: (clave) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/validateClaveIncrementoConvenioOficina",
+                    data: {
+                        clave: clave,
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            $.get(
+                                "/admin/editStatusIncrementoConvenioOficina",
+                                {
+                                    id: id,
+                                    status: statusValor,
+                                },
+                                function () {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Estatus actualizado",
+                                    });
+
+                                    table.ajax.reload(null, false);
+                                }
+                            );
+                        } else {
+                            statusClaveIncorrectaOficina();
+
+                            Toast.fire({
+                                icon: "error",
+                                title: "Clave incorrecta",
+                            });
+                        }
+                    },
+                    error: function () {
+                        statusClaveIncorrectaOficina();
+                        Toast.fire({
+                            icon: "error",
+                            title: "Clave incorrecta",
+                        });
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading(),
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                statusClaveIncorrectaOficina();
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                    html: '<p style="font-family: Poppins">El status del convenio no se ha actualizado</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            }
+        });
+    });
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -1716,6 +1807,18 @@ $(document).ready(function () {
         } else {
             $("#convenioStatusInput").prop("checked", false);
             $("#convenioStatusInput").val("Pendiente de activación");
+        }
+    }
+
+    function statusClaveIncorrectaOficina() {
+        var estatus = $("#convenioStatusInputOficina").data("status");
+
+        if (estatus == "Activado") {
+            $("#convenioStatusInputOficina").prop("checked", true);
+            $("#convenioStatusInputOficina").val("Activado");
+        } else {
+            $("#convenioStatusInputOficina").prop("checked", false);
+            $("#convenioStatusInputOficina").val("Pendiente de activación");
         }
     }
 

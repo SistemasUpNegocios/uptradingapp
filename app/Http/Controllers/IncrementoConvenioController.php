@@ -80,7 +80,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("ps.id", "like", $psid)
                     ->orWhere("cliente.id", "like", $clienteid);
@@ -93,7 +93,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -107,7 +107,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -138,7 +138,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("ps.id", "like", $psid)
                     ->orWhere("cliente.id", "like", $clienteid);
@@ -152,7 +152,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -167,7 +167,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -199,7 +199,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("ps.id", "like", $psid)
                     ->orWhere("cliente.id", "like", $clienteid);
@@ -213,7 +213,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -228,7 +228,7 @@ class IncrementoConvenioController extends Controller
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
+                ->select(DB::raw("incremento_convenio.id, incremento_convenio.folio, incremento_convenio.firma, incremento_convenio.fecha_inicio_incremento, incremento_convenio.status, incremento_convenio.status_oficina, incremento_convenio.cantidad_incremento, incremento_convenio.cantidad_incrementoletra, incremento_convenio.convenio_id as convenioid, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre"))
                 ->where("ps.id", "like", $psid)
                 ->where("cliente.id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -264,6 +264,11 @@ class IncrementoConvenioController extends Controller
             $incremento_convenio->cantidad_incremento = $request->monto_incremento;
             $incremento_convenio->cantidad_incrementoletra = $request->montoincremento_letra;
             $incremento_convenio->convenio_id  = $request->convenio_id;
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos){
+                $incremento_convenio->status_oficina = "Activado";
+            }else{
+                $incremento_convenio->status_oficina = "Pendiente";
+            }
             $incremento_convenio->save();
 
             $convenio_id = $incremento_convenio->id;
@@ -548,6 +553,46 @@ class IncrementoConvenioController extends Controller
                 return response()->json($data);
             }
         }
+    }
+
+    public function validateClaveOficina(Request $request)
+    {
+        $clave = DB::table('users')->where("id", "=", auth()->user()->id)->first();
+
+        if (\Hash::check($request->clave, $clave->password)) {
+            return response("success");
+        }else{
+            return response("error");
+        }
+    }
+
+    public function editStatusOficina(Request $request)
+    {
+        $incremento_convenio = IncrementoConvenio::find($request->id);
+        $incremento_convenio->status_oficina = $request->status;
+        $incremento_convenio->update();
+
+        \Telegram::sendMessage([
+            'chat_id' => '-1001976160071',
+            'parse_mode' => 'HTML',
+            'text' => "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación."
+        ]);
+
+        $notificacion = new Notificacion;
+        $notificacion->titulo = "La oficina central autorizó la información";
+        $notificacion->mensaje = "La oficina central ha autorizado la información del incremento de convenio con folio $incremento_convenio->folio para su activación";
+        $notificacion->status = "Pendiente";
+        $notificacion->user_id = 1;
+        $notificacion->save();
+
+        $notificacion = new Notificacion;
+        $notificacion->titulo = "La oficina central autorizó la información";
+        $notificacion->mensaje = "La oficina central ha autorizado la información del incremento de convenio con folio $incremento_convenio->folio para su activación";
+        $notificacion->status = "Pendiente";
+        $notificacion->user_id = 3;
+        $notificacion->save();
+
+        return response($incremento_convenio);
     }
 
 }

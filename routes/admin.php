@@ -159,6 +159,9 @@ Route::get('/admin/getFolioIncrementoConvenio', [App\Http\Controllers\Incremento
 Route::get('/admin/getConvenioUsuario', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenioUsuario']);
 Route::get('/admin/enviarTelegramIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'enviarTelegram']);
 
+Route::get('/admin/validateClaveIncrementoConvenioOficina', [App\Http\Controllers\IncrementoConvenioController::class, 'validateClaveOficina']);
+Route::get('/admin/editStatusIncrementoConvenioOficina', [App\Http\Controllers\IncrementoConvenioController::class, 'editStatusOficina']);
+
 // Rutas para gestión de modelo
 Route::get('/admin/modelo', [App\Http\Controllers\ModeloController::class, 'index'])->name('modelo');
 Route::get('/admin/showModelo', [App\Http\Controllers\ModeloController::class, 'getModelo']);

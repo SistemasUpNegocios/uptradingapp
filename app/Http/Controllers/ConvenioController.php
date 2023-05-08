@@ -571,6 +571,8 @@ class ConvenioController extends Controller
             ]);
             
             $convenio->memo_status = "Convenio activado por id:1";
+            $convenio->fecha_inicio = Carbon::now()->format('Y-m-d');
+            $convenio->fecha_fin = Carbon::now()->addYear()->format('Y-m-d');
 
             $notificacion = new Notificacion;
             $notificacion->titulo = "Jorge activó un nuevo convenio";
@@ -730,14 +732,14 @@ class ConvenioController extends Controller
         ]);
 
         $notificacion = new Notificacion;
-        $notificacion->titulo = "La oficina central autorizó información";
+        $notificacion->titulo = "La oficina central la autorizó información";
         $notificacion->mensaje = "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación";
         $notificacion->status = "Pendiente";
         $notificacion->user_id = 1;
         $notificacion->save();
 
         $notificacion = new Notificacion;
-        $notificacion->titulo = "La oficina central autorizó información";
+        $notificacion->titulo = "La oficina central la autorizó información";
         $notificacion->mensaje = "La oficina central ha autorizado la información del convenio con folio $convenio->folio para su activación";
         $notificacion->status = "Pendiente";
         $notificacion->user_id = 3;
