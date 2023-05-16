@@ -34,14 +34,14 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             //PENDIENTES
             $pendientes = Pendiente::all();
-            $pendientesCheck = Pendiente::select("primer_pago")->get();
+            $pendientesCheck = Pendiente::select("primer_reporte")->get();
             $fecha = \Carbon\Carbon::parse(date('d-m-Y'))->formatLocalized('%d de %B de %Y');
             //mandar correo
             $mail = new PHPMailer(true);
             $mail->CharSet = "UTF-8";
 
             foreach ($pendientesCheck as $pendienteCheck) {
-                if ($pendienteCheck->primer_pago == "Pendiente"){
+                if ($pendienteCheck->primer_reporte == "Pendiente"){
                     $mensaje = "<!DOCTYPE html>
                                 <html lang='es'>
                                     <head>
@@ -293,10 +293,10 @@ class Kernel extends ConsoleKernel
                                                         <br>
                                                         <div class='contenido_mensaje_texto__info'>
                                                             <p color: #404040;'><b>ORGANIZACIÓN:</b> Up Trading Experts.</p>
-                                                            <p color: #404040;'><b>ENCARGADA:</b> María Eugenia.</p>
+                                                            <p color: #404040;'><b>AREA:</b> Administración.</p>
                                                             <p color: #404040;'><b>FECHA:</b> $fecha.</p>";
                                                             foreach($pendientes as $pendiente) {
-                                                                if($pendiente->primer_pago == "Pendiente"){
+                                                                if($pendiente->primer_reporte == "Pendiente"){
 
                                                                     $cont = 0;
                                                                     $mensaje.="
@@ -323,20 +323,20 @@ class Kernel extends ConsoleKernel
                                                                                         <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->introduccion</td>
                                                                                     </tr>";
                                                                                 }
-                                                                                if($pendiente->intencion_inversion == "Pendiente"){
-                                                                                    $cont+=1;
-                                                                                    $mensaje.= "<tr>
-                                                                                        <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>Intención de inversión</td>
-                                                                                        <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->intencion_inversion</td>
-                                                                                    </tr>";
-                                                                                }
                                                                                 if($pendiente->formulario == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
                                                                                         <td class='tg-baqh'>$cont</td>
                                                                                         <td class='tg-0lax'>Formulario</td>
                                                                                         <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->formulario</td>
+                                                                                    </tr>";
+                                                                                }
+                                                                                if($pendiente->alta_cliente == "Pendiente"){
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Alta de cliente</td>
+                                                                                        <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->alta_cliente</td>
                                                                                     </tr>";
                                                                                 }
                                                                                 if($pendiente->videoconferencia == "Pendiente"){
@@ -369,6 +369,28 @@ class Kernel extends ConsoleKernel
                                                                                         <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->instrucciones_bancarias</td>
                                                                                     </tr>";
                                                                                 }
+                                                                                if($pendiente->generar_lpoa == "Pendiente"){
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Generar LPOA</td>
+                                                                                        <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->generar_lpoa</td>
+                                                                                    </tr>";
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Nota de LPOA</td>
+                                                                                        <td class='tg-baqh' style='background: #e2e3e5; color: #41464b; text-transform: uppercase; font-weight: bold;'>$pendiente->memo_generar_lpoa</td>
+                                                                                    </tr>";
+                                                                                }
+                                                                                if($pendiente->instrucciones_bancarias_mam == "Pendiente"){
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Instrucciones Bancarias MAM</td>
+                                                                                        <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->instrucciones_bancarias_mam</td>
+                                                                                    </tr>";
+                                                                                }
                                                                                 if($pendiente->transferencia == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
@@ -376,45 +398,47 @@ class Kernel extends ConsoleKernel
                                                                                         <td class='tg-0lax'>Transferencia</td>
                                                                                         <td class='tg-baqh' style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->transferencia</td>
                                                                                     </tr>";
-                                                                                }
-                                                                                if($pendiente->contrato == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
                                                                                         <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>Contrato activado</td>
-                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->contrato</td>
+                                                                                        <td class='tg-0lax'>Nota de transferencia</td>
+                                                                                        <td class='tg-baqh' style='background: #e2e3e5; color: #41464b; text-transform: uppercase; font-weight: bold;'>$pendiente->memo_transferencia</td>
                                                                                     </tr>";
                                                                                 }
-                                                                                if($pendiente->conexion_mampool == "Pendiente"){
+                                                                                if($pendiente->conexion_mampol == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
                                                                                         <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>Conexión MAM/POOL</td>
-                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->conexion_mampool</td>
+                                                                                        <td class='tg-0lax'>Conexión MAM</td>
+                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->conexion_mampol</td>
+                                                                                    </tr>";
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Nota de conexión MAM</td>
+                                                                                        <td class='tg-baqh' style='background: #e2e3e5; color: #41464b; text-transform: uppercase; font-weight: bold;'>$pendiente->memo_conexion_mampol</td>
                                                                                     </tr>";
                                                                                 }
-                                                                                if($pendiente->tarjeta_swissquote == "Pendiente"){
+                                                                                if($pendiente->generar_convenio == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
                                                                                         <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>Tajeta Swissquote</td>
-                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->tarjeta_swissquote</td>
+                                                                                        <td class='tg-0lax'>Generar convenio</td>
+                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->generar_convenio</td>
+                                                                                    </tr>";
+                                                                                    $cont+=1;
+                                                                                    $mensaje.= "<tr>
+                                                                                        <td class='tg-baqh'>$cont</td>
+                                                                                        <td class='tg-0lax'>Nota de convenio</td>
+                                                                                        <td class='tg-baqh' style='background: #e2e3e5; color: #41464b; text-transform: uppercase; font-weight: bold;'>$pendiente->memo_generar_convenio</td>
                                                                                     </tr>";
                                                                                 }
-                                                                                if($pendiente->tarjeta_uptrading == "Pendiente"){
+                                                                                if($pendiente->primer_reporte == "Pendiente"){
                                                                                     $cont+=1;
                                                                                     $mensaje.= "<tr>
                                                                                         <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>Tarjeta Uptrading</td>
-                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->tarjeta_uptrading</td>
-                                                                                    </tr>";
-                                                                                }
-                                                                                if($pendiente->primer_pago == "Pendiente"){
-                                                                                    $cont+=1;
-                                                                                    $mensaje.= "<tr>
-                                                                                        <td class='tg-baqh'>$cont</td>
-                                                                                        <td class='tg-0lax'>1er pago</td>
-                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->primer_pago</td>
+                                                                                        <td class='tg-0lax'>1er reporte</td>
+                                                                                        <td class='tg-baqh'style='background: #f8d7da; color: #842029; text-transform: uppercase; font-weight: bold;'>$pendiente->primer_reporte</td>
                                                                                     </tr>";
                                                                                 }
                                                                             $mensaje.="</tbody>
@@ -486,93 +510,17 @@ class Kernel extends ConsoleKernel
 
                 //Recipients
                 $mail->setFrom('mensajes@uptradingexperts.com', 'Sistemas Up Trading Experts');
-                $mail->addAddress("administracion@upnegocios.com", "María Eugenia");     //Add a recipient
+                $mail->addAddress("javiersalazar@uptradingexperts.com", "Administración");     //Add a recipient
 
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->Subject = 'PENDIENTES EN EL CHECKLIST';
                 $mail->Body    = $mensaje;
                     
-
                 $mail->send();
 
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
-
-
-            //NOTIFICACIONES
-            $fecha_actual = date('Y-m-d');
-            $fecha_actual = date("Y-m-d", strtotime($fecha_actual."+ 1 week"));
-
-            $users = DB::table('users')
-                        ->select(DB::raw("id"))
-                        ->where("privilegio", 'contabilidad')
-                        ->get();
-
-            $pagos_clientes = DB::table('pago_cliente')
-                        ->select(DB::raw("fecha_pago, pago, contrato_id"))
-                        ->get();
-
-            foreach ($pagos_clientes as $pago_cliente) {
-                $fecha = date("d/m/Y",strtotime($pago_cliente->fecha_pago)); 
-
-                $contrato = DB::table('contrato')
-                ->select(DB::raw("contrato, cliente_id"))
-                ->where("id", $pago_cliente->contrato_id)
-                ->get();
-
-                $cliente = DB::table('cliente')
-                ->select(DB::raw("CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS clientenombre"))
-                ->where("id", $contrato[0]->cliente_id)
-                ->get();
-
-                if ($pago_cliente->fecha_pago == $fecha_actual){
-                    foreach ($users as $user) {
-
-                        $notificacion = new Notificacion;
-        
-                        $notificacion->titulo = "Pago a cliente.";
-                        $notificacion->mensaje = "La fecha para pagar el contrato con número ".$contrato[0]->contrato.", del cliente ".$cliente[0]->clientenombre.". Es para el $fecha, por una cantidad de $".number_format($pago_cliente->pago, 2)." dólares.";
-                        $notificacion->status = "Pendiente";
-                        $notificacion->user_id = $user->id;
-        
-                        $notificacion->save();
-                    }
-                }
-            }
-
-            $pagosps = DB::table('pago_ps')
-                        ->select(DB::raw("fecha_pago, pago, contrato_id"))
-                        ->get();
-
-            foreach ($pagosps as $pagops) {                
-                $fecha = date("d/m/Y",strtotime($pagops->fecha_pago)); 
-
-                $contrato = DB::table('contrato')
-                ->select()
-                ->where("id", $pagops->contrato_id)
-                ->get();
-
-                $ps = DB::table('ps')
-                ->select(DB::raw("CONCAT(nombre, ' ', apellido_p, ' ', apellido_m) AS psnombre"))
-                ->where("id", $contrato[0]->ps_id)
-                ->get();
-
-                if ($pagops->fecha_pago == $fecha_actual){
-                    foreach ($users as $user) {
-
-                        $notificacion = new Notificacion;
-        
-                        $notificacion->titulo = "Pago a PS";
-                        $notificacion->mensaje = "$contrato";
-                        $notificacion->mensaje = "La fecha para pagar al PS ".$ps[0]->psnombre." es para el $fecha, por una cantidad de $".number_format($pagops->pago, 2)." dólares.";
-                        $notificacion->status = "Pendiente";
-                        $notificacion->user_id = $user->id;
-        
-                        $notificacion->save();
-                    }
-                }
             }
 
         })
@@ -580,7 +528,7 @@ class Kernel extends ConsoleKernel
         ->dailyAt("08:40")
         ->timezone('America/Mexico_City');
 
-        $schedule->command("backup:run --only-db")->weekdays()->dailyAt("08:30")->timezone('America/Mexico_City');
+        $schedule->command("backup:run --only-db")->weekdays()->dailyAt("20:00")->timezone('America/Mexico_City');
     }
 
     /**

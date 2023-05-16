@@ -35,6 +35,7 @@ $(document).ready(function () {
         let fecha = formatDate(new Date());
         fecha = fecha.split("/").reverse().join("-");
         $("#botonActualizar").removeClass("d-none");
+        dolar = $("#dolarInput").val();
 
         $.ajax({
             type: "GET",
@@ -318,6 +319,7 @@ $(document).ready(function () {
     $(document).on("change", "#fechaInicioInput", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        dolar = $("#dolarInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";
@@ -394,6 +396,7 @@ $(document).ready(function () {
     $(document).on("change", "#fechaFinInput", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        dolar = $("#dolarInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";
@@ -488,6 +491,8 @@ $(document).ready(function () {
             ("/admin/getResumenPagoClienteDiaCompuesto");
         }
 
+        dolar = $("#dolarInput").val();
+
         $.ajax({
             type: "GET",
             data: { fecha: fecha, dolar: dolar },
@@ -558,12 +563,14 @@ $(document).ready(function () {
             let contratoid = $(this).data("contratoid");
             let tipo = $(this).data("tipo");
             let dolar = $("#dolarInput").val();
-            let rendimiento = $(this).data("rendimientoini");
+            let rendimiento = $(this).data("rendimiento");
 
-            rendimiento = formatearCantidad
-                .format(parseFloat(rendimiento) * parseFloat(dolar))
-                .replaceAll("$", "")
-                .replaceAll(",", "");
+            // rendimiento = formatearCantidad
+            //     .format(parseFloat(rendimiento) * parseFloat(dolar))
+            //     .replaceAll("$", "")
+            //     .replaceAll(",", "");
+
+            rendimiento = rendimiento.replaceAll("$", "").replaceAll(",", "");
 
             let letra = numeroALetrasMXN(rendimiento);
             let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
@@ -634,7 +641,7 @@ $(document).ready(function () {
         );
     });
 
-    $(document).on("change", "#dolarInput", function () {
+    $(document).on("keyup", "#dolarInput", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         let dolar_nuevo = $("#dolarInput").val();
@@ -760,6 +767,7 @@ $(document).ready(function () {
     const filtros = () => {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
+        dolar = $("#dolarInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";

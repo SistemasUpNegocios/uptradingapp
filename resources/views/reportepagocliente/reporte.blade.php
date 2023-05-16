@@ -44,7 +44,7 @@
       $contrato_find = \App\Models\Contrato::find($contratoid);
       $fecha_inicial = \Carbon\Carbon::parse($contrato_find->fecha)->formatLocalized('%d de %B de %Y');
       $inversion_dolares = number_format($contrato_find->inversion_us, 2);
-      $rendimiento_final = number_format($contrato_find->inversion_us * $dolares, 2);
+      $rendimiento_final = number_format($contrato_find->inversion_us, 2);
 
       if($pago == "12/12"){
         $centavos = strval($rendimiento_final);
@@ -108,7 +108,7 @@
     @if($pago == "12/12")
       <div class="mt-5">
         <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
-          <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento_final }} M.N. ({{ $letra }} {{ $centavos_num }}), por concepto de pago de liquidación del contrato mensual {{ $contrato }} de fecha {{ $fecha_inicial }}, cuya inversión fue de ${{ $inversion_dolares }} dólares ({{ $inversion_letra }} {{ $inversion_centavos }}) y al término del contrato el día {{ $fecha }} se reintegra la inversión, y se paga al tipo de cambio a este día, sin que al momento exista algún adeudo.
+          <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra }} {{ $centavos_num }}), por concepto de pago de liquidación del contrato mensual {{ $contrato }} de fecha {{ $fecha_inicial }}, cuya inversión fue de ${{ $inversion_dolares }} dólares ({{ $inversion_letra }} {{ $inversion_centavos }}) y al término del contrato el día {{ $fecha }} se reintegra la inversión, y se paga al tipo de cambio a este día, sin que al momento exista algún adeudo.
         </p>
       </div>
     @else

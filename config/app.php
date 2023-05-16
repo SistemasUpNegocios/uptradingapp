@@ -178,6 +178,8 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
+        
     ],
 
     /*
