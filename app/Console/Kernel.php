@@ -281,7 +281,7 @@ class Kernel extends ConsoleKernel
                                         <div class='contenedor'>
                                             <div class='header'>
                                                 <div class='header_contenido'>
-                                                    <img src='https://admin.uptradingexperts.com/img/logo.png' alt='Up Trading Experts' title='Up Trading Experts'>
+                                                    <img src='https://www.uptradingexperts.com/assets/images/logoblanco.png' alt='Up Trading Experts' title='Up Trading Experts'>
                                                 </div>
                                             </div>
                                             <div class='contenido'>
@@ -485,7 +485,7 @@ class Kernel extends ConsoleKernel
                                                     <p style='margin: 0; font-size: 12px; text-align: left; color: #999999;'>
                                                         <strong>Up Trading Experts</strong>
                                                         <br>Torre V1 - Av. Universidad #234.<br>
-                                                        Fracc. Lomas del Guadiana, Interior #308, C.P. 34138, Durango, Dgo. México.
+                                                        Fracc. Lomas del Guadiana, Interior #308, C.P. 34110, Durango, Dgo. México.
                                                     </p>                
                                                 </div>
                                             </div>
@@ -528,7 +528,7 @@ class Kernel extends ConsoleKernel
         ->dailyAt("08:40")
         ->timezone('America/Mexico_City');
 
-        $schedule->command("backup:run --only-db")->weekdays()->dailyAt("20:00")->timezone('America/Mexico_City');
+        $schedule->command("backup:run --only-db")->dailyAt("20:00")->timezone('America/Mexico_City');
     }
 
     /**
