@@ -96,6 +96,7 @@
                                             <option value="root">Root</option>
                                             <option value="admin">Admin</option>
                                             <option value="procesos">Procesos</option>
+                                            <option value="ps_diamond">PS Diamond</option>
                                             <option value="ps_gold">PS Gold</option>
                                             <option value="ps_bronze">PS Bronze</option>
                                             <option value="ps_silver">PS Silver</option>
@@ -111,6 +112,7 @@
                                     <div class="form-floating mb-3">
                                         <select name="privilegio" class="form-control" id="privilegioInput" required>
                                             <option value="" disabled selected>Selecciona...</option>
+                                            <option value="ps_diamond">PS Diamond</option>
                                             <option value="ps_gold">PS Gold</option>
                                             <option value="ps_bronze">PS Bronze</option>
                                             <option value="ps_silver">PS Silver</option>

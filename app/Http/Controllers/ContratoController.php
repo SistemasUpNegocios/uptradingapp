@@ -825,7 +825,7 @@ class ContratoController extends Controller
                         $pago = $contrato->inversion_us;
 
                         $pagops->contrato_id = $contrato_id;
-                        $pagops->serie = 12;
+                        $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
                         $pagops->pago = floatval(number_format(($pago * $cmensual), 2));

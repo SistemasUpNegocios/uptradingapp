@@ -558,25 +558,29 @@ $(document).ready(function () {
 
             let pago = $(this).data("pago");
             let cliente = $(this).data("cliente");
+            let rendimiento = $(this).data("rendimiento");
             let fecha = $(this).data("fecha");
             let contrato = $(this).data("contrato");
             let contratoid = $(this).data("contratoid");
             let tipo = $(this).data("tipo");
+            let reporte = $(this).data("reporte");
             let dolar = $("#dolarInput").val();
-            let rendimiento = $(this).data("rendimiento");
+            let inversionus = $(this).data("inversionus");
+            let letra = "";
 
-            // rendimiento = formatearCantidad
-            //     .format(parseFloat(rendimiento) * parseFloat(dolar))
-            //     .replaceAll("$", "")
-            //     .replaceAll(",", "");
+            if(reporte == "liquidacion"){
+                rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+                letra = numeroALetrasMXN(rendimiento);
+            }else{
+                rendimiento = rendimiento.replaceAll("$", "").replaceAll(",", "");
+                letra = numeroALetrasMXN(rendimiento);
+            }
 
-            rendimiento = rendimiento.replaceAll("$", "").replaceAll(",", "");
-
-            let letra = numeroALetrasMXN(rendimiento);
             let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
 
+
             window.open(
-                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
+                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}`,
                 "_blank"
             );
         } else {
@@ -604,11 +608,19 @@ $(document).ready(function () {
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
         let tipo = $(this).data("tipo");
-        let rendimiento = String($(this).data("rendimiento"))
-            .replaceAll("$", "")
-            .replaceAll(",", "");
+        let rendimiento = String($(this).data("rendimiento")).replaceAll("$", "").replaceAll(",", "");
+        let reporte = $(this).data("reporte");
+        let dolar = $("#dolarInput").val();
+        let inversionus = $(this).data("inversionus");
+        let letra = "";
 
-        let letra = numeroALetrasMXN(rendimiento);
+        if(reporte == "liquidacion"){
+            rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+            letra = numeroALetrasMXN(rendimiento);
+        }else{
+            letra = numeroALetrasMXN(rendimiento);
+        }
+
         $("#pagoInput").val(pago);
         $("#fechaInput").val(fecha);
         $("#clienteInput").val(cliente);
@@ -617,6 +629,7 @@ $(document).ready(function () {
         $("#letraInput").val(letra);
         $("#contratoIdInput").val(id);
         $("#tipoInput").val(tipo);
+        $("#reporteInput").val(reporte);
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {
@@ -634,9 +647,10 @@ $(document).ready(function () {
         let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
         let contratoid = $("#contratoIdInput").val();
         let tipo = $("#tipoInput").val();
+        let reporte = $("#reporteInput").val();
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
             "_blank"
         );
     });

@@ -97,21 +97,15 @@
       } else {
         $total_centavos = "00/100";
       }
-      $posCON = strrpos($letra_total, "con");
-      if($posCON === false){
-        $total_letra = 'son '.$letra_total;
-      }else{
-        $total_letra = 'son '.substr_replace($letra_total, "", $posCON);
-      }
     @endphp
 
-    @if($pago == "12/12")
+    @if($reporte == "liquidacion")
       <div class="mt-5">
         <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
           <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra }} {{ $centavos_num }}), por concepto de pago de liquidación del contrato mensual {{ $contrato }} de fecha {{ $fecha_inicial }}, cuya inversión fue de ${{ $inversion_dolares }} dólares ({{ $inversion_letra }} {{ $inversion_centavos }}) y al término del contrato el día {{ $fecha }} se reintegra la inversión, y se paga al tipo de cambio a este día, sin que al momento exista algún adeudo.
         </p>
       </div>
-    @else
+    @elseif($reporte == "mensual")
       <div class="mt-5">
         <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
           <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra}} {{ $centavos_num }}), por concepto de pago de rendimiento del día {{ $fecha }} en relación con el contrato {{ $contrato }}, sin que al momento exista algún adeudo.

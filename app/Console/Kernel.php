@@ -5,11 +5,20 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\Pendiente;
+use App\Models\Contrato;
+use App\Models\TipoContrato;
+use App\Models\Notificacion;
+use App\Models\Amortizacion;
+use App\Models\PagoCliente;
+use App\Models\PagoPS;
+use Carbon\Carbon;
+use App\Mail\BackupEmail;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use App\Models\Notificacion;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\Drive;
 
 class Kernel extends ConsoleKernel
 {
@@ -31,11 +40,14 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
+
+        //Tarea para enviar correos de pendientes de checklist
         $schedule->call(function () {
-            //PENDIENTES
+
             $pendientes = Pendiente::all();
             $pendientesCheck = Pendiente::select("primer_reporte")->get();
             $fecha = \Carbon\Carbon::parse(date('d-m-Y'))->formatLocalized('%d de %B de %Y');
+            
             //mandar correo
             $mail = new PHPMailer(true);
             $mail->CharSet = "UTF-8";
@@ -528,7 +540,70 @@ class Kernel extends ConsoleKernel
         ->dailyAt("08:00")
         ->timezone('America/Mexico_City');
 
+        //Tarea para refrendar contratos
+        // $schedule->call(function () {
+
+        //     //Consulta de contratos a un día de vencer
+        //     $contratos = Contrato::where("contrato.status", "Activado")
+        //     ->where("fecha_pago", Carbon::now()->format('Y-m-d'))
+        //     ->get();
+
+        //     foreach ($contratos as $contrato_update) {
+        //         $contrato = Contrato::find($contrato_update->id);
+                
+        //         //Actualizar numero de contrato
+        //         $contratoAct = explode("-", $contrato_update->contrato);
+        //         $contratoRef = intval($contratoAct[2]) + 1;
+        //         $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+        //         $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+        //         //Guardar cambios de contrato
+        //         $contrato->contrato = strtoupper($contratoRef);
+        //         $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+        //         $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+        //         $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+        //         $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+        //         $contrato->status = "Activado";
+        //         $contrato->update();
+
+        //         //Actualización de tabla de amortizaciones
+        //         $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+        //         foreach ($amortizaciones as $amortizacion_update) {
+        //             $amortizacion = Amortizacion::find($amortizacion_update->id);
+        //             $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+        //             $amortizacion->update();
+        //         }
+
+        //         //Actualización de tabla de pago de clientes
+        //         $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+        //         foreach ($pagos_clientes as $pago_cliente_update) {
+        //             $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+        //             $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+        //             $pago_cliente->update();
+        //         }
+
+        //         //Actualización de tabla de pago de ps
+        //         $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+        //         foreach ($pagos_ps as $pago_ps_update) {
+        //             $pago_ps = PagoPS::find($pago_ps_update->id);
+        //             $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+        //             $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+        //             $pago_ps->update();
+        //         }
+
+        //     }
+
+        // })
+        // ->dailyAt("09:00")
+        // ->timezone('America/Mexico_City');
+        
+        //Tareas para Bakups de archivos y base de datos y envier correos.
         $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
+        $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
+        $schedule->call(function () { 
+            Drive::dispatch(); 
+        })->dailyAt("22:00")->timezone('America/Mexico_City');
+        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**
