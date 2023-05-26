@@ -483,7 +483,20 @@
 
                                     <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
-                            </div>                           
+                            </div>
+                            
+                            <div class="col-md-6 col-12" id="montoWiseCont">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en Wise" id="montoWiseInput" name="monto_pago[]">
+                                    <label for="montoWiseInput">Monto en Wise</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12" id="referenciaWiseCont">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de Wise" id="referenciaWiseInput" name="referencia_pago[]">
+                                    <label for="referenciaWiseInput">Referencia de Wise</label>
+                                </div>
+                            </div>
                             
                             <div class="col-md-6 col-12" id="montoHSBCCont">
                                 <div class="form-floating mb-3">
@@ -522,19 +535,6 @@
                                     <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>
                             </div>
-
-                            <div class="col-md-6 col-12" id="montoWiseCont">
-                                <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en Wise" id="montoWiseInput" name="monto_pago[]">
-                                    <label for="montoWiseInput">Monto en Wise</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12" id="referenciaWiseCont">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de Wise" id="referenciaWiseInput" name="referencia_pago[]">
-                                    <label for="referenciaWiseInput">Referencia de Wise</label>
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3">
@@ -545,7 +545,7 @@
                                         <a id="comprobantePagoDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
                                     </div>
                                 </div>
-                                <input type="file" id="comprobantePagoInput" class="form-control" name="comprobante_pago[]" multiple>
+                                <input type="file" id="comprobantePagoInput" class="form-control" name="comprobante_pago[]" multiple required>
                             </div>
                         </div>
                         <div class="col-12">

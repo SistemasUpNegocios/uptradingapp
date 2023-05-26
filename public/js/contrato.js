@@ -1815,7 +1815,7 @@ $(document).ready(function () {
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
         $("#wiseInput").prop("disabled", false);
-        $("#hsbcInput").prop("disabled", false);
+        $("#hsbcInput").prop("disabled", true);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
@@ -2709,6 +2709,7 @@ $(document).ready(function () {
         containerHide();
 
         $("#comprobantePagoInput").prop("disabled", false);
+        $("#comprobantePagoInput").prop("required", false);
         comprobantePago(this);
 
         $("#efectivoInput").prop("disabled", false);
@@ -2716,7 +2717,7 @@ $(document).ready(function () {
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
         $("#wiseInput").prop("disabled", false);
-        $("#hsbcInput").prop("disabled", false);
+        $("#hsbcInput").prop("disabled", true);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
@@ -2738,6 +2739,8 @@ $(document).ready(function () {
         $("#referenciaHSBCInput").prop("disabled", false);
 
         $("#cambiarPorcentajeInput").prop("disabled", false);
+
+        
 
         $.ajax({
             type: "GET",
@@ -4544,8 +4547,10 @@ $(document).ready(function () {
 
             if (efectivoChecked) {
                 $("#montoEfectivoCont").show();
+                $("#montoEfectivoInput").prop("required", true);
             } else {
                 $("#montoEfectivoCont").hide();
+                $("#montoEfectivoInput").prop("required", false);
             }
         }
         if (target.is("#transferenciaSwissInput")) {
@@ -4555,10 +4560,14 @@ $(document).ready(function () {
 
             if (transferenciaSwissChecked) {
                 $("#montoTransSwissPOOLCont").show();
+                $("#montoTransSwissPOOLInput").prop("required", true);
                 $("#referenciaTransSwissPOOLCont").show();
+                $("#referenciaTransSwissPOOLInput").prop("required", true);
             } else {
                 $("#montoTransSwissPOOLCont").hide();
+                $("#montoTransSwissPOOLInput").prop("required", false);
                 $("#referenciaTransSwissPOOLCont").hide();
+                $("#referenciaTransSwissPOOLInput").prop("required", false);
             }
         }
         if (target.is("#transferenciaMXInput")) {
@@ -4568,10 +4577,14 @@ $(document).ready(function () {
 
             if (transferenciaMXChecked) {
                 $("#montoTransMXPOOLCont").show();
+                $("#montoTransMXPOOLInput").prop("required", true);
                 $("#referenciaTransMXPOOLCont").show();
+                $("#referenciaTransMXPOOLInput").prop("required", true);
             } else {
                 $("#montoTransMXPOOLCont").hide();
+                $("#montoTransMXPOOLInput").prop("required", false);
                 $("#referenciaTransMXPOOLCont").hide();
+                $("#referenciaTransMXPOOLInput").prop("required", false);
             }
         }
         if (target.is("#ciBankInput")) {
@@ -4579,8 +4592,10 @@ $(document).ready(function () {
 
             if (ciBankChecked) {
                 $("#montoBankCont").show();
+                $("#montoBankInput").prop("required", true);
             } else {
                 $("#montoBankCont").hide();
+                $("#montoBankInput").prop("required", false);
             }
         }
         if (target.is("#wiseInput")) {
@@ -4588,10 +4603,14 @@ $(document).ready(function () {
 
             if (wiseChecked) {
                 $("#montoWiseCont").show();
+                $("#montoWiseInput").prop("required", true);
                 $("#referenciaWiseCont").show();
+                $("#referenciaWiseInput").prop("required", true);
             } else {
                 $("#montoWiseCont").hide();
+                $("#montoWiseInput").prop("required", false);
                 $("#referenciaWiseCont").hide();
+                $("#referenciaWiseInput").prop("required", false);
             }
         }
         if (target.is("#hsbcInput")) {
@@ -4599,10 +4618,14 @@ $(document).ready(function () {
 
             if (hsbcChecked) {
                 $("#montoHSBCCont").show();
+                $("#montoHSBCInput").prop("required", true);
                 $("#referenciaHSBCCont").show();
+                $("#referenciaHSBCInput").prop("required", true);
             } else {
                 $("#montoHSBCCont").hide();
+                $("#montoHSBCInput").prop("required", false);
                 $("#referenciaHSBCCont").hide();
+                $("#referenciaHSBCInput").prop("required", false);
             }
         }
         if (target.is("#renovacionInput")) {
@@ -4610,8 +4633,10 @@ $(document).ready(function () {
 
             if (renovacionChecked) {
                 $("#montoRenovacionCont").show();
+                $("#montoRenovacionInput").prop("required", true);
             } else {
                 $("#montoRenovacionCont").hide();
+                $("#montoRenovacionInput").prop("required", false);
             }
         }
         if (target.is("#rendimientosInput")) {
@@ -4619,8 +4644,10 @@ $(document).ready(function () {
 
             if (rendimientoChecked) {
                 $("#montoRendimientosCont").show();
+                $("#montoRendimientosInput").prop("required", true);
             } else {
                 $("#montoRendimientosCont").hide();
+                $("#montoRendimientosInput").prop("required", false);
             }
         }
         if (target.is("#comisionesInput")) {
@@ -4628,8 +4655,10 @@ $(document).ready(function () {
 
             if (comisionChecked) {
                 $("#montoComisionesCont").show();
+                $("#montoComisionesInput").prop("required", true);
             } else {
                 $("#montoComisionesCont").hide();
+                $("#montoComisionesInput").prop("required", false);
             }
         }
 
@@ -4820,6 +4849,21 @@ $(document).ready(function () {
         $("#referenciaTransMXPOOLCont").hide();
         $("#referenciaHSBCCont").hide();
         $("#referenciaWiseCont").hide();
+
+        $("#montoEfectivoInput").prop("required", false);
+        $("#montoTransSwissPOOLInput").prop("required", false);
+        $("#montoTransMXPOOLInput").prop("required", false);
+        $("#montoBankInput").prop("required", false);
+        $("#montoWiseInput").prop("required", false);
+        $("#montoHSBCInput").prop("required", false);
+        $("#montoRenovacionInput").prop("required", false);
+        $("#montoRendimientosInput").prop("required", false);
+        $("#montoComisionesInput").prop("required", false);
+
+        $("#referenciaTransSwissPOOLInput").prop("required", false);
+        $("#referenciaTransMXPOOLInput").prop("required", false);
+        $("#referenciaHSBCInput").prop("required", false);
+        $("#referenciaWiseInput").prop("required", false);
     };
 
     const estilos = (
