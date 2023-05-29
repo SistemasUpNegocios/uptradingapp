@@ -472,7 +472,7 @@ class ContratoController extends Controller
                 $contrato->contrato = strtoupper($request->input('contrato'));
                 $contrato->status = "Pendiente de activación";
             } elseif ($request->status == "Refrendado") {
-                $contrato->status = "Pendiente de activación";
+                $contrato->status = "Activado";
 
                 Contrato::where('contrato', strtoupper($request->contrato))->update(["status" => "Finiquitado"]);
 

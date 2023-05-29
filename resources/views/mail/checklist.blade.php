@@ -255,6 +255,7 @@
                                 @if($pendiente->primer_reporte == "Pendiente")
                                     @php $cont = 0; @endphp
                                     <br>
+                                    <p style='color: #404040;'><b>PS:</b> {{$pendiente->psnombre}}.</p>
                                     <p style='color: #404040;'><b>CLIENTE:</b> {{$pendiente->memo_nombre}}.</p>
                                     <p style='color: #404040; margin-bottom: 8px'><b>ULTIMA MODIFICACIÓN: </b>
                                         {{\Carbon\Carbon::parse($pendiente->ultima_modificacion)->diffForHumans()}}
@@ -266,7 +267,7 @@
                                                     <th class='tg-a3y7'># DE TAREA</th>
                                                     <th class='tg-a3y7'>NOMBRE DE LA TAREA</th>
                                                     <th class='tg-5bf1'>STATUS</th>
-                                                </tr>                                                        
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 @if($pendiente->introduccion == "Pendiente")

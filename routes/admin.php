@@ -33,14 +33,14 @@ Route::get("/mail", function(){
 	// rename($ruta_anterior, $nueva_ruta);
 
 	// Subir archvio a Google Drive
-	putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/AdminUpTradingExperts.zip'));
+	putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/clave.json'));
 
 	$client = new \Google_Client();
 	$client->useApplicationDefaultCredentials();
 	$client->setScopes(['https://www.googleapis.com/auth/drive.file']);
 	
 	try {
-		// ini_set('memory_limit', '8192M');
+		ini_set('memory_limit', '8192M');
 
 		$fecha_inicio = \Carbon\Carbon::now()->subDays(1)->formatLocalized('%d de %B de %Y');
 		$fecha_fin = \Carbon\Carbon::now()->formatLocalized('%d de %B de %Y');
@@ -69,9 +69,9 @@ Route::get("/mail", function(){
 		
 		//Enviar correos
 		Mail::to("javiersalazar@uptradingexperts.com")->send(new BackupEmail($link));
-		Mail::to("paolarosales@uptradingexperts.com")->send(new BackupEmail($link));
+		// Mail::to("paolarosales@uptradingexperts.com")->send(new BackupEmail($link));
 		
-		// ini_set('memory_limit', '512M');
+		ini_set('memory_limit', '512M');
 
 	} catch (Google_Service_Exception $gs) {
 		$mensaje = json_decode($gs->getMessage());

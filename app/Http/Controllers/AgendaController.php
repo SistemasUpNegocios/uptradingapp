@@ -28,10 +28,18 @@ class AgendaController extends Controller
     public function index()
     {
         if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
-            $users = User::where('privilegio', 'root')
+
+            if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos) {
+                $users = User::where('privilegio', 'root')
                     ->orWhere('privilegio', 'admin')
                     ->orWhere('privilegio', 'procesos')
                     ->get();
+            }elseif(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
+                $users = User::where('privilegio', 'admin')
+                ->orWhere('privilegio', 'procesos')
+                ->get();
+            }
+            
             return View('agenda.show', compact('users'));
         }else{
             return redirect()->to('/admin/dashboard');

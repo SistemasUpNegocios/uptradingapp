@@ -43,10 +43,12 @@ class Kernel extends ConsoleKernel
 
         //Tarea para enviar correos de pendientes de checklist
         $schedule->call(function () {
-            $pendientes = Pendiente::all();
+            $pendientes = Pendiente::join("ps", "ps.id", "=", "pendiente.ps_id")->select(DB::raw("*,  CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre"))->where("pendiente.primer_reporte", "Pendiente")->get();
             $fecha = \Carbon\Carbon::parse(date('d-m-Y'))->formatLocalized('%d de %B de %Y');
             
-            Mail::to("administracion@upnegocios.com")->send(new CheckListEmail($pendientes, $fecha));
+            if(sizeof($pendientes) > 0){
+                Mail::to("administracion@upnegocios.com")->send(new CheckListEmail($pendientes, $fecha));
+            }
         })
         ->weekdays()
         ->dailyAt("08:00")
