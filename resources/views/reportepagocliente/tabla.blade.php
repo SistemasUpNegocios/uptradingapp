@@ -251,6 +251,10 @@
                                 <label class="form-check-label" for="efectivoInput">Efectivo</label>
                             </div>
                             <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inversionesInput" name="tipo_pago[]" value="inversiones">
+                                <label class="form-check-label" for="inversionesInput">Inversiones</label>
+                            </div>
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="transferenciaInput" name="tipo_pago[]" value="transferencia">
                                 <label class="form-check-label" for="transferenciaInput">Transferencia</label>
                             </div>
@@ -265,6 +269,14 @@
                             <div class="form-floating mb-3">
                                 <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en efectivo" id="montoEfectivoInput" name="monto[]">
                                 <label for="montoEfectivoInput">Monto en efectivo</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-12" id="montoInversionesCont">
+                            <div class="form-floating mb-3">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto de inversion" id="montoInversionesInput" name="monto[]">
+                                    <label for="montoInversionesInput">Monto en inversiones</label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 col-12" id="montoTransferenciaCont">

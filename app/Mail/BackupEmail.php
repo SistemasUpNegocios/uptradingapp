@@ -7,11 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class BackupEmail extends Mailable
+class BackupEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    public $fecha_inicio;
-    public $fecha_fin;
+    public $fecha;
     public $link;
 
     /**
@@ -22,8 +21,7 @@ class BackupEmail extends Mailable
     public function __construct($link)
     {
         $this->link = $link;
-        $this->fecha_inicio = \Carbon\Carbon::now()->subDays(1)->formatLocalized('%d de %B de %Y');
-        $this->fecha_fin = \Carbon\Carbon::now()->formatLocalized('%d de %B de %Y');
+        $this->fecha = \Carbon\Carbon::now()->subDays(1)->formatLocalized('%d de %B de %Y');
     }
 
     /**

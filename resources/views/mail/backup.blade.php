@@ -202,7 +202,7 @@
                         <div class='contenido_mensaje_texto__info'>
                             <p><b>ORGANIZACIÓN:</b> Up Trading Experts.</p>
                             <p><b>AREA:</b> Sistemas.</p>
-                            <p><b>FECHAS:</b> Del {{$fecha_inicio}} al {{$fecha_fin}}.</p>
+                            <p><b>FECHA:</b> {{$fecha}}.</p>
                             <br>
                             <br>
                             <br>

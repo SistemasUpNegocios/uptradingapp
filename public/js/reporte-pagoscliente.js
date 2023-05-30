@@ -11,6 +11,7 @@ $(document).ready(function () {
     let table = "";
     let pesos = 0;
     let pesos_divididos = 0;
+    let dolares_divididos = 0;
     let dolares = 0;
 
     $.ajax({
@@ -903,6 +904,7 @@ $(document).ready(function () {
         $("#alertaNota").empty();
 
         $("#montoEfectivoCont").hide();
+        $("#montoInversionesCont").hide();
         $("#montoTransferenciaCont").hide();
         $("#montoTransSwissCont").hide();
 
@@ -919,18 +921,21 @@ $(document).ready(function () {
 
         let checkbox = [
             "#efectivoInput",
+            "#inversionesInput",
             "#transferenciaInput",
             "#transferenciaSwissInput",
         ];
 
         let inputs = [
             "#montoEfectivoInput",
+            "#montoInversionesInput",
             "#montoTransferenciaInput",
             "#montoTransferenciaSwissInput",
         ];
 
         let conts = [
             "#montoEfectivoCont",
+            "#montoInversionesCont",
             "#montoTransferenciaCont",
             "#montoTransSwissCont",
         ];
@@ -986,6 +991,38 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("change", "#inversionesInput", () => {
+        $("#alertaNota").empty();
+        $("#montoInversionesCont").toggle();
+
+        if (
+            !$("#montoEfectivoCont").is(":hidden") &&
+            !$("#montoTransferenciaCont").is(":hidden")
+        ) {
+            pesos_divididos = pesos / 2;
+            $("#montoEfectivoInput").val(pesos_divididos.toFixed(2));
+            $("#montoTransferenciaInput").val(pesos_divididos.toFixed(2));
+        } else if ($("#montoEfectivoCont").is(":hidden")) {
+            $("#montoTransferenciaInput").val(pesos);
+        } else if ($("#montoTransferenciaCont").is(":hidden")) {
+            $("#montoEfectivoInput").val(pesos);
+        }
+
+        if (
+            !$("#montoInversionesCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            dolares_divididos = dolares / 2;
+            $("#montoInversionesInput").val(dolares_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(dolares_divididos.toFixed(2));
+        } else if ($("#montoInversionesCont").is(":hidden")) {
+            $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
+        } else if ($("#montoTransSwissCont").is(":hidden")) {
+            $("#montoInversionesInput").val(dolares.toFixed(2));
+        }
+        
+    });
+
     $(document).on("change", "#transferenciaInput", () => {
         $("#alertaNota").empty();
         $("#montoTransferenciaCont").toggle();
@@ -1021,7 +1058,18 @@ $(document).ready(function () {
             $("#montoEfectivoInput").val(pesos);
         }
 
-        $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
+        if (
+            !$("#montoInversionesCont").is(":hidden") &&
+            !$("#montoTransSwissCont").is(":hidden")
+        ) {
+            dolares_divididos = dolares / 2;
+            $("#montoInversionesInput").val(dolares_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(dolares_divididos.toFixed(2));
+        } else if ($("#montoInversionesCont").is(":hidden")) {
+            $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
+        } else if ($("#montoTransSwissCont").is(":hidden")) {
+            $("#montoInversionesInput").val(dolares.toFixed(2));
+        }
     });
 
     $(document).on("submit", "#notaForm", function (e) {
@@ -1033,6 +1081,10 @@ $(document).ready(function () {
             $("#montoEfectivoInput").val(0);
         }
 
+        if ($("#montoInversionesCont").is(":hidden")) {
+            $("#montoInversionesInput").val(0);
+        }
+
         if ($("#montoTransferenciaCont").is(":hidden")) {
             $("#montoTransferenciaInput").val(0);
         }
@@ -1042,10 +1094,11 @@ $(document).ready(function () {
         }
 
         let efectivo = $("#montoEfectivoInput").val();
+        let inversiones = $("#montoInversionesInput").val();
         let transferencia = $("#montoTransferenciaInput").val();
         let transferenciaSwiss = $("#montoTransferenciaSwissInput").val();
 
-        if (efectivo > 0 || transferencia > 0 || transferenciaSwiss > 0) {
+        if (efectivo > 0 || transferencia > 0 || transferenciaSwiss > 0 || inversiones > 0) {
             $.ajax({
                 type: "POST",
                 url: url,
