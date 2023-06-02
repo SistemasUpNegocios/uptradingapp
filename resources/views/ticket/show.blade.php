@@ -405,10 +405,10 @@
                     @csrf
                     <input type="hidden" name="id" id="idInput">
                     <div class="row">
-                        <div class="col-md-12 col-12">
+                        <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <select name="departamento" class="form-control" id="departamentoInput" required>
-                                    <option value="" disabled selected>Selecciona..</option>
+                                    <option value="" disabled selected>Selecciona...</option>
                                     <option value="Administración">Administración</option>
                                     <option value="Contabilidad">Contabilidad</option>
                                     <option value="Egresos">Egresos</option>
@@ -417,14 +417,22 @@
                                 <label for="asignadoAInput">Departamento dirigido</label>
                             </div>
                         </div>                        
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <select name="asignado_a" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" id="asignadoAInput" required>
+                                    <option value="" disabled selected>Selecciona...</option>
+                                </select>
+                                <label for="asignadoAInput">Asignar a</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
-                                <select name="asignado_a" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" id="asignadoAInput" required>
-                                    <option value="" disabled selected>Selecciona..</option>
-                                </select>
-                                <label for="asignadoAInput">Asignar a</label>
+                                <input type="datetime-local" class="form-control"
+                                    placeholder="Selecciona la fecha actual" id="fechaActuakInput" name="fecha_actual"
+                                    disabled value="{{\Carbon\Carbon::now()->format("Y-m-d H:i")}}">
+                                <label for="fechaActuakInput">Fecha de generación</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -538,7 +546,7 @@
                         <div class="col-12">
                             <div class="form-floating mb-3">
                                 <select name="status" class="form-control" id="statusInput" required>
-                                    <option value="" disabled selected>Selecciona..</option>
+                                    <option value="" disabled selected>Selecciona...</option>
                                     <option value="Abierto">Abierto</option>
                                     <option value="En proceso">En proceso</option>
                                     <option value="Cancelado">Cancelado</option>
@@ -575,7 +583,7 @@
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <select name="departamento" class="form-control" id="departamentoTrasInput" required>
-                                    <option value="" disabled selected>Selecciona..</option>
+                                    <option value="" disabled selected>Selecciona...</option>
                                     <option value="Administración">Administración</option>
                                     <option value="Contabilidad">Contabilidad</option>
                                     <option value="Egresos">Egresos</option>
@@ -587,7 +595,7 @@
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <select name="asignado_a" class="form-control" id="asignadoATrasInput" required>
-                                    <option value="" disabled selected>Selecciona..</option>
+                                    <option value="" disabled selected>Selecciona...</option>
                                 </select>
                                 <label for="asignadoATrasInput">Asignar a</label>
                             </div>

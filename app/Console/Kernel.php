@@ -58,26 +58,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             //Consulta de contratos a un día de vencer
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_pago", Carbon::now()->format('Y-m-d'))
-            ->where(function ($query) {
-                    $query->where("nota_contrato", NULL)
-                    ->orWhere("nota_contrato", "")
-                    ->orWhere("nota_contrato", "like", "%refrendo%")
-                    ->orWhere("nota_contrato", "like", "%Refrendo%")
-                    ->orWhere("nota_contrato", "like", "%REFRENDO%")
-                    ->orWhere("nota_contrato", "like", "%refrenda%")
-                    ->orWhere("nota_contrato", "like", "%Refrenda%")
-                    ->orWhere("nota_contrato", "like", "%REFRENDA%")
-                    ->orWhere("nota_contrato", "like", "%renovar%")
-                    ->orWhere("nota_contrato", "like", "%Renovar%")
-                    ->orWhere("nota_contrato", "like", "%RENOVAR%")
-                    ->orWhere("nota_contrato", "like", "%renovación%")
-                    ->orWhere("nota_contrato", "like", "%Renovación%")
-                    ->orWhere("nota_contrato", "like", "%RENOVACIÓN%")
-                    ->orWhere("nota_contrato", "like", "%renovacion%")
-                    ->orWhere("nota_contrato", "like", "%Renovacion%")
-                    ->orWhere("nota_contrato", "like", "%RENOVACION%");
-            })->get();
+            ->where("fecha", Carbon::now()->subDay()->format('Y-m-d'))
+            ->where("nota_contrato", NULL)
+            ->where("nota_contrato", "")
+            ->get();
 
             foreach ($contratos as $contrato_update) {
 
@@ -163,7 +147,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () { 
             Drive::dispatch(); 
         })->dailyAt("22:00")->timezone('America/Mexico_City');
-        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
+        $schedule->command("queue:work --timeout = 600 --tries = 30")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**

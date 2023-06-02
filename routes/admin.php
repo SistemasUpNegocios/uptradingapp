@@ -2,9 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Mail\BackupEmail;
-use Illuminate\Support\Facades\Mail;
-use App\Jobs\Drive;
 
 //Ruta principal
 Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
