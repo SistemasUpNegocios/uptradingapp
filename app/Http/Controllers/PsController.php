@@ -124,10 +124,7 @@ class PsController extends Controller
                 $user->apellido_p = strtoupper($request->apellidop);
                 $user->apellido_m = strtoupper($request->apellidom);
                 $user->correo = strtolower($request->correo_institucional);
-                $userId = User::select('id')->orderBy('id', 'desc')->first();
-                $userId = intval($userId->id) + 1;
-                $pass = explode("@", $request->correo_institucional);
-                $user->password = $userId . $pass[0];
+                $user->password = "nuevo123";
                 $user->privilegio = 'ps_silver';
 
                 $user->save();

@@ -54,17 +54,17 @@ class Kernel extends ConsoleKernel
         ->dailyAt("08:00")
         ->timezone('America/Mexico_City');
 
-        //Tarea para refrendar contratos
+        // Tarea para refrendar contratos
         $schedule->call(function () {
             //Consulta de contratos a un día de vencer
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha", Carbon::now()->subDay()->format('Y-m-d'))
-            ->where("nota_contrato", NULL)
-            ->where("nota_contrato", "")
-            ->get();
+            ->where("fecha_renovacion", Carbon::now()->subDay()->format('Y-m-d'))
+            ->where(function ($query) {
+                $query->where("nota_contrato", NULL)
+                ->orWhere("nota_contrato", "");
+            })->get();
 
             foreach ($contratos as $contrato_update) {
-
                 //Actualizar contrato
                 $contrato = Contrato::find($contrato_update->id);
                 
@@ -107,9 +107,7 @@ class Kernel extends ConsoleKernel
                     $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
                     $pago_ps->update();
                 }
-
             }
-
         })
         ->dailyAt("09:00")
         ->timezone('America/Mexico_City');
@@ -147,7 +145,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () { 
             Drive::dispatch(); 
         })->dailyAt("22:00")->timezone('America/Mexico_City');
-        $schedule->command("queue:work --timeout = 600 --tries = 30")->dailyAt("23:00")->timezone('America/Mexico_City');
+        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**
