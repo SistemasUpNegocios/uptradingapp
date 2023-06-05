@@ -21,7 +21,7 @@ class BackupEmail extends Mailable implements ShouldQueue
     public function __construct($link)
     {
         $this->link = $link;
-        $this->fecha = \Carbon\Carbon::now()->subDays(1)->formatLocalized('%d de %B de %Y');
+        $this->fecha = \Carbon\Carbon::now()->formatLocalized('%d de %B de %Y');
     }
 
     /**

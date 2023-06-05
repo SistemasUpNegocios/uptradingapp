@@ -442,10 +442,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/cumple.js') }}"></script>
     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
         <script src="{{ asset('js/graficas.js') }}"></script>
-        <script src="{{ asset('js/dashboard.js') }}"></script>        
+        <script src="{{ asset('js/dashboard.js') }}"></script>
     @endif
     @if (auth()->user()->is_root && auth()->user()->id != 1 && auth()->user()->id != 2 && auth()->user()->id != 4)
         <script src="{{ asset('js/alertas-convenios.js') }}"></script>
