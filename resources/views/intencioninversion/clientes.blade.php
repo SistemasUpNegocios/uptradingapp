@@ -1,7 +1,7 @@
 <div class="col-md-6 col-12">
     <div class="form-floating mb-3">
-        <select name="nombre" class="form-control" id="nombreInput" required style="text-transform: none;">
-            <option value="" disabled selected>SELECCIONA AL CLIENTE...</option>
+        <select name="nombre" class="form-select selectSearch" id="nombreInput" required style="text-transform: none;">
+            <option value="" disabled selected>Selecciona...</option>
             @foreach($clientes as $cliente)
             @php
                 $nombre_cliente = $cliente->apellido_p . ' ' .

@@ -96,6 +96,11 @@ class Kernel extends ConsoleKernel
                 foreach ($pagos_clientes as $pago_cliente_update) {
                     $pago_cliente = PagoCliente::find($pago_cliente_update->id);
                     $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
                     $pago_cliente->update();
                 }
 
@@ -105,6 +110,10 @@ class Kernel extends ConsoleKernel
                     $pago_ps = PagoPS::find($pago_ps_update->id);
                     $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
                     $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
                     $pago_ps->update();
                 }
             }
