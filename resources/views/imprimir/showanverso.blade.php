@@ -25,7 +25,7 @@
     <p class="mb-3 text-center" style="font-weight: bold; text-transform: uppercase; margin-top: -1rem; color: #000;">{{ $contratos[0]->tipocontrato }}</p>
 
     <p class="mb-3 contrato_parrafo">
-        Contrato de inversión a largo plazo con <span style="text-transform: lowercase;">{{ $contratos[0]->tipocontrato }}</span>, celebrado por una parte por: <span style="text-transform: uppercase; font-weight: bold">{{ $contratos[0]->clientenombre }}</span> como "El Cliente" y {{ $empresa }} como "El Operador" de inversión. Con número de escritura 25518, volumen 1113 y fecha de 03 de junio del 2016.
+        <span style="margin-left: 25px">Contrato</span> de inversión a largo plazo con <span style="text-transform: lowercase;">{{ $contratos[0]->tipocontrato }}</span>, celebrado por una parte por: <span style="text-transform: uppercase; font-weight: bold">{{ $contratos[0]->clientenombre }}</span> como "El Cliente" y {{ $empresa }} como "El Operador" de inversión. Con número de escritura 25518, volumen 1113 y fecha de 03 de junio del 2016. Representado por el Sr. Hilario Hamilton Herrera Cossaín.
     </span>
 
     <p class="mb-3 text-center" style="font-weight: bold; text-transform: uppercase; color: #000;">DECLARACIONES</p>
@@ -50,7 +50,7 @@
 
     <p class="mb-3 contrato_parrafo">
         II. "El Operador" {{ $empresa }}, ubicada en Av. Universidad #234 Int. 308 con teléfono de oficina <span style="text-decoration: underline">8000878290</span> y con email
-        <span style="text-decoration: underline">clientes@uptradingexperts.com</span>
+        <span style="text-decoration: underline">clientes@uptradingexperts.com</span>, declara que su representante legal es el Sr. Hilario Hamilton Herrera Cossaín con INE 0228061546388
     </p>
 
     <p class="mb-3 contrato_parrafo">
@@ -59,8 +59,7 @@
 
       <ol type="A" class="center" style="color: #000">
           <li style="font-size: 10px">
-              <p style="margin-bottom: -0.5rem">Ser personas físicas mayores de edad, se identifican ambas partes con
-                  credencial oficial con fotografía.</p>
+              <p style="margin-bottom: -0.5rem">Ser mayores de edad y se identifican con credencial oficial con fotografía.</p>
           </li>
           <li style="font-size: 10px">
               <p style="margin-bottom: -0.5rem">Contar con capacidad legal para celebrar el presente acuerdo.</p>
@@ -300,7 +299,7 @@
       correspondiendo a la fecha del día <span style="text-decoration: underline">{{\Carbon\Carbon::parse(strtotime($contratos[0]->fecha))->formatLocalized('%d de %B de %Y')}}</span>. {{$contratos[0]->lugar_firma }}.
       @if (!empty($holograma2))
         <br>
-        <span>Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
+        <span>Número de autorización y firma electrónica: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
       @endif
     </p>
 

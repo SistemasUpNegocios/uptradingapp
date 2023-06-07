@@ -519,6 +519,16 @@
                     <h5 class="modal-title" id="modalTitleNota">Añadir contrato</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <div class="alert alert-primary d-flex align-items-center mx-2" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                        <use xlink:href="#info-fill" />
+                    </svg>
+                    <div>
+                        Si el contrato se va a <b>renovar</b>, no es añadas una nota. El sistema lo renovará automáticamente.
+                    </div>
+                </div>
+
                 <div class="modal-body">
                     <form id="contratoFormNota" method="post">
                         @csrf

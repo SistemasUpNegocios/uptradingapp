@@ -6,7 +6,9 @@ use App\Models\Cliente;
 use App\Models\Ps;
 use App\Models\Contrato;
 use App\Models\Log;
+use App\Models\Ticket;
 use App\Models\TipoContrato;
+use App\Models\Notificacion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,9 +70,55 @@ class ContratoVencerController extends Controller
 
     public function editNota(Request $request)
     {
+
+        $bitacora_id = session('bitacora_id');
+
         $contrato = Contrato::find($request->id);
         $contrato->nota_contrato = $request->nota_contrato;
         $contrato->save();
+
+        $contrato_completo = Contrato::join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+            ->select(DB::raw("CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS cliente"))
+            ->where("contrato.id", $contrato->id)
+            ->first();
+
+        $contrato_id = $contrato->id;
+        $log = new Log;
+        $log->tipo_accion = "Inserción";
+        $log->tabla = "Ticket";
+        $log->id_tabla = $contrato_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+
+        $ticket = new Ticket;
+        $ticket->generado_por = auth()->user()->id;
+        $ticket->asignado_a = "246".','.Carbon::now()->toDateTimeString();
+        $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+        $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+        $ticket->departamento = "Egresos";
+        $ticket->asunto = "Nota de contrato a vencer";
+        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.";
+        $ticket->status = "Abierto";
+        $ticket->save();
+
+        $ticket_id = $ticket->id;
+        $log = new Log;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Contrato (nota)";
+        $log->id_tabla = $ticket_id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+
+        if ($log->save()) {
+            $notificacion = new Notificacion;
+            $notificacion->titulo = "Ticket abierto";
+            $notificacion->mensaje = "Tienes un nuevo ticket abierto con asunto: Nota de contrato a vencer";
+            $notificacion->status = "Pendiente";
+            $notificacion->user_id = 246;
+            $notificacion->save();
+
+            return response($ticket);
+        }
 
         return response($contrato);
     }

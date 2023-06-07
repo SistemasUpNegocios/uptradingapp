@@ -569,16 +569,17 @@ $(document).ready(function () {
             let inversionus = $(this).data("inversionus");
             let letra = "";
 
-            if(reporte == "liquidacion"){
+            if (reporte == "liquidacion") {
                 rendimiento = parseFloat(inversionus) * parseFloat(dolar);
                 letra = numeroALetrasMXN(rendimiento);
-            }else{
-                rendimiento = rendimiento.replaceAll("$", "").replaceAll(",", "");
+            } else {
+                rendimiento = rendimiento
+                    .replaceAll("$", "")
+                    .replaceAll(",", "");
                 letra = numeroALetrasMXN(rendimiento);
             }
 
             let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
-
 
             window.open(
                 `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}`,
@@ -609,16 +610,18 @@ $(document).ready(function () {
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
         let tipo = $(this).data("tipo");
-        let rendimiento = String($(this).data("rendimiento")).replaceAll("$", "").replaceAll(",", "");
+        let rendimiento = String($(this).data("rendimiento"))
+            .replaceAll("$", "")
+            .replaceAll(",", "");
         let reporte = $(this).data("reporte");
         let dolar = $("#dolarInput").val();
         let inversionus = $(this).data("inversionus");
         let letra = "";
 
-        if(reporte == "liquidacion"){
+        if (reporte == "liquidacion") {
             rendimiento = parseFloat(inversionus) * parseFloat(dolar);
             letra = numeroALetrasMXN(rendimiento);
-        }else{
+        } else {
             letra = numeroALetrasMXN(rendimiento);
         }
 
@@ -727,7 +730,7 @@ $(document).ready(function () {
         if (tipo == 1) {
             mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         $("#nombreClienteInput").val(cliente);
@@ -750,7 +753,7 @@ $(document).ready(function () {
         if (tipo == 1) {
             mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha actual de ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         $("#nombreClienteInput").val(cliente);
@@ -1014,13 +1017,14 @@ $(document).ready(function () {
         ) {
             dolares_divididos = dolares / 2;
             $("#montoInversionesInput").val(dolares_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(dolares_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(
+                dolares_divididos.toFixed(2)
+            );
         } else if ($("#montoInversionesCont").is(":hidden")) {
             $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
         } else if ($("#montoTransSwissCont").is(":hidden")) {
             $("#montoInversionesInput").val(dolares.toFixed(2));
         }
-        
     });
 
     $(document).on("change", "#transferenciaInput", () => {
@@ -1064,7 +1068,9 @@ $(document).ready(function () {
         ) {
             dolares_divididos = dolares / 2;
             $("#montoInversionesInput").val(dolares_divididos.toFixed(2));
-            $("#montoTransferenciaSwissInput").val(dolares_divididos.toFixed(2));
+            $("#montoTransferenciaSwissInput").val(
+                dolares_divididos.toFixed(2)
+            );
         } else if ($("#montoInversionesCont").is(":hidden")) {
             $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
         } else if ($("#montoTransSwissCont").is(":hidden")) {
@@ -1098,7 +1104,12 @@ $(document).ready(function () {
         let transferencia = $("#montoTransferenciaInput").val();
         let transferenciaSwiss = $("#montoTransferenciaSwissInput").val();
 
-        if (efectivo > 0 || transferencia > 0 || transferenciaSwiss > 0 || inversiones > 0) {
+        if (
+            efectivo > 0 ||
+            transferencia > 0 ||
+            transferenciaSwiss > 0 ||
+            inversiones > 0
+        ) {
             $.ajax({
                 type: "POST",
                 url: url,
