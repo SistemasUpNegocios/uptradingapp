@@ -334,6 +334,9 @@ class ReportePagoClienteController extends Controller
 
     public function guardarPago(Request $request)
     {
+
+        DB::table('pagos')->where("id_contrato", $request->contrato_id)->where('memo', $request->memo)->delete();
+
         $pago = new Pago;
         $pago->id_contrato = $request->contrato_id;
         $pago->memo = $request->memo;

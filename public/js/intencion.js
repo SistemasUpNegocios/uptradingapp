@@ -479,11 +479,33 @@ $(document).ready(function () {
                     const config = {
                         search: true,
                     };
-                
+
                     dselect(document.querySelector("#nombreInput"), config);
-                
-                    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-                    $(".dselect-no-results").text("No se encontraron resultados...");
+
+                    $(".dropdown-menu .form-control").attr(
+                        "placeholder",
+                        "Buscar..."
+                    );
+                    $(".dselect-no-results").text(
+                        "No se encontraron resultados..."
+                    );
+
+                    $("#nombreInput").change(function () {
+                        var id = $("#nombreInput").val();
+
+                        $.post({
+                            data: {
+                                id: id,
+                            },
+                            url: "/admin/getDatosCliente",
+                            success: function (response) {
+                                $("#telefonoInput").val(response[0].celular);
+                                $("#emailInput").val(
+                                    response[0].correo_personal
+                                );
+                            },
+                        });
+                    });
                 },
             });
         }
@@ -558,22 +580,7 @@ $("#contForm").on("keyup change", function (event) {
             $("#inversionInput").val(pesos.toFixed(2));
         }
     }
-    if (target.is($("#nombreInput"))) {
-        if (target.is("select")) {
-            var id = $("option:selected", this).data("id");
 
-            $.post({
-                data: {
-                    id: id,
-                },
-                url: "/admin/getDatosCliente",
-                success: function (response) {
-                    $("#telefonoInput").val(response[0].celular);
-                    $("#emailInput").val(response[0].correo_personal);
-                },
-            });
-        }
-    }
     if ($("#fechaInicioInput").val()) {
         var fechaInicio = $("#fechaInicioInput").val();
         fechaInicio = new Date(fechaInicio);

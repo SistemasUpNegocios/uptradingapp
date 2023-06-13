@@ -1481,7 +1481,7 @@ class ContratoController extends Controller
         }elseif($request->status == "Finiquitado"){
             $contrato->memo_status = "Contrato finiquitado por id:$id_user";
         }elseif($request->status == "Refrendado"){
-            $contrato->memo_status = "Contrato refrendado por id:$id_user";
+            $contrato->memo_status = "Contrato activado por id:$id_user";
         }
 
         $contrato->status = $request->status;

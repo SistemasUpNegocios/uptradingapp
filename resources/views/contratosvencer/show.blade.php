@@ -525,7 +525,7 @@
                         <use xlink:href="#info-fill" />
                     </svg>
                     <div>
-                        Si el contrato se va a <b>renovar</b>, no es añadas una nota. El sistema lo renovará automáticamente.
+                        SI EL CONTRATO SE VA A <b>RENOVAR</b>, NO AÑADAS UNA NOTA. EL SISTEMA LO RENOVARÁ AUTOMÁTICAMENTE.
                     </div>
                 </div>
 

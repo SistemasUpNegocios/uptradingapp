@@ -8,6 +8,8 @@ use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+// use Luecano\NumeroALetras\NumeroALetras;
+
 
 class PerfilController extends Controller
 {
@@ -17,7 +19,9 @@ class PerfilController extends Controller
 
     public function index()
     {
-        return response()->view('perfil.show');
+        // return response()->view('perfil.show');
+        $formatter = new \NumeroALetras();
+        echo $formatter->toMoney(123.45, 2, "pesos", "centavos");
     }
 
     public function editPerfil(Request $request)

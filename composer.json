@@ -24,6 +24,7 @@
         "laravel/passport": "^10.4",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.0",
+        "luecano/numero-a-letras": "3.0",
         "maatwebsite/excel": "^3.1",
         "masterminds/html5": "^2.7",
         "phpmailer/phpmailer": "^6.6",

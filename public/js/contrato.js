@@ -2740,8 +2740,6 @@ $(document).ready(function () {
 
         $("#cambiarPorcentajeInput").prop("disabled", false);
 
-        
-
         $.ajax({
             type: "GET",
             url: "/admin/getBeneficiarios",

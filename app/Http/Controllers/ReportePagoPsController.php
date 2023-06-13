@@ -35,7 +35,7 @@ class ReportePagoPsController extends Controller
     {
 
         $psid = session('psid');    
-        $ps = Ps::all();
+        $ps = Ps::orderBy("id", "DESC")->get();
 
         $data = array(
             "fecha" => $request->fecha,
@@ -185,6 +185,8 @@ class ReportePagoPsController extends Controller
                 $log->id_tabla = $id;
                 $log->bitacora_id = session('bitacora_id');
                 $log->save();
+
+                DB::table('pagos')->where('memo', "Pago de comisión por el contrato $pago_ps->contrato_id")->delete();
 
                 $pago = new Pago;
                 $pago->id_contrato = $pago_ps->contrato_id;

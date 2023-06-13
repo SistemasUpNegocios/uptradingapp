@@ -3,6 +3,14 @@ $(document).ready(function () {
         return fecha.split(" ")[0].split("-").reverse().join("/");
     };
 
+    Swal.fire({
+        icon: "warning",
+        title: '<h1 style="font-family: Poppins; font-weight: 700;">¡ADVERTENCIA!</h1>',
+        html: '<p style="font-family: Poppins">SI EL CONTRATO SE VA A <b>RENOVAR</b>, NO AÑADAS UNA NOTA. EL SISTEMA LO RENOVARÁ AUTOMÁTICAMENTE.</p>',
+        confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
+        confirmButtonColor: "#01bbcc",
+    });
+
     var table = $("#contratoVencer").DataTable({
         ajax: "/admin/showContratoVencer",
         columns: [

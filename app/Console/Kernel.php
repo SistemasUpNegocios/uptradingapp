@@ -19,6 +19,7 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\Drive;
+use Luecano\NumeroALetras\NumeroALetras;
 
 class Kernel extends ConsoleKernel
 {
@@ -54,40 +55,91 @@ class Kernel extends ConsoleKernel
         ->dailyAt("08:00")
         ->timezone('America/Mexico_City');
 
-        // Tarea para refrendar contratos
+        // Tareas para refrendar contratos
         $schedule->call(function () {
-            //Consulta de contratos a un día de vencer
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDay()->format('Y-m-d'))
-            ->where(function ($query) {
-                $query->where("nota_contrato", NULL)
-                ->orWhere("nota_contrato", "");
-            })->get();
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
 
             foreach ($contratos as $contrato_update) {
                 //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
                 $contrato = Contrato::find($contrato_update->id);
                 
-                //Actualizar numero de contrato
+                // Actualizar numero de contrato
                 $contratoAct = explode("-", $contrato_update->contrato);
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
                 //Guardar cambios de contrato
                 $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
                 $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
-                $contrato->update();
 
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
                 //Actualización de tabla de amortizaciones
                 $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
                 foreach ($amortizaciones as $amortizacion_update) {
                     $amortizacion = Amortizacion::find($amortizacion_update->id);
                     $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
                     $amortizacion->update();
                 }
 
@@ -97,6 +149,9 @@ class Kernel extends ConsoleKernel
                     $pago_cliente = PagoCliente::find($pago_cliente_update->id);
                     $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
                     $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
                     $pago_cliente->status = "Pendiente";
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
@@ -104,21 +159,669 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->update();
                 }
 
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
                 //Actualización de tabla de pago de ps
                 $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
                 foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
                     $pago_ps = PagoPS::find($pago_ps_update->id);
                     $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
                     $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
                     $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
                     $pago_ps->update();
                 }
+
             }
         })
         ->dailyAt("09:00")
+        ->timezone('America/Mexico_City');
+
+        $schedule->call(function () {
+            $contratos = Contrato::where("contrato.status", "Activado")
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
+
+            foreach ($contratos as $contrato_update) {
+                //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
+                $contrato = Contrato::find($contrato_update->id);
+                
+                // Actualizar numero de contrato
+                $contratoAct = explode("-", $contrato_update->contrato);
+                $contratoRef = intval($contratoAct[2]) + 1;
+                $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+                $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
+                //Guardar cambios de contrato
+                $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
+                $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+                $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->status = "Activado";
+
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
+
+                //Actualización de tabla de pago de clientes
+                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_clientes as $pago_cliente_update) {
+                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
+                    $pago_cliente->update();
+                }
+
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
+                //Actualización de tabla de pago de ps
+                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps = PagoPS::find($pago_ps_update->id);
+                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
+                    $pago_ps->update();
+                }
+
+            }
+        })
+        ->dailyAt("09:10")
+        ->timezone('America/Mexico_City');
+
+        $schedule->call(function () {
+            $contratos = Contrato::where("contrato.status", "Activado")
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
+
+            foreach ($contratos as $contrato_update) {
+                //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
+                $contrato = Contrato::find($contrato_update->id);
+                
+                // Actualizar numero de contrato
+                $contratoAct = explode("-", $contrato_update->contrato);
+                $contratoRef = intval($contratoAct[2]) + 1;
+                $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+                $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
+                //Guardar cambios de contrato
+                $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
+                $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+                $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->status = "Activado";
+
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
+
+                //Actualización de tabla de pago de clientes
+                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_clientes as $pago_cliente_update) {
+                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
+                    $pago_cliente->update();
+                }
+
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
+                //Actualización de tabla de pago de ps
+                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps = PagoPS::find($pago_ps_update->id);
+                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
+                    $pago_ps->update();
+                }
+
+            }
+        })
+        ->dailyAt("09:20")
+        ->timezone('America/Mexico_City');
+
+        $schedule->call(function () {
+            $contratos = Contrato::where("contrato.status", "Activado")
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
+
+            foreach ($contratos as $contrato_update) {
+                //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
+                $contrato = Contrato::find($contrato_update->id);
+                
+                // Actualizar numero de contrato
+                $contratoAct = explode("-", $contrato_update->contrato);
+                $contratoRef = intval($contratoAct[2]) + 1;
+                $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+                $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
+                //Guardar cambios de contrato
+                $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
+                $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+                $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->status = "Activado";
+
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
+
+                //Actualización de tabla de pago de clientes
+                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_clientes as $pago_cliente_update) {
+                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
+                    $pago_cliente->update();
+                }
+
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
+                //Actualización de tabla de pago de ps
+                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps = PagoPS::find($pago_ps_update->id);
+                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
+                    $pago_ps->update();
+                }
+
+            }
+        })
+        ->dailyAt("09:30")
+        ->timezone('America/Mexico_City');
+
+        $schedule->call(function () {
+            $contratos = Contrato::where("contrato.status", "Activado")
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
+
+            foreach ($contratos as $contrato_update) {
+                //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
+                $contrato = Contrato::find($contrato_update->id);
+                
+                // Actualizar numero de contrato
+                $contratoAct = explode("-", $contrato_update->contrato);
+                $contratoRef = intval($contratoAct[2]) + 1;
+                $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+                $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
+                //Guardar cambios de contrato
+                $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
+                $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+                $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->status = "Activado";
+
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
+
+                //Actualización de tabla de pago de clientes
+                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_clientes as $pago_cliente_update) {
+                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
+                    $pago_cliente->update();
+                }
+
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
+                //Actualización de tabla de pago de ps
+                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps = PagoPS::find($pago_ps_update->id);
+                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
+                    $pago_ps->update();
+                }
+
+            }
+        })
+        ->dailyAt("09:40")
+        ->timezone('America/Mexico_City');
+
+        $schedule->call(function () {
+            $contratos = Contrato::where("contrato.status", "Activado")
+            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
+            ->get();
+
+            foreach ($contratos as $contrato_update) {
+                //Actualizar contrato
+                $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
+                $contrato = Contrato::find($contrato_update->id);
+                
+                // Actualizar numero de contrato
+                $contratoAct = explode("-", $contrato_update->contrato);
+                $contratoRef = intval($contratoAct[2]) + 1;
+                $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
+                $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                //Obtener el refrendo
+                $pago = $contrato_update->inversion_us;
+                $inversion = $contrato_update->inversion;
+                $inversion_us = $contrato_update->inversion_us;
+                $porcentaje = $contrato_update->porcentaje * 0.01;
+                $meses = intval($contrato_update->periodo);
+
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < $meses; $i++) {
+                        $inversion_us = $inversion_us + $inversion_us * $porcentaje;
+                        $inversion =  $inversion + $inversion * $porcentaje;
+                    
+                        $pago = $pago + $pago * $porcentaje;
+                        $redito = $pago * $porcentaje;
+                        $pago = $pago + $redito;
+                    }
+                }
+
+                $formatter = new NumeroALetras();
+                $inversion_letra = strtolower($formatter->toMoney($inversion, 2, "pesos", "centavos"));
+                $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
+
+                //Guardar cambios de contrato
+                $contrato->contrato = strtoupper($contratoRef);
+
+                // Actualizar fechas y status
+                $contrato->fecha = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
+                $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
+                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
+                $contrato->status = "Activado";
+
+                // Dejar todo por defecto
+                $contrato->status_reintegro = "pendiente";
+                $contrato->memo_reintegro = NULL;
+                $contrato->memo_status = "Contrato activado por id:1";
+                $contrato->pendiente_id = NULL;
+                $contrato->nota_contrato = NULL;
+                $contrato->autorizacion_nota = NULL;
+
+                // Actualizar inversion refrendada
+                $contrato->inversion = $inversion;
+                $contrato->inversion_letra = $inversion_letra;
+                $contrato->inversion_us = $inversion_us;
+                $contrato->inversion_letra_us = $inversion_letra_us;
+                $contrato->update();
+                
+                $monto = $inversion_us;
+                $redito = 0;
+                $saldo_con_redito = 0;
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
+
+                //Actualización de tabla de pago de clientes
+                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_clientes as $pago_cliente_update) {
+                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
+                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_cliente->fecha_pagado = NULL;
+                    if ($tipo_contrato->id == 2) {
+                        $pago_cliente->pago = $pago;
+                    }
+                    $pago_cliente->status = "Pendiente";
+                    $pago_cliente->memo = NULL;
+                    $pago_cliente->tipo_pago = "Pendiente";
+                    $pago_cliente->comprobante = NULL;
+                    $pago_cliente->update();
+                }
+
+                $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_mensual = $inversion_us * $cmensual;
+                $capertura = $tipo_contrato->capertura * .01;
+                $pago_ps_apertura = $inversion_us * $capertura;
+                //Actualización de tabla de pago de ps
+                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
+                foreach ($pagos_ps as $pago_ps_update) {
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps = PagoPS::find($pago_ps_update->id);
+                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps->fecha_pagado = NULL;
+                    $pago_ps->pago = $pago_ps_mensual;
+                    $pago_ps->status = "Pendiente";
+                    $pago_ps->tipo_pago = "Pendiente";
+                    $pago_ps->comprobante = NULL;
+                    $pago_ps->update();
+                }
+
+            }
+        })
+        ->dailyAt("09:50")
         ->timezone('America/Mexico_City');
 
         //Tarea para mandar mensaje de cumpleaños

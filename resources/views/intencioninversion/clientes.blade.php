@@ -7,7 +7,7 @@
                 $nombre_cliente = $cliente->apellido_p . ' ' .
                 $cliente->apellido_m . ' ' . $cliente->nombre;
             @endphp
-            <option value="{{ $nombre_cliente }}" data-id="{{ $cliente->id }}">{{ $nombre_cliente }}</option>
+            <option value="{{ $cliente->id }}" data-id="{{ $cliente->id }}">{{ $nombre_cliente }}</option>
             @endforeach
         </select>
         <label for="nombreInput">Cliente</label>

@@ -299,7 +299,14 @@
       correspondiendo a la fecha del día <span style="text-decoration: underline">{{\Carbon\Carbon::parse(strtotime($contratos[0]->fecha))->formatLocalized('%d de %B de %Y')}}</span>. {{$contratos[0]->lugar_firma }}.
       @if (!empty($holograma2))
         <br>
-        <span>Número de autorización y firma electrónica: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
+        <span>
+          Número de autorización y firma electrónica: <span style="color: #0070c0 !important">{{$holograma2}}</span>
+          {{-- <br>
+          Sr. Hilario Hamilton Herrera Cossaín. --}}
+        </span>
+        {{-- <div style="position: relative;">
+          <img style="position: absolute; right: 0; top: -70px; right: 200px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="80" height="80">
+        </div> --}}
       @endif
     </p>
 
