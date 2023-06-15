@@ -294,23 +294,18 @@
     </p>
 
     <p class="mb-2 contrato_parrafo">
-      En caso de interpretación o incumplimiento del presente contrato, las partes se someten a la jurisdicción de los
+      <span style="margin-left: 25px">En</span> caso de interpretación o incumplimiento del presente contrato, las partes se someten a la jurisdicción de los
       Tribunales del Estado de Durango, la validez del presente contrato comienza a partir de sus firmas y validaciones
       correspondiendo a la fecha del día <span style="text-decoration: underline">{{\Carbon\Carbon::parse(strtotime($contratos[0]->fecha))->formatLocalized('%d de %B de %Y')}}</span>. {{$contratos[0]->lugar_firma }}.
       @if (!empty($holograma2))
         <br>
         <span>
-          Número de autorización y firma electrónica: <span style="color: #0070c0 !important">{{$holograma2}}</span>
-          {{-- <br>
-          Sr. Hilario Hamilton Herrera Cossaín. --}}
+          Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span>
         </span>
-        {{-- <div style="position: relative;">
-          <img style="position: absolute; right: 0; top: -70px; right: 200px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="80" height="80">
-        </div> --}}
       @endif
     </p>
 
-    <div class="contenedor_firma">
+    {{-- <div class="contenedor_firma">
       <div class="contenedor_firma__izquierda">
         <hr class="contenedor_firma__hr">
         <div class=" text-center">
@@ -334,6 +329,56 @@
             <span class="contrato_parrafo_firmas_nombre">{{ $contratos[0]->operador }}</span>
           </p>
         </div>
+      </div>
+    </div> --}}
+    <div class="contenedor_firma">
+      <div class="contenedor_firma__izquierda" style="margin-top: -2rem">
+        <div style="position: relative;">
+          <img style="position: absolute; left: 80px;  top: -90px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="130" height="130">
+        </div>
+        <hr class="contenedor_firma__hr">
+        <div class=" text-center">
+          <p class="contrato_parrafo_firmas">
+            <span>UP TRADING EXPERTS</span>
+            <br>
+            <span>REPRESENTANTE LEGAL</span>
+            <br>
+            <span class="contrato_parrafo_firmas_nombre">Hilario Hamilton Herrera Cossaín</span>
+            {{-- @if ($contratos[0]->firma == "MARIA EUGENIA RINCON ACEVAL")
+                <span>GERENTE GENERAL</span>
+                <br>
+                <span class="contrato_parrafo_firmas_nombre">{{$contratos[0]->firma}}</span>
+            @else
+                <span>REPRESENTANTE LEGAL</span>
+            @endif --}}
+          </p>
+        </div>
+      </div>
+      <div class="contenedor_firma__derecha" style="margin-top: -2rem">
+          <hr class="contenedor_firma__hr">
+          <div class="text-center">
+              <p class="contrato_parrafo_firmas">
+                <span>CLIENTE</span>
+                <br>
+                <span class="contrato_parrafo_firmas_nombre">{{ $contratos[0]->clientenombre }}</span>
+              </p>
+          </div>
+      </div>
+      <div class="contenedor_firma__centro" style="margin-top: 4rem">
+          <hr class="contenedor_firma__hr">
+          <div class=" text-center">
+              <p class="contrato_parrafo_firmas">
+                  <span>UP TRADING EXPERTS</span>
+                  <br>
+                  <span>GERENTE GENERAL</span>
+                  <br>
+                  <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
+                  {{-- @if ($contratos[0]->firma == "MARIA EUGENIA RINCON ACEVAL") --}}
+                  {{-- @else --}}
+                      {{-- <span>REPRESENTANTE LEGAL</span> --}}
+                  {{-- @endif --}}
+              </p>
+          </div>
       </div>
     </div>
 
