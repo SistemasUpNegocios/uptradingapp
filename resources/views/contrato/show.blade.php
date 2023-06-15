@@ -438,6 +438,10 @@
                                     <input class="form-check-input" type="checkbox" id="comisionesInput" name="tipo_pago[]" value="comisiones">
                                     <label class="form-check-label" for="comisionesInput">Comisiones</label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="bitsoInput" name="tipo_pago[]" value="bitso">
+                                    <label class="form-check-label" for="bitsoInput">Bitso</label>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -531,6 +535,14 @@
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en comisiones" id="montoComisionesInput" name="monto_pago[]">
                                     <label for="montoComisionesInput">Monto en comisiones</label>
+
+                                    <input type="hidden" class="form-control" name="referencia_pago[]">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12" id="montoBitsoCont">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en bitso" id="montoBitsoInput" name="monto_pago[]">
+                                    <label for="montoBitsoInput">Monto en bitso</label>
 
                                     <input type="hidden" class="form-control" name="referencia_pago[]">
                                 </div>

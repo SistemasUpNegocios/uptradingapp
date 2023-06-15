@@ -1581,6 +1581,16 @@ $(document).ready(function () {
         $("#alertMessage").text("");
         $("option:selected", "#statusInput").prop("disabled", false);
 
+        Swal.fire({
+            title: '<h2 style="font-family: Poppins;">Se está generando el contrato, por favor espere...</h2>',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
         $.ajax({
             type: "POST",
             url: url,
@@ -1590,6 +1600,8 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
+                Swal.close();
+
                 let rendimiento = $("#porcentajeRendimientoInput").val();
                 let contrato_numero = $("#contratoInput").val();
                 let estatus = $("#statusInput").val();
@@ -1819,6 +1831,7 @@ $(document).ready(function () {
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
+        $("#bitsoInput").prop("disabled", false);
 
         $("#montoEfectivoInput").prop("disabled", false);
         $("#montoTransSwissPOOLInput").prop("disabled", false);
@@ -1829,6 +1842,7 @@ $(document).ready(function () {
         $("#montoRenovacionInput").prop("disabled", false);
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
+        $("#montoBitsoInput").prop("disabled", false);
 
         $("#referenciaTransSwissPOOLInput").prop("disabled", false);
         $("#referenciaTransMXPOOLInput").prop("disabled", false);
@@ -2085,6 +2099,7 @@ $(document).ready(function () {
         $("#renovacionInput").prop("disabled", true);
         $("#rendimientosInput").prop("disabled", true);
         $("#comisionesInput").prop("disabled", true);
+        $("#bitsoInput").prop("disabled", true);
         tipoPago(this);
 
         $("#montoEfectivoInput").prop("disabled", true);
@@ -2096,6 +2111,7 @@ $(document).ready(function () {
         $("#montoRenovacionInput").prop("disabled", true);
         $("#montoRendimientosInput").prop("disabled", true);
         $("#montoComisionesInput").prop("disabled", true);
+        $("#montoBitsoInput").prop("disabled", true);
 
         $("#referenciaTransSwissPOOLInput").prop("disabled", true);
         $("#referenciaTransMXPOOLInput").prop("disabled", true);
@@ -2721,6 +2737,7 @@ $(document).ready(function () {
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
+        $("#bitsoInput").prop("disabled", false);
         tipoPago(this);
 
         $("#montoEfectivoInput").prop("disabled", false);
@@ -2732,6 +2749,7 @@ $(document).ready(function () {
         $("#montoRenovacionInput").prop("disabled", false);
         $("#montoRendimientosInput").prop("disabled", false);
         $("#montoComisionesInput").prop("disabled", false);
+        $("#montoBitsoInput").prop("disabled", false);
 
         $("#referenciaTransSwissPOOLInput").prop("disabled", false);
         $("#referenciaTransMXPOOLInput").prop("disabled", false);
@@ -4659,6 +4677,17 @@ $(document).ready(function () {
                 $("#montoComisionesInput").prop("required", false);
             }
         }
+        if (target.is("#bitsoInput")) {
+            let bitsoChecked = $("#bitsoInput").is(":checked");
+
+            if (bitsoChecked) {
+                $("#montoBitsoCont").show();
+                $("#montoBitsoInput").prop("required", true);
+            } else {
+                $("#montoBitsoCont").hide();
+                $("#montoBitsoInput").prop("required", false);
+            }
+        }
 
         //APARTADO PARA CAMBIAR EL PORCENTAJE DE RENDIMIENTOS
         if (target.is("#cambiarPorcentajeInput")) {
@@ -4732,11 +4761,12 @@ $(document).ready(function () {
             "#transferenciaSwissInput",
             "#transferenciaMXInput",
             "#ciBankInput",
+            "#wiseInput",
             "#hsbcInput",
             "#renovacionInput",
             "#rendimientosInput",
             "#comisionesInput",
-            "#wiseInput",
+            "#bitsoInput",
         ];
 
         let inputs = [
@@ -4744,11 +4774,12 @@ $(document).ready(function () {
             "#montoTransSwissPOOLInput",
             "#montoTransMXPOOLInput",
             "#montoBankInput",
+            "#montoWiseInput",
             "#montoHSBCInput",
             "#montoRenovacionInput",
             "#montoRendimientosInput",
             "#montoComisionesInput",
-            "#montoWiseInput",
+            "#montoBitsoInput",
         ];
 
         let conts = [
@@ -4756,11 +4787,12 @@ $(document).ready(function () {
             "#montoTransSwissPOOLCont",
             "#montoTransMXPOOLCont",
             "#montoBankCont",
+            "#montoWiseCont",
             "#montoHSBCCont",
             "#montoRenovacionCont",
             "montoRendimientosCont",
             "#montoComisionesCont",
-            "#montoWiseCont",
+            "#montoBitsoCont",
         ];
 
         let contsRef = [
@@ -4768,11 +4800,12 @@ $(document).ready(function () {
             "#referenciaTransSwissPOOLCont",
             "#referenciaTransMXPOOLCont",
             "#referenciaBankCont",
+            "#referenciaWiseCont",
             "#referenciaHSBCCont",
             "#referenciaRenovacionCont",
             "referenciaRendimientosCont",
             "#referenciaComisionesCont",
-            "#referenciaWiseCont",
+            "#referenciaBitsoCont",
         ];
 
         let montopago = $(thiss).data("montopago");
@@ -4836,12 +4869,13 @@ $(document).ready(function () {
         $("#montoTransSwissPOOLCont").hide();
         $("#montoTransMXPOOLCont").hide();
         $("#montoBankCont").hide();
+        $("#montoWiseCont").hide();
         $("#montoHSBCCont").hide();
         $("#montoRenovacionCont").hide();
         $("#montoRendimientosCont").hide();
         $("#montoComisionesCont").hide();
+        $("#montoBitsoCont").hide();
         $("#porcentajeRendimientoCont").hide();
-        $("#montoWiseCont").hide();
 
         $("#referenciaTransSwissPOOLCont").hide();
         $("#referenciaTransMXPOOLCont").hide();
@@ -4857,6 +4891,7 @@ $(document).ready(function () {
         $("#montoRenovacionInput").prop("required", false);
         $("#montoRendimientosInput").prop("required", false);
         $("#montoComisionesInput").prop("required", false);
+        $("#montoBitsoInput").prop("required", false);
 
         $("#referenciaTransSwissPOOLInput").prop("required", false);
         $("#referenciaTransMXPOOLInput").prop("required", false);
