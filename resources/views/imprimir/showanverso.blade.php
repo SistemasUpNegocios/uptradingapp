@@ -99,7 +99,6 @@
               <p style="margin-bottom: -0.5rem; line-height: 11px">El inversionista confirma que cuenta con todas las
                   autorizaciones necesarias para celebrar el presente acuerdo y manifiesta que no le genera incumplimiento
                   a obligaciones previamente contraídas con terceros.
-
               </p>
           </li>
       </ol>
@@ -168,14 +167,14 @@
         
         if (sizeof($beneficiarios) > 0) {
           $sustituciones[8] = "<div class='contenedor_beneficiarios'>
-                  <div class='contenedor_beneficiarios_izquierda'>                  
+                  <div class='contenedor_beneficiarios_izquierda'>
                       <ol>
-                        <p class='contrato_parrafo_li text-center'>Nombre</p>";                    
+                        <p class='contrato_parrafo_li text-center'>Nombre</p>";
                           foreach($beneficiarios as $beneficiario){
                             if ($beneficiario->porcentaje > 0){
                               $sustituciones[8].="<li>$beneficiario->nombre</li>";
                             }
-                          }                    
+                          }
           $sustituciones[8].="</ol>
                   </div>
                   <div class='contenedor_beneficiarios_derecha'>
@@ -208,7 +207,7 @@
       </p>
     @endforeach
 
-    @if ($contratos[0]->tabla == true)      
+    @if ($contratos[0]->tabla == true)
       @if ($contratos[0]->tipocontrato == 'Rendimiento mensual')
         <div class="contenedor_tabla">
           <table class="tabla_reverso table table-sm">
@@ -223,7 +222,7 @@
               @php
                   $cobrado_sum = 0;
               @endphp
-              @foreach ($amortizaciones as $amortizacion)    
+              @foreach ($amortizaciones as $amortizacion)
               <tr>
                 <td>{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
                 <td style="background: #00b0f02f !important">$@convert($amortizacion->monto)</td>
@@ -264,7 +263,7 @@
               <tr>
                 <td>{{date("d/m/Y", strtotime($amortizacion->fecha))}}</td>
                 @php
-                  echo '<td style="background: #00b0f02f !important">$'.number_format($amortizacion->monto, 2).'</td>';                  
+                  echo '<td style="background: #00b0f02f !important">$'.number_format($amortizacion->monto, 2).'</td>';
                   $acumulado += $amortizacion->redito;
                 @endphp
                 <td>$@convert($amortizacion->redito)</td>
@@ -381,7 +380,6 @@
           </div>
       </div>
     </div>
-
   </div>
 
     @if (!empty($holograma))

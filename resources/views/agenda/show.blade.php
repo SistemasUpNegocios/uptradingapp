@@ -105,13 +105,9 @@
                                 <div class="form-floating">
                                     <select name="asignado_a" class="form-control" id="asignadoAInput" required style="text-transform: none !important;">
                                         <option value="" disabled selected>Selecciona..</option>
-                                        {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos) --}}
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}"> {{ $user->nombre }} {{ $user->apellido_p }} {{ $user->apellido_m }}</option>
                                         @endforeach                                            
-                                        {{-- @elseif(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond)
-                                            <option value="{{ auth()->user()->id }}"> {{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}</option>
-                                        @endif --}}
                                     </select>
                                     <label for="asignadoAInput">Asignar a</label>
                                 </div>

@@ -33,6 +33,7 @@ class AgendaController extends Controller
                 $users = User::where('privilegio', 'root')
                     ->orWhere('privilegio', 'admin')
                     ->orWhere('privilegio', 'procesos')
+                    ->orWhere('privilegio', 'egresos')
                     ->get();
             }elseif(auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze){
                 $users = User::where('privilegio', 'admin')
