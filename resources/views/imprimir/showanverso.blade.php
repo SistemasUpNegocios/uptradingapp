@@ -296,12 +296,6 @@
       <span style="margin-left: 25px">En</span> caso de interpretación o incumplimiento del presente contrato, las partes se someten a la jurisdicción de los
       Tribunales del Estado de Durango, la validez del presente contrato comienza a partir de sus firmas y validaciones
       correspondiendo a la fecha del día <span style="text-decoration: underline">{{\Carbon\Carbon::parse(strtotime($contratos[0]->fecha))->formatLocalized('%d de %B de %Y')}}</span>. {{$contratos[0]->lugar_firma }}.
-      @if (!empty($holograma2))
-        <br>
-        <span>
-          Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span>
-        </span>
-      @endif
     </p>
 
     {{-- <div class="contenedor_firma">
@@ -336,8 +330,14 @@
           <img style="position: absolute; left: 80px;  top: -90px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="130" height="130">
         </div>
         <hr class="contenedor_firma__hr">
+        <div class="text-center" style="position: relative">
+          @if (!empty($holograma2))
+            <span style="position: absolute; top: -8px; right: 2px !important; left: 10px; font-size: 9.5px;"> Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span> </span>
+          @endif
+        </div>
         <div class=" text-center">
           <p class="contrato_parrafo_firmas">
+            <br>
             <span>UP TRADING EXPERTS</span>
             <br>
             <span>REPRESENTANTE LEGAL</span>

@@ -560,6 +560,7 @@ $(document).ready(function () {
             let pago = $(this).data("pago");
             let cliente = $(this).data("cliente");
             let rendimiento = $(this).data("rendimiento");
+            let rendimiento_dolar = $(this).data("rendimientoini");
             let fecha = $(this).data("fecha");
             let contrato = $(this).data("contrato");
             let contratoid = $(this).data("contratoid");
@@ -579,10 +580,10 @@ $(document).ready(function () {
                 letra = numeroALetrasMXN(rendimiento);
             }
 
-            let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
+            let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
 
             window.open(
-                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}`,
+                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}`,
                 "_blank"
             );
         } else {
@@ -613,6 +614,9 @@ $(document).ready(function () {
         let rendimiento = String($(this).data("rendimiento"))
             .replaceAll("$", "")
             .replaceAll(",", "");
+        let rendimiento_dolar = String($(this).data("rendimientoini"))
+            .replaceAll("$", "")
+            .replaceAll(",", "");
         let reporte = $(this).data("reporte");
         let dolar = $("#dolarInput").val();
         let inversionus = $(this).data("inversionus");
@@ -629,6 +633,9 @@ $(document).ready(function () {
         $("#fechaInput").val(fecha);
         $("#clienteInput").val(cliente);
         $("#rendimientoInput").val(formatearCantidad.format(rendimiento));
+        $("#rendimientoIniInput").val(
+            formatearCantidad.format(rendimiento_dolar)
+        );
         $("#contratoInput").val(contrato);
         $("#letraInput").val(letra);
         $("#contratoIdInput").val(id);
@@ -644,17 +651,21 @@ $(document).ready(function () {
             .val()
             .replaceAll("$", "")
             .replaceAll(",", "");
+        let rendimiento_dolar = $("#rendimientoIniInput")
+            .val()
+            .replaceAll("$", "")
+            .replaceAll(",", "");
         let fecha = $("#fechaInput").val();
         let contrato = $("#contratoInput").val();
         let letra = numeroALetrasMXN(rendimiento);
         let dolar = $("#dolarInput").val();
-        let letra_dolares = numeroALetrasMXN(rendimiento / dolar);
+        let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
         let contratoid = $("#contratoIdInput").val();
         let tipo = $("#tipoInput").val();
         let reporte = $("#reporteInput").val();
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
             "_blank"
         );
     });

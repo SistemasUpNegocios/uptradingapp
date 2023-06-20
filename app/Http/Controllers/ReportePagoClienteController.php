@@ -263,7 +263,7 @@ class ReportePagoClienteController extends Controller
     {
         $fecha = \Carbon\Carbon::parse($request->fecha)->formatLocalized('%d de %B de %Y');
         $rendimiento = number_format($request->rendimiento, 2);
-        $total_dolares = number_format($request->rendimiento / $request->dolar, 2);
+        $total_dolares = number_format($request->rendimiento_dolar, 2);
         
         $data = array(
             "pago" => $request->pago,

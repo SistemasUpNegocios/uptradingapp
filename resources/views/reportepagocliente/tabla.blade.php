@@ -143,6 +143,12 @@
                 <div class="row d-none">
                     <div class="col-md-6 col-12">
                         <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Ingresa el rendimiento" id="rendimientoIniInput">
+                            <label for="rendimientoIniInput">Rendimiento (USD)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control" placeholder="Ingresa el pago" id="pagoInput" readonly>
                             <label for="pagoInput">Pago</label>
                         </div>
