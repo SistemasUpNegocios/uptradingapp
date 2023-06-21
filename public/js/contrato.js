@@ -1712,6 +1712,8 @@ $(document).ready(function () {
                 casilla = false;
             },
             error: function (err, exception) {
+                Swal.close();
+
                 var validacion = err.responseJSON.errors;
                 for (let clave in validacion) {
                     $("#alertMessage").append(

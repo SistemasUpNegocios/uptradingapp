@@ -133,6 +133,7 @@ Route::get('/admin/convenio', [App\Http\Controllers\ConvenioController::class, '
 Route::get('/admin/showConvenio', [App\Http\Controllers\ConvenioController::class, 'getConvenio']);
 Route::get('/admin/showConvenioActivados', [App\Http\Controllers\ConvenioController::class, 'getConvenioActivado']);
 Route::get('/admin/showConvenioPendientes', [App\Http\Controllers\ConvenioController::class, 'getConvenioPendiente']);
+Route::get('/admin/getBeneficiarios', [App\Http\Controllers\ConvenioController::class, 'getBeneficiarios']);
 Route::post('/admin/addConvenio', [App\Http\Controllers\ConvenioController::class, 'addConvenio']);
 Route::post('/admin/editConvenio', [App\Http\Controllers\ConvenioController::class, 'editConvenio']);
 Route::post('/admin/deleteConvenio', [App\Http\Controllers\ConvenioController::class, 'deleteConvenio']);

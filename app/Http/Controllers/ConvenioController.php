@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Banco;
 use App\Models\Cliente;
+use App\Models\BeneficiarioConvenio;
 use App\Models\Convenio;
 use App\Models\Log;
 use App\Models\Oficina;
@@ -73,6 +74,7 @@ class ConvenioController extends Controller
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
                 })
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->orderBy("convenio.id", "desc")
                 ->get();
         }else{
             $convenio = DB::table('convenio')
@@ -84,6 +86,7 @@ class ConvenioController extends Controller
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->orderBy("convenio.id", "desc")
                 ->get();
         }
 
@@ -98,6 +101,7 @@ class ConvenioController extends Controller
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->orderBy("convenio.id", "desc")
                 ->get();
         }
 
@@ -300,6 +304,28 @@ class ConvenioController extends Controller
 
             $log->save();
 
+            //agregar en la tabla beneficiarios
+            for ($i = 0; $i <= 4; $i++) {
+                if ($request->input('nombre-ben' . $i)) {
+                    $nombre = 'nombre-ben' . ($i);
+                    $porcentaje = 'porcentaje-ben' . ($i);
+                    $telefono = 'telefono-ben' . ($i);
+                    $correo_electronico = 'correo-ben' . ($i);
+                    $curp = 'curp-ben' . ($i);
+
+                    $beneficiario = new BeneficiarioConvenio;
+
+                    $beneficiario->convenio_id = $convenio_id;
+                    $beneficiario->nombre = strtoupper($request->input($nombre));
+                    $beneficiario->porcentaje = $request->input($porcentaje);
+                    $beneficiario->telefono = $request->input($telefono);
+                    $beneficiario->correo_electronico = strtoupper($request->input($correo_electronico));
+                    $beneficiario->curp = strtoupper($request->input($curp));
+
+                    $beneficiario->save();
+                }
+            }
+
             for ($i = 0; $i < 13; $i++) {
                 $serie = "serie-pagops" . $i;
                 $fechaPago = "fecha-pagops" . $i;
@@ -454,6 +480,27 @@ class ConvenioController extends Controller
             $convenio_id = $convenio->id;
 
             DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_id)->delete();
+            DB::table('beneficiario_convenio')->where('convenio_id', '=', $convenio_id)->delete();
+            for ($i = 0; $i <= 4; $i++) {
+                if ($request->input('nombre-ben' . $i)) {
+                    $nombre = 'nombre-ben' . ($i);
+                    $porcentaje = 'porcentaje-ben' . ($i);
+                    $telefono = 'telefono-ben' . ($i);
+                    $correo_electronico = 'correo-ben' . ($i);
+                    $curp = 'curp-ben' . ($i);
+
+                    $beneficiario = new BeneficiarioConvenio;
+
+                    $beneficiario->convenio_id = $convenio_id;
+                    $beneficiario->nombre = strtoupper($request->input($nombre));
+                    $beneficiario->porcentaje = $request->input($porcentaje);
+                    $beneficiario->telefono = $request->input($telefono);
+                    $beneficiario->correo_electronico = strtoupper($request->input($correo_electronico));
+                    $beneficiario->curp = strtoupper($request->input($curp));
+
+                    $beneficiario->save();
+                }
+            }
 
             for ($i = 0; $i < 13; $i++) {
                 $serie = "serie-pagops" . $i;
@@ -746,5 +793,22 @@ class ConvenioController extends Controller
         $notificacion->save();
 
         return response($convenio);
+    }
+
+    public function getBeneficiarios(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+
+            $beneficiarios = DB::table("beneficiario_convenio")
+                ->where("convenio_id", "=", $id)
+                ->get();
+
+            $countBeneficiarios = DB::table("beneficiario_convenio")
+                ->where("convenio_id", "=", $id)
+                ->count();
+
+            return response(["beneficiarios" => $beneficiarios, "countBeneficiarios" => $countBeneficiarios]);
+        }
     }
 }

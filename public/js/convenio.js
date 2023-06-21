@@ -228,6 +228,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
         },
+        aaSorting: [],
     });
 
     $("#contenedor_filtros").hide();
@@ -1154,17 +1155,6 @@ $(document).ready(function () {
                 $("#convenioForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
-                    // let mensaje = `Se ha generado un nuevo convenio, por favor actívalo.\nFolio de convenio: ${folio}`;
-                    // $.get({
-                    //     url: "/admin/enviarTelegramConvenio",
-                    //     data: {
-                    //         mensaje: mensaje,
-                    //     },
-                    //     success: function (response) {
-                    //         $("#folioInput").val(response);
-                    //     },
-                    // });
-
                     Swal.fire({
                         icon: "success",
                         title: '<h1 style="font-family: Poppins; font-weight: 700;">Convenio añadido</h1>',
@@ -1183,6 +1173,60 @@ $(document).ready(function () {
                         confirmButtonColor: "#01bbcc",
                     });
                 }
+
+                $("#contBeneficiarios").empty();
+                $("#contBeneficiarios").append(`
+                    <div class="col-12">
+                        <div class="alert alert-primary d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                <use xlink:href="#info-fill" />
+                            </svg>
+                            <div>
+                                Ingresa al beneficiario en caso de fallecimiento del cliente:
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control"
+                                placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
+                                name="nombre-ben1" minlength="3" maxlength="255">
+                            <label for="nombreBen1Input">Nombre del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input type="number" step="any" class="form-control"
+                                placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
+                                name="porcentaje-ben1" value="0">
+                            <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input type="number" class="form-control"
+                                placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
+                                name="telefono-ben1" minlength="3" maxlength="100">
+                            <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">                                
+                            <input style="text-transform: lowercase;" type="email" class="form-control"
+                                placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
+                                name="correo-ben1" minlength="3" maxlength="100">
+                            <label for="correoBen1Input">Correo del beneficiario</label>
+                        </div>
+                    </div>                    
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control"
+                                placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
+                                name="curp-ben1" minlength="3" maxlength="100">
+                            <label for="curpBen1Input">CURP del beneficiario</label>
+                        </div>
+                    </div>
+                `);
             },
             error: function (jqXHR, exception) {
                 var validacion = jqXHR.responseJSON.errors;
@@ -1233,6 +1277,61 @@ $(document).ready(function () {
         $("#statusInput").prop("disabled", false);
         $("#numeroCuentaInput").prop("readonly", false);
         $("#modifySwitch").prop("disabled", false);
+        $("#beneficiariosInput").prop("disabled", false);
+
+        $("#contBeneficiarios").empty();
+        $("#contBeneficiarios").append(`
+            <div class="col-12">
+                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                        <use xlink:href="#info-fill" />
+                    </svg>
+                    <div>
+                        Ingresa al beneficiario en caso de fallecimiento del cliente:
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control"
+                        placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
+                        name="nombre-ben1" minlength="3" maxlength="255">
+                    <label for="nombreBen1Input">Nombre del beneficiario</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-2">
+                    <input type="number" step="any" class="form-control"
+                        placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
+                        name="porcentaje-ben1" value="0">
+                    <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-2">
+                    <input type="number" class="form-control"
+                        placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
+                        name="telefono-ben1" minlength="3" maxlength="100">
+                    <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-3">                                
+                    <input style="text-transform: lowercase;" type="email" class="form-control"
+                        placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
+                        name="correo-ben1" minlength="3" maxlength="100">
+                    <label for="correoBen1Input">Correo del beneficiario</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control"
+                        placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
+                        name="curp-ben1" minlength="3" maxlength="100">
+                    <label for="curpBen1Input">CURP del beneficiario</label>
+                </div>
+            </div>
+        `);
 
         $("#modalTitle").text("Añadir convenio");
         $("#btnSubmit").text("Añadir convenio");
@@ -1248,6 +1347,7 @@ $(document).ready(function () {
         acc = "view";
         e.preventDefault();
 
+        var id = $(this).data("id");
         var folio = $(this).data("folio");
         var nombrecliente = $(this).data("nombrecliente");
         var monto = $(this).data("monto");
@@ -1341,6 +1441,236 @@ $(document).ready(function () {
         $("#bancoIdInput").prop("disabled", true);
 
         $("#modifySwitch").prop("disabled", true);
+
+        $("#beneficiariosInput").prop("disabled", true);
+        $.ajax({
+            type: "GET",
+            url: "/admin/getBeneficiarios",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            success: function (response) {
+                $("#beneficiariosInput").val(response.countBeneficiarios);
+                if (response.countBeneficiarios > 0) {
+                    $("#contBeneficiarios").empty();
+                    for (var i = 1; i <= response.countBeneficiarios; i++) {
+                        var adjetivo = "";
+                        if (i == 1) {
+                            adjetivo = "primer";
+                        } else if (i == 2) {
+                            adjetivo = "segundo";
+                        } else if (i == 3) {
+                            adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
+                        }
+                        $("#contBeneficiarios").append(`             
+                            <div class="col-12">
+                                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                        <use xlink:href="#info-fill" />
+                                    </svg>
+                                    <div>
+                                        Ingresa al ${adjetivo} beneficiario en caso de fallecimiento del cliente:
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input"
+                                        name="nombre-ben${i}" minlength="3" maxlength="255">
+                                    <label for="nombreBen${i}Input">Nombre del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="number" step="any" class="form-control"
+                                        placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input"
+                                        name="porcentaje-ben${i}" value="0">
+                                    <label for="porcentajeBen${i}Input">Porcentaje del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control"
+                                        placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input"
+                                        name="telefono-ben${i}" minlength="3" maxlength="100">
+                                    <label for="telefonoBen${i}Input">Teléfono del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">                                
+                                    <input style="text-transform: lowercase;" type="email" class="form-control"
+                                        placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input"
+                                        name="correo-ben${i}" minlength="3" maxlength="100">
+                                    <label for="correoBen${i}Input">Correo del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
+                                        name="curp-ben${i}" minlength="3" maxlength="100">
+                                    <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                        `);
+
+                        $(`#nombreBen${i}Input`).prop("readonly", true);
+                        $(`#porcentajeBen${i}Input`).prop("readonly", true);
+                        $(`#telefonoBen${i}Input`).prop("readonly", true);
+                        $(`#correoBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}InputCheck`).prop("disabled", true);
+                    }
+
+                    if (response.beneficiarios[0]) {
+                        var nombreben1 = response.beneficiarios[0].nombre;
+                        var porcentajeben1 =
+                            response.beneficiarios[0].porcentaje;
+                        var telefonoben1 = response.beneficiarios[0].telefono;
+                        var correoben1 =
+                            response.beneficiarios[0].correo_electronico;
+                        var curpben1 = response.beneficiarios[0].curp;
+
+                        $("#nombreBen1Input").val(nombreben1);
+                        $("#porcentajeBen1Input").val(porcentajeben1);
+                        $("#telefonoBen1Input").val(telefonoben1);
+                        $("#correoBen1Input").val(correoben1);
+                        $("#curpBen1Input").val(curpben1);
+                    } else {
+                        $("#nombreBen1Input").val("sin beneficiario");
+                        $("#porcentajeBen1Input").val(0);
+                        $("#telefonoBen1Input").val("sin telefono de contácto");
+                        $("#correoBen1Input").val("sin correo de contácto");
+                        $("#curpBen1Input").val("sin curp");
+                    }
+
+                    if (response.beneficiarios[1]) {
+                        var nombreben2 = response.beneficiarios[1].nombre;
+                        var porcentajeben2 =
+                            response.beneficiarios[1].porcentaje;
+                        var telefonoben2 = response.beneficiarios[1].telefono;
+                        var correoben2 =
+                            response.beneficiarios[1].correo_electronico;
+                        var curpben2 = response.beneficiarios[1].curp;
+
+                        $("#nombreBen2Input").val(nombreben2);
+                        $("#porcentajeBen2Input").val(porcentajeben2);
+                        $("#telefonoBen2Input").val(telefonoben2);
+                        $("#correoBen2Input").val(correoben2);
+                        $("#curpBen2Input").val(curpben2);
+                    } else {
+                        $("#nombreBen2Input").val("sin beneficiario");
+                        $("#porcentajeBen2Input").val(0);
+                        $("#telefonoBen2Input").val("sin telefono de contácto");
+                        $("#correoBen2Input").val("sin correo de contácto");
+                        $("#curpBen2Input").val("sin curp");
+                    }
+
+                    if (response.beneficiarios[2]) {
+                        var nombreben3 = response.beneficiarios[2].nombre;
+                        var porcentajeben3 =
+                            response.beneficiarios[2].porcentaje;
+                        var telefonoben3 = response.beneficiarios[2].telefono;
+                        var correoben3 =
+                            response.beneficiarios[2].correo_electronico;
+                        var curpben3 = response.beneficiarios[2].curp;
+
+                        $("#nombreBen3Input").val(nombreben3);
+                        $("#porcentajeBen3Input").val(porcentajeben3);
+                        $("#telefonoBen3Input").val(telefonoben3);
+                        $("#correoBen3Input").val(correoben3);
+                        $("#curpBen3Input").val(curpben3);
+                    } else {
+                        $("#nombreBen3Input").val("sin beneficiario");
+                        $("#porcentajeBen3Input").val(0);
+                        $("#telefonoBen3Input").val("sin telefono de contácto");
+                        $("#correoBen3Input").val("sin correo de contácto");
+                        $("#curpBen3Input").val("sin curp");
+                    }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("sin beneficiario");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("sin telefono de contácto");
+                        $("#correoBen4Input").val("sin correo de contácto");
+                        $("#curpBen4Input").val("sin curp");
+                    }
+                } else {
+                    $("#beneficiariosInput").val(1);
+                    $("#contBeneficiarios").empty();
+                    $("#contBeneficiarios").append(`
+                    <div class="col-12">
+                        <div class="alert alert-primary d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                <use xlink:href="#info-fill" />
+                            </svg>
+                            <div>
+                                Ingresa al beneficiario en caso de fallecimiento del cliente:
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input readonly type="text" class="form-control"
+                                placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
+                                name="nombre-ben1" minlength="3" maxlength="255">
+                            <label for="nombreBen1Input">Nombre del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input readonly type="number" step="any" class="form-control"
+                                placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
+                                name="porcentaje-ben1" value="0">
+                            <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-2">
+                            <input readonly type="number" class="form-control"
+                                placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
+                                name="telefono-ben1" minlength="3" maxlength="100">
+                            <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">                                
+                            <input readonly type="text" class="form-control"
+                                placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
+                                name="correo-ben1" minlength="3" maxlength="100">
+                            <label for="correoBen1Input">Correo del beneficiario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input readonly type="text" class="form-control"
+                                placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
+                                name="curp-ben1" minlength="3" maxlength="100">
+                            <label for="curpBen1Input">CURP del beneficiario</label>
+                        </div>
+                    </div>
+                `);
+                }
+            },
+        });
 
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
@@ -1458,6 +1788,236 @@ $(document).ready(function () {
         $("#bancoIdInput").prop("disabled", false);
 
         $("#modifySwitch").prop("disabled", false);
+
+        $("#beneficiariosInput").prop("disabled", false);
+        $.ajax({
+            type: "GET",
+            url: "/admin/getBeneficiarios",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            success: function (response) {
+                $("#beneficiariosInput").val(response.countBeneficiarios);
+                if (response.countBeneficiarios > 0) {
+                    $("#contBeneficiarios").empty();
+                    for (var i = 1; i <= response.countBeneficiarios; i++) {
+                        var adjetivo = "";
+                        if (i == 1) {
+                            adjetivo = "primer";
+                        } else if (i == 2) {
+                            adjetivo = "segundo";
+                        } else if (i == 3) {
+                            adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
+                        }
+                        $("#contBeneficiarios").append(`             
+                            <div class="col-12">
+                                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                        aria-label="Info:">
+                                        <use xlink:href="#info-fill" />
+                                    </svg>
+                                    <div>
+                                        Ingresa al ${adjetivo} beneficiario en caso de fallecimiento del cliente:
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input"
+                                        name="nombre-ben${i}" minlength="3" maxlength="255">
+                                    <label for="nombreBen${i}Input">Nombre del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="number" step="any" class="form-control"
+                                        placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input"
+                                        name="porcentaje-ben${i}" value="0">
+                                    <label for="porcentajeBen${i}Input">Porcentaje del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control"
+                                        placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input"
+                                        name="telefono-ben${i}" minlength="3" maxlength="100">
+                                    <label for="telefonoBen${i}Input">Teléfono del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input style="text-transform: lowercase;" type="email" class="form-control"
+                                        placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input"
+                                        name="correo-ben${i}" minlength="3" maxlength="100">
+                                    <label for="correoBen${i}Input">Correo del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>                            
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
+                                        name="curp-ben${i}" minlength="3" maxlength="100">
+                                    <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
+                        `);
+
+                        $(`#nombreBen${i}Input`).prop("readonly", false);
+                        $(`#porcentajeBen${i}Input`).prop("readonly", false);
+                        $(`#telefonoBen${i}Input`).prop("readonly", false);
+                        $(`#correoBen${i}Input`).prop("readonly", false);
+                        $(`#curpBen${i}Input`).prop("readonly", false);
+                        $(`#curpBen${i}InputCheck`).prop("disabled", false);
+                    }
+                    if (response.beneficiarios[0]) {
+                        var nombreben1 = response.beneficiarios[0].nombre;
+                        var porcentajeben1 =
+                            response.beneficiarios[0].porcentaje;
+                        var telefonoben1 = response.beneficiarios[0].telefono;
+                        var correoben1 =
+                            response.beneficiarios[0].correo_electronico;
+                        var curpben1 = response.beneficiarios[0].curp;
+
+                        $("#nombreBen1Input").val(nombreben1);
+                        $("#porcentajeBen1Input").val(porcentajeben1);
+                        $("#telefonoBen1Input").val(telefonoben1);
+                        $("#correoBen1Input").val(correoben1);
+                        $("#curpBen1Input").val(curpben1);
+                    } else {
+                        $("#nombreBen1Input").val("");
+                        $("#porcentajeBen1Input").val(0);
+                        $("#telefonoBen1Input").val("");
+                        $("#correoBen1Input").val("");
+                        $("#curpBen1Input").val("");
+                    }
+
+                    if (response.beneficiarios[1]) {
+                        var nombreben2 = response.beneficiarios[1].nombre;
+                        var porcentajeben2 =
+                            response.beneficiarios[1].porcentaje;
+                        var telefonoben2 = response.beneficiarios[1].telefono;
+                        var correoben2 =
+                            response.beneficiarios[1].correo_electronico;
+                        var curpben2 = response.beneficiarios[1].curp;
+
+                        $("#nombreBen2Input").val(nombreben2);
+                        $("#porcentajeBen2Input").val(porcentajeben2);
+                        $("#telefonoBen2Input").val(telefonoben2);
+                        $("#correoBen2Input").val(correoben2);
+                        $("#curpBen2Input").val(curpben2);
+                    } else {
+                        $("#nombreBen2Input").val("");
+                        $("#porcentajeBen2Input").val(0);
+                        $("#telefonoBen2Input").val("");
+                        $("#correoBen2Input").val("");
+                        $("#curpBen2Input").val("");
+                    }
+
+                    if (response.beneficiarios[2]) {
+                        var nombreben3 = response.beneficiarios[2].nombre;
+                        var porcentajeben3 =
+                            response.beneficiarios[2].porcentaje;
+                        var telefonoben3 = response.beneficiarios[2].telefono;
+                        var correoben3 =
+                            response.beneficiarios[2].correo_electronico;
+                        var curpben3 = response.beneficiarios[2].curp;
+
+                        $("#nombreBen3Input").val(nombreben3);
+                        $("#porcentajeBen3Input").val(porcentajeben3);
+                        $("#telefonoBen3Input").val(telefonoben3);
+                        $("#correoBen3Input").val(correoben3);
+                        $("#curpBen3Input").val(curpben3);
+                    } else {
+                        $("#nombreBen3Input").val("");
+                        $("#porcentajeBen3Input").val(0);
+                        $("#telefonoBen3Input").val("");
+                        $("#correoBen3Input").val("");
+                        $("#curpBen3Input").val("");
+                    }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("");
+                        $("#correoBen4Input").val("");
+                        $("#curpBen4Input").val("");
+                    }
+                } else {
+                    $("#beneficiariosInput").val(1);
+                    $("#contBeneficiarios").empty();
+                    $("#contBeneficiarios").append(`
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Ingresa al beneficiario en caso de fallecimiento del cliente:
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
+                                    name="nombre-ben1" minlength="3" maxlength="255">
+                                <label for="nombreBen1Input">Nombre del beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="number" step="any" class="form-control"
+                                    placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
+                                    name="porcentaje-ben1" value="0">
+                                <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control"
+                                    placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
+                                    name="telefono-ben1" minlength="3" maxlength="100">
+                                <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">                                
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
+                                    name="correo-ben1" minlength="3" maxlength="100">
+                                <label for="correoBen1Input">Correo del beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
+                                    name="curp-ben1" minlength="3" maxlength="100">
+                                <label for="curpBen1Input">CURP del beneficiario</label>
+                            </div>
+                        </div>
+                `);
+                }
+            },
+        });
 
         $("#modalTitle").text(`Editar convenio de: ${nombrecliente}`);
         $("#btnSubmit").show();
@@ -1829,8 +2389,6 @@ $(document).ready(function () {
         }
 
         if (acc == "edit") {
-            console.log(dataInversionUS);
-            console.log($("#montoInput").val());
             if (
                 $("#statusInput").val() == "Refrendado" &&
                 dataInversionUS != $("#montoInput").val()
@@ -2376,6 +2934,584 @@ $(document).ready(function () {
                 $("#contMemoCan").removeClass("d-none");
             } else {
                 $("#contMemoCan").addClass("d-none");
+            }
+        }
+
+        //APARTADO DE BENEFICIARIOS
+        if (target.is("#beneficiariosInput")) {
+            $("#contBeneficiarios").empty();
+
+            var beneficiarios = $("#beneficiariosInput").val();
+
+            if (beneficiarios != "") {
+                for (var i = 1; i <= beneficiarios; i++) {
+                    var adjetivo = "";
+                    if (i == 1) {
+                        adjetivo = "primer";
+                    } else if (i == 2) {
+                        adjetivo = "segundo";
+                    } else if (i == 3) {
+                        adjetivo = "tercer";
+                    } else if (i == 4) {
+                        adjetivo = "cuarto";
+                    }
+                    $("#contBeneficiarios").append(`             
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                    aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Ingresa al ${adjetivo} beneficiario en caso de fallecimiento del cliente:
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input"
+                                    name="nombre-ben${i}" minlength="3" maxlength="255">
+                                <label for="nombreBen${i}Input">Nombre del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="number" step="any" class="form-control"
+                                    placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input"
+                                    name="porcentaje-ben${i}" value="0">
+                                <label for="porcentajeBen${i}Input">Porcentaje del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control"
+                                    placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input"
+                                    name="telefono-ben${i}" minlength="3" maxlength="100">
+                                <label for="telefonoBen${i}Input">Teléfono del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input style="text-transform: lowercase;" type="email" class="form-control"
+                                    placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input"
+                                    name="correo-ben${i}" minlength="3" maxlength="100">
+                                <label for="correoBen${i}Input">Correo del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
+                                    name="curp-ben${i}" minlength="3" maxlength="100">
+                                <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>
+                    `);
+                }
+
+                if (beneficiarios == 1) {
+                    $("#nombreBen1Input").keyup(function () {
+                        $("#porcentajeBen1Input").val(100);
+                    });
+                }
+
+                // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+                $("#porcentajeBen1Input").change(function () {
+                    var porcentajeben1 = parseInt(
+                        $("#porcentajeBen1Input").val()
+                    );
+
+                    if (porcentajeben1 > 100 || porcentajeben1 < 0) {
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                    } else {
+                        if (beneficiarios == 2) {
+                            var porcentajeRestante = 100 - porcentajeben1;
+                            $("#porcentajeBen2Input").val(porcentajeRestante);
+                        } else if (beneficiarios == 3) {
+                            var porcentajeRestante = (100 - porcentajeben1) / 2;
+                            $("#porcentajeBen2Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen3Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                        } else if (beneficiarios == 4) {
+                            var porcentajeRestante = (100 - porcentajeben1) / 3;
+                            $("#porcentajeBen2Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen3Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                            $("#porcentajeBen4Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                        }
+                    }
+                });
+                // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+                $("#porcentajeBen2Input").change(function () {
+                    var porcentajeben1 = parseInt(
+                        $("#porcentajeBen1Input").val()
+                    );
+                    var porcentajeben2 = parseInt(
+                        $("#porcentajeBen2Input").val()
+                    );
+                    if (porcentajeben2 > 100 || porcentajeben2 < 0) {
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                    } else {
+                        if (beneficiarios == 2) {
+                            var porcentajeRestante = 100 - porcentajeben2;
+                            $("#porcentajeBen1Input").val(
+                                porcentajeRestante.toFixed(2)
+                            );
+                        } else if (beneficiarios == 3) {
+                            var porcentajeRestante =
+                                100 - (porcentajeben1 + porcentajeben2);
+                            var sumaPorcentajes =
+                                porcentajeben1 + porcentajeben2;
+                            if (sumaPorcentajes > 100) {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben1) / 2;
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            } else {
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            }
+                        } else if (beneficiarios == 4) {
+                            var porcentajeRestante =
+                                100 - (porcentajeben1 + porcentajeben2);
+                            var sumaPorcentajes =
+                                porcentajeben1 + porcentajeben2;
+                            if (sumaPorcentajes > 100) {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben1) / 3;
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            } else {
+                                porcentajeRestante = porcentajeRestante / 2;
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            }
+                        }
+                    }
+                });
+                // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+                $("#porcentajeBen3Input").change(function () {
+                    var porcentajeben1 = parseInt(
+                        $("#porcentajeBen1Input").val()
+                    );
+                    var porcentajeben2 = parseInt(
+                        $("#porcentajeBen2Input").val()
+                    );
+                    var porcentajeben3 = parseInt(
+                        $("#porcentajeBen3Input").val()
+                    );
+
+                    if (porcentajeben3 > 100 || porcentajeben3 < 0) {
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                    } else {
+                        if (beneficiarios == 4) {
+                            // var sumaPorcentajes =
+                            //     porcentajeben1 +
+                            //     porcentajeben2 +
+                            //     porcentajeben3;
+
+                            // if (sumaPorcentajes > 100.0) {
+                            //     var porcentajeRestante =
+                            //         100 -
+                            //         (porcentajeben1 +
+                            //             porcentajeben2 +
+                            //             porcentajeben3);
+                            //     $("#porcentajeBen4Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            // } else {
+                            //     var porcentajeRestante =
+                            //         (100 - porcentajeben3) / 3;
+                            //     $("#porcentajeBen1Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            //     $("#porcentajeBen2Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            //     $("#porcentajeBen4Input").val(
+                            //         porcentajeRestante
+                            //     );
+                            // }
+                            var porcentajeRestante =
+                                100 -
+                                (porcentajeben1 +
+                                    porcentajeben2 +
+                                    porcentajeben3);
+                            var sumaPorcentajes =
+                                porcentajeben1 +
+                                porcentajeben2 +
+                                porcentajeben3;
+                            if (sumaPorcentajes > 100) {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben1) / 3;
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            } else {
+                                $("#porcentajeBen4Input").val(
+                                    porcentajeRestante.toFixed(2)
+                                );
+                            }
+                        } else {
+                            var sumaPorcentajes =
+                                porcentajeben1 +
+                                porcentajeben2 +
+                                porcentajeben3;
+
+                            if (sumaPorcentajes > 100.0) {
+                                var porcentajeRestante =
+                                    100 - (porcentajeben1 + porcentajeben2);
+                                $("#porcentajeBen3Input").val(
+                                    porcentajeRestante
+                                );
+                            } else {
+                                var porcentajeRestante =
+                                    (100 - porcentajeben3) / 2;
+                                $("#porcentajeBen1Input").val(
+                                    porcentajeRestante
+                                );
+                                $("#porcentajeBen2Input").val(
+                                    porcentajeRestante
+                                );
+                            }
+                        }
+                    }
+                });
+                // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+                $("#porcentajeBen4Input").change(function () {
+                    var porcentajeben1 = parseInt(
+                        $("#porcentajeBen1Input").val()
+                    );
+                    var porcentajeben2 = parseInt(
+                        $("#porcentajeBen2Input").val()
+                    );
+                    var porcentajeben3 = parseInt(
+                        $("#porcentajeBen3Input").val()
+                    );
+                    var porcentajeben4 = parseInt(
+                        $("#porcentajeBen4Input").val()
+                    );
+
+                    if (porcentajeben4 > 100 || porcentajeben4 < 0) {
+                        let nuevo_porcentaje = 100 / beneficiarios;
+                        $("#porcentajeBen1Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen2Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            nuevo_porcentaje.toFixed(2)
+                        );
+                    } else {
+                        var sumaPorcentajes =
+                            porcentajeben1 +
+                            porcentajeben2 +
+                            porcentajeben3 +
+                            porcentajeben4;
+
+                        if (sumaPorcentajes > 100.0) {
+                            var porcentajeRestante =
+                                100 -
+                                (porcentajeben1 +
+                                    porcentajeben2 +
+                                    porcentajeben3);
+                            $("#porcentajeBen4Input").val(porcentajeRestante);
+                        } else {
+                            var porcentajeRestante = (100 - porcentajeben4) / 3;
+                            $("#porcentajeBen1Input").val(porcentajeRestante);
+                            $("#porcentajeBen2Input").val(porcentajeRestante);
+                            $("#porcentajeBen3Input").val(porcentajeRestante);
+                        }
+                    }
+                });
+            }
+        }
+        // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+        $("#porcentajeBen1Input").change(function () {
+            var porcentajeben1 = parseInt($("#porcentajeBen1Input").val());
+
+            if (porcentajeben1 > 100 || porcentajeben1 < 0) {
+                let nuevo_porcentaje = 100 / beneficiarios;
+                $("#porcentajeBen1Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen2Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen3Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen4Input").val(nuevo_porcentaje.toFixed(2));
+            } else {
+                if (beneficiarios == 2) {
+                    var porcentajeRestante = 100 - porcentajeben1;
+                    $("#porcentajeBen2Input").val(porcentajeRestante);
+                } else if (beneficiarios == 3) {
+                    var porcentajeRestante = (100 - porcentajeben1) / 2;
+                    $("#porcentajeBen2Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                    $("#porcentajeBen3Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                } else if (beneficiarios == 4) {
+                    var porcentajeRestante = (100 - porcentajeben1) / 3;
+                    $("#porcentajeBen2Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                    $("#porcentajeBen3Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                    $("#porcentajeBen4Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                }
+            }
+        });
+        // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+        $("#porcentajeBen2Input").change(function () {
+            var porcentajeben1 = parseInt($("#porcentajeBen1Input").val());
+            var porcentajeben2 = parseInt($("#porcentajeBen2Input").val());
+            if (porcentajeben2 > 100 || porcentajeben2 < 0) {
+                let nuevo_porcentaje = 100 / beneficiarios;
+                $("#porcentajeBen1Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen2Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen3Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen4Input").val(nuevo_porcentaje.toFixed(2));
+            } else {
+                if (beneficiarios == 2) {
+                    var porcentajeRestante = 100 - porcentajeben2;
+                    $("#porcentajeBen1Input").val(
+                        porcentajeRestante.toFixed(2)
+                    );
+                } else if (beneficiarios == 3) {
+                    var porcentajeRestante =
+                        100 - (porcentajeben1 + porcentajeben2);
+                    var sumaPorcentajes = porcentajeben1 + porcentajeben2;
+                    if (sumaPorcentajes > 100) {
+                        var porcentajeRestante = (100 - porcentajeben1) / 2;
+                        $("#porcentajeBen2Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    } else {
+                        $("#porcentajeBen3Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    }
+                } else if (beneficiarios == 4) {
+                    var porcentajeRestante =
+                        100 - (porcentajeben1 + porcentajeben2);
+                    var sumaPorcentajes = porcentajeben1 + porcentajeben2;
+                    if (sumaPorcentajes > 100) {
+                        var porcentajeRestante = (100 - porcentajeben1) / 3;
+                        $("#porcentajeBen2Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    } else {
+                        porcentajeRestante = porcentajeRestante / 2;
+                        $("#porcentajeBen3Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    }
+                }
+            }
+        });
+        // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+        $("#porcentajeBen3Input").change(function () {
+            var porcentajeben1 = parseInt($("#porcentajeBen1Input").val());
+            var porcentajeben2 = parseInt($("#porcentajeBen2Input").val());
+            var porcentajeben3 = parseInt($("#porcentajeBen3Input").val());
+
+            if (porcentajeben3 > 100 || porcentajeben3 < 0) {
+                let nuevo_porcentaje = 100 / beneficiarios;
+                $("#porcentajeBen1Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen2Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen3Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen4Input").val(nuevo_porcentaje.toFixed(2));
+            } else {
+                if (beneficiarios == 4) {
+                    // var sumaPorcentajes =
+                    //     porcentajeben1 +
+                    //     porcentajeben2 +
+                    //     porcentajeben3;
+
+                    // if (sumaPorcentajes > 100.0) {
+                    //     var porcentajeRestante =
+                    //         100 -
+                    //         (porcentajeben1 +
+                    //             porcentajeben2 +
+                    //             porcentajeben3);
+                    //     $("#porcentajeBen4Input").val(
+                    //         porcentajeRestante
+                    //     );
+                    // } else {
+                    //     var porcentajeRestante =
+                    //         (100 - porcentajeben3) / 3;
+                    //     $("#porcentajeBen1Input").val(
+                    //         porcentajeRestante
+                    //     );
+                    //     $("#porcentajeBen2Input").val(
+                    //         porcentajeRestante
+                    //     );
+                    //     $("#porcentajeBen4Input").val(
+                    //         porcentajeRestante
+                    //     );
+                    // }
+                    var porcentajeRestante =
+                        100 -
+                        (porcentajeben1 + porcentajeben2 + porcentajeben3);
+                    var sumaPorcentajes =
+                        porcentajeben1 + porcentajeben2 + porcentajeben3;
+                    if (sumaPorcentajes > 100) {
+                        var porcentajeRestante = (100 - porcentajeben1) / 3;
+                        $("#porcentajeBen2Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen3Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                        $("#porcentajeBen4Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    } else {
+                        $("#porcentajeBen4Input").val(
+                            porcentajeRestante.toFixed(2)
+                        );
+                    }
+                } else {
+                    var sumaPorcentajes =
+                        porcentajeben1 + porcentajeben2 + porcentajeben3;
+
+                    if (sumaPorcentajes > 100.0) {
+                        var porcentajeRestante =
+                            100 - (porcentajeben1 + porcentajeben2);
+                        $("#porcentajeBen3Input").val(porcentajeRestante);
+                    } else {
+                        var porcentajeRestante = (100 - porcentajeben3) / 2;
+                        $("#porcentajeBen1Input").val(porcentajeRestante);
+                        $("#porcentajeBen2Input").val(porcentajeRestante);
+                    }
+                }
+            }
+        });
+        // Evento on change del porcentaje para ajustar automaticamente el porcentaje del beneficiario
+        $("#porcentajeBen4Input").change(function () {
+            var porcentajeben1 = parseInt($("#porcentajeBen1Input").val());
+            var porcentajeben2 = parseInt($("#porcentajeBen2Input").val());
+            var porcentajeben3 = parseInt($("#porcentajeBen3Input").val());
+            var porcentajeben4 = parseInt($("#porcentajeBen4Input").val());
+
+            if (porcentajeben4 > 100 || porcentajeben4 < 0) {
+                let nuevo_porcentaje = 100 / beneficiarios;
+                $("#porcentajeBen1Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen2Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen3Input").val(nuevo_porcentaje.toFixed(2));
+                $("#porcentajeBen4Input").val(nuevo_porcentaje.toFixed(2));
+            } else {
+                var sumaPorcentajes =
+                    porcentajeben1 +
+                    porcentajeben2 +
+                    porcentajeben3 +
+                    porcentajeben4;
+
+                if (sumaPorcentajes > 100.0) {
+                    var porcentajeRestante =
+                        100 -
+                        (porcentajeben1 + porcentajeben2 + porcentajeben3);
+                    $("#porcentajeBen4Input").val(porcentajeRestante);
+                } else {
+                    var porcentajeRestante = (100 - porcentajeben4) / 3;
+                    $("#porcentajeBen1Input").val(porcentajeRestante);
+                    $("#porcentajeBen2Input").val(porcentajeRestante);
+                    $("#porcentajeBen3Input").val(porcentajeRestante);
+                }
+            }
+        });
+        var beneficiarios = $("#beneficiariosInput").val();
+        if (beneficiarios == 1) {
+            let nombreBeneficiario = $("#nombreBen1Input").val();
+            if (
+                target.is("#nombreBen1Input") ||
+                nombreBeneficiario.length > 0
+            ) {
+                $("#porcentajeBen1Input").val(100);
             }
         }
     });

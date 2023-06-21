@@ -132,9 +132,9 @@
                     <span style="text-decoration: underline">{{ \Carbon\Carbon::parse(strtotime($convenio[0]->fecha_inicio))->formatLocalized('%d de %B de %Y') }}</span>,
                     quedando de acuerdo, después de haber leído cada uno de los puntos o cláusulas descritas, no quedando ningún punto por aclarar o entender. Siendo así que ambas partes se sujetan a lo dispuesto y conveniado.
                     <br>
-                    @if (!empty($holograma2))
+                    {{-- @if (!empty($holograma2))
                         <span>Número de autorización: <span style="color: #0070c0 !important">{{$holograma2}}</span></span>
-                    @endif
+                    @endif --}}
                 </p>
             </li>
         </ol>

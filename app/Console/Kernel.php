@@ -8,6 +8,7 @@ use App\Models\Pendiente;
 use App\Models\Contrato;
 use App\Models\Amortizacion;
 use App\Models\PagoCliente;
+use App\Models\Ticket;
 use App\Models\Cliente;
 use App\Models\PagoPS;
 use Carbon\Carbon;
@@ -72,6 +73,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -201,6 +214,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
+
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -328,6 +353,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -457,6 +494,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
+
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -585,6 +634,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
+
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -712,6 +773,18 @@ class Kernel extends ConsoleKernel
                 $contratoRef = intval($contratoAct[2]) + 1;
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
+
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Sistemas";
+                $ticket->asunto = "Contrato refrendado para imprimir";
+                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
+                $ticket->status = "Abierto";
+                $ticket->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;

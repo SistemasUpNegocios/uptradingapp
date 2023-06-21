@@ -80,8 +80,8 @@
                     <h5 class="modal-title" id="modalTitle">Añadir convenio</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="convenioForm" method="post">
+                <form id="convenioForm" method="post">
+                    <div class="modal-body">
                         @csrf
                         <input type="hidden" name="id" id="idInput">
                         <div id="contPagos"></div>
@@ -294,12 +294,25 @@
                                 </div>
                             </div>
                         </div>
-                </div>
-                <div id="alertMessage"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn principal-button" id="btnSubmit">Añadir convenio</button>
-                </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3">
+                                    <select class="form-control" id="beneficiariosInput">
+                                        <option value="1" selected>1 beneficiario</option>
+                                        <option value="2">2 beneficiarios</option>
+                                        <option value="3">3 beneficiarios</option>
+                                    </select>
+                                    <label for="invitadoInput">Número de beneficiarios</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="contBeneficiarios"></div>
+                    </div>
+                    <div id="alertMessage"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn principal-button" id="btnSubmit">Añadir convenio</button>
+                    </div>
                 </form>
             </div>
         </div>
