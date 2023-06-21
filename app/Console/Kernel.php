@@ -77,7 +77,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -85,6 +85,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -217,7 +224,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -225,6 +232,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -357,7 +371,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -365,6 +379,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -497,7 +518,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -505,6 +526,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -637,7 +665,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -645,6 +673,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
@@ -777,7 +812,7 @@ class Kernel extends ConsoleKernel
                 // Crear ticket
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
-                $ticket->asignado_a = "1".','.Carbon::now()->toDateTimeString();
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
                 $ticket->departamento = "Sistemas";
@@ -785,6 +820,13 @@ class Kernel extends ConsoleKernel
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
                 $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
 
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
