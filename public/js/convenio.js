@@ -1445,7 +1445,7 @@ $(document).ready(function () {
         $("#beneficiariosInput").prop("disabled", true);
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiarios",
+            url: "/admin/getBeneficiariosConvenio",
             data: {
                 id: id,
             },
@@ -1792,7 +1792,7 @@ $(document).ready(function () {
         $("#beneficiariosInput").prop("disabled", false);
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiarios",
+            url: "/admin/getBeneficiariosConvenio",
             data: {
                 id: id,
             },
