@@ -226,7 +226,6 @@ class AgendaController extends Controller
         $log->tabla = "Agenda";
         $log->id_tabla = $agenda_id;
         $log->bitacora_id = $bitacora_id;
-
         if ($log->save()) {
             Agenda::destroy($request->id);
         }
