@@ -78,7 +78,7 @@ class ContratoVencerController extends Controller
         $contrato->save();
 
         $contrato_completo = Contrato::join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
-            ->select(DB::raw("CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS cliente"))
+            ->select(DB::raw("CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS cliente, fecha_renovacion"))
             ->where("contrato.id", $contrato->id)
             ->first();
 
@@ -97,7 +97,7 @@ class ContratoVencerController extends Controller
         $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
         $ticket->departamento = "Egresos";
         $ticket->asunto = "Nota de contrato a vencer";
-        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.";
+        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.\nFecha de termino: $contrato_completo->fecha_renovacion.";
         $ticket->status = "Abierto";
         $ticket->save();
 

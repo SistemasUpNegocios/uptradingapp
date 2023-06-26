@@ -101,13 +101,13 @@
 
     @if($reporte == "liquidacion")
       <div class="mt-5">
-        <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
+        <p style="font-size: 14px; !important; line-height: 15px !important; color: #000; text-align: justify;">
           <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra }} {{ $centavos_num }}), por concepto de pago de liquidación del contrato mensual {{ $contrato }} de fecha {{ $fecha_inicial }}, cuya inversión fue de ${{ $inversion_dolares }} dólares ({{ $inversion_letra }} {{ $inversion_centavos }}) y al término del contrato el día {{ $fecha }} se reintegra la inversión, y se paga al tipo de cambio a este día, sin que al momento exista algún adeudo.
         </p>
       </div>
     @elseif($reporte == "mensual")
       <div class="mt-5">
-        <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
+        <p style="font-size: 14px; !important; line-height: 15px !important; color: #000; text-align: justify;">
           <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{$total_dolares}} dólares ({{$letra_total}} {{$total_centavos}}) al tipo de cambio del día de hoy ${{$dolares}} son <b><u>${{ $rendimiento }} M.N. ({{ $letra}} {{ $centavos_num }})</u></b>, por concepto de pago de rendimiento del día {{ $fecha }} en relación con el contrato {{ $contrato }}, sin que al momento exista algún adeudo.
         </p>
       </div>
@@ -205,7 +205,7 @@
     @endphp
 
     <div class="mt-5">
-      <p style="font-size: 15px; !important; line-height: 15px !important; color: #000">
+      <p style="font-size: 15px; !important; line-height: 15px !important; color: #000; text-align: justify;">
         <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{ $rendimiento }} M.N. ({{ $letra }} {{ $centavos_num }}), por concepto de pago de rendimiento y liquidación del contrato compuesto {{ $contrato }} de fecha {{ $fecha_inicial }}, cuya inversión inicial fue de ${{ $inversion_dolares }} dólares ({{ $inversion_letra }} {{ $inversion_centavos }}) y al término del contrato el día {{ $fecha }} se reintegra la inversión junto con el rendimiento por un total de ${{ $total_dolares }} dólares ({{ $total_letra }} {{ $total_centavos }}), la cual se paga al tipo de cambio a este día, sin que al momento exista algún adeudo.
       </p>
     </div>
