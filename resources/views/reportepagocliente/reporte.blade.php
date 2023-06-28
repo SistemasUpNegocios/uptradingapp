@@ -108,7 +108,7 @@
     @elseif($reporte == "mensual")
       <div class="mt-5">
         <p style="font-size: 14px; !important; line-height: 15px !important; color: #000; text-align: justify;">
-          <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de ${{$total_dolares}} dólares ({{$letra_total}} {{$total_centavos}}) al tipo de cambio del día de hoy ${{$dolares}} son <b><u>${{ $rendimiento }} M.N. ({{ $letra}} {{ $centavos_num }})</u></b>, por concepto de pago de rendimiento del día {{ $fecha }} en relación con el contrato {{ $contrato }}, sin que al momento exista algún adeudo.
+          <span style="margin-left: 30px;">Yo,</span> {{ $cliente }}, recibo la cantidad de <u>${{ $rendimiento }} M.N.</u> ({{ $letra}} {{ $centavos_num }}), por concepto de pago de rendimiento mensual del día {{ $fecha }} en relación con el contrato {{ $contrato }} correspondiente a ${{$total_dolares}} dólares ({{$letra_total}} {{$total_centavos}}), al tipo de cambio ${{$dolares}}, sin que al momento exista algún adeudo.
         </p>
       </div>
     @endif
