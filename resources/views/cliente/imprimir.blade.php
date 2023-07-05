@@ -28,12 +28,16 @@
 <body class="contrato_imprimir">
     <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
 
-    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 10rem !important; padding-bottom: 3rem !important;">
+    <div style="padding-top: 6rem" class="text-center">
+        <p style="font-size: 16px;"><b>CLIENTES CON CUENTA MAM</b></p>
+    </div>
+
+    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; ">
         <thead>
             <tr>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Nombre del cliente</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Número de cuenta</th>
-                <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Monto (USD)</th>
+                <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">Monto (USD)</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Fecha de inicio</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Incremento</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Fecha de incremento</th>
