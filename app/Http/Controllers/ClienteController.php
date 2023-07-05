@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Http;
 use App\Models\Formulario;
+use App\Models\Convenio;
 use App\Models\Log;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -21,6 +22,7 @@ use PHPMailer\PHPMailer\Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SwissEmail;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class ClienteController extends Controller
 {
@@ -663,7 +665,7 @@ class ClienteController extends Controller
                                         line-height: 1.2;
                                     }
 
-                                    @media (max-width: 500px) {
+@media(max-width: 500px) {
                                         .contenido_mensaje_texto{
                                             padding-left: 0px;
                                             padding-right: 0px;
@@ -771,4 +773,26 @@ class ClienteController extends Controller
           
         return response()->json(['data']);
     }
+
+    public function getCuenta()
+    {
+        $cliente = Convenio::join("cliente", "cliente.id", "=", "convenio.cliente_id")
+        ->select("convenio.id as convenioid", "cliente.nombre", "cliente.apellido_p", "cliente.apellido_m", "convenio.numerocuenta", "convenio.monto", "convenio.fecha_inicio", "convenio.cliente_id")
+        ->groupBy('convenio.cliente_id')
+        ->orderBy("convenio.cliente_id", "ASC")
+        ->get();
+
+        $data = array(
+            "informacion" => $cliente,
+        );
+
+        $pdf = PDF::loadView('cliente.imprimir', $data)->setPaper('letter', 'landscape');
+        
+        $fecha = Carbon::now()->formatLocalized('%d de %B de %Y');
+        $nombreDescarga = "Clientes y su IBAN hasta el día $fecha.pdf";
+
+        return $pdf->stream($nombreDescarga);
+        
+    }
+
 }

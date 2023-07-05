@@ -292,6 +292,12 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".cuenta_mam", function (e) {
+        e.preventDefault();
+
+        window.open(`/admin/getCuenta`, "_blank");
+    });
+
     $(document).on("click", ".new", function (e) {
         $("#clienteForm")[0].reset();
 

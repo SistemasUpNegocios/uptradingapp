@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Foraneos</h5>
                     <p class="card-text">Presiona el botón para ver los PS foraneos.</p>
-                    <a href="#" id="foraneos" class="btn btn-sm principal-button">Ver foraneos</a>
+                    <a href="#" data-id="0" id="foraneos" class="btn btn-sm principal-button verOficina">Ver foraneos</a>
                 </div>
             </div>
         </div>
