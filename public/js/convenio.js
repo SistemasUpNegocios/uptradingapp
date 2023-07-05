@@ -1145,12 +1145,6 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function () {
-                let folio = $("#folioInput").val();
-                let estatus = $("#statusInput").val();
-                if (estatus == "Activado") {
-                    $("option:selected", "#statusInput").prop("disabled", true);
-                }
-
                 $("#formModal").modal("hide");
                 $("#convenioForm")[0].reset();
                 table.ajax.reload(null, false);
@@ -1276,6 +1270,7 @@ $(document).ready(function () {
         $("#montoLetraInput").prop("readonly", false);
         $("#statusInput").prop("disabled", false);
         $("#numeroCuentaInput").prop("readonly", false);
+        $("#logginInput").prop("readonly", false);
         $("#modifySwitch").prop("disabled", false);
         $("#beneficiariosInput").prop("disabled", false);
 
@@ -1359,6 +1354,7 @@ $(document).ready(function () {
         var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
         var numerocuenta = $(this).data("numerocuenta");
+        var loggin = $(this).data("loggin");
         var ps_id = $(this).data("ps_id");
         var cliente_id = $(this).data("cliente_id");
         var banco_id = $(this).data("banco_id");
@@ -1430,6 +1426,9 @@ $(document).ready(function () {
 
         $("#numeroCuentaInput").val(numerocuenta);
         $("#numeroCuentaInput").prop("readonly", true);
+
+        $("#logginInput").val(loggin);
+        $("#logginInput").prop("readonly", true);
 
         $("#psIdInput").val(ps_id);
         $("#psIdInput").prop("disabled", true);
@@ -1698,6 +1697,7 @@ $(document).ready(function () {
         var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
         var numerocuenta = $(this).data("numerocuenta");
+        var loggin = $(this).data("loggin");
         var ps_id = $(this).data("ps_id");
         var cliente_id = $(this).data("cliente_id");
         var psnombre = $(this).data("psnombre");
@@ -1777,6 +1777,9 @@ $(document).ready(function () {
 
         $("#numeroCuentaInput").val(numerocuenta);
         $("#numeroCuentaInput").prop("readonly", false);
+
+        $("#logginInput").val(loggin);
+        $("#logginInput").prop("readonly", false);
 
         $("#psIdInput").val(ps_id);
         $("#psIdInput").prop("disabled", false);
