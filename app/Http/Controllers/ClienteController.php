@@ -778,6 +778,7 @@ class ClienteController extends Controller
     {
         $cliente = Convenio::join("cliente", "cliente.id", "=", "convenio.cliente_id")
         ->select("convenio.id as convenioid", "cliente.nombre", "cliente.apellido_p", "cliente.apellido_m", "convenio.numerocuenta", "convenio.monto", "convenio.fecha_inicio", "convenio.cliente_id", "convenio.loggin")
+        ->where("convenio.id", "!=", 39)
         ->groupBy('convenio.cliente_id')
         ->orderBy("convenio.cliente_id", "ASC")
         ->get();
