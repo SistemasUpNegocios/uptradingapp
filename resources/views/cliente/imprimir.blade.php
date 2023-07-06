@@ -70,13 +70,19 @@
                     }elseif($periodo == 0){
                         $periodo = 1;
                     }
+
+                    if($info->loggin == "" || $info->loggin == NULL){
+                        $loggin = "NA";
+                    }else{
+                        $loggin = $info->loggin;
+                    }
                 @endphp
                 <tr>
                     <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         {{ $info->nombre }} {{ $info->apellido_p }} {{ $info->apellido_m }}
                     </td>
                     <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">{{ $info->numerocuenta }}</td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">{{ $info->loggin }}</td>
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">{{ $loggin }}</td>
                     <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">${{ number_format($info->monto, 2) }}</td>
                     <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         {{ \Carbon\Carbon::parse($info->fecha_inicio)->format("d/m/Y") }}
