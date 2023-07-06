@@ -37,11 +37,13 @@
             <tr>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Nombre del cliente</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Número de cuenta</th>
+                <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Loggin</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">Monto (USD)</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Fecha de inicio</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Incremento</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Fecha de incremento</th>
                 <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Monto incrementado</th>
+                <th data-priority="0" scope="col" style="vertical-align: middle !important; font-size: 13px !important; padding: 0 5px !important;">Periodo</th>
             </tr>
         </thead>
         <tbody id="resuemnBody">
@@ -54,32 +56,50 @@
                     $incrementos_count = \App\Models\IncrementoConvenio::select()
                     ->where('convenio_id', $info->convenioid)
                     ->count();
+
+                    $mes = \Carbon\Carbon::parse($info->fecha_inicio)->format("m");
+                    $anio = \Carbon\Carbon::parse($info->fecha_inicio)->format("Y");
+
+                    $fecha_inicio = \Carbon\Carbon::parse("01-$mes-$anio");
+                    $fecha_actual = \Carbon\Carbon::now();
+
+                    $periodo = $fecha_actual->diffInMonths($fecha_inicio);
+                    
+                    if($periodo > 12){
+                        $periodo = 12;
+                    }elseif($periodo == 0){
+                        $periodo = 1;
+                    }
                 @endphp
                 <tr>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; text-align: left !important; padding-left: 10px !important;">
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         {{ $info->nombre }} {{ $info->apellido_p }} {{ $info->apellido_m }}
                     </td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">{{ $info->numerocuenta }}</td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">${{ number_format($info->monto, 2) }}</td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">{{ $info->numerocuenta }}</td>
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">{{ $info->loggin }}</td>
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">${{ number_format($info->monto, 2) }}</td>
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         {{ \Carbon\Carbon::parse($info->fecha_inicio)->format("d/m/Y") }}
                     </td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         @if ($incrementos_count > 0) SI @else NO @endif
                     </td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         @if ($incrementos_count > 0)
                             {{\Carbon\Carbon::parse($incrementos->fecha_inicio_incremento)->format("d/m/Y")}}
                         @else
                             NA
                         @endif
                     </td>
-                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 0 10px !important;">
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
                         @if ($incrementos_count > 0)
                             ${{number_format($incrementos->cantidad_incremento, 2)}}
                         @else
                             NA
                         @endif
+                    </td>
+                    <td style="vertical-align: middle !important; font-size: 13px !important; padding: 5px 10px !important;">
+                        {{$periodo}}/12
                     </td>
                 </tr>
             @endforeach
