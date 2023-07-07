@@ -1829,7 +1829,7 @@ $(document).ready(function () {
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
         $("#wiseInput").prop("disabled", false);
-        $("#hsbcInput").prop("disabled", true);
+        $("#hsbcInput").prop("disabled", false);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
@@ -2735,7 +2735,7 @@ $(document).ready(function () {
         $("#transferenciaMXInput").prop("disabled", false);
         $("#ciBankInput").prop("disabled", false);
         $("#wiseInput").prop("disabled", false);
-        $("#hsbcInput").prop("disabled", true);
+        $("#hsbcInput").prop("disabled", false);
         $("#renovacionInput").prop("disabled", false);
         $("#rendimientosInput").prop("disabled", false);
         $("#comisionesInput").prop("disabled", false);
@@ -4792,7 +4792,7 @@ $(document).ready(function () {
             "#montoWiseCont",
             "#montoHSBCCont",
             "#montoRenovacionCont",
-            "montoRendimientosCont",
+            "#montoRendimientosCont",
             "#montoComisionesCont",
             "#montoBitsoCont",
         ];
@@ -4805,7 +4805,7 @@ $(document).ready(function () {
             "#referenciaWiseCont",
             "#referenciaHSBCCont",
             "#referenciaRenovacionCont",
-            "referenciaRendimientosCont",
+            "#referenciaRendimientosCont",
             "#referenciaComisionesCont",
             "#referenciaBitsoCont",
         ];
@@ -4847,7 +4847,7 @@ $(document).ready(function () {
                                     $("#referenciaTransMXPOOLInput").val(ref);
                                 } else if (
                                     contsRef[j] == "#referenciaHSBCCont" &&
-                                    tipo == "HSBC"
+                                    tipo == "Santander"
                                 ) {
                                     $("#referenciaHSBCCont").show();
                                     $("#referenciaHSBCInput").val(ref);
@@ -4883,7 +4883,7 @@ $(document).ready(function () {
         $("#referenciaTransMXPOOLCont").hide();
         $("#referenciaHSBCCont").hide();
         $("#referenciaWiseCont").hide();
-
+        //rendimientos no sale
         $("#montoEfectivoInput").prop("required", false);
         $("#montoTransSwissPOOLInput").prop("required", false);
         $("#montoTransMXPOOLInput").prop("required", false);

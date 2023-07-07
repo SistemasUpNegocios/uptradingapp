@@ -298,6 +298,12 @@ $(document).ready(function () {
         window.open(`/admin/getCuenta`, "_blank");
     });
 
+    $(document).on("click", "#exportarCuentasMam", function (e) {
+        e.preventDefault();
+
+        window.open(`/admin/exportarCuentasMam`);
+    });
+
     $(document).on("click", ".new", function (e) {
         $("#clienteForm")[0].reset();
 

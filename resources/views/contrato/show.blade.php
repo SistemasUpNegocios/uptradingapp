@@ -423,8 +423,8 @@
                                     <label class="form-check-label" for="wiseInput">Wise</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]" value="HSBC">
-                                    <label class="form-check-label" for="hsbcInput">HSBC</label>
+                                    <input class="form-check-input" type="checkbox" id="hsbcInput" name="tipo_pago[]" value="Santander">
+                                    <label class="form-check-label" for="hsbcInput">Santander</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="renovacionInput" name="tipo_pago[]" value="renovacion">
@@ -504,14 +504,14 @@
                             
                             <div class="col-md-6 col-12" id="montoHSBCCont">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en HSBC" id="montoHSBCInput" name="monto_pago[]">
-                                    <label for="montoHSBCInput">Monto en HSBC</label>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el monto en Santander" id="montoHSBCInput" name="monto_pago[]">
+                                    <label for="montoHSBCInput">Monto en Santander</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12" id="referenciaHSBCCont">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de HSBC" id="referenciaHSBCInput" name="referencia_pago[]">
-                                    <label for="referenciaHSBCInput">Referencia de HSBC</label>
+                                    <input type="text" class="form-control" placeholder="Ingresa la referencia de Santander" id="referenciaHSBCInput" name="referencia_pago[]">
+                                    <label for="referenciaHSBCInput">Referencia de Santander</label>
                                 </div>
                             </div>
                             

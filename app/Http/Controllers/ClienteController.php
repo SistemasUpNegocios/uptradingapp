@@ -23,6 +23,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SwissEmail;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Exports\CuentasMam;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClienteController extends Controller
 {
@@ -794,6 +796,12 @@ class ClienteController extends Controller
 
         return $pdf->stream($nombreDescarga);
         
+    }
+
+    public function export()
+    {
+        $fecha = Carbon::now()->formatLocalized('%d de %B de %Y');
+        return Excel::download(new CuentasMam(), "Cuentas Mam al día $fecha.xlsx");
     }
 
 }
