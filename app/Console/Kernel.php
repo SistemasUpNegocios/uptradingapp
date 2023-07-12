@@ -81,7 +81,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Procesos";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
@@ -228,7 +228,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Sistemas";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
@@ -375,7 +375,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Sistemas";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
@@ -522,7 +522,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Sistemas";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
@@ -669,7 +669,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Sistemas";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
@@ -816,7 +816,7 @@ class Kernel extends ConsoleKernel
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
                 $ticket->fecha_generado = Carbon::now()->toDateTimeString();
                 $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Sistemas";
+                $ticket->departamento = "Administración";
                 $ticket->asunto = "Contrato refrendado para imprimir";
                 $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
                 $ticket->status = "Abierto";
