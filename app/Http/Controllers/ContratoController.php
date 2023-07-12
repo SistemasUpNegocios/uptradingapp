@@ -679,7 +679,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_limite;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $capertura), 2));
+                        $pagops->pago = round(($pago * $capertura), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión por apertura';
                         $pagops->tipo_pago = 'Pendiente';
@@ -694,7 +694,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $cmensual), 2));
+                        $pagops->pago = round(($pago * $cmensual), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión mensual';
                         $pagops->tipo_pago = 'Pendiente';
@@ -709,7 +709,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $cmensual), 2));
+                        $pagops->pago = round(($pago * $cmensual), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión mensual';
                         $pagops->tipo_pago = 'Pendiente';
@@ -798,7 +798,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $capertura), 2));
+                        $pagops->pago = round(($pago * $capertura), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión por apertura';
                         $pagops->tipo_pago = 'Pendiente';
@@ -813,7 +813,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $cmensual), 2));
+                        $pagops->pago = round(($pago * $cmensual), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión mensual';
                         $pagops->tipo_pago = 'Pendiente';
@@ -828,7 +828,7 @@ class ContratoController extends Controller
                         $pagops->serie = ($i + 1);
                         $pagops->fecha_pago = $fecha_pago;
                         $pagops->fecha_limite = $fecha_limite;
-                        $pagops->pago = floatval(number_format(($pago * $cmensual), 2));
+                        $pagops->pago = round(($pago * $cmensual), 2);
                         $pagops->status = 'Pendiente';
                         $pagops->memo = 'Comisión mensual';
                         $pagops->tipo_pago = 'Pendiente';
