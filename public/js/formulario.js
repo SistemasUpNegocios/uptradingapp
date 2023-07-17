@@ -396,6 +396,26 @@ $(document).ready(function () {
         $("#origenDinero").prop("disabled", false);
         $("#psInput").prop("disabled", false);
 
+        $("#ineDocumentoInput").prop("disabled", false);
+        $("#pasaporteDocumentoInput").prop("disabled", false);
+        $("#comprobanteDomicilioInput").prop("disabled", false);
+
+        $("#ineDocumentoDesc").prop("disabled", false);
+        $("#pasaporteDocumentoDesc").prop("disabled", false);
+        $("#comprobanteDomicilioDesc").prop("disabled", false);
+
+        $("#ineDocumentoInput").removeClass("is-valid");
+        $("#ineDocumentoInput").removeClass("is-invalid");
+        $("#ineDocumentoDesc").addClass("d-none");
+
+        $("#pasaporteDocumentoInput").removeClass("is-valid");
+        $("#pasaporteDocumentoInput").removeClass("is-invalid");
+        $("#pasaporteDocumentoDesc").addClass("d-none");
+
+        $("#comprobanteDomicilioInput").removeClass("is-valid");
+        $("#comprobanteDomicilioInput").removeClass("is-invalid");
+        $("#comprobanteDomicilioDesc").addClass("d-none");
+
         $("#modalTitle").text("Formulario de cuenta Forex");
         $("#btnSubmit").text("Agregar cuenta Forex");
 
@@ -443,7 +463,6 @@ $(document).ready(function () {
         var correoi = $(this).data("correoi");
         var fueramexico = $(this).data("fueramexico");
         var situacionlaboral = $(this).data("situacionlaboral");
-        console.log(situacionlaboral);
         var nombredireccion = $(this).data("nombredireccion");
         var giroempresa = $(this).data("giroempresa");
         var puesto = $(this).data("puesto");
@@ -556,6 +575,16 @@ $(document).ready(function () {
 
         $("#trabajoFueraSiInput").prop("disabled", true);
         $("#trabajoFueraNoInput").prop("disabled", true);
+
+        $("#ineDocumentoInput").prop("disabled", true);
+        $("#pasaporteDocumentoInput").prop("disabled", true);
+        $("#comprobanteDomicilioInput").prop("disabled", true);
+
+        $("#ineDocumentoDesc").prop("disabled", true);
+        $("#pasaporteDocumentoDesc").prop("disabled", true);
+        $("#comprobanteDomicilioDesc").prop("disabled", true);
+
+        documentosClientes(this);
 
         if (fueramexico == "SI") {
             $("#trabajoFueraSiInput").val(fueramexico);
@@ -807,6 +836,16 @@ $(document).ready(function () {
         $("#solteroInput").prop("disabled", false);
         $("#casadoInput").prop("disabled", false);
         $("#concubinatoInput").prop("disabled", false);
+
+        $("#ineDocumentoInput").prop("disabled", false);
+        $("#pasaporteDocumentoInput").prop("disabled", false);
+        $("#comprobanteDomicilioInput").prop("disabled", false);
+
+        $("#ineDocumentoDesc").prop("disabled", false);
+        $("#pasaporteDocumentoDesc").prop("disabled", false);
+        $("#comprobanteDomicilioDesc").prop("disabled", false);
+
+        documentosClientes(this);
 
         if (estadocivil == "SOLTERO") {
             $("#solteroInput").val(estadocivil);
@@ -1327,6 +1366,148 @@ $(document).ready(function () {
             $("#especifiqueInput").prop("readonly", false);
         }
     };
+
+    const documentosClientes = (thiss) => {
+        var codigocliente = $(thiss).data("codigocliente");
+        codigocliente = codigocliente.split("-");
+        codigocliente = `${codigocliente[1]}-${codigocliente[2]}`;
+        var inedocumento = $(thiss).data("inedocumento");
+        var pasaportedocumento = $(thiss).data("pasaportedocumento");
+        var comprobantedomicilio = $(thiss).data("comprobantedomicilio");
+
+        if (inedocumento.length > 0) {
+            $("#ineDocumentoInput").addClass("is-valid");
+            $("#ineDocumentoInput").removeClass("is-invalid");
+
+            $("#ineDocumentoDesc").attr("download", `${inedocumento}`);
+            $("#ineDocumentoDesc").attr(
+                "href",
+                `../documentos/formulario/${codigocliente}/${inedocumento}`
+            );
+            $("#ineDocumentoDesc").removeClass("d-none");
+        } else {
+            $("#ineDocumentoInput").addClass("is-invalid");
+            $("#ineDocumentoInput").removeClass("is-valid");
+
+            $("#ineDocumentoDesc").addClass("d-none");
+        }
+
+        if (pasaportedocumento.length > 0) {
+            $("#pasaporteDocumentoInput").addClass("is-valid");
+            $("#pasaporteDocumentoInput").removeClass("is-invalid");
+
+            $("#pasaporteDocumentoDesc").attr(
+                "download",
+                `${pasaportedocumento}`
+            );
+            $("#pasaporteDocumentoDesc").attr(
+                "href",
+                `../documentos/formulario/${codigocliente}/${pasaportedocumento}`
+            );
+            $("#pasaporteDocumentoDesc").removeClass("d-none");
+        } else {
+            $("#pasaporteDocumentoInput").addClass("is-invalid");
+            $("#pasaporteDocumentoInput").removeClass("is-valid");
+
+            $("#pasaporteDocumentoDesc").addClass("d-none");
+        }
+
+        if (comprobantedomicilio.length > 0) {
+            $("#comprobanteDomicilioInput").addClass("is-valid");
+            $("#comprobanteDomicilioInput").removeClass("is-invalid");
+
+            $("#comprobanteDomicilioDesc").attr(
+                "download",
+                `${comprobantedomicilio}`
+            );
+            $("#comprobanteDomicilioDesc").attr(
+                "href",
+                `../documentos/formulario/${codigocliente}/${comprobantedomicilio}`
+            );
+            $("#comprobanteDomicilioDesc").removeClass("d-none");
+        } else {
+            $("#comprobanteDomicilioInput").addClass("is-invalid");
+            $("#comprobanteDomicilioInput").removeClass("is-valid");
+
+            $("#comprobanteDomicilioDesc").addClass("d-none");
+        }
+    };
+
+    const validarExtension = (file, input) => {
+        var extensiones =
+            /(.png|.jpg|.jpeg|.pdf|.jfif|.PNG|.JPG|.JPEG|.PDF|.JFIF)$/i;
+        if (!extensiones.exec(file)) {
+            Swal.fire({
+                icon: "error",
+                title: '<h1 style="font-family: Poppins; font-weight: 700;">Extensión invalida</h1>',
+                html: `<p style="font-family: Poppins">Las extensiones permitidas son: <b>png, jpg, jpeg, pdf y jfif</b></p>`,
+                confirmButtonText:
+                    '<a style="font-family: Poppins">Aceptar</a>',
+                confirmButtonColor: "#01bbcc",
+            });
+
+            $(input).val("");
+            $(input).removeClass("is-valid");
+
+            return false;
+        } else {
+            let ext = file.split(".");
+            return ext[ext.length - 1];
+        }
+    };
+
+    $("#ineDocumentoInput").change(function () {
+        let datatarget = $(`.${acc}`).data("inedocumento");
+        if ($("#ineDocumentoInput")[0].files[0]?.name) {
+            $("#ineDocumentoInput").removeClass("is-invalid");
+            $("#ineDocumentoInput").addClass("is-valid");
+            validarExtension(
+                $("#ineDocumentoInput").val(),
+                "#ineDocumentoInput"
+            );
+        } else {
+            if (datatarget < 1) {
+                $("#ineDocumentoInput").removeClass("is-valid");
+                $("#ineDocumentoInput").addClass("is-invalid");
+            }
+        }
+    });
+
+    $("#pasaporteDocumentoInput").change(function () {
+        let datatarget = $(`.${acc}`).data("pasaportedocumento");
+
+        if ($("#pasaporteDocumentoInput")[0].files[0]?.name) {
+            $("#pasaporteDocumentoInput").removeClass("is-invalid");
+            $("#pasaporteDocumentoInput").addClass("is-valid");
+            validarExtension(
+                $("#pasaporteDocumentoInput").val(),
+                "#pasaporteDocumentoInput"
+            );
+        } else {
+            if (datatarget < 1) {
+                $("#pasaporteDocumentoInput").removeClass("is-valid");
+                $("#pasaporteDocumentoInput").addClass("is-invalid");
+            }
+        }
+    });
+
+    $("#comprobanteDomicilioInput").change(function () {
+        let datatarget = $(`.${acc}`).data("comprobantedomicilio");
+
+        if ($("#comprobanteDomicilioInput")[0].files[0]?.name) {
+            $("#comprobanteDomicilioInput").removeClass("is-invalid");
+            $("#comprobanteDomicilioInput").addClass("is-valid");
+            validarExtension(
+                $("#comprobanteDomicilioInput").val(),
+                "#comprobanteDomicilioInput"
+            );
+        } else {
+            if (datatarget < 1) {
+                $("#comprobanteDomicilioInput").removeClass("is-valid");
+                $("#comprobanteDomicilioInput").addClass("is-invalid");
+            }
+        }
+    });
 });
 
 $(".table").addClass("compact nowrap w-100");

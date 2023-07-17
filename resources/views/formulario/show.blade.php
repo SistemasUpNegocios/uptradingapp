@@ -94,13 +94,14 @@
                     <form id="formularioForm" method="post">
                         @csrf
                         <input type="hidden" name="id" id="idInput">
+                        
                         <div class="col-12">
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    INFORMACIÓN PERSONAL:
+                                    INFORMACIÓN PERSONAL
                                 </div>
                             </div>
                         </div>
@@ -186,13 +187,48 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-12">
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    INFORMACIÓN LEGAL:
+                                    DOCUMENTOS
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label for="ineDocumentoInput" class="form-label">INE (documento)</label>
+                                    <a id="ineDocumentoDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
+                                </div>
+                                <input type="file" id="ineDocumentoInput" class="form-control form-control-sm" name="ine_documento">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label for="pasaporteDocumentoInput" class="form-label">Pasaporte (documento)</label>
+                                    <a id="pasaporteDocumentoDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
+                                </div>
+                                <input type="file" id="pasaporteDocumentoInput" class="form-control form-control-sm" name="pasaporte_documento">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label for="comprobanteDomicilioInput" class="form-label">Comprobante de domicilio</label>
+                                    <a id="comprobanteDomicilioDesc" class="d-none fs-5 text-secondary"><i class="bi bi-download"></i></a>
+                                </div>
+                                <input type="file" id="comprobanteDomicilioInput" class="form-control form-control-sm" name="comprobante_domicilio">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    INFORMACIÓN LEGAL
                                 </div>
                             </div>
                         </div>
@@ -245,7 +281,7 @@
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    INFORMACIÓN DE CONTACTO:
+                                    INFORMACIÓN DE CONTACTO
                                 </div>
                             </div>
                         </div>
@@ -270,7 +306,7 @@
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    PERFIL DEL CLIENTE:
+                                    PERFIL DEL CLIENTE
                                 </div>
                             </div>
                         </div>
@@ -552,7 +588,7 @@
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    INFORMACIÓN DE LA INVERSIÓN:
+                                    INFORMACIÓN DE LA INVERSIÓN
                                 </div>
                             </div>
                         </div>
@@ -576,7 +612,7 @@
                                     <use xlink:href="#info-fill" />
                                 </svg>
                                 <div>
-                                    INFORMACIÓN DEL PS:
+                                    INFORMACIÓN DEL PS
                                 </div>
                             </div>
                         </div>

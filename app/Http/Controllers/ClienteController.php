@@ -50,7 +50,7 @@ class ClienteController extends Controller
     {
         $codigo = session('codigo_oficina');
         $numeroCliente = "MXN-" . $codigo . "-";
-        $cliente = Cliente::select()->where('codigoCliente', 'like', "$numeroCliente%")->get();
+        $cliente = Cliente::select()->where('codigoCliente', 'like', "$numeroCliente%")->orderBy("id", "DESC")->get();
 
         return datatables()->of($cliente)->addColumn('btn', 'cliente.buttons')->rawColumns(['btn'])->toJson();
     }
@@ -129,6 +129,8 @@ class ClienteController extends Controller
                     $cliente->tarjeta = "NO";
                 }
 
+                $formulario = DB::table('formulario')->select()->where("id", "=", $request->form_id)->first();
+
                 $nombreDocs = $request->codigocliente;
                 $nombreDocs = explode("-", $request->codigocliente);
                 $nombreDocs = $nombreDocs[1] . "-" . $nombreDocs[2];
@@ -140,6 +142,8 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->ine_documento = $filename;
+                }else{
+                    $cliente->ine_documento = $formulario->ine_documento;
                 }
 
                 if ($request->hasFile('pasaporte_documento')) {
@@ -150,6 +154,9 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->pasaporte_documento = $filename;
+                }else{
+                    $pasaporte_documento = $formulario->pasaporte_documento;
+                    $cliente->pasaporte_documento = $pasaporte_documento;
                 }
 
                 if ($request->hasFile('comprobante_domicilio')) {
@@ -160,6 +167,8 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->comprobante_domicilio = $filename;
+                }else{
+                    $cliente->comprobante_domicilio = $formulario->comprobante_domicilio;
                 }
 
                 if ($request->hasFile('lpoa_documento')) {
@@ -433,8 +442,8 @@ class ClienteController extends Controller
         if ($numeroOficina == "%") {
             $numeroOficina = "001";
         }
-        $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+        $codigoForm = Formulario::select('codigoCliente')->orderBy('id', 'DESC')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->orderBy('id', 'DESC')->first();
         
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 

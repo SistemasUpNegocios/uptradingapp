@@ -221,7 +221,7 @@ $(document).ready(function () {
             },
             info: "Mostrando de _START_ a _END_ de _TOTAL_ clientes",
         },
-        order: [[0, "desc"]],
+        aaSorting: [],
     });
 
     $.ajaxSetup({
@@ -368,6 +368,30 @@ $(document).ready(function () {
         $("#LPOADocumentoDesc").prop("disabled", false);
         $("#formAperturaDesc").prop("disabled", false);
         $("#formRiesgosDesc").prop("disabled", false);
+
+        $("#ineDocumentoInput").removeClass("is-valid");
+        $("#ineDocumentoInput").removeClass("is-invalid");
+        $("#ineDocumentoDesc").addClass("d-none");
+
+        $("#pasaporteDocumentoInput").removeClass("is-valid");
+        $("#pasaporteDocumentoInput").removeClass("is-invalid");
+        $("#pasaporteDocumentoDesc").addClass("d-none");
+
+        $("#comprobanteDomicilioInput").removeClass("is-valid");
+        $("#comprobanteDomicilioInput").removeClass("is-invalid");
+        $("#comprobanteDomicilioDesc").addClass("d-none");
+
+        $("#LPOADocumentoInput").removeClass("is-valid");
+        $("#LPOADocumentoInput").removeClass("is-invalid");
+        $("#LPOADocumentoDesc").addClass("d-none");
+
+        $("#formAperturaInput").removeClass("is-valid");
+        $("#formAperturaInput").removeClass("is-invalid");
+        $("#formAperturaDesc").addClass("d-none");
+
+        $("#formRiesgosInput").removeClass("is-valid");
+        $("#formRiesgosInput").removeClass("is-invalid");
+        $("#formRiesgosDesc").addClass("d-none");
 
         $("#modalTitle").text("Añadir cliente");
         $("#btnSubmit").text("Añadir cliente");
@@ -1002,6 +1026,66 @@ $(document).ready(function () {
                     $("#correoiInput").val(form.correo_institucional);
                     $("#ineInput").val(form.ine);
                     $("#pasaporteInput").val(form.pasaporte);
+
+                    var inedocumento = form.ine_documento;
+                    var pasaportedocumento = form.pasaporte_documento;
+                    var comprobantedomicilio = form.comprobante_domicilio;
+
+                    if (inedocumento != null) {
+                        $("#ineDocumentoInput").addClass("is-valid");
+                        $("#ineDocumentoInput").removeClass("is-invalid");
+
+                        $("#ineDocumentoDesc").attr(
+                            "download",
+                            `${inedocumento}`
+                        );
+                        $("#ineDocumentoDesc").attr(
+                            "href",
+                            `../documentos/formulario/${form.codigoCliente}/${inedocumento}`
+                        );
+                        $("#ineDocumentoDesc").removeClass("d-none");
+                    } else {
+                        $("#ineDocumentoInput").removeClass("is-valid");
+                        $("#ineDocumentoDesc").addClass("d-none");
+                    }
+
+                    if (pasaportedocumento != null) {
+                        $("#pasaporteDocumentoInput").addClass("is-valid");
+                        $("#pasaporteDocumentoInput").removeClass("is-invalid");
+
+                        $("#pasaporteDocumentoDesc").attr(
+                            "download",
+                            `${pasaportedocumento}`
+                        );
+                        $("#pasaporteDocumentoDesc").attr(
+                            "href",
+                            `../documentos/formulario/${form.codigoCliente}/${pasaportedocumento}`
+                        );
+                        $("#pasaporteDocumentoDesc").removeClass("d-none");
+                    } else {
+                        $("#pasaporteDocumentoInput").removeClass("is-valid");
+                        $("#pasaporteDocumentoDesc").addClass("d-none");
+                    }
+
+                    if (comprobantedomicilio != null) {
+                        $("#comprobanteDomicilioInput").addClass("is-valid");
+                        $("#comprobanteDomicilioInput").removeClass(
+                            "is-invalid"
+                        );
+
+                        $("#comprobanteDomicilioDesc").attr(
+                            "download",
+                            `${comprobantedomicilio}`
+                        );
+                        $("#comprobanteDomicilioDesc").attr(
+                            "href",
+                            `../documentos/formulario/${form.codigoCliente}/${comprobantedomicilio}`
+                        );
+                        $("#comprobanteDomicilioDesc").removeClass("d-none");
+                    } else {
+                        $("#comprobanteDomicilioInput").removeClass("is-valid");
+                        $("#comprobanteDomicilioDesc").addClass("d-none");
+                    }
                 });
             },
         });

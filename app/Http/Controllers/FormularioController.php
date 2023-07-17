@@ -43,7 +43,7 @@ class FormularioController extends Controller
         }
 
         $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, formulario.id as formularioid, formulario.codigoCliente, formulario.nombre, formulario.apellido_p, formulario.apellido_m, formulario.estado_civil, formulario.fecha_nacimiento, formulario.pasaporte, formulario.ine, formulario.nacionalidad, formulario.direccion, formulario.colonia, formulario.cp, formulario.ciudad, formulario.estado, formulario.pais, formulario.celular, formulario.correo_personal, formulario.correo_institucional, formulario.fuera_mexico, formulario.situacion_laboral, formulario.nombre_direccion, formulario.giro_empresa, formulario.puesto, formulario.sector_empresa, formulario.personas_cargo, formulario.porcentaje_acciones, formulario.monto_anio, formulario.pagina_web, formulario.ultimo_empleo, formulario.ultimo_empleador, formulario.status_anterior, formulario.monto_mensual_jubilacion, formulario.escuela_universidad, formulario.campo_facultad, formulario.especificacion_trabajo, formulario.funcion_publica, formulario.descripcion_funcion_publica, formulario.residencia, formulario.rfc, formulario.deposito_inicial, formulario.origen_dinero, formulario.ps_id"))
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, formulario.id as formularioid, formulario.codigoCliente, formulario.nombre, formulario.apellido_p, formulario.apellido_m, formulario.estado_civil, formulario.fecha_nacimiento, formulario.pasaporte, formulario.ine, formulario.nacionalidad, formulario.direccion, formulario.colonia, formulario.cp, formulario.ciudad, formulario.estado, formulario.pais, formulario.celular, formulario.correo_personal, formulario.correo_institucional, formulario.ine_documento, formulario.pasaporte_documento, formulario.comprobante_domicilio, formulario.fuera_mexico, formulario.situacion_laboral, formulario.nombre_direccion, formulario.giro_empresa, formulario.puesto, formulario.sector_empresa, formulario.personas_cargo, formulario.porcentaje_acciones, formulario.monto_anio, formulario.pagina_web, formulario.ultimo_empleo, formulario.ultimo_empleador, formulario.status_anterior, formulario.monto_mensual_jubilacion, formulario.escuela_universidad, formulario.campo_facultad, formulario.especificacion_trabajo, formulario.funcion_publica, formulario.descripcion_funcion_publica, formulario.residencia, formulario.rfc, formulario.deposito_inicial, formulario.origen_dinero, formulario.ps_id"))
             ->where('formulario.codigoCliente', 'like', "$numeroCliente%")
             ->where("formulario.ps_id", 'like', $psid)
             ->orderBy('formulario.id', 'DESC')->get();
@@ -55,7 +55,7 @@ class FormularioController extends Controller
     {
         if($request->id == "todos"){
             $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
-            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, formulario.id as formularioid, formulario.codigoCliente, formulario.nombre, formulario.apellido_p, formulario.apellido_m, formulario.estado_civil, formulario.fecha_nacimiento, formulario.pasaporte, formulario.ine, formulario.nacionalidad, formulario.direccion, formulario.colonia, formulario.cp, formulario.ciudad, formulario.estado, formulario.pais, formulario.celular, formulario.correo_personal, formulario.correo_institucional, formulario.fuera_mexico, formulario.situacion_laboral, formulario.nombre_direccion, formulario.giro_empresa, formulario.puesto, formulario.sector_empresa, formulario.personas_cargo, formulario.porcentaje_acciones, formulario.monto_anio, formulario.pagina_web, formulario.ultimo_empleo, formulario.ultimo_empleador, formulario.status_anterior, formulario.monto_mensual_jubilacion, formulario.escuela_universidad, formulario.campo_facultad, formulario.especificacion_trabajo, formulario.funcion_publica, formulario.descripcion_funcion_publica, formulario.residencia, formulario.rfc, formulario.deposito_inicial, formulario.origen_dinero, formulario.ps_id"))
+            ->select(DB::raw("CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, formulario.id as formularioid, formulario.codigoCliente, formulario.nombre, formulario.apellido_p, formulario.apellido_m, formulario.estado_civil, formulario.fecha_nacimiento, formulario.pasaporte, formulario.ine, formulario.nacionalidad, formulario.direccion, formulario.colonia, formulario.cp, formulario.ciudad, formulario.estado, formulario.pais, formulario.celular, formulario.correo_personal, formulario.correo_institucional, formulario.ine_documento, formulario.pasaporte_documento, formulario.comprobante_domicilio, formulario.fuera_mexico, formulario.situacion_laboral, formulario.nombre_direccion, formulario.giro_empresa, formulario.puesto, formulario.sector_empresa, formulario.personas_cargo, formulario.porcentaje_acciones, formulario.monto_anio, formulario.pagina_web, formulario.ultimo_empleo, formulario.ultimo_empleador, formulario.status_anterior, formulario.monto_mensual_jubilacion, formulario.escuela_universidad, formulario.campo_facultad, formulario.especificacion_trabajo, formulario.funcion_publica, formulario.descripcion_funcion_publica, formulario.residencia, formulario.rfc, formulario.deposito_inicial, formulario.origen_dinero, formulario.ps_id"))
             ->orderBy('formulario.id', 'DESC')->get();
         }else{
             $formulario = Formulario::join('ps', 'ps.id', '=', 'formulario.ps_id')
@@ -157,6 +157,38 @@ class FormularioController extends Controller
 
                 $formulario->origen_dinero = strtoupper($request->origen_dinero);
                 $formulario->ps_id = $request->ps_id;
+
+                $nombreDocs = explode("-", $request->codigocliente);
+                $nombreDocs = $nombreDocs[1] . "-" . $nombreDocs[2];
+                if ($request->hasFile('ine_documento')) {
+                    $file = $request->file('ine_documento');
+                    $ext = $file->getClientOriginalName();
+                    $ext = substr($ext, strpos($ext, "."));
+                    $filename = $nombreDocs . "_ine" . $ext;
+
+                    $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                    $formulario->ine_documento = $filename;
+                }
+
+                if ($request->hasFile('pasaporte_documento')) {
+                    $file = $request->file('pasaporte_documento');
+                    $ext = $file->getClientOriginalName();
+                    $ext = substr($ext, strpos($ext, "."));
+                    $filename = $nombreDocs . "_pasaporte" . $ext;
+
+                    $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                    $formulario->pasaporte_documento = $filename;
+                }
+
+                if ($request->hasFile('comprobante_domicilio')) {
+                    $file = $request->file('comprobante_domicilio');
+                    $ext = $file->getClientOriginalName();
+                    $ext = substr($ext, strpos($ext, "."));
+                    $filename = $nombreDocs . "_comprobante_domicilio" . $ext;
+
+                    $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                    $formulario->comprobante_domicilio = $filename;
+                }
 
                 $formulario->save();
 
@@ -269,6 +301,38 @@ class FormularioController extends Controller
             $formulario->origen_dinero = strtoupper($request->origen_dinero);
             $formulario->ps_id = $request->ps_id;
 
+            $nombreDocs = explode("-", $request->codigocliente);
+            $nombreDocs = $nombreDocs[1] . "-" . $nombreDocs[2];
+            if ($request->hasFile('ine_documento')) {
+                $file = $request->file('ine_documento');
+                $ext = $file->getClientOriginalName();
+                $ext = substr($ext, strpos($ext, "."));
+                $filename = $nombreDocs . "_ine" . $ext;
+
+                $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                $formulario->ine_documento = $filename;
+            }
+
+            if ($request->hasFile('pasaporte_documento')) {
+                $file = $request->file('pasaporte_documento');
+                $ext = $file->getClientOriginalName();
+                $ext = substr($ext, strpos($ext, "."));
+                $filename = $nombreDocs . "_pasaporte" . $ext;
+
+                $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                $formulario->pasaporte_documento = $filename;
+            }
+
+            if ($request->hasFile('comprobante_domicilio')) {
+                $file = $request->file('comprobante_domicilio');
+                $ext = $file->getClientOriginalName();
+                $ext = substr($ext, strpos($ext, "."));
+                $filename = $nombreDocs . "_comprobante_domicilio" . $ext;
+
+                $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
+                $formulario->comprobante_domicilio = $filename;
+            }
+
             $formulario->save();
 
             $formulario_id = $formulario->id;
@@ -315,8 +379,8 @@ class FormularioController extends Controller
             $numeroOficina = "001";
         }
 
-        $codigoForm = Formulario::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
-        $codigoCliente = Cliente::select('codigoCliente')->orderBy('codigoCliente', 'DESC')->first();
+        $codigoForm = Formulario::select('codigoCliente')->orderBy('id', 'DESC')->first();
+        $codigoCliente = Cliente::select('codigoCliente')->orderBy('id', 'DESC')->first();
 
         if (!empty($codigoForm) && !empty($codigoCliente)) {
 
