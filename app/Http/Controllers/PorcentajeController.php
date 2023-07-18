@@ -77,7 +77,7 @@ class PorcentajeController extends Controller
                     $pago = $monto + $redito;
 
                     Amortizacion::where('contrato_id', $contrato->id)->update(["saldo_con_redito" => $pago, "redito" => $redito, "monto" => $monto]);
-                    PagoCliente::where('contrato_id', $contrato->id)->update(["pago" => $pago]);
+                    PagoCliente::where('contrato_id', $contrato->id)->update(["pago" => $redito]);
                     
                 }
 

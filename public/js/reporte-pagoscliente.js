@@ -737,9 +737,15 @@ $(document).ready(function () {
         let clientenumero = $(this).data("clientenumero");
         let fecha = $(this).data("fecha");
         let tipo = $(this).data("tipo");
+        let dolar = $("#dolarInput").val();
+        let dolares =
+            parseFloat(rendimiento.replaceAll(",", "")) / parseFloat(dolar);
+        dolares = dolares.toFixed(2);
+
+        //00293-009
 
         if (tipo == 1) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago del rendimiento mensual del día ${fecha} con relación al contrato ${contrato} (pago ${pago}), correspondiente a $${dolares} dólares al tipo de cambio $${dolar}, sin que al momento exista algún adeudo.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
             mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
