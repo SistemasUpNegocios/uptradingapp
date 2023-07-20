@@ -938,6 +938,7 @@ $(document).ready(function () {
         dolares = $(this).data("dolares").toString().replaceAll(",", ".");
         dolares = parseFloat(dolares);
         let tipopago = $(this).data("tipopago");
+        let tipopagocliente = $(this).data("tipopagocliente");
 
         let checkbox = [
             "#efectivoInput",
@@ -960,28 +961,73 @@ $(document).ready(function () {
             "#montoTransSwissCont",
         ];
 
-        if (typeof monto !== "undefined") {
-            monto = monto.split(",");
-            tipopago = tipopago.split(",");
-
-            tipopago.map((tipo, j) => {
+        if (typeof tipopagocliente !== "undefined") {
+            tipopagocliente = tipopagocliente.split(",");
+            tipopagocliente.map((tipo) => {
                 checkbox.map((input, i) => {
                     if (tipo == $(input).val()) {
                         $(input).prop("checked", true);
                         let checked = $(input).is(":checked");
                         if (checked) {
                             $(conts[i]).show();
-                            $(inputs[i]).val(monto[j]);
                         }
                     }
                 });
+
+                var efectivoCont =
+                    $("#montoEfectivoCont").css("display") == "none"
+                        ? true
+                        : false;
+
+                var transferenciaCont =
+                    $("#montoTransferenciaCont").css("display") == "none"
+                        ? true
+                        : false;
+
+                if (tipo == "efectivo" || tipo == "transferencia") {
+                    if (!efectivoCont && !transferenciaCont) {
+                        pesos_divididos = pesos / 2;
+                        $("#montoEfectivoInput").val(
+                            pesos_divididos.toFixed(2)
+                        );
+                        $("#montoTransferenciaInput").val(
+                            pesos_divididos.toFixed(2)
+                        );
+                    } else if (efectivoCont) {
+                        $("#montoTransferenciaInput").val(pesos);
+                    } else if (transferenciaCont) {
+                        $("#montoEfectivoInput").val(pesos);
+                    }
+                }
+
+                if (tipo == "transferenciaSwiss") {
+                    $("#montoTransferenciaSwissInput").val(dolares.toFixed(2));
+                }
             });
         } else {
-            checkbox.map((input, i) => {
-                $(input).prop("checked", false);
-                $(conts[i]).hide();
-                $(inputs[i]).val(pesos);
-            });
+            if (typeof monto !== "undefined") {
+                monto = monto.split(",");
+                tipopago = tipopago.split(",");
+
+                tipopago.map((tipo, j) => {
+                    checkbox.map((input, i) => {
+                        if (tipo == $(input).val()) {
+                            $(input).prop("checked", true);
+                            let checked = $(input).is(":checked");
+                            if (checked) {
+                                $(conts[i]).show();
+                                $(inputs[i]).val(monto[j]);
+                            }
+                        }
+                    });
+                });
+            } else {
+                checkbox.map((input, i) => {
+                    $(input).prop("checked", false);
+                    $(conts[i]).hide();
+                    $(inputs[i]).val(pesos);
+                });
+            }
         }
 
         $("#idInputNota").val(pagoid);

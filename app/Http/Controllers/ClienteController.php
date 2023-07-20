@@ -120,6 +120,15 @@ class ClienteController extends Controller
                 $cliente->swift = strtoupper($request->input('swift'));
                 $cliente->iban = strtoupper($request->input('iban'));
                 $cliente->identificador_mam = $request->input('identificador');
+                if (gettype($request->tipo_pago) != 'NULL'){
+                    $tipos_pagos = "";
+                    foreach ($request->tipo_pago as $tipo_pago) {
+                        if($tipo_pago != ""){
+                            $tipos_pagos .= $tipo_pago.',';
+                        }
+                    }
+                    $cliente->tipo_pago = $tipos_pagos;
+                }
 
                 $tarjeta = $request->input('tarjeta');
                 
@@ -134,6 +143,7 @@ class ClienteController extends Controller
                 $nombreDocs = $request->codigocliente;
                 $nombreDocs = explode("-", $request->codigocliente);
                 $nombreDocs = $nombreDocs[1] . "-" . $nombreDocs[2];
+
                 if ($request->hasFile('ine_documento')) {
                     $file = $request->file('ine_documento');
                     $ext = $file->getClientOriginalName();
@@ -142,9 +152,10 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->ine_documento = $filename;
-                }else{
-                    $cliente->ine_documento = $formulario->ine_documento;
+                }else if($request->form_id > 0 || $request->form_id != ""){
+                        $cliente->ine_documento = $formulario->ine_documento;
                 }
+                    
 
                 if ($request->hasFile('pasaporte_documento')) {
                     $file = $request->file('pasaporte_documento');
@@ -154,9 +165,8 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->pasaporte_documento = $filename;
-                }else{
-                    $pasaporte_documento = $formulario->pasaporte_documento;
-                    $cliente->pasaporte_documento = $pasaporte_documento;
+                }else if($request->form_id > 0 || $request->form_id != ""){
+                    $cliente->pasaporte_documento = $formulario->pasaporte_documento;
                 }
 
                 if ($request->hasFile('comprobante_domicilio')) {
@@ -167,7 +177,7 @@ class ClienteController extends Controller
 
                     $file->move(public_path("documentos/clientes/$nombreDocs"), $filename);
                     $cliente->comprobante_domicilio = $filename;
-                }else{
+                }else if($request->form_id > 0 || $request->form_id != ""){
                     $cliente->comprobante_domicilio = $formulario->comprobante_domicilio;
                 }
 
@@ -311,6 +321,15 @@ class ClienteController extends Controller
             $cliente->swift = strtoupper($request->input('swift'));
             $cliente->iban = $request->input('iban');
             $cliente->identificador_mam = $request->input('identificador');
+            if (gettype($request->tipo_pago) != 'NULL'){
+                $tipos_pagos = "";
+                foreach ($request->tipo_pago as $tipo_pago) {
+                    if($tipo_pago != ""){
+                        $tipos_pagos .= $tipo_pago.',';
+                    }
+                }
+                $cliente->tipo_pago = $tipos_pagos;
+            }
 
             $tarjeta = $request->input('tarjeta');
             

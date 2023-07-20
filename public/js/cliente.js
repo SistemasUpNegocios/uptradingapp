@@ -369,6 +369,14 @@ $(document).ready(function () {
         $("#formAperturaDesc").prop("disabled", false);
         $("#formRiesgosDesc").prop("disabled", false);
 
+        $("#efectivoInput").prop("disabled", false);
+        $("#transferenciaInput").prop("disabled", false);
+        $("#transferenciaSwissInput").prop("disabled", false);
+
+        $("#efectivoInput").prop("checked", false);
+        $("#transferenciaInput").prop("checked", false);
+        $("#transferenciaSwissInput").prop("checked", false);
+
         $("#ineDocumentoInput").removeClass("is-valid");
         $("#ineDocumentoInput").removeClass("is-invalid");
         $("#ineDocumentoDesc").addClass("d-none");
@@ -556,7 +564,35 @@ $(document).ready(function () {
         $("#formAperturaDesc").prop("disabled", true);
         $("#formRiesgosDesc").prop("disabled", true);
 
+        $("#efectivoInput").prop("disabled", true);
+        $("#transferenciaInput").prop("disabled", true);
+        $("#transferenciaSwissInput").prop("disabled", true);
+
         documentosClientes(this);
+
+        let tipopago = $(this).data("tipopago");
+
+        let checkbox = [
+            "#efectivoInput",
+            "#transferenciaInput",
+            "#transferenciaSwissInput",
+        ];
+
+        if (typeof tipopago !== "undefined") {
+            tipopago = tipopago.split(",");
+
+            tipopago.map((tipo) => {
+                checkbox.map((input) => {
+                    if (tipo == $(input).val()) {
+                        $(input).prop("checked", true);
+                    }
+                });
+            });
+        } else {
+            checkbox.map((input) => {
+                $(input).prop("checked", false);
+            });
+        }
 
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
@@ -719,7 +755,36 @@ $(document).ready(function () {
         $("#formAperturaDesc").prop("disabled", false);
         $("#formRiesgosDesc").prop("disabled", false);
 
+        $("#efectivoInput").prop("disabled", false);
+        $("#transferenciaInput").prop("disabled", false);
+        $("#transferenciaSwissInput").prop("disabled", false);
+
         documentosClientes(this);
+
+        let tipopago = $(this).data("tipopago");
+
+        let checkbox = [
+            "#efectivoInput",
+            "#transferenciaInput",
+            "#transferenciaSwissInput",
+        ];
+
+        if (typeof tipopago !== "undefined") {
+            tipopago = tipopago.split(",");
+
+            tipopago.map((tipo) => {
+                checkbox.map((input) => {
+                    console.log(tipo, $(input).val());
+                    if (tipo == $(input).val()) {
+                        $(input).prop("checked", true);
+                    }
+                });
+            });
+        } else {
+            checkbox.map((input) => {
+                $(input).prop("checked", false);
+            });
+        }
 
         $("#modalTitle").text(
             `Editar cliente: ${nombre} ${apellidop} ${apellidom}`

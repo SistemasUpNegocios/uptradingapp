@@ -260,6 +260,34 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-12" id="tipoPagoContText">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Forma de pago:
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="tipoPagoCont">
+                            <div class="col-12 mb-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="efectivoInput" name="tipo_pago[]" value="efectivo">
+                                    <label class="form-check-label" for="efectivoInput">Efectivo</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="transferenciaInput" name="tipo_pago[]" value="transferencia">
+                                    <label class="form-check-label" for="transferenciaInput">Transferencia</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="transferenciaSwissInput" name="tipo_pago[]" value="transferenciaSwiss">
+                                    <label class="form-check-label" for="transferenciaSwissInput">Transferencia a Swissquote</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-12" id="cargarCliente">
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
@@ -318,6 +346,7 @@
                                 <input type="file" id="formRiesgosInput" class="form-control form-control-sm" name="formulario_riesgos">
                             </div>
                         </div>
+
                         <div id="alertMessage"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
