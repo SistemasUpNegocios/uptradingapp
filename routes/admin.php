@@ -73,6 +73,7 @@ Route::get('/admin/getResumenPagoClienteLiquidacion', [App\Http\Controllers\Repo
 Route::get('/admin/getResumenPagoClienteDiaLiquidacion', [App\Http\Controllers\ReportePagoClienteController::class, 'getResumenPagoClienteDiaLiquidacion']);
 Route::get('/admin/imprimirResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'imprimirResumenCliente']);
 Route::get('/admin/imprimirReporteCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getReportePago']);
+Route::get('/admin/tiposPagosClientes', [App\Http\Controllers\ReportePagoClienteController::class, 'tiposPagosClientes']);
 Route::get('/admin/exportarResumenCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'export']);
 Route::get('/admin/showClavePagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'getClave']);
 Route::get('/admin/editStatusPagoCliente', [App\Http\Controllers\ReportePagoClienteController::class, 'editStatus']);
@@ -147,6 +148,20 @@ Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioContro
 Route::get('/admin/validateClaveConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'validateClaveOficina']);
 Route::get('/admin/editStatusConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'editStatusOficina']);
 
+// Rutas para gestión de convenio terminado
+Route::get('/admin/convenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'index'])->name('convenioTerminado');
+Route::get('/admin/showConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'getConvenio']);
+Route::post('/admin/editConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'editConvenio']);
+Route::post('/admin/deleteConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'deleteConvenio']);
+Route::get('/admin/getBeneficiariosConvenioTerminido', [App\Http\Controllers\ConvenioTerminadoController::class, 'getBeneficiarios']);
+Route::get('/admin/showClaveConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'getClave']);
+Route::get('/admin/editStatusConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'editStatus']);
+
+Route::get('/admin/conveniovencer', [App\Http\Controllers\ConvenioVencerController::class, 'index'])->name('conveniovencer');
+Route::get('/admin/showConvenioVencer', [App\Http\Controllers\ConvenioVencerController::class, 'getConvenioVencer']);
+Route::post('/admin/convenio/editnota', [App\Http\Controllers\ConvenioVencerController::class, 'editNota']);
+Route::get('/admin/convenio/autorizarnota', [App\Http\Controllers\ConvenioVencerController::class, 'autorizarNota']);
+
 //Rutas para gestión de incrementos convenio MAM
 Route::get('/admin/incrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'index']);
 Route::get('/admin/showIncrementoConvenio', [App\Http\Controllers\IncrementoConvenioController::class, 'getConvenio']);
@@ -206,12 +221,12 @@ Route::get('/admin/showPagosPS', [App\Http\Controllers\PagoPsController::class, 
 Route::post('/admin/editPagosPS', [App\Http\Controllers\PagoPsController::class, 'editPagoPS']);
 
 // Rutas para gestión de menú para pagos a ps (convenio)
-Route::get('/admin/pagoPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'index'])->name('pagopsconvenio');
-Route::get('/admin/showPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getPSConvenio']);
-Route::get('/admin/showContratosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getConvenios']);
-Route::post('/admin/existPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'ifExists']);
-Route::get('/admin/showPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'getPagosPS']);
-Route::post('/admin/editPagosPSConvenio', [App\Http\Controllers\PagoPsConvenioController::class, 'editPagoPS']);
+Route::get('/admin/pagoPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'index'])->name('pagopsconvenio');
+Route::get('/admin/showPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'getPSConvenio']);
+Route::get('/admin/showContratosPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'getConvenios']);
+Route::post('/admin/existPagosPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'ifExists']);
+Route::get('/admin/showPagosPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'getPagosPS']);
+Route::post('/admin/editPagosPSConvenio', [App\Http\Controllers\PagoPSConvenioController::class, 'editPagoPS']);
 
 // Rutas para gestión de menú para reporte de pagos a ps
 Route::get('/admin/reportePagosPs', [App\Http\Controllers\ReportePagoPsController::class, 'index'])->name('reportepagops');

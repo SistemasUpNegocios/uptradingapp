@@ -6,6 +6,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\Pendiente;
 use App\Models\Contrato;
+use App\Models\Convenio;
+use App\Models\PagoPSConvenio;
 use App\Models\Amortizacion;
 use App\Models\PagoCliente;
 use App\Models\Ticket;
@@ -65,7 +67,6 @@ class Kernel extends ConsoleKernel
             ->get();
 
             foreach ($contratos as $contrato_update) {
-                //Actualizar contrato
                 $tipo_contrato = DB::table('tipo_contrato')->where('id', $contrato_update->tipo_id)->first();
                 $contrato = Contrato::find($contrato_update->id);
                 
@@ -135,7 +136,6 @@ class Kernel extends ConsoleKernel
                 $inversion_letra_us = strtolower($formatter->toMoney($inversion_us, 2, "dólares", "centavos"));
 
                 //Guardar cambios de contrato
-                $contrato->folio = $folio;
                 $contrato->contrato = strtoupper($contratoRef);
 
                 // Actualizar fechas y status
@@ -160,7 +160,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -180,7 +180,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -196,7 +196,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -216,9 +216,86 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                // Crear ticket
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "234".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Administración";
+                $ticket->asunto = "Convenio refrendado para imprimir";
+                $ticket->descripcion = "Convenio: ".strtoupper($folio_completo);
+                $ticket->status = "Abierto";
+                $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 234;
+                $notificacion->save();
+
+                $ticket = new Ticket;
+                $ticket->generado_por = 1;
+                $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
+                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
+                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+                $ticket->departamento = "Administración";
+                $ticket->asunto = "Convenio refrendado para imprimir";
+                $ticket->descripcion = "Convenio: ".strtoupper($folio_completo);
+                $ticket->status = "Abierto";
+                $ticket->save();
+
+                $notificacion = new Notificacion;
+                $notificacion->titulo = "Ticket abierto";
+                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
+                $notificacion->status = "Pendiente";
+                $notificacion->user_id = 235;
+                $notificacion->save();
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:00")
@@ -241,25 +318,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                // $ticket = new Ticket;
-                // $ticket->generado_por = 1;
-                // $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
-                // $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                // $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                // $ticket->departamento = "Administración";
-                // $ticket->asunto = "Contrato refrendado para imprimir";
-                // $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                // $ticket->status = "Abierto";
-                // $ticket->save();
-
-                // $notificacion = new Notificacion;
-                // $notificacion->titulo = "Ticket abierto";
-                // $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                // $notificacion->status = "Pendiente";
-                // $notificacion->user_id = 235;
-                // $notificacion->save();
-
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -307,7 +365,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -327,7 +385,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -343,7 +401,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -363,9 +421,49 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:10")
@@ -388,25 +486,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                // $ticket = new Ticket;
-                // $ticket->generado_por = 1;
-                // $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
-                // $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                // $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                // $ticket->departamento = "Administración";
-                // $ticket->asunto = "Contrato refrendado para imprimir";
-                // $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                // $ticket->status = "Abierto";
-                // $ticket->save();
-
-                // $notificacion = new Notificacion;
-                // $notificacion->titulo = "Ticket abierto";
-                // $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                // $notificacion->status = "Pendiente";
-                // $notificacion->user_id = 235;
-                // $notificacion->save();
-
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -454,7 +533,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -474,7 +553,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -490,7 +569,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -510,9 +589,49 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:20")
@@ -535,25 +654,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                // $ticket = new Ticket;
-                // $ticket->generado_por = 1;
-                // $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
-                // $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                // $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                // $ticket->departamento = "Administración";
-                // $ticket->asunto = "Contrato refrendado para imprimir";
-                // $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                // $ticket->status = "Abierto";
-                // $ticket->save();
-
-                // $notificacion = new Notificacion;
-                // $notificacion->titulo = "Ticket abierto";
-                // $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                // $notificacion->status = "Pendiente";
-                // $notificacion->user_id = 235;
-                // $notificacion->save();
-
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -601,7 +701,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -621,7 +721,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -637,7 +737,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -657,9 +757,49 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:30")
@@ -682,25 +822,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                // $ticket = new Ticket;
-                // $ticket->generado_por = 1;
-                // $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
-                // $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                // $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                // $ticket->departamento = "Administración";
-                // $ticket->asunto = "Contrato refrendado para imprimir";
-                // $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                // $ticket->status = "Abierto";
-                // $ticket->save();
-
-                // $notificacion = new Notificacion;
-                // $notificacion->titulo = "Ticket abierto";
-                // $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                // $notificacion->status = "Pendiente";
-                // $notificacion->user_id = 235;
-                // $notificacion->save();
-
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -748,7 +869,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -768,7 +889,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -784,7 +905,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -804,9 +925,49 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:40")
@@ -829,25 +990,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                // $ticket = new Ticket;
-                // $ticket->generado_por = 1;
-                // $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
-                // $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                // $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                // $ticket->departamento = "Administración";
-                // $ticket->asunto = "Contrato refrendado para imprimir";
-                // $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                // $ticket->status = "Abierto";
-                // $ticket->save();
-
-                // $notificacion = new Notificacion;
-                // $notificacion->titulo = "Ticket abierto";
-                // $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                // $notificacion->status = "Pendiente";
-                // $notificacion->user_id = 235;
-                // $notificacion->save();
-
                 //Obtener el refrendo
                 $pago = $contrato_update->inversion_us;
                 $inversion = $contrato_update->inversion;
@@ -895,7 +1037,7 @@ class Kernel extends ConsoleKernel
                 $contrato->inversion_letra = $inversion_letra;
                 $contrato->inversion_us = $inversion_us;
                 $contrato->inversion_letra_us = $inversion_letra_us;
-                $contrato->update();
+                $contrato->save();
                 
                 $monto = $inversion_us;
                 $redito = 0;
@@ -915,7 +1057,7 @@ class Kernel extends ConsoleKernel
 
                     $amortizacion->redito = $redito;
                     $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->update();
+                    $amortizacion->save();
                 }
 
                 //Actualización de tabla de pago de clientes
@@ -931,7 +1073,7 @@ class Kernel extends ConsoleKernel
                     $pago_cliente->memo = NULL;
                     $pago_cliente->tipo_pago = "Pendiente";
                     $pago_cliente->comprobante = NULL;
-                    $pago_cliente->update();
+                    $pago_cliente->save();
                 }
 
                 $cmensual = $tipo_contrato->cmensual * .001;
@@ -951,9 +1093,49 @@ class Kernel extends ConsoleKernel
                     $pago_ps->status = "Pendiente";
                     $pago_ps->tipo_pago = "Pendiente";
                     $pago_ps->comprobante = NULL;
-                    $pago_ps->update();
+                    $pago_ps->save();
                 }
 
+            }
+
+            $convenios = Convenio::where("convenio.status", "Activado")
+            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
+            ->get();
+
+            foreach ($convenios as $convenio_update) {
+                $convenio = Convenio::find($convenio_update->id);
+
+                //Refrendar folio
+                $folio = explode("-", $convenio_update->folio);
+                $refrendo = intval($folio[4]) + 1;
+                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
+                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
+
+                //Actualizar numero de folio
+                $convenio->folio = strtoupper($folio_completo);
+
+                // Actualizar fechas y status
+                $convenio->fecha_inicio = Carbon::parse($convenio_update->fecha_inicio)->addYear()->format('Y-m-d');
+                $convenio->fecha_fin = Carbon::parse($convenio_update->fecha_fin)->addYear()->format('Y-m-d');
+                $convenio->status = "Activado";
+                $convenio->status_oficina = "Activado";
+                $convenio->memo_status = "Convenio activado por id:1";
+
+                // Dejar todo por defecto
+                $convenio->nota_convenio = NULL;
+                $convenio->autorizacion_nota = NULL;
+                $convenio->save();
+
+                $pagos_ps_convenio = PagoPSConvenio::where("convenio_id", $convenio_update->id)->get();
+                foreach ($pagos_ps_convenio as $pago_ps_convenio_update) {
+                    DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_update->id)->where("memo", "Comisión por apertura")->delete();
+
+                    $pago_ps_convenio = PagoPSConvenio::find($pago_ps_convenio_update->id);
+                    $pago_ps_convenio->fecha_pago = Carbon::parse($pago_ps_convenio_update->fecha_pago)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->fecha_limite = Carbon::parse($pago_ps_convenio_update->fecha_limite)->addYear()->format('Y-m-d');
+                    $pago_ps_convenio->save();
+                }
             }
         })
         ->dailyAt("09:50")

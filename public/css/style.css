@@ -1719,6 +1719,10 @@ h6 {
     vertical-align: middle !important;
 }
 
+#convenioVencer td,
+#convenioVencer th,
+#contratoVencer td,
+#contratoVencer th,
 #pagos td,
 #pagos th,
 #tipoContrato td,

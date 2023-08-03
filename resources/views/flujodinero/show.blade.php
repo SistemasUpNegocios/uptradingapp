@@ -76,10 +76,12 @@
                                         <th data-priority="0" scope="col">Renovación</th>
                                         <th data-priority="0" scope="col">Comisiones</th>
                                         <th data-priority="0" scope="col">MX a POOL</th>
+                                        <th data-priority="0" scope="col">Santander</th>
                                         <th data-priority="0" scope="col">Efectivo</th>
                                         <th data-priority="0" scope="col">CI BANK</th>
+                                        <th data-priority="0" scope="col">Bitso</th>
                                         <th data-priority="0" scope="col">HSBC</th>
-                                        <th data-priority="0" scope="col">WISE</th>
+                                        <th data-priority="0" scope="col">Wise</th>
                                     </tr>
                                 </thead>
                                 <tbody id="flujoDineroBody" style="vertical-align: middle;">

@@ -45,15 +45,17 @@
         <div>
             <div style="float: left; width: 50%; margin: auto;">
                 <div class=" text-center">
-                    <p style="margin: 0 !important; font-size: 13px !important"><b>Wise:</b> ${{ $total_wise }}</p>
                     <p style="margin: 0 !important; font-size: 13px !important"><b>HSBC:</b> ${{ $total_HSBC }}</p>
+                    <p style="margin: 0 !important; font-size: 13px !important"><b>Wise:</b> ${{ $total_wise }}</p>
+                    <p style="margin: 0 !important; font-size: 13px !important"><b>Bitso:</b> ${{ $total_bitso }}</p>
+                    <p style="margin: 0 !important; font-size: 13px !important"><b>Efectivo:</b> ${{ $total_efectivo }}</p>
                     <p style="margin: 0 !important; font-size: 13px !important"><b>MX a POOL:</b> ${{ $total_mx_pool }}</p>
-                    <p style="margin: 0 !important; font-size: 13px !important"><b>Efectivo:</b> ${{ $total_efectivo }}</p>            
                 </div>
             </div>
             <div style="float: right; width: 50%;">
                 <div class="text-center">
                     <p style="margin: 0 !important; font-size: 13px !important"><b>CI BANK:</b> ${{ $total_ci_bank }}</p>
+                    <p style="margin: 0 !important; font-size: 13px !important"><b>Santander:</b> ${{ $total_santander }}</p>
                     <p style="margin: 0 !important; font-size: 13px !important"><b>Comisiones:</b> ${{ $total_comisiones }}</p>
                     <p style="margin: 0 !important; font-size: 13px !important"><b>Renovaciones:</b> ${{ $total_renovacion }}</p>
                     <p style="margin: 0 !important; font-size: 13px !important"><b>Rendimientos:</b> ${{ $total_rendimientos }}</p>
@@ -79,10 +81,12 @@
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">Renovación</th>
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">Comisiones</th>
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">MX a POOL</th>
+                <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">Santander</th>
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">Efectivo</th>
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">CI BANK</th>
+                <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">Bitso</th>
                 <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important;">HSBC</th>
-                <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important; border-right: 1px solid #bebebe !important;">WISE</th>
+                <th data-priority="0" scope="col" style="padding: 2px !important; border-left: 1px solid #bebebe !important; border-right: 1px solid #bebebe !important;">Wise</th>
             </tr>
         </thead>
         <tbody id="flujoDineroBody">
@@ -156,6 +160,17 @@
                         @php $pago = number_format(0, 2); @endphp
 
                         @for ($i=0; $i < sizeof($tipo_pago); $i++)
+                            @if($tipo_pago[$i] == "Santander")
+                                @php $pago = number_format($monto_pago[$i], 2); @endphp
+                            @endif
+                        @endfor
+
+                        ${{ $pago }}
+                    </td>
+                    <td style="padding: 2px 6px !important; border-left: 1px solid #bebebe !important; border-bottom: 1px solid #bebebe !important;">
+                        @php $pago = number_format(0, 2); @endphp
+
+                        @for ($i=0; $i < sizeof($tipo_pago); $i++)
                             @if($tipo_pago[$i] == "efectivo")
                                 @php $pago = number_format($monto_pago[$i], 2); @endphp
                             @endif
@@ -168,6 +183,17 @@
 
                         @for ($i=0; $i < sizeof($tipo_pago); $i++)
                             @if($tipo_pago[$i] == "ci_bank")
+                                @php $pago = number_format($monto_pago[$i], 2); @endphp
+                            @endif
+                        @endfor
+
+                        ${{ $pago }}
+                    </td>
+                    <td style="padding: 2px 6px !important; border-left: 1px solid #bebebe !important; border-bottom: 1px solid #bebebe !important;">
+                        @php $pago = number_format(0, 2); @endphp
+
+                        @for ($i=0; $i < sizeof($tipo_pago); $i++)
+                            @if($tipo_pago[$i] == "bitso")
                                 @php $pago = number_format($monto_pago[$i], 2); @endphp
                             @endif
                         @endfor

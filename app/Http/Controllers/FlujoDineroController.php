@@ -58,6 +58,8 @@ class FlujoDineroController extends Controller
         $total_efectivo = 0;
         $total_wise = 0;
         $total_ci_bank = 0;
+        $total_santander = 0;
+        $total_bitso = 0;
         $total_HSBC = 0;
         $total_final = 0;
 
@@ -80,15 +82,19 @@ class FlujoDineroController extends Controller
                     $total_efectivo += floatval($monto_pago[$i]);//x
                 }elseif ($tipo_pago[$i] == "ci_bank") {
                     $total_ci_bank += floatval($monto_pago[$i]);
-                }elseif ($tipo_pago[$i] == "HSBC") {
-                    $total_HSBC += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "Santander") {
+                    $total_santander += floatval($monto_pago[$i]);
                 }elseif ($tipo_pago[$i] == "wise") {
                     $total_wise += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "bitso") {
+                    $total_bitso += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "HSBC") {
+                    $total_HSBC += floatval($monto_pago[$i]);
                 }
             }
         }
 
-        $total_final = $total_swiss_pool + $total_rendimientos + $total_renovacion + $total_comisiones + $total_mx_pool + $total_efectivo + $total_ci_bank + $total_HSBC + $total_wise;
+        $total_final = $total_swiss_pool + $total_rendimientos + $total_renovacion + $total_comisiones + $total_mx_pool + $total_efectivo + $total_ci_bank + $total_santander + $total_wise + $total_bitso + $total_HSBC;
 
         $data = array(
             "total_swiss_pool" => number_format($total_swiss_pool, 2),
@@ -98,8 +104,10 @@ class FlujoDineroController extends Controller
             "total_mx_pool" => number_format($total_mx_pool, 2),
             "total_efectivo" => number_format($total_efectivo, 2),
             "total_ci_bank" => number_format($total_ci_bank, 2),
-            "total_HSBC" => number_format($total_HSBC, 2),
+            "total_santander" => number_format($total_santander, 2),
             "total_wise" => number_format($total_wise, 2),
+            "total_bitso" => number_format($total_bitso, 2),
+            "total_HSBC" => number_format($total_HSBC, 2),
             "total_final" => number_format($total_final, 2)
         );
 
@@ -123,8 +131,10 @@ class FlujoDineroController extends Controller
         $total_mx_pool = 0;
         $total_efectivo = 0;
         $total_ci_bank = 0;
-        $total_HSBC = 0;
+        $total_santander = 0;
         $total_wise = 0;
+        $total_bitso = 0;
+        $total_HSBC = 0;
         $total_final = 0;
 
         foreach ($flujodinero as $flujo) {
@@ -146,15 +156,19 @@ class FlujoDineroController extends Controller
                     $total_efectivo += floatval($monto_pago[$i]);//x
                 }elseif ($tipo_pago[$i] == "ci_bank") {
                     $total_ci_bank += floatval($monto_pago[$i]);
-                }elseif ($tipo_pago[$i] == "HSBC") {
-                    $total_HSBC += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "Santander") {
+                    $total_santander += floatval($monto_pago[$i]);
                 }elseif ($tipo_pago[$i] == "wise") {
                     $total_wise += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "bitso") {
+                    $total_bitso += floatval($monto_pago[$i]);
+                }elseif ($tipo_pago[$i] == "HSBC") {
+                    $total_HSBC += floatval($monto_pago[$i]);
                 }
             }
         }
 
-        $total_final = $total_swiss_pool + $total_rendimientos + $total_renovacion + $total_comisiones + $total_mx_pool + $total_efectivo + $total_ci_bank + $total_HSBC + $total_wise;
+        $total_final = $total_swiss_pool + $total_rendimientos + $total_renovacion + $total_comisiones + $total_mx_pool + $total_efectivo + $total_ci_bank + $total_santander + $total_wise + $total_bitso + $total_HSBC;
 
         $data = array(
             "flujodinero" => $flujodinero,
@@ -166,8 +180,10 @@ class FlujoDineroController extends Controller
             "total_mx_pool" => number_format($total_mx_pool, 2),
             "total_efectivo" => number_format($total_efectivo, 2),
             "total_ci_bank" => number_format($total_ci_bank, 2),
-            "total_HSBC" => number_format($total_HSBC, 2),
+            "total_santander" => number_format($total_santander, 2),
             "total_wise" => number_format($total_wise, 2),
+            "total_bitso" => number_format($total_bitso, 2),
+            "total_HSBC" => number_format($total_HSBC, 2),
             "total_final" => number_format($total_final, 2)
         );
         

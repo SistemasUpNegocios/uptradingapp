@@ -548,6 +548,16 @@ $(document).ready(function () {
         );
     });
 
+    $("#tiposPagos").on("click", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+
+        window.open(
+            `/admin/tiposPagosClientes?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            "_blank"
+        );
+    });
+
     $(document).on("click", "#imprimirReporte", function () {
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
@@ -738,8 +748,15 @@ $(document).ready(function () {
         let fecha = $(this).data("fecha");
         let tipo = $(this).data("tipo");
         let dolar = $("#dolarInput").val();
-        let dolares =
-            parseFloat(rendimiento.replaceAll(",", "")) / parseFloat(dolar);
+        let pos = rendimiento.toString().indexOf(",");
+        let rendimiento_remp = "";
+        if (pos != -1) {
+            rendimiento_remp = rendimiento.replaceAll(",", "");
+        } else {
+            rendimiento_remp = rendimiento;
+        }
+
+        let dolares = parseFloat(rendimiento_remp) / parseFloat(dolar);
         dolares = dolares.toFixed(2);
 
         //00293-009

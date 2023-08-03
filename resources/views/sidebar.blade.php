@@ -376,13 +376,23 @@
                         <i class="bi bi-circle"></i><span>Convenios</span>
                     </a>
                 </li>
-            </ul>
-            <ul id="convenios-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ URL::to('admin/incrementoConvenio') }}">
                         <i class="bi bi-circle"></i><span>Incremento cuenta MAM</span>
                     </a>
                 </li>
+                @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                    <li>
+                        <a href="{{ URL::to('admin/conveniovencer') }}">
+                            <i class="bi bi-circle"></i><span>Convenios a vencer</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/convenioTerminado') }}">
+                            <i class="bi bi-circle"></i><span>Convenios terminados</span>
+                        </a>
+                    </li>                    
+                @endif
             </ul>
         </li>
 

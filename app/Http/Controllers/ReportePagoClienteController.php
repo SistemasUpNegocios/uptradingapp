@@ -11,6 +11,7 @@ use App\Models\TipoCambio;
 use App\Models\Log;
 use App\Models\Pago;
 use App\Exports\PagosClienteExport;
+use App\Exports\TiposPagos;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
@@ -317,6 +318,45 @@ class ReportePagoClienteController extends Controller
         $fecha_fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
 
         return Excel::download(new PagosClienteExport($request->fecha_inicio, $request->fecha_fin, $request->dolar), "pagos a clientes del día $fecha_inicio a $fecha_fin.xlsx");
+    }
+
+    public function tiposPagosClientes(Request $request)
+    {
+        $psid = session('psid');
+        $clienteid = session('clienteid');
+        $codigo = session('codigo_oficina');
+
+        $resumenContrato = DB::table('contrato')
+        ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+        ->join('oficina', 'oficina.id', '=', 'ps.oficina_id')
+        ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+        ->join('amortizacion', 'amortizacion.contrato_id', '=', 'contrato.id')
+        ->join('pago_cliente', 'pago_cliente.contrato_id', '=', 'contrato.id')
+        ->select(DB::raw("CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, cliente.tipo_pago"))
+        ->whereBetween('amortizacion.fecha', [$request->fecha_inicio, $request->fecha_fin])
+        ->where(function ($query) use ($psid, $clienteid) {
+            $query->where("contrato.ps_id", "like", $psid)
+            ->orWhere("contrato.cliente_id", "like", $clienteid);
+        })
+        ->where("oficina.codigo_oficina", "like", $codigo)
+        ->where("contrato.status", "Activado")
+        ->distinct("clientenombre")
+        ->orderBy('contrato.id', 'DESC')
+        ->get();
+
+        $data = array(
+            "resumenes_contrato" => $resumenContrato,
+            "fecha_inicio" => $request->fecha_inicio,
+            "fecha_fin" => $request->fecha_fin,
+            "dolar" => $request->dolar,
+        );
+
+        $inicio = \Carbon\Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
+        $fin = \Carbon\Carbon::parse($request->fecha_fin)->formatLocalized('%d de %B de %Y');
+
+        $pdf = PDF::loadView('reportepagocliente.pagos', $data);
+        $nombreDescarga = "Forma de pagos a clientes de $inicio hasta $fin.pdf";
+        return $pdf->stream($nombreDescarga);
     }
 
     public function getClave(Request $request)

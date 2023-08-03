@@ -39,12 +39,14 @@
                             </div>
                         </div>
                         <table class="table table-striped table-bordered nowrap text-center" id="contratoVencer">
-                            <thead>
+                            <thead style="vertical-align: middle">
                                 <tr>
                                     <th data-priority="0" scope="col">Contrato</th>
                                     <th data-priority="0" scope="col">Cliente</th>
-                                    <th data-priority="0" scope="col">Fecha a vencer</th>
-                                    <th data-priority="0" scope="col">Fecha limite</th>
+                                    {{-- <th data-priority="0" scope="col">Inversión (USD)</th> --}}
+                                    {{-- <th data-priority="0" scope="col">Inversión (MXN)</th> --}}
+                                    <th data-priority="0" scope="col">Fecha de inicio</th>
+                                    <th data-priority="0" scope="col">Fecha de vencimiento</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>

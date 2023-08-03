@@ -1,36 +1,21 @@
 @extends('index')
 
-@section('title', 'Gestión de convenios')
+@section('title', 'Gestión de convenios terminados')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap5.min.css">
-
-    <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
 @endsection
 
 @section('content')
     <div class="pagetitle">
-        <h1>Gestión de convenios</h1>
+        <h1>Gestión de convenios terminados</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Gestión de convenios</li>
+                <li class="breadcrumb-item active">Gestión de convenios terminados</li>
             </ol>
         </nav>
-    </div>
-
-    <div id="contenedor_filtros" class="contenedor_filtros">
-        <div class="card info-card machines-card">
-            <div class="card-body pb-0">
-                <h5 class="card-title mb-0 text-center">Convenios</h5>
-                <div class="col-12 mb-2 px-2">
-                    <a class="btn btn-primary mb-2" id="todos">Todos</a>
-                    <a class="btn btn-outline-primary mb-2" id="conveniosActivados">Activados</a>
-                    <a class="btn btn-outline-primary mb-2" id="conveniosPendientes">Pendientes</a>
-                </div>
-            </div>
-        </div>
     </div>
 
     <section class="section">
@@ -38,17 +23,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
-                        <div class="alert alert-primary d-flex align-items-center l-bg-primary mt-2" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                                <use xlink:href="#info-fill"></use>
-                            </svg>
-                            <div id="titulo_filtro">Mostrando todos los convenios</div>
-                        </div>
-
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
-                            <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo convenio</a>
-                        @endif
-                        <table class="table table-striped table-bordered nowrap text-center" id="convenio">
+                        <table class="table table-striped table-bordered nowrap text-center" id="convenioTerminado">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Folio</th>
@@ -309,10 +284,6 @@
             </div>
         </div>
     </div>
-
-    <a href="#" id="filtros" title="Filtros de conveios" class="d-flex align-items-center justify-content-center">
-        <i class="bi bi-funnel-fill text-white"></i>
-    </a>
 @endsection
 
 @section('preloader')
@@ -340,6 +311,5 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
-    <script src="{{ asset('js/convenio.js') }}"></script>
+    <script src="{{ asset('js/convenioterminado.js') }}"></script>
 @endsection

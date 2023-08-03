@@ -74,6 +74,7 @@ class ConvenioController extends Controller
                     ->orWhere("convenio.cliente_id", "like", $clienteid);
                 })
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where("convenio.status", "!=", "Finiquitado")
                 ->orderBy("convenio.id", "desc")
                 ->get();
         }else{
@@ -86,6 +87,7 @@ class ConvenioController extends Controller
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where("convenio.status", "!=", "Finiquitado")
                 ->orderBy("convenio.id", "desc")
                 ->get();
         }
@@ -101,6 +103,7 @@ class ConvenioController extends Controller
                 ->where("convenio.ps_id", "like", $psid)
                 ->where("convenio.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
+                ->where("convenio.status", "!=", "Finiquitado")
                 ->orderBy("convenio.id", "desc")
                 ->get();
         }

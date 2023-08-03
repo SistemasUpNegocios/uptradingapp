@@ -104,6 +104,20 @@ $(document).ready(function () {
                     return formatearCantidad.format(0);
                 },
             },
+            //Santander
+            {
+                data: function (data) {
+                    let tipo_pago = data.tipo_pago.split(",");
+                    let monto_pago = data.monto_pago.split(",");
+
+                    for (let i = 0; i < tipo_pago.length; i++) {
+                        if (tipo_pago[i] == "Santander") {
+                            return formatearCantidad.format(monto_pago[i]);
+                        }
+                    }
+                    return formatearCantidad.format(0);
+                },
+            },
             // Efectivo
             {
                 data: function (data) {
@@ -126,6 +140,20 @@ $(document).ready(function () {
 
                     for (let i = 0; i < tipo_pago.length; i++) {
                         if (tipo_pago[i] == "ci_bank") {
+                            return formatearCantidad.format(monto_pago[i]);
+                        }
+                    }
+                    return formatearCantidad.format(0);
+                },
+            },
+            //Bitso
+            {
+                data: function (data) {
+                    let tipo_pago = data.tipo_pago.split(",");
+                    let monto_pago = data.monto_pago.split(",");
+
+                    for (let i = 0; i < tipo_pago.length; i++) {
+                        if (tipo_pago[i] == "bitso") {
                             return formatearCantidad.format(monto_pago[i]);
                         }
                     }
@@ -342,10 +370,10 @@ $(document).ready(function () {
             info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
         },
         lengthMenu: [
-            [50, 100, 150, -1],
-            [50, 100, 150, "Todo"],
+            [5, 10, 15, -1],
+            [5, 10, 15, "Todo"],
         ],
-        pageLength: 50,
+        pageLength: 5,
         aaSorting: [],
     });
 
@@ -395,9 +423,12 @@ $(document).ready(function () {
                         <th data-priority="0" scope="col">Renovación</th>
                         <th data-priority="0" scope="col">Comisiones</th>
                         <th data-priority="0" scope="col">MX a POOL</th>
+                        <th data-priority="0" scope="col">Santander</th>
                         <th data-priority="0" scope="col">Efectivo</th>
                         <th data-priority="0" scope="col">CI BANK</th>
+                        <th data-priority="0" scope="col">Bitso</th>
                         <th data-priority="0" scope="col">HSBC</th>
+                        <th data-priority="0" scope="col">Wise</th>
                     </tr>
                 </thead>
                 <tbody id="amortizacionBody">
@@ -507,6 +538,22 @@ $(document).ready(function () {
                                 return formatearCantidad.format(0);
                             },
                         },
+                        //Santander
+                        {
+                            data: function (data) {
+                                let tipo_pago = data.tipo_pago.split(",");
+                                let monto_pago = data.monto_pago.split(",");
+
+                                for (let i = 0; i < tipo_pago.length; i++) {
+                                    if (tipo_pago[i] == "Santander") {
+                                        return formatearCantidad.format(
+                                            monto_pago[i]
+                                        );
+                                    }
+                                }
+                                return formatearCantidad.format(0);
+                            },
+                        },
                         // Efectivo
                         {
                             data: function (data) {
@@ -539,6 +586,22 @@ $(document).ready(function () {
                                 return formatearCantidad.format(0);
                             },
                         },
+                        //Bitso
+                        {
+                            data: function (data) {
+                                let tipo_pago = data.tipo_pago.split(",");
+                                let monto_pago = data.monto_pago.split(",");
+
+                                for (let i = 0; i < tipo_pago.length; i++) {
+                                    if (tipo_pago[i] == "bitso") {
+                                        return formatearCantidad.format(
+                                            monto_pago[i]
+                                        );
+                                    }
+                                }
+                                return formatearCantidad.format(0);
+                            },
+                        },
                         //HSBC
                         {
                             data: function (data) {
@@ -547,6 +610,22 @@ $(document).ready(function () {
 
                                 for (let i = 0; i < tipo_pago.length; i++) {
                                     if (tipo_pago[i] == "HSBC") {
+                                        return formatearCantidad.format(
+                                            monto_pago[i]
+                                        );
+                                    }
+                                }
+                                return formatearCantidad.format(0);
+                            },
+                        },
+                        //Wise
+                        {
+                            data: function (data) {
+                                let tipo_pago = data.tipo_pago.split(",");
+                                let monto_pago = data.monto_pago.split(",");
+
+                                for (let i = 0; i < tipo_pago.length; i++) {
+                                    if (tipo_pago[i] == "wise") {
                                         return formatearCantidad.format(
                                             monto_pago[i]
                                         );
@@ -738,10 +817,10 @@ $(document).ready(function () {
                         info: "Mostrando de _START_ a _END_ de _TOTAL_ pagos",
                     },
                     lengthMenu: [
-                        [50, 100, 150, -1],
-                        [50, 100, 150, "Todo"],
+                        [5, 10, 15, -1],
+                        [5, 10, 15, "Todo"],
                     ],
-                    pageLength: 50,
+                    pageLength: 5,
                     aaSorting: [],
                 });
             },

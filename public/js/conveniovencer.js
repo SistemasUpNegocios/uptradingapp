@@ -6,48 +6,24 @@ $(document).ready(function () {
     Swal.fire({
         icon: "warning",
         title: '<h1 style="font-family: Poppins; font-weight: 700;">¡ADVERTENCIA!</h1>',
-        html: '<p style="font-family: Poppins">SI EL CONTRATO SE VA A <b>RENOVAR</b>, NO AÑADAS UNA NOTA. EL SISTEMA LO RENOVARÁ AUTOMÁTICAMENTE.</p>',
+        html: '<p style="font-family: Poppins">SI EL CONVENIO SE VA A <b>RENOVAR</b>, NO AÑADAS UNA NOTA. EL SISTEMA LO RENOVARÁ AUTOMÁTICAMENTE.</p>',
         confirmButtonText: '<a style="font-family: Poppins">Aceptar</a>',
         confirmButtonColor: "#01bbcc",
     });
 
-    // const formatearCantidad = new Intl.NumberFormat("en-US", {
-    //     style: "currency",
-    //     currency: "USD",
-    //     minimumFractionDigits: 2,
-    // });
-
-    // const formatearCantidadMXN = new Intl.NumberFormat("es-MX", {
-    //     style: "currency",
-    //     currency: "MXN",
-    //     minimumFractionDigits: 2,
-    // });
-
-    var table = $("#contratoVencer").DataTable({
-        ajax: "/admin/showContratoVencer",
+    var table = $("#convenioVencer").DataTable({
+        ajax: "/admin/showConvenioVencer",
         columns: [
-            { data: "contrato" },
+            { data: "folio" },
             { data: "clientenombre" },
-            // {
-            //     data: "inversion_us",
-            //     render: function (data) {
-            //         return formatearCantidad.format(data);
-            //     },
-            // },
-            // {
-            //     data: "inversion",
-            //     render: function (data) {
-            //         return formatearCantidadMXN.format(data);
-            //     },
-            // },
             {
-                data: "fecha",
+                data: "fecha_inicio",
                 render: function (data) {
                     return formatearFecha(data);
                 },
             },
             {
-                data: "fecha_renovacion",
+                data: "fecha_fin",
                 render: function (data) {
                     return formatearFecha(data);
                 },
@@ -76,12 +52,12 @@ $(document).ready(function () {
         },
         language: {
             processing: "Procesando...",
-            lengthMenu: "Mostrar _MENU_ contratos",
+            lengthMenu: "Mostrar _MENU_ convenios",
             zeroRecords: "No se encontraron resultados",
-            emptyTable: "No se ha registrado ningún contrato",
+            emptyTable: "No se ha registrado ningún convenio",
             infoEmpty:
-                "Mostrando contratos del 0 al 0 de un total de 0 contratos",
-            infoFiltered: "(filtrado de un total de _MAX_ contratos)",
+                "Mostrando convenios del 0 al 0 de un total de 0 convenios",
+            infoFiltered: "(filtrado de un total de _MAX_ convenios)",
             search: "Buscar:",
             infoThousands: ",",
             loadingRecords: "Cargando...",
@@ -189,7 +165,7 @@ $(document).ready(function () {
             },
             searchPanes: {
                 clearMessage: "Borrar todo",
-                collacontratoe: {
+                collage: {
                     0: "Paneles de búsqueda",
                     _: "Paneles de búsqueda (%d)",
                 },
@@ -253,7 +229,7 @@ $(document).ready(function () {
                         "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
                 },
             },
-            info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos",
+            info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
         },
         aaSorting: [],
     });
@@ -265,41 +241,30 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".view", function (e) {
-        $("#contratoForm")[0].reset();
+        $("#convenioForm")[0].reset();
 
         $("#alertMessage").text("");
+        acc = "view";
         e.preventDefault();
 
         var id = $(this).data("id");
-        var nombrecliente = $(this).data("nombrecliente");
-        var operador = $(this).data("operador");
-        var operadorine = $(this).data("operadorine");
-        var lugarfirma = $(this).data("lugarfirma");
-        var fechainicio = $(this).data("fecha");
-        var fecharen = $(this).data("fecharen");
-        var fechapag = $(this).data("fechapag");
-        var fechalimite = $(this).data("fechalimite");
-        var periodo = $(this).data("periodo");
-        var contrato = $(this).data("contrato");
-        var psid = $(this).data("psid");
-        var psnombre = $(this).data("psnombre");
-        var clienteid = $(this).data("clienteid");
-        var pendienteid = $(this).data("pendienteid");
-        var tipoid = $(this).data("tipoid");
-        var porcentaje = $(this).data("porcentaje");
         var folio = $(this).data("folio");
-        var modeloid = $(this).data("modeloid");
-        var inversion = $(this).data("inversion");
-        var inversionus = $(this).data("inversionus");
-        var tipocambio = $(this).data("tipocambio");
-        var inversionlet = $(this).data("inversionlet");
-        var inversionletus = $(this).data("inversionletus");
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
+        var nombrecliente = $(this).data("nombrecliente");
+        var monto = $(this).data("monto");
+        var monto_letra = $(this).data("monto_letra");
+        var fecha_inicio = $(this).data("fecha_inicio");
+        var fecha_fin = $(this).data("fecha_fin");
+        var capertura = $(this).data("capertura");
+        var cmensual = $(this).data("cmensual");
+        var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
-
-        $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
+        var numerocuenta = $(this).data("numerocuenta");
+        var loggin = $(this).data("loggin");
+        var ps_id = $(this).data("ps_id");
+        var cliente_id = $(this).data("cliente_id");
+        var banco_id = $(this).data("banco_id");
+        var psnombre = $(this).data("psnombre");
+        var firma = $(this).data("firma");
 
         $("#clienteIdInput").next().children().first().empty();
         $("#clienteIdInput").next().children().first().text(nombrecliente);
@@ -319,116 +284,72 @@ $(document).ready(function () {
             .attr("data-dselect-text", psnombre);
         $("#psIdInput").next().children().first().attr("disabled", true);
 
+        $("#modalTitle").text(`Vista previa del convenio de: ${nombrecliente}`);
+
         $("#formModal").modal("show");
-
-        $("#operadorInput").val(operador);
-        $("#operadorInput").prop("readonly", true);
-
-        $("#operadorINEInput").val(operadorine);
-        $("#operadorINEInput").prop("readonly", true);
-
-        $("#lugarFirmaInput").val(lugarfirma);
-        $("#lugarFirmaInput").prop("readonly", true);
-
-        $("#fechaInicioInput").val(fechainicio);
-        $("#fechaInicioInput").prop("readonly", true);
-
-        $("#fechaRenInput").val(fecharen);
-        $("#fechaRenInput").prop("readonly", true);
-
-        $("#fechaPagInput").val(fechapag);
-        $("#fechaPagInput").prop("readonly", true);
-
-        $("#fechaLimiteInput").val(fechalimite);
-        $("#fechaLimiteInput").prop("readonly", true);
-
-        $("#periodoInput").val(periodo);
-        $("#periodoInput").prop("disabled", true);
-
-        $("#contratoInput").val(contrato);
-        $("#contratoInput").prop("readonly", true);
-
-        $("#clienteIdInput").val(clienteid);
-        $("#clienteIdInput").prop("disabled", true);
-
-        $("#psIdInput").val(psid);
-        $("#psIdInput").prop("disabled", true);
-
-        $("#pendienteIdInput").val(pendienteid);
-        $("#pendienteIdInput").prop("disabled", true);
-
-        $("#tipoIdInput").val(tipoid);
-        $("#tipoIdInput").prop("disabled", true);
-
-        porcentaje = porcentaje.toString().replace(",", ".");
-        $("#porcentajeInput").val(porcentaje);
-        // $("#porcentajeInput").prop("readonly", true);
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
-        $("#modeloIdInput").val(modeloid);
-        $("#modeloIdInput").prop("disabled", true);
+        if (firma == "MARIA EUGENIA RINCON ACEVAL") {
+            $("#gerenteInput").prop("checked", true);
+            $("#representanteInput").prop("checked", false);
+        } else {
+            $("#representanteInput").prop("checked", true);
+            $("#gerenteInput").prop("checked", false);
+        }
+        $("#gerenteInput").prop("disabled", true);
+        $("#representanteInput").prop("disabled", true);
 
-        inversion = inversion.toString().replace(",", ".");
-        $("#inversionInput").val(inversion);
-        $("#inversionInput").prop("readonly", true);
+        monto = monto.toString().replace(",", ".");
+        $("#montoInput").val(monto);
+        $("#montoInput").prop("readonly", true);
 
-        inversionus = inversionus.toString().replace(",", ".");
-        $("#inversionUsInput").val(inversionus);
-        $("#inversionUsInput").prop("readonly", true);
+        $("#montoLetraInput").val(monto_letra);
+        $("#montoLetraInput").prop("readonly", true);
 
-        tipocambio = tipocambio.toString().replace(",", ".");
-        $("#tipoCambioInput").val(tipocambio);
-        $("#tipoCambioInput").prop("readonly", true);
+        $("#fechaInicioInput").val(fecha_inicio);
+        $("#fechaInicioInput").prop("readonly", true);
 
-        $("#inversionLetInput").val(inversionlet);
-        $("#inversionLetInput").prop("readonly", true);
+        $("#fechaFinInput").val(fecha_fin);
+        $("#fechaFinInput").prop("readonly", true);
 
-        $("#inversionLetUsInput").val(inversionletus);
-        $("#inversionLetUsInput").prop("readonly", true);
+        capertura = capertura.toString().replace(",", ".");
+        $("#cAperturaInput").val(capertura);
+        $("#cAperturaInput").prop("readonly", true);
 
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", true);
+        cmensual = cmensual.toString().replace(",", ".");
+        $("#cMensualInput").val(cmensual);
+        $("#cMensualInput").prop("readonly", true);
 
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", true);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", true);
+        ctrimestral = ctrimestral.toString().replace(",", ".");
+        $("#cTrimestralInput").val(ctrimestral);
+        $("#cTrimestralInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
 
+        $("#numeroCuentaInput").val(numerocuenta);
+        $("#numeroCuentaInput").prop("readonly", true);
+
+        $("#logginInput").val(loggin);
+        $("#logginInput").prop("readonly", true);
+
+        $("#psIdInput").val(ps_id);
+        $("#psIdInput").prop("disabled", true);
+
+        $("#clienteIdInput").val(cliente_id);
+        $("#clienteIdInput").prop("disabled", true);
+
+        $("#bancoIdInput").val(banco_id);
+        $("#bancoIdInput").prop("disabled", true);
+
+        $("#modifySwitch").prop("disabled", true);
+
         $("#beneficiariosInput").prop("disabled", true);
-
-        containerHide();
-
-        $("#comprobantePagoInput").prop("disabled", true);
-        comprobantePago(this);
-
-        $("#efectivoInput").prop("disabled", true);
-        $("#transferenciaSwissInput").prop("disabled", true);
-        $("#transferenciaMXInput").prop("disabled", true);
-        $("#ciBankInput").prop("disabled", true);
-        $("#hsbcInput").prop("disabled", true);
-        $("#renovacionInput").prop("disabled", true);
-        $("#rendimientosInput").prop("disabled", true);
-        $("#comisionesInput").prop("disabled", true);
-        tipoPago(this);
-
-        $("#montoEfectivoInput").prop("disabled", true);
-        $("#montoTransSwissPOOLInput").prop("disabled", true);
-        $("#montoTransMXPOOLInput").prop("disabled", true);
-        $("#montoBankInput").prop("disabled", true);
-        $("#montoHSBCInput").prop("disabled", true);
-        $("#montoRenovacionInput").prop("disabled", true);
-        $("#montoRendimientosInput").prop("disabled", true);
-        $("#montoComisionesInput").prop("disabled", true);
-
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiarios",
+            url: "/admin/getBeneficiariosConvenio",
             data: {
                 id: id,
             },
@@ -445,6 +366,8 @@ $(document).ready(function () {
                             adjetivo = "segundo";
                         } else if (i == 3) {
                             adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
                         }
                         $("#contBeneficiarios").append(`             
                             <div class="col-12">
@@ -572,6 +495,28 @@ $(document).ready(function () {
                         $("#correoBen3Input").val("sin correo de contácto");
                         $("#curpBen3Input").val("sin curp");
                     }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("sin beneficiario");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("sin telefono de contácto");
+                        $("#correoBen4Input").val("sin correo de contácto");
+                        $("#curpBen4Input").val("sin curp");
+                    }
                 } else {
                     $("#beneficiariosInput").val(1);
                     $("#contBeneficiarios").empty();
@@ -631,223 +576,27 @@ $(document).ready(function () {
             },
         });
 
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
-
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
 
         $("#contPagos").empty();
-        $(".cont-tabla").empty();
-
-        var tipo_contrato = $("option:selected", "#tipoIdInput").attr(
-            "data-tipo"
-        );
-
-        if (tipo_contrato == "Rendimiento compuesto") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                                <th scope="col">Rendimiento</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        } else if (tipo_contrato == "Rendimiento mensual") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        }
-
-        var cmensual = $("option:selected", "#tipoIdInput").attr(
-            "data-cmensual"
-        );
-
-        cmensual = parseFloat(cmensual);
-
-        var inversionMXN = $("#inversionInput").val();
-        inversionMXN = parseFloat(inversionMXN);
-
-        var inversionUSD = $("#inversionUsInput").val();
-        inversionUSD = parseFloat(inversionUSD);
-        // var inversionInicialUSD = parseFloat(inversionUSD);
-
-        var porcentaje = $("#porcentajeInput").val();
-        porcentaje = parseFloat(porcentaje);
-
-        var fecha = $("#fechaInicioInput").val();
-
-        var porcentaje = $("#porcentajeInput").val();
-        var usd = parseFloat($("#tipoCambioInput").val());
-
-        var cmensual2 = `0.0${cmensual}`;
-        cmensual2 = parseFloat(cmensual2);
-
-        var meses = $("#periodoInput").val();
-
-        var fechaFeb = $("#fechaInicioInput").val();
-        fechaFeb = fechaFeb.split("-");
-        for (var i = 0; i < meses; i++) {
-            fecha = fecha.split("-");
-            if (parseInt(fecha[1]) + 1 == 2) {
-                if (
-                    fechaFeb[2] == 29 ||
-                    fechaFeb[2] == 30 ||
-                    fechaFeb[2] == 31
-                ) {
-                    fecha = `28/02/${fecha[0]}`;
-                } else {
-                    fecha = new Date(fecha[0], fecha[1], fechaFeb[2]);
-                    fecha = formatDate(fecha);
-                }
-            } else if (fechaFeb[2] == 31) {
-                if (
-                    fecha[1] == 3 ||
-                    fecha[1] == 5 ||
-                    fecha[1] == 8 ||
-                    fecha[1] == 10
-                ) {
-                    fecha = new Date(fecha[0], fecha[1], 30);
-                    fecha = formatDate(fecha);
-                } else {
-                    fecha = new Date(fecha[0], fecha[1], fechaFeb[2]);
-                    fecha = formatDate(fecha);
-                }
-            } else {
-                fecha = new Date(fecha[0], fecha[1], fechaFeb[2]);
-                fecha = formatDate(fecha);
-            }
-
-            var formatterUSD = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            });
-
-            var formatterMXN = new Intl.NumberFormat("es-MX", {
-                style: "currency",
-                currency: "MXN",
-            });
-
-            var fechaInput = fecha.split("/").reverse().join("-");
-
-            if (porcentaje.length < 3 && porcentaje.length > 0) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `0.0${porcentaje}`;
-                }
-            } else if (porcentaje.length == 3) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `${porcentaje}`;
-                }
-            }
-            porcentaje2 = parseFloat(porcentaje2);
-
-            var monto = inversionUSD;
-            var redito = inversionUSD * porcentaje2;
-            var monto_redito = monto + redito;
-            var pagoPS = cmensual2 * inversionUSD;
-
-            $("#contPagos").append(
-                `
-                <input type="hidden" name="serie-reintegro${
-                    i + 1
-                }" id="serieReintegro${i + 1}Input" value="${i + 1}">
-                <input type="hidden" name="fecha-reintegro${
-                    i + 1
-                }" id="fechaReintegro${i + 1}Input" value="${fechaInput}">
-                <input type="hidden" name="monto-reintegro${
-                    i + 1
-                }" id="montoReintegro${i + 1}Input" value="${monto.toFixed(2)}">
-                <input type="hidden" name="redito-reintegro${
-                    i + 1
-                }" id="reditoReintegro${i + 1}Input" value="${redito.toFixed(
-                    2
-                )}">
-                <input type="hidden" name="montoredito-reintegro${
-                    i + 1
-                }" id="montoReditoReintegro${
-                    i + 1
-                }Input" value="${monto_redito.toFixed(2)}">
-
-                <input type="hidden" name="monto-pagops${
-                    i + 1
-                }" id="montoPagoPs${i + 1}Input" value="${pagoPS.toFixed(2)}">
-                `
-            );
-
-            if (tipo_contrato == "Rendimiento compuesto") {
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                    <td>${formatterUSD.format(
-                        inversionUSD + inversionUSD * porcentaje2
-                    )}</td>
-                </tr>
-                `);
-                inversionMXN = inversionMXN + inversionMXN * porcentaje2;
-                inversionUSD = inversionUSD + inversionUSD * porcentaje2;
-            } else if (tipo_contrato == "Rendimiento mensual") {
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                </tr>
-                `);
-            }
-
-            fecha = fecha.split("/").reverse().join("-");
-        }
     });
 
     $(document).on("click", ".edit", function (e) {
-        $("#contratoFormNota")[0].reset();
+        $("#convenioFormNota")[0].reset();
         $("#alertMessage").text("");
         e.preventDefault();
 
         var id = $(this).data("id");
-        var contrato = $(this).data("contrato");
-        var nota = $(this).data("notacontrato");
+        var folio = $(this).data("folio");
+        var nota = $(this).data("notafolio");
         var cliente = $(this).data("cliente");
 
         $("#idInputNota").val(id);
         $("#notaInput").val(nota);
 
         $("#modalTitleNota").text(
-            `Agregar nota para el contrato: ${contrato} de ${cliente}`
+            `Agregar nota para el convenio: ${folio} de ${cliente}`
         );
         $("#formModalNota").modal("show");
 
@@ -882,7 +631,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "/admin/contrato/autorizarnota",
+            url: "/admin/convenio/autorizarnota",
             data: {
                 id: id,
                 autorizacion: autorizacion,
@@ -912,12 +661,12 @@ $(document).ready(function () {
         });
     });
 
-    $("#contratoFormNota").on("submit", function (e) {
+    $("#convenioFormNota").on("submit", function (e) {
         e.preventDefault();
         $("#alertMessage").text("");
         $.ajax({
             type: "POST",
-            url: "/admin/contrato/editnota",
+            url: "/admin/convenio/editnota",
             data: new FormData(this),
             dataType: "json",
             contentType: false,
@@ -925,7 +674,7 @@ $(document).ready(function () {
             processData: false,
             success: function () {
                 $("#formModalNota").modal("hide");
-                $("#contratoFormNota")[0].reset();
+                $("#convenioFormNota")[0].reset();
                 table.ajax.reload(null, false);
                 Swal.fire({
                     icon: "success",
@@ -946,99 +695,6 @@ $(document).ready(function () {
             },
         });
     });
-
-    const comprobantePago = (thiss) => {
-        var comprobantepago = $(thiss).data("comprobantepago");
-        var contrato = $(thiss).data("contrato");
-
-        if (comprobantepago.length > 0) {
-            $("#comprobantePagoInput").addClass("is-valid");
-            $("#comprobantePagoInput").removeClass("is-invalid");
-
-            $("#comprobantePagoDesc").attr("download", `${contrato}.zip`);
-            $("#comprobantePagoDesc").attr(
-                "href",
-                `../documentos/comprobantes_pagos/contratos/${contrato}/${contrato}.zip`
-            );
-
-            $("#comprobantePagoDesc").removeClass("d-none");
-        } else {
-            $("#comprobantePagoInput").addClass("is-invalid");
-            $("#comprobantePagoInput").removeClass("is-valid");
-
-            $("#comprobantePagoDesc").addClass("d-none");
-        }
-    };
-
-    const tipoPago = (thiss) => {
-        let checkbox = [
-            "#efectivoInput",
-            "#transferenciaSwissInput",
-            "#transferenciaMXInput",
-            "#ciBankInput",
-            "#hsbcInput",
-            "#renovacionInput",
-            "#rendimientosInput",
-            "#comisionesInput",
-        ];
-
-        let inputs = [
-            "#montoEfectivoInput",
-            "#montoTransSwissPOOLInput",
-            "#montoTransMXPOOLInput",
-            "#montoBankInput",
-            "#montoHSBCInput",
-            "#montoRenovacionInput",
-            "#montoRendimientosInput",
-            "#montoComisionesInput",
-        ];
-
-        let conts = [
-            "#montoEfectivoCont",
-            "#montoTransSwissPOOLCont",
-            "#montoTransMXPOOLCont",
-            "#montoBankCont",
-            "#montoHSBCCont",
-            "#montoRenovacionCont",
-            "#montoComisionesCont",
-        ];
-
-        let montopago = $(thiss).data("montopago");
-        let tipopago = $(thiss).data("tipopago");
-
-        if (typeof montopago !== "undefined") {
-            montopago = montopago.split(",");
-
-            tipopago = tipopago.split(",");
-            let j = 0;
-            tipopago.map((tipo) => {
-                let i = 0;
-                checkbox.map((input) => {
-                    if (tipo == $(input).val()) {
-                        $(input).prop("checked", true);
-                        let checked = $(input).is(":checked");
-                        if (checked) {
-                            $(conts[i]).show();
-                            $(inputs[i]).val(montopago[j]);
-                        }
-                        j++;
-                    }
-                    i++;
-                });
-            });
-        }
-    };
-
-    const containerHide = () => {
-        $("#montoEfectivoCont").hide();
-        $("#montoTransSwissPOOLCont").hide();
-        $("#montoTransMXPOOLCont").hide();
-        $("#montoBankCont").hide();
-        $("#montoHSBCCont").hide();
-        $("#montoRenovacionCont").hide();
-        $("#montoRendimientosCont").hide();
-        $("#montoComisionesCont").hide();
-    };
 });
 
 $(".table").addClass("compact nowrap w-100");
