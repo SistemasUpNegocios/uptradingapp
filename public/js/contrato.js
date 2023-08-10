@@ -36,6 +36,9 @@ $(document).ready(function () {
     let acc = "";
     let casilla = false;
 
+    $(".contEuro").hide();
+    $(".contFranco").hide();
+
     var table = $("#contrato").DataTable({
         ajax: "/admin/showContrato",
         columns: [
@@ -1466,6 +1469,8 @@ $(document).ready(function () {
 
     let dataInversionUS = 0;
     let dataInversionMXN = 0;
+    let dataInversionEUR = 0;
+    let dataInversionCHF = 0;
     let dataFechaInicio = "";
 
     table.on("change", ".status", function () {
@@ -1802,6 +1807,12 @@ $(document).ready(function () {
         $("#tipoCambioInput").prop("readonly", false);
         $("#inversionLetInput").prop("readonly", false);
         $("#inversionLetUsInput").prop("readonly", false);
+        $("#tipoCambioInputEUR").prop("readonly", false);
+        $("#tipoCambioInputCHF").prop("readonly", false);
+        $("#inversionInputEUR").prop("readonly", false);
+        $("#inversionInputCHF").prop("readonly", false);
+        $("#inversionLetInputEUR").prop("readonly", false);
+        $("#inversionLetInputCHF").prop("readonly", false);
         $("#fechaReinInput").prop("readonly", false);
         $("#statusReinInput").prop("disabled", false);
         $("#memoReinInput").prop("readonly", false);
@@ -1858,6 +1869,10 @@ $(document).ready(function () {
 
         $(".status_reintegro").hide();
         $(".memo_reintegro").hide();
+
+        $("#monedaDolaresInput").prop("disabled", false);
+        $("#monedaEurosInput").prop("disabled", false);
+        $("#monedaFrancosInput").prop("disabled", false);
 
         $("#modalTitle").text("Añadir contrato");
         $("#btnSubmit").text("Añadir contrato");
@@ -1937,6 +1952,24 @@ $(document).ready(function () {
         });
 
         $.ajax({
+            url: "https://api.currencyapi.com/v3/latest?apikey=cur_live_5M1goOJMnU9vgGYLZIGNkbHFI2fvMUGTR063XuVO&currencies=MXN&base_currency=CHF",
+            success: function (response) {
+                //FRANCO SUIZO
+                let franco = response.data.MXN.value;
+                $("#tipoCambioInputCHF").val(franco.toFixed(2));
+            },
+        });
+
+        $.ajax({
+            url: "https://api.currencyapi.com/v3/latest?apikey=cur_live_5M1goOJMnU9vgGYLZIGNkbHFI2fvMUGTR063XuVO&currencies=MXN&base_currency=EUR",
+            success: function (response) {
+                //EURO
+                let euro = response.data.MXN.value;
+                $("#tipoCambioInputEUR").val(euro.toFixed(2));
+            },
+        });
+
+        $.ajax({
             type: "GET",
             url: "/admin/getFolio",
             success: function (data) {
@@ -1979,11 +2012,18 @@ $(document).ready(function () {
         var inversionus = $(this).data("inversionus");
         var tipocambio = $(this).data("tipocambio");
         var inversionlet = $(this).data("inversionlet");
+        var tipocambio_eur = $(this).data("tipocambioeur");
+        var tipocambio_chf = $(this).data("tipocambiochf");
+        var inversion_eur = $(this).data("inversioneur");
+        var inversion_chf = $(this).data("inversionchf");
+        var inversionlet_eur = $(this).data("inversionleteur");
+        var inversionlet_chf = $(this).data("inversionletchf");
         var inversionletus = $(this).data("inversionletus");
         var fecharein = $(this).data("fecharein");
         var statusrein = $(this).data("statusrein");
         var memorein = $(this).data("memorein");
         var status = $(this).data("status");
+        var moneda = $(this).data("moneda");
 
         $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
 
@@ -2071,6 +2111,26 @@ $(document).ready(function () {
         $("#inversionLetUsInput").val(inversionletus);
         $("#inversionLetUsInput").prop("readonly", true);
 
+        $("#tipoCambioInputEUR").val(tipocambio_eur);
+        $("#tipoCambioInputEUR").prop("readonly", true);
+
+        $("#tipoCambioInputCHF").val(tipocambio_chf);
+        $("#tipoCambioInputCHF").prop("readonly", true);
+
+        inversion_eur = inversion_eur.toString().replace(",", ".");
+        $("#inversionInputEUR").val(inversion_eur);
+        $("#inversionInputEUR").prop("readonly", true);
+
+        inversion_chf = inversion_chf.toString().replace(",", ".");
+        $("#inversionInputCHF").val(inversion_chf);
+        $("#inversionInputCHF").prop("readonly", true);
+
+        $("#inversionLetInputEUR").val(inversionlet_eur);
+        $("#inversionLetInputEUR").prop("readonly", true);
+
+        $("#inversionLetInputCHF").val(inversionlet_chf);
+        $("#inversionLetInputCHF").prop("readonly", true);
+
         $("#fechaReinInput").val(fecharein);
         $("#fechaReinInput").prop("readonly", true);
 
@@ -2084,6 +2144,38 @@ $(document).ready(function () {
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
+
+        $("#monedaDolaresInput").prop("disabled", true);
+        $("#monedaDolaresInput").prop("checked", false);
+
+        $("#monedaEurosInput").prop("disabled", true);
+        $("#monedaEurosInput").prop("checked", false);
+
+        $("#monedaFrancosInput").prop("disabled", true);
+        $("#monedaFrancosInput").prop("checked", false);
+
+        if (moneda == "dolares") {
+            $("#monedaDolaresInput").prop("checked", true);
+
+            $(".contEuro").hide();
+            $(".contFranco").hide();
+
+            $(".contDolar").show();
+        } else if (moneda == "euros") {
+            $("#monedaEurosInput").prop("checked", true);
+
+            $(".contDolar").hide();
+            $(".contFranco").hide();
+
+            $(".contEuro").show();
+        } else if (moneda == "francos") {
+            $("#monedaFrancosInput").prop("checked", true);
+
+            $(".contDolar").hide();
+            $(".contEuro").hide();
+
+            $(".contFranco").show();
+        }
 
         $("#beneficiariosInput").prop("disabled", true);
 
@@ -2362,6 +2454,22 @@ $(document).ready(function () {
             "data-tipo"
         );
 
+        let monedaDolaresChecked = $("#monedaDolaresInput").is(":checked");
+        let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+        let monedaFrancosChecked = $("#monedaFrancosInput").is(":checked");
+        let capital_nombre = "";
+
+        if (monedaDolaresChecked) {
+            var inversionUSD = $("#inversionUsInput").val();
+            capital_nombre = "Capital (USD)";
+        } else if (monedaEurosChecked) {
+            var inversionUSD = $("#inversionInputEUR").val();
+            capital_nombre = "Capital (EUR)";
+        } else if (monedaFrancosChecked) {
+            var inversionUSD = $("#inversionInputCHF").val();
+            capital_nombre = "Capital (CHF)";
+        }
+
         if (tipo_contrato == "Rendimiento compuesto") {
             $(".cont-tabla").append(`
                 <div class="table-responsive">
@@ -2370,7 +2478,7 @@ $(document).ready(function () {
                             <tr>
                                 <th scope="col">Serie</th>
                                 <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
+                                <th scope="col">${capital_nombre}</th>
                                 <th scope="col">Interés</th>
                                 <th scope="col">Rendimiento</th>
                             </tr>
@@ -2388,7 +2496,7 @@ $(document).ready(function () {
                             <tr>
                                 <th scope="col">Serie</th>
                                 <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
+                                <th scope="col">${capital_nombre}</th>
                                 <th scope="col">Interés</th>
                             </tr>
                         </thead>
@@ -2408,7 +2516,6 @@ $(document).ready(function () {
         var inversionMXN = $("#inversionInput").val();
         inversionMXN = parseFloat(inversionMXN);
 
-        var inversionUSD = $("#inversionUsInput").val();
         inversionUSD = parseFloat(inversionUSD);
         // var inversionInicialUSD = parseFloat(inversionUSD);
 
@@ -2639,9 +2746,18 @@ $(document).ready(function () {
         var statusrein = $(this).data("statusrein");
         var memorein = $(this).data("memorein");
         var status = $(this).data("status");
+        var moneda = $(this).data("moneda");
+        var tipocambio_eur = $(this).data("tipocambioeur");
+        var tipocambio_chf = $(this).data("tipocambiochf");
+        var inversion_eur = $(this).data("inversioneur");
+        var inversion_chf = $(this).data("inversionchf");
+        var inversionlet_eur = $(this).data("inversionleteur");
+        var inversionlet_chf = $(this).data("inversionletchf");
 
         dataInversionUS = $(this).data("inversionus");
         dataInversionMXN = $(this).data("inversion");
+        dataInversionEUR = $(this).data("inversioneur");
+        dataInversionCHF = $(this).data("inversionchf");
         dataFechaInicio = $(this).data("fecha");
 
         $("#contratoForm").attr("action", "/admin/editContrato");
@@ -2721,6 +2837,61 @@ $(document).ready(function () {
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", false);
+
+        $("#tipoCambioInputEUR").val(tipocambio_eur);
+        $("#tipoCambioInputEUR").prop("readonly", false);
+
+        $("#tipoCambioInputCHF").val(tipocambio_chf);
+        $("#tipoCambioInputCHF").prop("readonly", false);
+
+        inversion_eur = inversion_eur.toString().replace(",", ".");
+        $("#inversionInputEUR").val(inversion_eur);
+        $("#inversionInputEUR").prop("readonly", false);
+
+        inversion_chf = inversion_chf.toString().replace(",", ".");
+        $("#inversionInputCHF").val(inversion_chf);
+        $("#inversionInputCHF").prop("readonly", false);
+
+        $("#inversionLetInputEUR").val(inversionlet_eur);
+        $("#inversionLetInputEUR").prop("readonly", false);
+
+        $("#inversionLetInputCHF").val(inversionlet_chf);
+        $("#inversionLetInputCHF").prop("readonly", false);
+
+        $("#monedaDolaresInput").prop("disabled", false);
+        $("#monedaDolaresInput").prop("checked", false);
+
+        $("#monedaEurosInput").prop("disabled", false);
+        $("#monedaEurosInput").prop("checked", false);
+
+        $("#monedaFrancosInput").prop("disabled", false);
+        $("#monedaFrancosInput").prop("checked", false);
+
+        if (moneda == "dolares") {
+            $("#monedaDolaresInput").prop("checked", true);
+            $("#inversionInputEUR").val(inversionus);
+            $("#inversionInputCHF").val(inversionus);
+
+            $(".contEuro").hide();
+            $(".contFranco").hide();
+            $(".contDolar").show();
+        } else if (moneda == "euros") {
+            $("#monedaEurosInput").prop("checked", true);
+            $("#inversionUsInput").val(inversion_eur);
+            $("#inversionInputCHF").val(inversion_eur);
+
+            $(".contDolar").hide();
+            $(".contFranco").hide();
+            $(".contEuro").show();
+        } else if (moneda == "francos") {
+            $("#monedaFrancosInput").prop("checked", true);
+            $("#inversionUsInput").val(inversion_chf);
+            $("#inversionInputEUR").val(inversion_chf);
+
+            $(".contDolar").hide();
+            $(".contEuro").hide();
+            $(".contFranco").show();
+        }
 
         $("#beneficiariosInput").prop("disabled", false);
 
@@ -3022,6 +3193,22 @@ $(document).ready(function () {
             "data-tipo"
         );
 
+        let monedaDolaresChecked = $("#monedaDolaresInput").is(":checked");
+        let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+        let monedaFrancosChecked = $("#monedaFrancosInput").is(":checked");
+        let capital_nombre = "";
+
+        if (monedaDolaresChecked) {
+            var inversionUSD = $("#inversionUsInput").val();
+            capital_nombre = "Capital (USD)";
+        } else if (monedaEurosChecked) {
+            var inversionUSD = $("#inversionInputEUR").val();
+            capital_nombre = "Capital (EUR)";
+        } else if (monedaFrancosChecked) {
+            var inversionUSD = $("#inversionInputCHF").val();
+            capital_nombre = "Capital (CHF)";
+        }
+
         if (tipo_contrato == "Rendimiento compuesto") {
             $(".cont-tabla").append(`
                 <div class="table-responsive">
@@ -3030,7 +3217,7 @@ $(document).ready(function () {
                             <tr>
                                 <th scope="col">Serie</th>
                                 <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
+                                <th scope="col">${capital_nombre}</th>
                                 <th scope="col">Interés</th>
                                 <th scope="col">Rendimiento</th>
                             </tr>
@@ -3048,7 +3235,7 @@ $(document).ready(function () {
                             <tr>
                                 <th scope="col">Serie</th>
                                 <th scope="col">Fecha</th>
-                                <th scope="col">Capital (USD)</th>
+                                <th scope="col">${capital_nombre}</th>
                                 <th scope="col">Interés</th>
                             </tr>
                         </thead>
@@ -3062,7 +3249,6 @@ $(document).ready(function () {
         var inversionMXN = $("#inversionInput").val();
         inversionMXN = parseFloat(inversionMXN);
 
-        var inversionUSD = $("#inversionUsInput").val();
         inversionUSD = parseFloat(inversionUSD);
         // var inversionInicialUSD = parseFloat(inversionUSD);
 
@@ -3342,9 +3528,18 @@ $(document).ready(function () {
         if (target.is("#inversionInput")) {
             if ($("#tipoCambioInput").val()) {
                 var peso = $("#inversionInput").val();
+
                 var dolar_peso = $("#tipoCambioInput").val();
                 var dolares = peso / dolar_peso;
                 $("#inversionUsInput").val(dolares.toFixed(2));
+
+                var euro_peso = $("#tipoCambioInputEUR").val();
+                let euros = peso / euro_peso;
+                $("#inversionInputEUR").val(euros.toFixed(2));
+
+                var franco_peso = $("#tipoCambioInputCHF").val();
+                let francos = peso / franco_peso;
+                $("#inversionInputCHF").val(francos.toFixed(2));
             }
             //Condicional para refrendo
             if (acc == "edit") {
@@ -3362,13 +3557,22 @@ $(document).ready(function () {
             $("#inversionLetUsInput").val(
                 numeroALetrasUSD($("#inversionUsInput").val())
             );
+            $("#inversionLetInputEUR").val(
+                numeroALetrasEUR($("#inversionInputEUR").val())
+            );
+            $("#inversionLetInputCHF").val(
+                numeroALetrasCHF($("#inversionInputCHF").val())
+            );
         } else if (target.is("#inversionUsInput")) {
             if ($("#tipoCambioInput").val()) {
                 var dolar = $("#inversionUsInput").val();
+
                 var dolar_peso = $("#tipoCambioInput").val();
-                var peso = 1 / dolar_peso;
-                var pesos = dolar / peso;
+                var pesos = dolar * dolar_peso;
                 $("#inversionInput").val(pesos.toFixed(2));
+
+                $("#inversionInputEUR").val(dolar);
+                $("#inversionInputCHF").val(dolar);
             }
 
             if (acc == "edit") {
@@ -3385,6 +3589,78 @@ $(document).ready(function () {
             );
             $("#inversionLetUsInput").val(
                 numeroALetrasUSD($("#inversionUsInput").val())
+            );
+            $("#inversionLetInputEUR").val(
+                numeroALetrasEUR($("#inversionUsInput").val())
+            );
+            $("#inversionLetInputCHF").val(
+                numeroALetrasCHF($("#inversionUsInput").val())
+            );
+        } else if (target.is("#inversionInputEUR")) {
+            if ($("#tipoCambioInputEUR").val()) {
+                var euro = $("#inversionInputEUR").val();
+
+                var euro_peso = $("#tipoCambioInputEUR").val();
+                let euros = euro * euro_peso;
+                $("#inversionInput").val(euros.toFixed(2));
+
+                $("#inversionUsInput").val(euro);
+                $("#inversionInputCHF").val(euro);
+            }
+
+            if (acc == "edit") {
+                if (
+                    $("#statusInput").val() == "Refrendado" &&
+                    dataInversionEUR != $("#inversionInputEUR").val()
+                ) {
+                    $("#contratoForm").attr("action", "/admin/addContrato");
+                }
+            }
+
+            $("#inversionLetInput").val(
+                numeroALetrasMXN($("#inversionInput").val())
+            );
+            $("#inversionLetUsInput").val(
+                numeroALetrasUSD($("#inversionInputEUR").val())
+            );
+            $("#inversionLetInputEUR").val(
+                numeroALetrasEUR($("#inversionInputEUR").val())
+            );
+            $("#inversionLetInputCHF").val(
+                numeroALetrasCHF($("#inversionInputEUR").val())
+            );
+        } else if (target.is("#inversionInputCHF")) {
+            if ($("#tipoCambioInputCHF").val()) {
+                var franco = $("#inversionInputCHF").val();
+
+                var franco_peso = $("#tipoCambioInputCHF").val();
+                let francos = franco * franco_peso;
+                $("#inversionInput").val(francos.toFixed(2));
+
+                $("#inversionUsInput").val(franco);
+                $("#inversionInputEUR").val(franco);
+            }
+
+            if (acc == "edit") {
+                if (
+                    $("#statusInput").val() == "Refrendado" &&
+                    dataInversionCHF != $("#inversionInputCHF").val()
+                ) {
+                    $("#contratoForm").attr("action", "/admin/addContrato");
+                }
+            }
+
+            $("#inversionLetInput").val(
+                numeroALetrasMXN($("#inversionInput").val())
+            );
+            $("#inversionLetUsInput").val(
+                numeroALetrasUSD($("#inversionInputCHF").val())
+            );
+            $("#inversionLetInputEUR").val(
+                numeroALetrasEUR($("#inversionInputCHF").val())
+            );
+            $("#inversionLetInputCHF").val(
+                numeroALetrasCHF($("#inversionInputCHF").val())
             );
         }
 
@@ -3435,6 +3711,22 @@ $(document).ready(function () {
                 "data-tipo"
             );
 
+            let monedaDolaresChecked = $("#monedaDolaresInput").is(":checked");
+            let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+            let monedaFrancosChecked = $("#monedaFrancosInput").is(":checked");
+            let capital_nombre = "";
+
+            if (monedaDolaresChecked) {
+                var inversionUSD = $("#inversionUsInput").val();
+                capital_nombre = "Capital (USD)";
+            } else if (monedaEurosChecked) {
+                var inversionUSD = $("#inversionInputEUR").val();
+                capital_nombre = "Capital (EUR)";
+            } else if (monedaFrancosChecked) {
+                var inversionUSD = $("#inversionInputCHF").val();
+                capital_nombre = "Capital (CHF)";
+            }
+
             if (tipo_contrato == "Rendimiento compuesto") {
                 $(".cont-tabla").append(`
                     <div class="table-responsive">
@@ -3443,7 +3735,7 @@ $(document).ready(function () {
                                 <tr>
                                     <th scope="col">Serie</th>
                                     <th scope="col">Fecha</th>
-                                    <th scope="col">Capital (USD)</th>
+                                    <th scope="col">${capital_nombre}</th>
                                     <th scope="col">Interés</th>
                                     <th scope="col">Rendimiento</th>
                                 </tr>
@@ -3461,7 +3753,7 @@ $(document).ready(function () {
                                 <tr>
                                     <th scope="col">Serie</th>
                                     <th scope="col">Fecha</th>
-                                    <th scope="col">Capital (USD)</th>
+                                    <th scope="col">${capital_nombre}</th>
                                     <th scope="col">Interés</th>
                                 </tr>
                             </thead>
@@ -3481,7 +3773,6 @@ $(document).ready(function () {
             var inversionMXN = $("#inversionInput").val();
             inversionMXN = parseFloat(inversionMXN);
 
-            var inversionUSD = $("#inversionUsInput").val();
             inversionUSD = parseFloat(inversionUSD);
 
             var porcentaje = $("#porcentajeInput").val();
@@ -3647,6 +3938,12 @@ $(document).ready(function () {
                     dataInversionUS = $("#inversionUsInput").val();
                     dataInversionUS = parseFloat(dataInversionUS);
 
+                    dataInversionEUR = $("#inversionInputEUR").val();
+                    dataInversionEUR = parseFloat(dataInversionEUR);
+
+                    dataInversionCHF = $("#inversionInputCHF").val();
+                    dataInversionCHF = parseFloat(dataInversionCHF);
+
                     dataFechaInicio = $("#fechaInicioInput").val();
                 }
 
@@ -3659,6 +3956,26 @@ $(document).ready(function () {
                     "data-tipo"
                 );
 
+                let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                    ":checked"
+                );
+                let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+                let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                    ":checked"
+                );
+                let capital_nombre = "";
+
+                if (monedaDolaresChecked) {
+                    var inversionUSD = $("#inversionUsInput").val();
+                    capital_nombre = "Capital (USD)";
+                } else if (monedaEurosChecked) {
+                    var inversionUSD = $("#inversionInputEUR").val();
+                    capital_nombre = "Capital (EUR)";
+                } else if (monedaFrancosChecked) {
+                    var inversionUSD = $("#inversionInputCHF").val();
+                    capital_nombre = "Capital (CHF)";
+                }
+
                 if (tipo_contrato == "Rendimiento compuesto") {
                     $(".cont-tabla").append(
                         `
@@ -3668,7 +3985,7 @@ $(document).ready(function () {
                                         <tr>
                                             <th scope="col">Serie</th>
                                             <th scope="col">Fecha</th>
-                                            <th scope="col">Capital (USD)</th>
+                                            <th scope="col">${capital_nombre}</th>
                                             <th scope="col">Interés</th>
                                             <th scope="col">Rendimiento</th>
                                         </tr>
@@ -3688,7 +4005,7 @@ $(document).ready(function () {
                                         <tr>
                                             <th scope="col">Serie</th>
                                             <th scope="col">Fecha</th>
-                                            <th scope="col">Capital (USD)</th>
+                                            <th scope="col">${capital_nombre}</th>
                                             <th scope="col">Interés</th>
                                         </tr>
                                     </thead>
@@ -3711,7 +4028,6 @@ $(document).ready(function () {
                 var inversionMXN = $("#inversionInput").val();
                 inversionMXN = parseFloat(inversionMXN);
 
-                var inversionUSD = $("#inversionUsInput").val();
                 inversionUSD = parseFloat(inversionUSD);
                 // var inversionInicialUSD = parseFloat(inversionUSD);
 
@@ -3782,6 +4098,12 @@ $(document).ready(function () {
                 );
                 $("#inversionLetUsInput").val(
                     numeroALetrasUSD($("#inversionUsInput").val())
+                );
+                $("#inversionLetInputEUR").val(
+                    numeroALetrasEUR($("#inversionUsInput").val())
+                );
+                $("#inversionLetInputCHF").val(
+                    numeroALetrasCHF($("#inversionUsInput").val())
                 );
 
                 // var rendimiento = 0;
@@ -3922,6 +4244,12 @@ $(document).ready(function () {
                     dataInversionUS = $("#inversionUsInput").val();
                     dataInversionUS = parseFloat(dataInversionUS);
 
+                    dataInversionEUR = $("#inversionInputEUR").val();
+                    dataInversionEUR = parseFloat(dataInversionEUR);
+
+                    dataInversionCHF = $("#inversionInputCHF").val();
+                    dataInversionCHF = parseFloat(dataInversionCHF);
+
                     dataFechaInicio = $("#fechaInicioInput").val();
                 }
 
@@ -3933,6 +4261,27 @@ $(document).ready(function () {
                     "data-tipo"
                 );
 
+                let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                    ":checked"
+                );
+                let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+                let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                    ":checked"
+                );
+                let capital_nombre = "";
+
+                var inversionUSD = 0;
+                if (monedaDolaresChecked) {
+                    inversionUSD = dataInversionUS;
+                    capital_nombre = "Capital (USD)";
+                } else if (monedaEurosChecked) {
+                    inversionUSD = dataInversionEUR;
+                    capital_nombre = "Capital (EUR)";
+                } else if (monedaFrancosChecked) {
+                    inversionUSD = dataInversionCHF;
+                    capital_nombre = "Capital (CHF)";
+                }
+
                 if (tipo_contrato == "Rendimiento compuesto") {
                     $(".cont-tabla").append(
                         `
@@ -3942,7 +4291,7 @@ $(document).ready(function () {
                                         <tr>
                                             <th scope="col">Serie</th>
                                             <th scope="col">Fecha</th>
-                                            <th scope="col">Capital (USD)</th>
+                                            <th scope="col">${capital_nombre}</th>
                                             <th scope="col">Interés</th>
                                             <th scope="col">Rendimiento</th>
                                         </tr>
@@ -3962,7 +4311,7 @@ $(document).ready(function () {
                                         <tr>
                                             <th scope="col">Serie</th>
                                             <th scope="col">Fecha</th>
-                                            <th scope="col">Capital (USD)</th>
+                                            <th scope="col">${capital_nombre}</th>
                                             <th scope="col">Interés</th>
                                         </tr>
                                     </thead>
@@ -3985,7 +4334,6 @@ $(document).ready(function () {
                 var inversionMXN = dataInversionMXN;
                 inversionMXN = parseFloat(inversionMXN);
 
-                var inversionUSD = dataInversionUS;
                 inversionUSD = parseFloat(inversionUSD);
 
                 var porcentaje = $("#porcentajeInput").val();
@@ -4050,6 +4398,12 @@ $(document).ready(function () {
                 );
                 $("#inversionLetUsInput").val(
                     numeroALetrasUSD($("#inversionUsInput").val())
+                );
+                $("#inversionLetInputEUR").val(
+                    numeroALetrasEUR($("#inversionUsInput").val())
+                );
+                $("#inversionLetInputCHF").val(
+                    numeroALetrasCHF($("#inversionUsInput").val())
                 );
 
                 var fechaFeb = $("#fechaInicioInput").val();
@@ -4699,6 +5053,80 @@ $(document).ready(function () {
             } else {
                 $("#porcentajeRendimientoCont").hide();
                 $("#porcentajeRendimientoInput").val(0);
+            }
+        }
+
+        //APARTADO DEL TIPO DE MONEDA
+        if (target.is("#monedaDolaresInput")) {
+            $(".contEuro").hide();
+            $(".contFranco").hide();
+
+            $(".contDolar").show();
+            var dolar = parseFloat($("#inversionUsInput").val());
+
+            var dolar_peso = $("#tipoCambioInput").val();
+            var pesos = dolar * dolar_peso;
+            $("#inversionInput").val(pesos.toFixed(2));
+
+            if ($("#inversionUsInput").val() > 0) {
+                $("#inversionLetInput").val(numeroALetrasMXN(pesos.toFixed(2)));
+                $("#inversionLetUsInput").val(
+                    numeroALetrasUSD(dolar.toFixed(2))
+                );
+                $("#inversionLetInputEUR").val(
+                    numeroALetrasEUR(dolar.toFixed(2))
+                );
+                $("#inversionLetInputCHF").val(
+                    numeroALetrasCHF(dolar.toFixed(2))
+                );
+            }
+        }
+        if (target.is("#monedaEurosInput")) {
+            $(".contDolar").hide();
+            $(".contFranco").hide();
+
+            $(".contEuro").show();
+            var euro = parseFloat($("#inversionInputEUR").val());
+
+            var euro_peso = $("#tipoCambioInputEUR").val();
+            let pesos = euro * euro_peso;
+            $("#inversionInput").val(pesos.toFixed(2));
+
+            if ($("#inversionInputEUR").val() > 0) {
+                $("#inversionLetInput").val(numeroALetrasMXN(pesos.toFixed(2)));
+                $("#inversionLetUsInput").val(
+                    numeroALetrasUSD(euro.toFixed(2))
+                );
+                $("#inversionLetInputEUR").val(
+                    numeroALetrasEUR(euro.toFixed(2))
+                );
+                $("#inversionLetInputCHF").val(
+                    numeroALetrasCHF(euro.toFixed(2))
+                );
+            }
+        }
+        if (target.is("#monedaFrancosInput")) {
+            $(".contDolar").hide();
+            $(".contEuro").hide();
+
+            $(".contFranco").show();
+            var franco = parseFloat($("#inversionInputCHF").val());
+
+            var franco_peso = $("#tipoCambioInputCHF").val();
+            let pesos = franco * franco_peso;
+            $("#inversionInput").val(pesos.toFixed(2));
+
+            if ($("#inversionInputCHF").val() > 0) {
+                $("#inversionLetInput").val(numeroALetrasMXN(pesos.toFixed(2)));
+                $("#inversionLetUsInput").val(
+                    numeroALetrasUSD(franco.toFixed(2))
+                );
+                $("#inversionLetInputEUR").val(
+                    numeroALetrasEUR(franco.toFixed(2))
+                );
+                $("#inversionLetInputCHF").val(
+                    numeroALetrasCHF(franco.toFixed(2))
+                );
             }
         }
     });

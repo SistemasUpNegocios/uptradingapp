@@ -75,7 +75,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("contrato.ps_id", "like", $psid)
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
@@ -91,7 +91,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -108,7 +108,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -141,7 +141,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("contrato.ps_id", "like", $psid)
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
@@ -159,7 +159,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -177,7 +177,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -211,7 +211,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("contrato.ps_id", "like", $psid)
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
@@ -229,7 +229,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -247,7 +247,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -281,7 +281,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("contrato.ps_id", "like", $psid)
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
@@ -296,7 +296,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -312,7 +312,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -344,7 +344,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where(function ($query) use ($psid, $clienteid) {
                     $query->where("contrato.ps_id", "like", $psid)
                     ->orWhere("contrato.cliente_id", "like", $clienteid);
@@ -359,7 +359,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -375,7 +375,7 @@ class ContratoController extends Controller
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('tipo_contrato', 'tipo_contrato.id', '=', 'contrato.tipo_id')
                 ->join('oficina', "oficina.id", "=", "ps.oficina_id")
-                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago"))
+                ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.fecha_reintegro, contrato.status_reintegro, contrato.memo_reintegro, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.referencia_pago, contrato.comprobante_pago, contrato.tipo_cambio_eur, contrato.tipo_cambio_chf, contrato.inversion_eur, inversion_letra_eur, contrato.inversion_chf, contrato.inversion_letra_chf, contrato.moneda"))
                 ->where("contrato.ps_id", "like", $psid)
                 ->where("contrato.cliente_id", "like", $clienteid)
                 ->where("oficina.codigo_oficina", "like", $codigo)
@@ -432,9 +432,7 @@ class ContratoController extends Controller
                     'tipo_cambio' => 'required',
                     'porcentaje' => 'required',
                     'inversion' => 'required',
-                    'inversion_us' => 'required',
                     'inversion_letra' => 'required',
-                    'inversion_letra_us' => 'required',
                     'fecha_reintegro' => 'required|date',
                 ]);
             }
@@ -459,14 +457,21 @@ class ContratoController extends Controller
             $contrato->tipo_id = $request->input('tipo_id');
             $contrato->porcentaje = $request->input('porcentaje');
             $contrato->tipo_cambio = $request->input('tipo_cambio');
+            $contrato->tipo_cambio_eur = $request->input('tipo_cambio_eur');
+            $contrato->tipo_cambio_chf = $request->input('tipo_cambio_chf');
             $contrato->inversion = $request->input('inversion');
-            $contrato->inversion_us = $request->input('inversion_us');
             $contrato->inversion_letra = $request->input('inversion_letra');
+            $contrato->inversion_us = $request->input('inversion_us');
             $contrato->inversion_letra_us = $request->input('inversion_letra_us');
+            $contrato->inversion_eur = $request->input('inversion_eur');
+            $contrato->inversion_letra_eur = $request->input('inversion_letra_eur');
+            $contrato->inversion_chf = $request->input('inversion_chf');
+            $contrato->inversion_letra_chf = $request->input('inversion_letra_chf');
             $contrato->fecha_reintegro = $request->input('fecha_reintegro');
             $contrato->status_reintegro = 'pendiente';
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
             $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
+            $contrato->moneda = $request->input('moneda');
 
             if (empty($request->status)) {
                 $contrato->contrato = strtoupper($request->input('contrato'));
@@ -919,9 +924,7 @@ class ContratoController extends Controller
                 'tipo_cambio' => 'required',
                 'porcentaje' => 'required',
                 'inversion' => 'required',
-                'inversion_us' => 'required',
                 'inversion_letra' => 'required',
-                'inversion_letra_us' => 'required',
                 'fecha_reintegro' => 'required|date',
                 'ps_id' => 'required',
             ]);
@@ -961,13 +964,20 @@ class ContratoController extends Controller
             $contrato->tipo_id = $request->input('tipo_id');
             $contrato->porcentaje = $request->input('porcentaje');
             $contrato->tipo_cambio = $request->input('tipo_cambio');
+            $contrato->tipo_cambio_eur = $request->input('tipo_cambio_eur');
+            $contrato->tipo_cambio_chf = $request->input('tipo_cambio_chf');
             $contrato->inversion = $request->input('inversion');
-            $contrato->inversion_us = $request->input('inversion_us');
             $contrato->inversion_letra = $request->input('inversion_letra');
+            $contrato->inversion_us = $request->input('inversion_us');
             $contrato->inversion_letra_us = $request->input('inversion_letra_us');
+            $contrato->inversion_eur = $request->input('inversion_eur');
+            $contrato->inversion_letra_eur = $request->input('inversion_letra_eur');
+            $contrato->inversion_chf = $request->input('inversion_chf');
+            $contrato->inversion_letra_chf = $request->input('inversion_letra_chf');
             $contrato->fecha_reintegro = $request->input('fecha_reintegro');
             $contrato->status_reintegro = $request->input('status_reintegro');
             $contrato->memo_reintegro = strtoupper($request->input('memo_reintegro'));
+            $contrato->moneda = $request->input('moneda');
             if ($request->status == "Refrendado") {
                 $contrato->status = "Activado";
                 $contratoAct = explode("-", $request->contrato);
@@ -1054,13 +1064,15 @@ class ContratoController extends Controller
             }
 
             $contrato_id = $contrato->id;
-
-            DB::table('amortizacion')->where('contrato_id', '=', $contrato_id)->delete();
+            
             DB::table('beneficiario')->where('contrato_id', '=', $contrato_id)->delete();
-            DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->delete();
-            DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->delete();
-            if ($request->input("redito-reintegro1") > 0) {
+            if($request->status != "Refrendado"){
                 DB::table('amortizacion')->where('contrato_id', '=', $contrato_id)->delete();
+                DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->delete();
+                DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->delete();
+                if ($request->input("redito-reintegro1") > 0) {
+                    DB::table('amortizacion')->where('contrato_id', '=', $contrato_id)->delete();
+                }
             }
 
             $periodo = $request->input('periodo');

@@ -76,12 +76,12 @@ class ReportePagoPsController extends Controller
         $resultCentavos_dolares = explode(".", $centavos_dolares);
         if (next($resultCentavos_dolares)) {
             if (strlen($resultCentavos_dolares[1]) == 1) {
-                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2) . "0".'/100 M.N.';
+                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2) . "0".'/100';
             } else {
-                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2).'/100 M.N.';
+                $centavos_num_dolares = substr($resultCentavos_dolares[1], 0, 2).'/100';
             }
         } else {
-            $centavos_num_dolares = "00/100 M.N";
+            $centavos_num_dolares = "00/100";
         }
         $posCON_dolares = strrpos($request->letra_dolares, "con");
         if($posCON_dolares === false){
@@ -99,6 +99,7 @@ class ReportePagoPsController extends Controller
             "centavos_dolares" => $centavos_num_dolares,
             "centavos" => $centavos_num,
             "fecha_imprimir" => $request->fecha_imprimir,
+            "dolar" => $request->dolar,
         );        
 
         $pdf = PDF::loadView('reportepagops.reporte', $data);

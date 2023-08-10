@@ -50,19 +50,27 @@
                             $contrato = substr($resumen->contrato, 0, -3);
                         }
                         $cliente = $resumen->clientenombre;
-                        $rendimiento = number_format($resumen->pago * $dolar, 2);
                         $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
                         $fecha = $resumen->fecha;
-                        $pago_dolares = number_format($resumen->pago, 2);
                         $pagos_bd = App\Models\Pago::where('id_contrato', $resumen->contratoid)->where("memo", "Pago a cliente ($pago)")->first();
+                        $pago_dolares = number_format($resumen->pago, 2);
+                        $rendimiento = number_format($resumen->pago * $dolar, 2);
+
+                        if ($resumen->tipo_id == 1 && $reporte == "liquidacion"){
+                            $rendimiento_liquidacion = number_format($resumen->inversion_us * $dolar, 2);
+                            $pago_dolares_liquidacion = number_format($resumen->inversion_us, 2);
+                        }else{
+                            $rendimiento_liquidacion = $rendimiento;
+                            $pago_dolares_liquidacion = number_format($resumen->pago, 2);
+                        }
                     @endphp
                         <tr>
                             <td style="font-size: 12.5px">
                                 {{ $contrato }}
                             </td>
                             <td style="font-size: 12.5px">{{ $cliente }}</td>
-                            <td style="font-size: 12.5px">${{ $rendimiento }}</td>
-                            <td style="font-size: 12.5px">${{ number_format($resumen->pago, 2) }}</td>
+                            <td style="font-size: 12.5px">${{ $rendimiento_liquidacion }}</td>
+                            <td style="font-size: 12.5px">${{ $pago_dolares_liquidacion }}</td>
                             @if($resumen->tipo_id == 1)
                                 <td style="font-size: 12.5px">{{ $pago }}</td>
                             @else
@@ -78,8 +86,8 @@
                                     @endif
                                     <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" data-reporte="mensual" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
                                     <button class="btn btn-success ms-1 editar_pago" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-reporte="mensual" data-tipo="{{$resumen->tipo_id}}" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
-                                    <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
+                                    <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" data-reporte="mensual" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
+                                    <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="mensual" data-tipo="{{$resumen->tipo_id}}" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                     
                                     <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                     <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
@@ -91,10 +99,13 @@
                                     @else
                                         <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-dolares="{{$resumen->pago}}" data-pago="{{$pago}}" data-tipopagocliente="{{$resumen->tipo_pago}}"> <i class="bi bi-journal-text"></i></button>
                                     @endif
-                                    <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-reporte="liquidacion" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
+                                    <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-reporte="liquidacion" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
+
                                     <button class="btn btn-success ms-1 editar_pago" style="font-size: 13px; padding: 7px" data-bs-toggle="modal" data-bs-target="#formModal"  data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-reporte="liquidacion" title="Editar pago" id="editarInput"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
-                                    <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
+
+                                    <button class="btn btn-primary abrirWhats whats_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="liquidacion" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" title="Mandar whats para pago por transferencia"><i class="bi bi-whatsapp"></i></button>
+
+                                    <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="liquidacion" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                     
                                     <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                     <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>

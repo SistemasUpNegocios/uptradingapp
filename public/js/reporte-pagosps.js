@@ -357,6 +357,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#imprimirReporte", function () {
+        let dolar_reporte = $("#dolarInput").val();
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
             let ps = $(this).data("ps");
@@ -373,7 +374,7 @@ $(document).ready(function () {
             let fecha_mes = $(this).data("fecha");
 
             window.open(
-                `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
+                `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar_reporte}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
                 "_blank"
             );
         } else {
@@ -440,7 +441,7 @@ $(document).ready(function () {
         );
     });
 
-    $(document).on("change", "#dolarInput", function () {
+    $(document).on("keyup", "#dolarInput", function () {
         $("#tablaResumen").empty();
         $("#tablaResumen").html(
             `

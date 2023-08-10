@@ -45,17 +45,17 @@
                         </div>
 
                         <div class="row d-none align-items-center" id="contImprimirResum">
-                            <div class="col-md-4 col-12 mb-3">
+                            <div class="col-md-6 col-12 mb-3">
                                 <button class="btn principal-button" id="imprimirResumenClientes">
                                     <i class="bi bi-printer-fill me-1"></i> Imprimir resumen
                                 </button>
                             </div>
-                            <div class="col-md-4 col-12 mb-3 d-flex">
+                            {{-- <div class="col-md-4 col-12 mb-3 d-flex">
                                 <button class="btn btn-danger" id="tiposPagos"> 
                                     <i class="bi bi-file-earmark-pdf"></i> Imprimir tipos de pagos
                                 </button>
-                            </div>
-                            <div class="col-md-4 col-12 mb-3 d-flex justify-content-end">
+                            </div> --}}
+                            <div class="col-md-6 col-12 mb-3 d-flex justify-content-end">
                                 <button class="btn btn-success" id="exportarResumenClientes"> 
                                     <i class="bi bi-file-earmark-spreadsheet-fill"></i> Exportar resumen a excel
                                 </button>

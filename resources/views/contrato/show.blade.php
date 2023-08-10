@@ -231,8 +231,24 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-12 mb-3 text-center">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaDolaresInput" type="radio" name="moneda" value="dolares" checked>
+                                    <label class="form-check-label" for="monedaDolaresInput">Dólares</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaEurosInput" type="radio" name="moneda" value="euros">
+                                    <label class="form-check-label" for="monedaEurosInput">Euros</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaFrancosInput" type="radio" name="moneda" value="francos">
+                                    <label class="form-check-label" for="monedaFrancosInput">Francos suizos</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
+                                <div class="form-floating ">
                                     <input type="text" step="any" class="form-control" placeholder="Ingresa el folio del contrato" id="folioInput" name="folio" required>
                                     <label for="folioInput">Ingresa el folio del contrato</label>
                                 </div>
@@ -259,38 +275,73 @@
                                     <label for="porcentajeInput">Porcentaje del rendimiento de contrato (%)</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+
+                            <div class="col-md-6 col-12 contDolar">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio" id="tipoCambioInput" name="tipo_cambio" required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio" id="tipoCambioInput" name="tipo_cambio">
                                     <label for="tipoCambioInput">Tipo de cambio MXN - USD</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
+                            <div class="col-md-6 col-12 contEuro">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio" id="tipoCambioInputEUR" name="tipo_cambio_eur">
+                                    <label for="tipoCambioInputEUR">Tipo de cambio MXN - EUR</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 contFranco">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio" id="tipoCambioInputCHF" name="tipo_cambio_chf">
+                                    <label for="tipoCambioInputCHF">Tipo de cambio MXN - CHF</label>
+                                </div>
+                            </div>
+
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión" id="inversionInput" name="inversion" required>
                                     <label for="inversionInput">Cantidad de inversión (MXN)</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-6 col-12 contDolar">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en USD" id="inversionUsInput" name="inversion_us" required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en USD" id="inversionUsInput" name="inversion_us">
                                     <label for="inversionUsInput">Cantidad de inversión (USD)</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
+                            <div class="col-md-6 col-12 contEuro">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión" id="inversionInputEUR" name="inversion_eur">
+                                    <label for="inversionInputEUR">Cantidad de inversión (EUR)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 contFranco">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en CHF" id="inversionInputCHF" name="inversion_chf">
+                                    <label for="inversionInputCHF">Cantidad de inversión (CHF)</label>
+                                </div>
+                            </div>
+
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetInput" name="inversion_letra" style="height: 100px" required></textarea>
                                     <label for="inversionLetInput">Cantidad de inversión en letra (MXN)</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-6 col-12 contDolar">
                                 <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetUsInput" name="inversion_letra_us" style="height: 100px" required></textarea>
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetUsInput" name="inversion_letra_us" style="height: 100px"></textarea>
                                     <label for="inversionLetUsInput">Cantidad de inversión en letra (USD)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 contEuro">
+                                <div class="form-floating mb-3">
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetInputEUR" name="inversion_letra_eur" style="height: 100px"></textarea>
+                                    <label for="inversionLetInputEUR">Cantidad de inversión en letra (EUR)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 contFranco">
+                                <div class="form-floating mb-3">
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="inversionLetInputCHF" name="inversion_letra_chf" style="height: 100px"></textarea>
+                                    <label for="inversionLetInputCHF">Cantidad de inversión en letra (CHF)</label>
                                 </div>
                             </div>
                         </div>
@@ -370,6 +421,16 @@
                                 <div class="form-floating mb-3">
                                     <textarea class="form-control" placeholder="Ingresa el memo de reintegro" id="memoReinInput" name="memo_reintegro" style="height: 100px"></textarea>
                                     <label for="memoReinInput">Memo de reintegro</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Selecciona la cantidad de beneficiarios:
                                 </div>
                             </div>
                         </div>

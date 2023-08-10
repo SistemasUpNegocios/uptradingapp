@@ -143,7 +143,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -165,60 +164,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
+                
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
-
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
@@ -348,7 +521,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -370,58 +542,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
+
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
 
             }
@@ -516,7 +864,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -538,58 +885,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
+                
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
 
             }
@@ -684,7 +1207,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -706,58 +1228,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
+                
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
 
             }
@@ -852,7 +1550,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -874,58 +1571,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
+                
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
 
             }
@@ -1020,7 +1893,6 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
                 $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
@@ -1042,58 +1914,234 @@ class Kernel extends ConsoleKernel
                 $monto = $inversion_us;
                 $redito = 0;
                 $saldo_con_redito = 0;
-                //Actualización de tabla de amortizaciones
-                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
-                foreach ($amortizaciones as $amortizacion_update) {
-                    $amortizacion = Amortizacion::find($amortizacion_update->id);
-                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
-                    $amortizacion->monto = $monto;
+                
+                //Fechas de pago refrendadas
+                $fecha_inicio = Carbon::parse($contrato_update->fecha)->addYear()->format('Y-m-d');
+                $fecha_pago = Carbon::parse($fecha_inicio);
+                $fecha_amortizacion = Carbon::parse($fecha_inicio);
+                $fecha_cond = Carbon::parse($fecha_inicio);
+                $fecha_feb = Carbon::parse($fecha_inicio);
+                $fecha_nueva = Carbon::parse($fecha_inicio);
+                $fechaFeb = Carbon::parse($fecha_inicio);
 
-                    if ($tipo_contrato->id == 2) {
-                        $redito = $monto * $porcentaje;
-                        $saldo_con_redito = $monto + $redito;
-                        $monto = $saldo_con_redito;
-                    }
+                $mes_pago_ps = Carbon::parse($fecha_inicio)->format('m');
+                $anio_pago_ps = Carbon::parse($fecha_inicio)->format('Y');
+                $mes_pago_ps = $mes_pago_ps + 1;
+                $mes_pago_ps = str_pad($mes_pago_ps, 2, "0", STR_PAD_LEFT);
 
-                    $amortizacion->redito = $redito;
-                    $amortizacion->saldo_con_redito = $saldo_con_redito;
-                    $amortizacion->save();
+                if ($mes_pago_ps == 13) {
+                    $anio_pago_ps = $anio_pago_ps + 1;
+                    $fecha_limite = $anio_pago_ps . "-01-10";                
+                }else{
+                    $fecha_limite = $anio_pago_ps . "-" . $mes_pago_ps . "-10";
                 }
 
-                //Actualización de tabla de pago de clientes
-                $pagos_clientes = PagoCliente::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_clientes as $pago_cliente_update) {
-                    $pago_cliente = PagoCliente::find($pago_cliente_update->id);
-                    $pago_cliente->fecha_pago = Carbon::parse($pago_cliente_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_cliente->fecha_pagado = NULL;
-                    if ($tipo_contrato->id == 2) {
-                        $pago_cliente->pago = $pago;
-                    }
-                    $pago_cliente->status = "Pendiente";
-                    $pago_cliente->memo = NULL;
-                    $pago_cliente->tipo_pago = "Pendiente";
-                    $pago_cliente->comprobante = NULL;
-                    $pago_cliente->save();
-                }
+                $rendimiento = $contrato_update->porcentaje;
+                $rendimiento = $rendimiento * .01;
 
                 $cmensual = $tipo_contrato->cmensual * .001;
+                $pago_ps_apertura = $inversion_us * .02;
                 $pago_ps_mensual = $inversion_us * $cmensual;
-                $capertura = $tipo_contrato->capertura * .01;
-                $pago_ps_apertura = $inversion_us * $capertura;
-                //Actualización de tabla de pago de ps
-                $pagos_ps = PagoPS::where("contrato_id", $contrato_update->id)->get();
-                foreach ($pagos_ps as $pago_ps_update) {
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_update->id)->where("memo", "Comisión por apertura")->delete();
-
-                    $pago_ps = PagoPS::find($pago_ps_update->id);
-                    $pago_ps->fecha_pago = Carbon::parse($pago_ps_update->fecha_pago)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_limite = Carbon::parse($pago_ps_update->fecha_limite)->addYear()->format('Y-m-d');
-                    $pago_ps->fecha_pagado = NULL;
-                    $pago_ps->pago = $pago_ps_mensual;
-                    $pago_ps->status = "Pendiente";
-                    $pago_ps->tipo_pago = "Pendiente";
-                    $pago_ps->comprobante = NULL;
-                    $pago_ps->save();
+                
+                if ($tipo_contrato->id == 2) {
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+                        
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');            
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $monto = ($monto + $redito);
+    
+                        $amortizacion->save();
+                    }
+    
+                    $pago_cliente = $amortizacion->saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+    
+                    $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
+    
+                    $pago_cliente_table = new PagoCliente;
+                    $pago_cliente_table->contrato_id = $contrato_update->id;
+                    $pago_cliente_table->serie = ($i + 1);
+                    $pago_cliente_table->fecha_pago = $fecha_pago_cliente;
+                    $pago_cliente_table->pago = $pago_cliente;
+                    $pago_cliente_table->status = "Pendiente";
+                    $pago_cliente_table->tipo_pago = "Pendiente";
+                    $pago_cliente_table->save();
+                } elseif ($tipo_contrato->id == 1) {
+                    $fecha_pago_cliente = Carbon::parse($fecha_inicio);
+    
+                    for ($i = 0; $i < 12; $i++) {
+                        $fecha_pago = Carbon::parse($fecha_limite);
+                        $fecha_pago->endOfMonth();
+                        $fecha_pago->format('Y-m-d');
+    
+                        $fecha_limite = Carbon::parse($fecha_limite);
+                        $fecha_limite->addMonth();
+    
+                        $fecha_limite->format('Y-m-d');
+    
+                        if ($i == 0) {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_apertura, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión por apertura';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+    
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        } else {
+                            $pagops = new PagoPS;
+                            $pago = $inversion_us;
+                            $pagops->contrato_id = $contrato_update->id;
+                            $pagops->serie = ($i + 1);
+                            $pagops->fecha_pago = $fecha_pago;
+                            $pagops->fecha_limite = $fecha_limite;
+                            $pagops->pago = round($pago_ps_mensual, 2);
+                            $pagops->status = 'Pendiente';
+                            $pagops->memo = 'Comisión mensual';
+                            $pagops->tipo_pago = 'Pendiente';
+                            $pagops->save();
+                        }
+    
+                        $amortizacion = new Amortizacion;
+    
+                        $amortizacion->contrato_id = $contrato_update->id;
+                        $amortizacion->serie = ($i + 1);
+    
+                        $mes_cond = $fecha_cond->format('m');
+                        if($mes_cond == 1){
+                            $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
+                        }else{
+                            $fechaFeb->subDays(2)->addMonth()->format('Y-m-d');
+                        }
+                        $fecha_cond = $fecha_cond->subDays(3)->addMonth();
+                        $fecha_dia = $fecha_nueva->format('d');
+                        $fecha_mes = $fechaFeb->format('m');
+                        $fecha_anio = $fechaFeb->format('Y');
+    
+                        if ($fecha_mes == 2){
+                            if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
+                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                            }else{
+                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            }
+                        }else if ($fecha_dia == 31){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else if($fecha_dia == 29 || $fecha_dia == 30){
+                            $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
+                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                        }else{
+                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                        }
+    
+                        $amortizacion->monto = round($monto, 2);
+                        $redito = $monto * $rendimiento;
+                        $amortizacion->redito = round($redito, 2);
+                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion->save();
+    
+                        $pago_cliente_table = new PagoCliente;
+                        $pago_cliente_table->contrato_id = $contrato_update->id;
+                        $pago_cliente_table->serie = ($i + 1);                
+                        $pago_cliente_table->pago = $redito;
+                        $pago_cliente_table->status = "Pendiente";
+                        $pago_cliente_table->tipo_pago = "Pendiente";
+                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->save();
+                    }
                 }
 
             }

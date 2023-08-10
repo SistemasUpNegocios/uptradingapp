@@ -121,14 +121,50 @@
         $patrones[7] = '/{CENTAVOS}/';
         $patrones[8] = '/{BENEFICIARIOS}/';
         $patrones[9] = '/{TIPO_CONTRATO}/';
+        $patrones[10] = '/{MONEDA}/';
         
-        $sustituciones[0] = '<u>'.number_format($contratos[0]->inversion_us, 2).'</u>';
-        $posILU = strrpos($contratos[0]->inversion_letra_us, "con");
-        if($posILU === false){
-          $sustituciones[1] = '<u>son '.$contratos[0]->inversion_letra_us;
+        if($contratos[0]->moneda == "dolares"){
+          $sustituciones[0] = '<u>'.number_format($contratos[0]->inversion_us, 2).'</u>';
+        }elseif($contratos[0]->moneda == "euros"){
+          $sustituciones[0] = '<u>'.number_format($contratos[0]->inversion_eur, 2).'</u>';
+        }elseif($contratos[0]->moneda == "francos"){
+          $sustituciones[0] = '<u>'.number_format($contratos[0]->inversion_chf, 2).'</u>';
         }else{
-          $sustituciones[1] = '<u>son '.substr_replace($contratos[0]->inversion_letra_us, "", $posILU);
+          $sustituciones[0] = '<u>'.number_format($contratos[0]->inversion_us, 2).'</u>';
         }
+        
+        if($contratos[0]->moneda == "dolares"){
+          $posILU = strrpos($contratos[0]->inversion_letra_us, "con");
+        }elseif($contratos[0]->moneda == "euros"){
+          $posILU = strrpos($contratos[0]->inversion_letra_eur, "con");
+        }elseif($contratos[0]->moneda == "francos"){
+          $posILU = strrpos($contratos[0]->inversion_letra_chf, "con");
+        }else{
+          $posILU = strrpos($contratos[0]->inversion_letra_us, "con");
+        }
+
+        if($posILU === false){
+          if($contratos[0]->moneda == "dolares"){
+            $sustituciones[1] = '<u>son '.$contratos[0]->inversion_letra_us;
+          }elseif($contratos[0]->moneda == "euros"){
+            $sustituciones[1] = '<u>son '.$contratos[0]->inversion_letra_eur;
+          }elseif($contratos[0]->moneda == "francos"){
+            $sustituciones[1] = '<u>son '.$contratos[0]->inversion_letra_chf;
+          }else{
+            $sustituciones[1] = '<u>son '.$contratos[0]->inversion_letra_us;
+          }
+        }else{
+          if($contratos[0]->moneda == "dolares"){
+            $sustituciones[1] = '<u>son '.substr_replace($contratos[0]->inversion_letra_us, "", $posILU);
+          }elseif($contratos[0]->moneda == "euros"){
+            $sustituciones[1] = '<u>son '.substr_replace($contratos[0]->inversion_letra_eur, "", $posILU);
+          }elseif($contratos[0]->moneda == "francos"){
+            $sustituciones[1] = '<u>son '.substr_replace($contratos[0]->inversion_letra_chf, "", $posILU);
+          }else{
+            $sustituciones[1] = '<u>son '.substr_replace($contratos[0]->inversion_letra_us, "", $posILU);
+          }
+        }
+        
         $sustituciones[2] = '<u>'.number_format($contratos[0]->inversion, 2).' M.N</u>';
         $posIL = strrpos($contratos[0]->inversion_letra, "con");
         if($posIL === false){
@@ -139,8 +175,16 @@
         $sustituciones[4] = $contratos[0]->periodo;
         $sustituciones[5] = $contratos[0]->porcentaje;
 
-        $moneyCentavos_us = strval($contratos[0]->inversion_us);
-        $resultCentavos_us = explode(",", $moneyCentavos_us);
+        if($contratos[0]->moneda == "dolares"){
+          $moneyCentavos_us = strval($contratos[0]->inversion_us);
+        }elseif($contratos[0]->moneda == "euros"){
+          $moneyCentavos_us = strval($contratos[0]->inversion_eur);
+        }elseif($contratos[0]->moneda == "francos"){
+          $moneyCentavos_us = strval($contratos[0]->inversion_chf);
+        }else{
+          $moneyCentavos_us = strval($contratos[0]->inversion_us);
+        }
+        $resultCentavos_us = explode(".", $moneyCentavos_us);
 
         if (next($resultCentavos_us)) {
           if (strlen($resultCentavos_us[1]) == 1) {
@@ -153,7 +197,7 @@
         }
 
         $moneyCentavos = strval($contratos[0]->inversion);
-        $resultCentavos = explode(",", $moneyCentavos);
+        $resultCentavos = explode(".", $moneyCentavos);
 
         if (next($resultCentavos)) {
           if (strlen($resultCentavos[1]) == 1) {
@@ -201,6 +245,16 @@
         } else if ($contratos[0]->tipocontrato == "Rendimiento mensual") {
           $sustituciones[9] = "<span style='text-decoration: underline;'>con interés mensual</span>";
         }
+
+        if($contratos[0]->moneda == "dolares"){
+          $sustituciones[10] = "dólares";
+        }elseif($contratos[0]->moneda == "euros"){
+          $sustituciones[10] = "euros";
+        }elseif($contratos[0]->moneda == "francos"){
+          $sustituciones[10] = "francos suizos";
+        }else{
+          $sustituciones[10] = "dólares";
+        }
         
         echo preg_replace($patrones, $sustituciones, $clausula->redaccion);
       @endphp
@@ -214,7 +268,15 @@
             <thead>
               <tr style="background: #66cbdc !important; color: #fff;">
                 <th>FECHA DE CORTE</th>
-                <th>CAPITAL (USD)</th>
+                @if($contratos[0]->moneda == "dolares")
+                  <th>CAPITAL (USD)</th>
+                @elseif($contratos[0]->moneda == "euros")
+                  <th>CAPITAL (EUR)</th>
+                @elseif($contratos[0]->moneda == "francos")
+                  <th>CAPITAL (CHF)</th>
+                @else
+                  <th>CAPITAL (USD)</th>
+                @endif
                 <th>INTERÉS</th>
               </tr>
             </thead>
@@ -253,7 +315,15 @@
             <thead>
               <tr style="background: #66cbdc !important; color: #fff;">
                 <th>FECHA</th>
-                <th>CAPITAL (USD)</th>
+                @if($contratos[0]->moneda == "dolares")
+                  <th>CAPITAL (USD)</th>
+                @elseif($contratos[0]->moneda == "euros")
+                  <th>CAPITAL (EUR)</th>
+                @elseif($contratos[0]->moneda == "francos")
+                  <th>CAPITAL (CHF)</th>
+                @else
+                  <th>CAPITAL (USD)</th>
+                @endif
                 <th>INTERÉS</th>
               </tr>
             </thead>

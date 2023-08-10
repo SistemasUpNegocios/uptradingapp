@@ -77,6 +77,8 @@
                         }else{
                             $consulta = "false";
                         }
+                    }else{
+                        $consulta = "false";
                     }
 
                 @endphp

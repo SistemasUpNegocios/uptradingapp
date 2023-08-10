@@ -38,7 +38,7 @@
 
   <div class="mt-5">
     <p style="font-size: 14px; !important; line-height: 15px !important; color: #000">
-      <span style="margin-left: 30px;">Yo,</span> {{ $ps }}, recibo la cantidad de ${{ $comision_dolares }} dólares ({{ $letra_dolares }} {{ $centavos_dolares }}) en efectivo, que al tipo de cambio del día de hoy son ${{ $comision }} M.N ({{ $letra }} {{ $centavos }}) por concepto de pago de comisión por presentador de soluciones patrimoniales de Up Trading Experts, sin que al momento exista algún adeudo.
+      <span style="margin-left: 30px;">Yo,</span> {{ $ps }}, recibo la cantidad de ${{ $comision_dolares }} dólares ({{ $letra_dolares }} {{ $centavos_dolares }} USD), que al tipo de cambio ${{ number_format($dolar, 2) }} del día de hoy son ${{ $comision }} pesos ({{ $letra }} {{ $centavos }}) por concepto de pago de comisión por presentador de soluciones patrimoniales de Up Trading Experts, sin que al momento exista algún adeudo.
     </p>
   </div>
 
