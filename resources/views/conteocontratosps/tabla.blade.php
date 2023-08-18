@@ -3,22 +3,45 @@
 <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="conteo">
     <thead>
         <tr>
-            <th data-priority="0" scope="col">Nombre</th>
+            <th data-priority="0" scope="col">PS</th>
             <th data-priority="0" scope="col">Mensuales</th>
             <th data-priority="0" scope="col">Compuestos</th>
             <th data-priority="0" scope="col">Total</th>
             <th data-priority="0" scope="col">$USD</th>
+            <th data-priority="0" scope="col">$EUR</th>
+            <th data-priority="0" scope="col">$CHF</th>
             <th data-priority="0" scope="col">$MXN</th>
         </tr>
     </thead>
     <tbody id="psBody">
         @foreach ($lista_ps as $ps)
             @php
-                $sum_contrato = DB::table('contrato')
+                $sum_contrato_eur = DB::table('contrato')
+                    ->where('ps_id', $ps->id)
+                    ->where('status', "Activado")
+                    ->where('moneda', "euros")
+                    ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                    ->sum("inversion_eur");
+
+                $sum_contrato_chf = DB::table('contrato')
+                    ->where('ps_id', $ps->id)
+                    ->where('status', "Activado")
+                    ->where('moneda', "francos")
+                    ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                    ->sum("inversion_chf");
+
+                $sum_contrato_usd = DB::table('contrato')
+                    ->where('ps_id', $ps->id)
+                    ->where('status', "Activado")
+                    ->where('moneda', "dolares")
+                    ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                    ->sum("inversion_us");
+
+                $sum_contrato_mxn = DB::table('contrato')
                     ->where('ps_id', $ps->id)
                     ->where('status', "Activado")
                     ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                    ->sum("inversion_us");
+                    ->sum("inversion");
 
                 $count_contrato = DB::table('contrato')
                     ->where('ps_id', $ps->id)
@@ -75,8 +98,10 @@
                     @endif
                 </td>
                 <td>{{ $count_contrato }}</td>
-                <td>${{ number_format($sum_contrato, 2) }}</td>
-                <td>${{ number_format($sum_contrato * $dolar, 2) }}</td>
+                <td>${{ number_format($sum_contrato_usd, 2) }}</td>
+                <td>${{ number_format($sum_contrato_eur, 2) }}</td>
+                <td>${{ number_format($sum_contrato_chf, 2) }}</td>
+                <td>${{ number_format($sum_contrato_mxn, 2) }}</td>
             </tr>
         @endforeach
     </tbody>

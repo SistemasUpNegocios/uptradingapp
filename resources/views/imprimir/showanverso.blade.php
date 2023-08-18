@@ -300,11 +300,27 @@
               </tr>
               <tr style="background: #0070c0 !important; color: #fff;">
                 <th colspan="2">CAPITAL</th>
-                <th>$@convert($contratos[0]->inversion_us)</th>
+                @if($contratos[0]->moneda == "dolares")
+                  <th>$@convert($contratos[0]->inversion_us)</th>
+                @elseif($contratos[0]->moneda == "euros")
+                  <th>$@convert($contratos[0]->inversion_eur)</th>
+                @elseif($contratos[0]->moneda == "francos")
+                  <th>$@convert($contratos[0]->inversion_chf)</th>
+                @else
+                  <th>$@convert($contratos[0]->inversion_us)</th>
+                @endif
               </tr>
               <tr style="background: #175c67 !important; color: #fff;">
                 <th colspan="2">BENEFICIO TOTAL</th>
-                <th>$@convert(($cobrado_sum + $contratos[0]->inversion_us))</th>
+                @if($contratos[0]->moneda == "dolares")
+                  <th>$@convert(($cobrado_sum + $contratos[0]->inversion_us))</th>
+                @elseif($contratos[0]->moneda == "euros")
+                <th>$@convert(($cobrado_sum + $contratos[0]->inversion_eur))</th>
+                @elseif($contratos[0]->moneda == "francos")
+                <th>$@convert(($cobrado_sum + $contratos[0]->inversion_chf))</th>
+                @else
+                  <th>$@convert(($cobrado_sum + $contratos[0]->inversion_us))</th>
+                @endif
               </tr>
             </tbody>
           </table>
@@ -413,13 +429,6 @@
             <span>REPRESENTANTE LEGAL</span>
             <br>
             <span class="contrato_parrafo_firmas_nombre">Hilario Hamilton Herrera Cossaín</span>
-            {{-- @if ($contratos[0]->firma == "MARIA EUGENIA RINCON ACEVAL")
-                <span>GERENTE GENERAL</span>
-                <br>
-                <span class="contrato_parrafo_firmas_nombre">{{$contratos[0]->firma}}</span>
-            @else
-                <span>REPRESENTANTE LEGAL</span>
-            @endif --}}
           </p>
         </div>
       </div>
@@ -433,7 +442,7 @@
               </p>
           </div>
       </div>
-      <div class="contenedor_firma__centro" style="margin-top: 4rem">
+      <div class="contenedor_firma__centro" style="margin-top: 3rem">
           <hr class="contenedor_firma__hr">
           <div class=" text-center">
               <p class="contrato_parrafo_firmas">
@@ -442,10 +451,6 @@
                   <span>GERENTE GENERAL</span>
                   <br>
                   <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
-                  {{-- @if ($contratos[0]->firma == "MARIA EUGENIA RINCON ACEVAL") --}}
-                  {{-- @else --}}
-                      {{-- <span>REPRESENTANTE LEGAL</span> --}}
-                  {{-- @endif --}}
               </p>
           </div>
       </div>

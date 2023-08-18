@@ -70,6 +70,7 @@
                                         <th data-priority="0" scope="col">Fecha</th>
                                         <th data-priority="0" scope="col">Cliente</th>
                                         <th data-priority="0" scope="col">PS</th>
+                                        <th data-priority="0" scope="col">Moneda</th>
                         
                                         <th data-priority="0" scope="col">Swissquote a POOL</th>
                                         <th data-priority="0" scope="col">Rendimientos</th>

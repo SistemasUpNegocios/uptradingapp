@@ -1,18 +1,26 @@
 $(document).ready(function () {
-    const config = {
-        search: true,
-    };
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
 
-    dselect(document.querySelector("#clienteIdInput"), config);
-
-    $(".dropdown-menu .form-control").attr("placeholder", "Buscar...");
-    $(".dselect-no-results").text("No se encontraron resultados...");
-
-    let acc = "";
-
-    var table = $("#bitacora").DataTable({
-        ajax: "/admin/showBitacora",
-        columns: [{ data: "nombre" }, { data: "nota" }, { data: "btn" }],
+    var table = $("#cuentasmam").DataTable({
+        ajax: "/admin/showCuentasMam",
+        columns: [
+            {
+                data: "folio",
+            },
+            {
+                data: "loggin",
+            },
+            {
+                data: "clientenombre",
+            },
+            {
+                data: "btn",
+            },
+        ],
         responsive: {
             breakpoints: [
                 {
@@ -35,12 +43,12 @@ $(document).ready(function () {
         },
         language: {
             processing: "Procesando...",
-            lengthMenu: "Mostrar _MENU_ bitácoras",
+            lengthMenu: "Mostrar _MENU_ convenios",
             zeroRecords: "No se encontraron resultados",
-            emptyTable: "No se ha registrado ninguna bitácora",
+            emptyTable: "No se ha registrado ningún convenio",
             infoEmpty:
-                "Mostrando bitácoras del 0 al 0 de un total de 0 bitácoras",
-            infoFiltered: "(filtrado de un total de _MAX_ bitácoras)",
+                "Mostrando convenios del 0 al 0 de un total de 0 convenios",
+            infoFiltered: "(filtrado de un total de _MAX_ convenios)",
             search: "Buscar:",
             infoThousands: ",",
             loadingRecords: "Cargando...",
@@ -148,7 +156,7 @@ $(document).ready(function () {
             },
             searchPanes: {
                 clearMessage: "Borrar todo",
-                collapse: {
+                collacontratoe: {
                     0: "Paneles de búsqueda",
                     _: "Paneles de búsqueda (%d)",
                 },
@@ -212,198 +220,123 @@ $(document).ready(function () {
                         "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
                 },
             },
-            info: "Mostrando de _START_ a _END_ de _TOTAL_ bitácoras",
+            info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
         },
+        aaSorting: [],
     });
 
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
-    $("#bitacoraForm").on("submit", function (e) {
+    $("#btnSubmit").on("click", function (e) {
         e.preventDefault();
-        var form = $(this).serialize();
-        var url = $(this).attr("action");
-        $("#alertMessage").text("");
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: new FormData(this),
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function () {
-                $("#formModal").modal("hide");
-                $("#bitacoraForm")[0].reset();
-                table.ajax.reload(null, false);
-                if (acc == "new") {
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Bitácora añadida</h1>',
-                        html: '<p style="font-family: Poppins">La bitácora ha sido añadida correctamente</p>',
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                } else if (acc == "edit") {
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Bitácora actualizada</h1>',
-                        html: '<p style="font-family: Poppins">La bitácora ha sido actualizada correctamente</p>',
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                }
-            },
-            error: function (jqXHR, exception) {
-                var validacion = jqXHR.responseJSON.errors;
-                for (let clave in validacion) {
-                    $("#alertMessage").append(
-                        `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
-                    );
-                }
+        Swal.fire({
+            title: '<h2 style="font-family: Poppins;">Se está enviando por correo el reporte, por favor espere...</h2>',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
             },
         });
-    });
 
-    $(document).on("click", ".new", function (e) {
-        $("#alertMessage").text("");
-        acc = "new";
-        $("#bitacoraForm").attr("action", "/admin/addBitacora");
-        $("#idInput").val("");
+        let id = $("#idInput").val();
+        let folio = $("#folioInput").val();
+        let cliente = $("#clienteInput").val();
+        let correo = $("#correoInput").val();
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let capital = $("#capitalInput").val();
+        let balance = $("#balanceInput").val();
+        let flotante = $("#flotanteInput").val();
+        let retiro = $("#retiroInput").val();
 
-        $("#clienteIdInput").next().children().first().empty();
-        $("#clienteIdInput").next().children().first().text("Selecciona...");
-        $("#clienteIdInput")
-            .next()
-            .children()
-            .first()
-            .attr("data-dselect-text", "");
-        $("#clienteIdInput").next().children().first().attr("disabled", false);
+        $.ajax({
+            type: "GET",
+            data: {
+                id,
+                folio,
+                cliente,
+                correo,
+                fecha_inicio,
+                fecha_fin,
+                capital,
+                balance,
+                flotante,
+                retiro,
+            },
+            url: "/admin/generarCuentaMam",
+            success: function (response) {
+                Swal.close();
+                if (response == "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Reporte enviado</h1>',
+                        html: '<p style="font-family: Poppins">El reporte MAM ha sido enviado correctamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                    $("#formModal").modal("hide");
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Reporte no enviado</h1>',
+                        html: '<p style="font-family: Poppins">El reporte MAM no puedo enviarse</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                }
+            },
+            error: function (response) {
+                Swal.close();
+                console.log(response);
+            },
+        });
 
-        $("#bitacoraForm")[0].reset();
-        $("#clienteIdInput").prop("disabled", false);
-        $("#notaInput").prop("readonly", false);
-
-        $("#modalTitle").text("Añadir bitácora");
-        $("#btnSubmit").text("Añadir bitácora");
-
-        $("#btnSubmit").show();
-        $("#btnCancel").text("Cancelar");
-    });
-
-    $(document).on("click", ".view", function (e) {
-        $("#alertMessage").text("");
-        acc = "view";
-        e.preventDefault();
-
-        var clienteid = $(this).data("clienteid");
-        var nombre = $(this).data("clientenom");
-        var nota = $(this).data("nota");
-
-        $("#clienteIdInput").next().children().first().empty();
-        $("#clienteIdInput").next().children().first().text(nombre);
-        $("#clienteIdInput")
-            .next()
-            .children()
-            .first()
-            .attr("data-dselect-text", nombre);
-        $("#clienteIdInput").next().children().first().attr("disabled", true);
-
-        $("#modalTitle").text(`Vista previa de la bitácora de: ${nombre}`);
-
-        $("#formModal").modal("show");
-
-        $("#clienteIdInput").val(clienteid);
-        $("#clienteIdInput").prop("disabled", true);
-
-        $("#notaInput").val(nota);
-        $("#notaInput").prop("readonly", true);
-
-        $("#btnCancel").text("Cerrar vista previa");
-        $("#btnSubmit").hide();
+        // window.open(
+        //     `/admin/generarCuentaMam?id=${id}&folio=${folio}&cliente=${cliente}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&capital=${capital}&balance=${balance}&flotante=${flotante}&retiro=${retiro}`,
+        //     "_blank"
+        // );
     });
 
     $(document).on("click", ".edit", function (e) {
+        $("#cuentaMamForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "edit";
         e.preventDefault();
+
         var id = $(this).data("id");
-
-        var clienteid = $(this).data("clienteid");
-        var nombre = $(this).data("clientenom");
-        var nota = $(this).data("nota");
-
-        $("#clienteIdInput").next().children().first().empty();
-        $("#clienteIdInput").next().children().first().text(nombre);
-        $("#clienteIdInput")
-            .next()
-            .children()
-            .first()
-            .attr("data-dselect-text", nombre);
-        $("#clienteIdInput").next().children().first().attr("disabled", false);
-
-        $("#formModal").modal("show");
-        $("#bitacoraForm").attr("action", "/admin/editBitacora");
+        var folio = $(this).data("folio");
+        var nombrecliente = $(this).data("nombrecliente");
+        var correocliente = $(this).data("correocliente");
+        var monto = $(this).data("monto");
+        var fecha_inicio = $(this).data("fecha_inicio");
+        var fecha_fin = $(this).data("fecha_fin");
 
         $("#idInput").val(id);
 
-        $("#clienteIdInput").val(clienteid);
-        $("#clienteIdInput").prop("disabled", false);
+        $("#folioInput").val(folio);
+        $("#folioInput").prop("readonly", true);
 
-        $("#notaInput").val(nota);
-        $("#notaInput").prop("readonly", false);
+        $("#correoInput").val(correocliente);
 
-        $("#modalTitle").text(`Editar bitacora de: ${nombre}`);
-        $("#btnSubmit").show();
-        $("#btnSubmit").text("Editar bitacora");
+        $("#clienteInput").val(nombrecliente);
+        $("#clienteInput").prop("readonly", true);
+
+        monto = monto.toString().replace(",", ".");
+        monto = parseFloat(monto);
+        $("#capitalInput").val(monto.toFixed(2));
+        $("#capitalInput").prop("readonly", true);
+
+        $("#fechaInicioInput").val(fecha_inicio);
+        $("#fechaInicioInput").prop("readonly", true);
+
+        $("#fechaFinInput").val(fecha_fin);
+        $("#fechaFinInput").prop("readonly", true);
+
         $("#btnCancel").text("Cancelar");
-    });
-
-    $(document).on("click", ".delete", function (e) {
-        e.preventDefault();
-        $("#alertMessage").text("");
-        var id = $(this).data("id");
-        var conf;
-
-        Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Eliminar bitácora</h1>',
-            html: '<p style="font-family: Poppins">¿Estás seguro de eliminar esta bitácora? esta opción no se puede deshacer</p>',
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: '<a style="font-family: Poppins">Eliminar</a>',
-            confirmButtonColor: "#01bbcc",
-            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
-            cancelButtonColor: "#dc3545",
-        }).then((result) => {
-            if (result.value) {
-                $.post("/admin/deleteBitacora", { id: id }, function () {
-                    table.ajax.reload(null, false);
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Bitácora eliminada</h1>',
-                        html: '<p style="font-family: Poppins">La bitácora se ha eliminado correctamente</p>',
-                        confirmButtonText:
-                            '<a style="font-family: Poppins">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">La bitácora no se ha eliminado</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            }
-        });
+        $("#formModal").modal("show");
     });
 });
 

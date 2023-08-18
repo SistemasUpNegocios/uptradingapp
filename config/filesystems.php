@@ -80,6 +80,11 @@ return [
             'root'   => public_path() . '/documentos/intencion',
         ],
 
+        'reportes' => [
+            'driver' => 'local',
+            'root'   => public_path() . '/documentos/reportes',
+        ],
+
         'documento' => [
             'driver' => 'local',
             'root'   => public_path() . '/documentos',

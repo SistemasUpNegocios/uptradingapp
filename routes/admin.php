@@ -36,13 +36,6 @@ Route::post('/admin/addBanco', [App\Http\Controllers\BancoController::class, 'ad
 Route::post('/admin/editBanco', [App\Http\Controllers\BancoController::class, 'editBanco']);
 Route::post('/admin/deleteBanco', [App\Http\Controllers\BancoController::class, 'deleteBanco']);
 
-// Rutas para gestión de bitacora
-Route::get('/admin/bitacora', [App\Http\Controllers\BitacoraController::class, 'index'])->name('bitacora');
-Route::get('/admin/showBitacora', [App\Http\Controllers\BitacoraController::class, 'getBitacora']);
-Route::post('/admin/addBitacora', [App\Http\Controllers\BitacoraController::class, 'addBitacora']);
-Route::post('/admin/editBitacora', [App\Http\Controllers\BitacoraController::class, 'editBitacora']);
-Route::post('/admin/deleteBitacora', [App\Http\Controllers\BitacoraController::class, 'deleteBitacora']);
-
 // Rutas para gestión de cliente
 Route::get('/admin/cliente', [App\Http\Controllers\ClienteController::class, 'index'])->name('cliente');
 Route::get('/admin/showCliente', [App\Http\Controllers\ClienteController::class, 'getCliente']);
@@ -105,11 +98,6 @@ Route::get('/admin/editStatus', [App\Http\Controllers\ContratoController::class,
 Route::get('/admin/getFolio', [App\Http\Controllers\ContratoController::class, 'getFolio']);
 Route::get('/admin/enviarTelegram', [App\Http\Controllers\ContratoController::class, 'enviarTelegram']);
 
-//Rutas par gestión de contrato escaneado
-Route::get('/admin/checkScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'checkScanner']);
-Route::post('/admin/addScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'addScanner']);
-Route::post('/admin/editScanner', [App\Http\Controllers\ContratoEscaneadoController::class, 'editScanner']);
-
 // Contratos filtrados
 Route::get('/admin/showContrato', [App\Http\Controllers\ContratoController::class, 'getContrato']);
 Route::get('/admin/showContratoMensuales', [App\Http\Controllers\ContratoController::class, 'getContratoMensual']);
@@ -147,6 +135,11 @@ Route::get('/admin/enviarTelegramConvenio', [App\Http\Controllers\ConvenioContro
 
 Route::get('/admin/validateClaveConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'validateClaveOficina']);
 Route::get('/admin/editStatusConvenioOficina', [App\Http\Controllers\ConvenioController::class, 'editStatusOficina']);
+
+// Rutas para gestión de convenio MAM
+Route::get('/admin/cuentasmam', [App\Http\Controllers\CuentaMamController::class, 'index'])->name('cuentamam');
+Route::get('/admin/showCuentasMam', [App\Http\Controllers\CuentaMamController::class, 'getCuentasMam']);
+Route::get('/admin/generarCuentaMam', [App\Http\Controllers\CuentaMamController::class, 'generarCuentaMam']);
 
 // Rutas para gestión de convenio terminado
 Route::get('/admin/convenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'index'])->name('convenioTerminado');
@@ -204,6 +197,16 @@ Route::get('/admin/imprimir-reporte-conteo-contratos', [App\Http\Controllers\Con
 Route::get('/admin/conteoconveniosps', [App\Http\Controllers\ConteoConvenioPsController::class, 'index'])->name('conteoconveniosps');
 Route::get('/admin/showConteoConvPs', [App\Http\Controllers\ConteoConvenioPsController::class, 'getPs']);
 Route::get('/admin/imprimir-reporte-conteo-convenios', [App\Http\Controllers\ConteoConvenioPsController::class, 'imprimirReporte']);
+
+// Rutas para gestión de # contratos Clientes
+Route::get('/admin/conteocontratosclientes', [App\Http\Controllers\ConteoContratoClienteController::class, 'index'])->name('conteocontratosclientes');
+Route::get('/admin/showConteoClientes', [App\Http\Controllers\ConteoContratoClienteController::class, 'getClientes']);
+Route::get('/admin/imprimir-reporte-conteo-contratos-clientes', [App\Http\Controllers\ConteoContratoClienteController::class, 'imprimirReporte']);
+
+// Rutas para gestión de # convenios Clientes
+Route::get('/admin/conteoconveniosclientes', [App\Http\Controllers\ConteoConvenioClienteController::class, 'index'])->name('conteoconveniosclientes');
+Route::get('/admin/showConteoConvClientes', [App\Http\Controllers\ConteoConvenioClienteController::class, 'getClientes']);
+Route::get('/admin/imprimir-reporte-conteo-convenios-clientes', [App\Http\Controllers\ConteoConvenioClienteController::class, 'imprimirReporte']);
 
 // Rutas para gestión de oficinas
 Route::get('/admin/oficina', [App\Http\Controllers\OficinaController::class, 'index'])->name('oficinas');
@@ -429,7 +432,7 @@ Route::post('/admin/deleteFolio', [App\Http\Controllers\FolioController::class, 
 // Rutas para gestión de concentrados
 Route::get('/admin/concentrado', [App\Http\Controllers\ConcentradoController::class, 'index'])->name('concentrado');
 Route::get('/admin/showConcentrado', [App\Http\Controllers\ConcentradoController::class, 'getConcentrado']);
-Route::get('/admin/reporteConcentrado/{id}', [App\Http\Controllers\ConcentradoController::class, 'reporteConcentrado']);
+Route::get('/admin/reporteConcentrado', [App\Http\Controllers\ConcentradoController::class, 'reporteConcentrado']);
 
 // Rutas para gestión de notas MAM
 Route::get('/admin/notas', [App\Http\Controllers\NotaController::class, 'index'])->name('notas');

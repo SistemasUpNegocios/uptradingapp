@@ -23,6 +23,26 @@ $(document).ready(function () {
         },
     });
 
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
+        success: function (response) {
+            //EURO
+            let euro = response.conversion_rate;
+            $("#euroInput").val(euro.toFixed(2));
+            datos();
+        },
+    });
+
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
+        success: function (response) {
+            //FRANCO SUIZO
+            let franco = response.conversion_rate;
+            $("#francoInput").val(franco.toFixed(2));
+            datos();
+        },
+    });
+
     const datos = () => {
         let mes = formatDate(new Date());
         mes = mes.split("/").reverse().join("-");
@@ -33,12 +53,17 @@ $(document).ready(function () {
             data: {
                 fecha: `${mes[0]}-${mes[1]}`,
                 dolar: dolar,
+                euro: $("#euroInput").val(),
+                franco: $("#francoInput").val(),
             },
             url: "/admin/getResumenPagoPs",
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
                 tablaResumen();
+
+                $(".contEuro").hide();
+                $(".contFranco").hide();
 
                 let vacio = $("#vacioInput").val();
                 if (vacio == "vacio") {
@@ -58,7 +83,7 @@ $(document).ready(function () {
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
-        table = $("#resumenPagoPs").DataTable({
+        table = $(".resumenPagoPs").DataTable({
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ pagos",
@@ -259,7 +284,14 @@ $(document).ready(function () {
 
         var id = $(this).data("id");
         var statusValor = $(this).val();
-        var dolar = $("#dolarInput").val();
+        let moneda = $(this).data("moneda");
+        let dolar = $("#dolarInput").val();
+
+        if (moneda == "euros") {
+            dolar = $("#euroInput").val();
+        } else if (moneda == "francos") {
+            dolar = $("#francoInput").val();
+        }
 
         const Toast = Swal.mixin({
             toast: true,
@@ -315,13 +347,38 @@ $(document).ready(function () {
                 type: "GET",
                 data: {
                     fecha: fecha,
-                    dolar: dolar,
+                    dolar: $("#dolarInput").val(),
+                    euro: $("#euroInput").val(),
+                    franco: $("#francoInput").val(),
                 },
                 url: "/admin/getResumenPagoPs",
                 success: function (response) {
                     $("#tablaResumen").empty();
                     $("#tablaResumen").html(response);
                     tablaResumen();
+
+                    let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                        ":checked"
+                    );
+                    let monedaEurosChecked =
+                        $("#monedaEurosInput").is(":checked");
+                    let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                        ":checked"
+                    );
+
+                    if (monedaDolaresChecked) {
+                        $(".contEuro").hide();
+                        $(".contFranco").hide();
+                        $(".contDolar").show();
+                    } else if (monedaEurosChecked) {
+                        $(".contDolar").hide();
+                        $(".contFranco").hide();
+                        $(".contEuro").show();
+                    } else if (monedaFrancosChecked) {
+                        $(".contDolar").hide();
+                        $(".contEuro").hide();
+                        $(".contFranco").show();
+                    }
 
                     let vacio = $("#vacioInput").val();
                     if (vacio == "vacio") {
@@ -360,6 +417,7 @@ $(document).ready(function () {
         let dolar_reporte = $("#dolarInput").val();
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
+            let moneda = $(this).data("moneda");
             let ps = $(this).data("ps");
             let comision = String($(this).data("comision"))
                 .replaceAll("$", "")
@@ -368,13 +426,26 @@ $(document).ready(function () {
                 .replaceAll("$", "")
                 .replaceAll(",", "");
 
-            let letra = numeroALetrasMXN(comision);
             let letra_dolares = numeroALetrasUSD(comision_dolares);
+
+            if (moneda == "euros") {
+                comision_dolares = String($(this).data("comisioneuros"))
+                    .replaceAll("$", "")
+                    .replaceAll(",", "");
+                letra_dolares = numeroALetrasEUR(comision_dolares);
+            } else if (moneda == "francos") {
+                comision_dolares = String($(this).data("comisionfrancos"))
+                    .replaceAll("$", "")
+                    .replaceAll(",", "");
+                letra_dolares = numeroALetrasCHF(comision_dolares);
+            }
+
+            let letra = numeroALetrasMXN(comision);
 
             let fecha_mes = $(this).data("fecha");
 
             window.open(
-                `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar_reporte}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
+                `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar_reporte}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}&moneda=${moneda}`,
                 "_blank"
             );
         } else {
@@ -396,6 +467,7 @@ $(document).ready(function () {
             minimumFractionDigits: 2,
         });
 
+        let moneda = $(this).data("moneda");
         let ps = $(this).data("ps");
         let comision = String($(this).data("comision"))
             .replaceAll("$", "")
@@ -404,8 +476,21 @@ $(document).ready(function () {
             .replaceAll("$", "")
             .replaceAll(",", "");
 
-        let letra = numeroALetrasMXN(comision);
         let letra_dolares = numeroALetrasUSD(comision_dolares);
+
+        if (moneda == "euros") {
+            comision_dolares = String($(this).data("comisioneuros"))
+                .replaceAll("$", "")
+                .replaceAll(",", "");
+            letra_dolares = numeroALetrasEUR(comision_dolares);
+        } else if (moneda == "francos") {
+            comision_dolares = String($(this).data("comisionfrancos"))
+                .replaceAll("$", "")
+                .replaceAll(",", "");
+            letra_dolares = numeroALetrasCHF(comision_dolares);
+        }
+
+        let letra = numeroALetrasMXN(comision);
 
         let fecha_mes = $(this).data("fecha");
 
@@ -429,14 +514,21 @@ $(document).ready(function () {
             .val()
             .replaceAll("$", "")
             .replaceAll(",", "");
-        let letra = numeroALetrasMXN(comision);
-        let letra_dolares = numeroALetrasUSD(comision_dolares);
+        let letra = $("#letraInput").val();
+        let letra_dolares = $("#letraDolaresInput").val();
+        let moneda = $("#monedaInput").val();
         let dolar = $("#dolarInput").val();
         let date_valor = $("#dateInput").val();
         let fecha_mes = $("#fechaMesInput").val();
 
+        if (moneda == "euros") {
+            dolar = $("#euroInput").val();
+        } else if (moneda == "francos") {
+            dolar = $("#francoInput").val();
+        }
+
         window.open(
-            `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}`,
+            `/admin/imprimirReportePs?ps=${ps}&comision=${comision}&comision_dolares=${comision_dolares}&letra=${letra}&letra_dolares=${letra_dolares}&dolar=${dolar}&fecha_imprimir=${date_valor}&fecha_mes=${fecha_mes}&moneda=${moneda}`,
             "_blank"
         );
     });
@@ -465,6 +557,8 @@ $(document).ready(function () {
             data: {
                 fecha: fecha,
                 dolar: dolar_nuevo,
+                euro: $("#euroInput").val(),
+                franco: $("#francoInput").val(),
             },
             url: "/admin/getResumenPagoPs",
             success: function (response) {
@@ -477,6 +571,124 @@ $(document).ready(function () {
                 } else {
                     $("#contImprimirResum").removeClass("d-none");
                 }
+
+                $(".contEuro").hide();
+                $(".contFranco").hide();
+                $(".contDolar").show();
+            },
+            error: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center mt-4">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+            },
+        });
+    });
+
+    $(document).on("keyup", "#euroInput", function () {
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="text-success">Cargando comisiones<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        let euro_nuevo = $("#euroInput").val();
+        let fecha = $("#fechaInput").val();
+
+        if (euro_nuevo == 0 || euro_nuevo == "") {
+            $("#euroInput").val(euro);
+            euro_nuevo = $("#euroInput").val();
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha: fecha,
+                euro: euro_nuevo,
+                dolar: $("#dolarInput").val(),
+                franco: $("#francoInput").val(),
+            },
+            url: "/admin/getResumenPagoPs",
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+
+                $(".contDolar").hide();
+                $(".contFranco").hide();
+                $(".contEuro").show();
+            },
+            error: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center mt-4">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+            },
+        });
+    });
+
+    $(document).on("keyup", "#francoInput", function () {
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="text-success">Cargando comisiones<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        let franco_nuevo = $("#francoInput").val();
+        let fecha = $("#fechaInput").val();
+
+        if (franco_nuevo == 0 || franco_nuevo == "") {
+            $("#francoInput").val(franco);
+            franco_nuevo = $("#francoInput").val();
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha: fecha,
+                franco: franco_nuevo,
+                euro: $("#euroInput").val(),
+                dolar: $("#dolarInput").val(),
+            },
+            url: "/admin/getResumenPagoPs",
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+
+                $(".contDolar").hide();
+                $(".contEuro").hide();
+                $(".contFranco").show();
             },
             error: function (response) {
                 $("#tablaResumen").empty();
@@ -512,10 +724,20 @@ $(document).ready(function () {
         $("#modalTitleWhats").text("Mandar WhatsApp para transferencia");
         let ps = $(this).data("ps");
         let psnumero = $(this).data("psnumero");
+        let moneda = $(this).data("moneda");
         let comision_dolares = $(this).data("comisiondolares");
         let fecha_mes = $(this).data("fecha");
+        let tipo_moneda = "dólares";
 
-        let mensaje = `Buen día ${ps}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${comision_dolares} dólares, por su comisión de PS por el mes de ${fecha_mes}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+        if (moneda == "euros") {
+            comision_dolares = $(this).data("comisioneuros");
+            tipo_moneda = "euros";
+        } else if (moneda == "francos") {
+            comision_dolares = $(this).data("comisionfrancos");
+            tipo_moneda = "francos suizos";
+        }
+
+        let mensaje = `Buen día ${ps}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${comision_dolares} ${tipo_moneda}, por su comisión de PS por el mes de ${fecha_mes}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
 
         $("#nombrePsInput").val(ps);
         $("#numeroPsInput").val(psnumero);
@@ -554,12 +776,23 @@ $(document).ready(function () {
         $("#montoTransSwissCont").hide();
 
         let pagoid = $(this).data("pagoid");
+        let pagoidconvenio = $(this).data("pagoidconvenio");
         let contratoid = $(this).data("contratoid");
+        let numero_pago = $(this).data("numeropago");
+        let numero_pago_convenio = $(this).data("numeropagoconvenio");
+        let moneda = $(this).data("moneda");
         let dolar = $("#dolarInput").val();
+
+        if (moneda == "euros") {
+            dolar = $("#euroInput").val();
+        } else if (moneda == "francos") {
+            dolar = $("#francoInput").val();
+        }
 
         let monto = $(this).data("monto");
         pesos = $(this).data("pesos").toString().replaceAll(",", "");
-        dolares = parseFloat($(this).data("dolares"));
+        dolares = $(this).data("dolares").toString().replaceAll(",", "");
+        dolares = parseFloat(dolares);
         let tipopago = $(this).data("tipopago");
 
         let checkbox = [
@@ -605,7 +838,10 @@ $(document).ready(function () {
         }
 
         $("#idInputNota").val(pagoid);
+        $("#idConvenioInputNota").val(pagoidconvenio);
         $("#contratoIdInputNota").val(contratoid);
+        $("#numeroPagoInputNota").val(numero_pago);
+        $("#numeroPagoConvenioInputNota").val(numero_pago_convenio);
         $("#memoInputNota").val("Pago de comisión");
         $("#dolarInputNota").val(dolar);
 
@@ -707,6 +943,8 @@ $(document).ready(function () {
                         data: {
                             fecha: fecha,
                             dolar: dolar,
+                            euro: $("#euroInput").val(),
+                            franco: $("#francoInput").val(),
                         },
                         url: "/admin/getResumenPagoPs",
                         success: function (response) {
@@ -714,6 +952,29 @@ $(document).ready(function () {
                             $("#tablaResumen").empty();
                             $("#tablaResumen").html(response);
                             tablaResumen();
+
+                            let monedaDolaresChecked = $(
+                                "#monedaDolaresInput"
+                            ).is(":checked");
+                            let monedaEurosChecked =
+                                $("#monedaEurosInput").is(":checked");
+                            let monedaFrancosChecked = $(
+                                "#monedaFrancosInput"
+                            ).is(":checked");
+
+                            if (monedaDolaresChecked) {
+                                $(".contEuro").hide();
+                                $(".contFranco").hide();
+                                $(".contDolar").show();
+                            } else if (monedaEurosChecked) {
+                                $(".contDolar").hide();
+                                $(".contFranco").hide();
+                                $(".contEuro").show();
+                            } else if (monedaFrancosChecked) {
+                                $(".contDolar").hide();
+                                $(".contEuro").hide();
+                                $(".contFranco").show();
+                            }
                         },
                         error: function (response) {
                             $("#tablaResumen").empty();
@@ -747,5 +1008,26 @@ $(document).ready(function () {
                 </div>
             `);
         }
+    });
+
+    $(document).on("click", "#monedaDolaresInput", function () {
+        $(".contEuro").hide();
+        $(".contFranco").hide();
+
+        $(".contDolar").show();
+    });
+
+    $(document).on("click", "#monedaEurosInput", function () {
+        $(".contDolar").hide();
+        $(".contFranco").hide();
+
+        $(".contEuro").show();
+    });
+
+    $(document).on("click", "#monedaFrancosInput", function () {
+        $(".contDolar").hide();
+        $(".contEuro").hide();
+
+        $(".contFranco").show();
     });
 });

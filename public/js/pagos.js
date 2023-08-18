@@ -14,6 +14,32 @@ $(document).ready(function () {
                 data: "contrato",
             },
             {
+                data: "monto",
+                render: function (data) {
+                    let montos = "";
+                    data = data.substring(0, data.length - 1);
+                    let cantidad = data.split(",");
+
+                    cantidad.map((monto, i) => {
+                        if (cantidad.length == i + 1) {
+                            montos =
+                                montos + "y " + formatearCantidad.format(monto);
+                        } else {
+                            montos =
+                                montos + formatearCantidad.format(monto) + ", ";
+                        }
+                    });
+
+                    if (cantidad.length == 1) {
+                        montos = montos.replace("y ", "");
+                    } else {
+                        montos = montos.replace(", y", " y");
+                    }
+
+                    return montos;
+                },
+            },
+            {
                 data: "tipo_pago",
                 render: function (data) {
                     let tipos = "";
@@ -46,33 +72,19 @@ $(document).ready(function () {
                 },
             },
             {
-                data: "monto",
+                data: "moneda",
                 render: function (data) {
-                    let montos = "";
-                    data = data.substring(0, data.length - 1);
-                    let cantidad = data.split(",");
-
-                    cantidad.map((monto, i) => {
-                        if (cantidad.length == i + 1) {
-                            montos =
-                                montos + "y " + formatearCantidad.format(monto);
-                        } else {
-                            montos =
-                                montos + formatearCantidad.format(monto) + ", ";
-                        }
-                    });
-
-                    if (cantidad.length == 1) {
-                        montos = montos.replace("y ", "");
-                    } else {
-                        montos = montos.replace(", y", " y");
+                    if (data == "dolares") {
+                        return "Dólares";
+                    } else if (data == "euros") {
+                        return "Euros";
+                    } else if (data == "francos") {
+                        return "Francos";
                     }
-
-                    return montos;
                 },
             },
             {
-                data: "dolar",
+                data: "tipo_cambio",
                 render: function (data) {
                     return formatearCantidad.format(data);
                 },

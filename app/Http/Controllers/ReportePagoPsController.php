@@ -9,6 +9,7 @@ use App\Models\Oficina;
 use App\Models\Ps;
 use App\Models\Pago;
 use App\Models\PagoPS;
+use App\Models\PagoPSConvenio;
 use App\Models\TipoCambio;
 use App\Models\Log;
 use App\Exports\PagosPsExport;
@@ -41,6 +42,8 @@ class ReportePagoPsController extends Controller
             "fecha" => $request->fecha,
             "lista_ps" => $ps,
             "dolar" => $request->dolar,
+            "euro" => $request->euro,
+            "franco" => $request->franco,
         );
 
         return response()->view('reportepagops.tabla', $data, 200);
@@ -100,6 +103,8 @@ class ReportePagoPsController extends Controller
             "centavos" => $centavos_num,
             "fecha_imprimir" => $request->fecha_imprimir,
             "dolar" => $request->dolar,
+            "euro" => $request->euro,
+            "franco" => $request->franco,
         );        
 
         $pdf = PDF::loadView('reportepagops.reporte', $data);
@@ -164,56 +169,109 @@ class ReportePagoPsController extends Controller
     public function guardarPago(Request $request)
     {
         $id_arr = explode(',', $request->id);
+        $id_convenio_arr = explode(',', $request->id_convenio);
 
-        foreach ($id_arr as $id) {
-            $pago_ps = PagoPS::find($id);
+        $numero_pago_arr = explode(',', $request->numero_pago);
+        $numero_pago_convenio_arr = explode(',', $request->numero_pago_convenio);
 
-            if(strlen($pago_ps) > 0){
-                $fecha = Carbon::now()->format('Y-m');
-                $pago_ps->fecha_pagado = $fecha."-10";
-                $pago_ps->status = "Pagado";
-                $pago_ps->update();
+        if(count($id_arr) > 0){
+            for ($i=0; $i < count($id_arr); $i++) { 
+                $pago_ps = PagoPS::find($id_arr[$i]);
 
-                $tipo_cambio = new TipoCambio;
-                $tipo_cambio->valor = number_format($request->dolar, 2);
-                $tipo_cambio->contrato_id = $pago_ps->contrato_id;
-                $tipo_cambio->memo = "Pago de comisión";
-                $tipo_cambio->save();
+                if(strlen($pago_ps) > 0){
+                    $fecha = Carbon::now()->format('Y-m');
+                    $pago_ps->fecha_pagado = $fecha."-10";
+                    $pago_ps->status = "Pagado";
+                    $pago_ps->update();
 
-                $log = new Log;
-                $log->tipo_accion = "Actualización";
-                $log->tabla = "Pago de PS por el contrato $pago_ps->contrato_id";
-                $log->id_tabla = $id;
-                $log->bitacora_id = session('bitacora_id');
-                $log->save();
+                    // DB::table('pagos')->where("id_contrato", $id_arr[$i])->where('memo', "Pago de comisión ($numero_pago_arr[$i])")->delete();
 
-                DB::table('pagos')->where('memo', "Pago de comisión por el contrato $pago_ps->contrato_id")->delete();
-
-                $pago = new Pago;
-                $pago->id_contrato = $pago_ps->contrato_id;
-                $pago->memo = "Pago de comisión por el contrato $pago_ps->contrato_id";
-                $pago->dolar = $request->dolar;
-                if (gettype($request->tipo_pago) != 'NULL'){
-                    $tipos_pagos = "";
-                    foreach ($request->tipo_pago as $tipo_pago) {
-                        if($tipo_pago != ""){
-                            $tipos_pagos .= $tipo_pago.',';
+                    $pago = new Pago;
+                    $pago->id_contrato = $pago_ps->contrato_id;
+                    $pago->memo = "Pago de comisión ($numero_pago_arr[$i])";
+                    $pago->tipo_cambio = $request->dolar;
+                    if (gettype($request->tipo_pago) != 'NULL'){
+                        $tipos_pagos = "";
+                        foreach ($request->tipo_pago as $tipo_pago) {
+                            if($tipo_pago != ""){
+                                $tipos_pagos .= $tipo_pago.',';
+                            }
                         }
+                        $pago->tipo_pago = $tipos_pagos;
                     }
-                    $pago->tipo_pago = $tipos_pagos;
-                }
-                if(count($request->monto) > 0 ){
-                    $montos = "";
-                    foreach ($request->monto as $monto) {
-                        if($monto > 0){
-                            $montos .= $monto.',';
+                    if(count($request->monto) > 0 ){
+                        $montos = "";
+                        foreach ($request->monto as $monto) {
+                            if($monto > 0){
+                                $montos .= $monto.',';
+                            }
                         }
+                        $pago->monto = $montos;
                     }
-                    $pago->monto = $montos;
+                    $pago->save();
+
+                    $tipo_cambio = new TipoCambio;
+                    $tipo_cambio->valor = number_format($request->dolar, 2);
+                    $tipo_cambio->contrato_id = $pago_ps->contrato_id;
+                    $tipo_cambio->memo = "Pago de comisión ($numero_pago_arr[$i])";
+                    $tipo_cambio->save();
+
+                    $log = new Log;
+                    $log->tipo_accion = "Actualización";
+                    $log->tabla = "Pago de PS";
+                    $log->id_tabla = $id_arr[$i];
+                    $log->bitacora_id = session('bitacora_id');
+                    $log->save();
                 }
-                $pago->save();
             }
         }
+
+        if(count($id_convenio_arr) > 0){
+            for ($i=0; $i < count($id_convenio_arr); $i++) { 
+                $pago_convenio_ps = PagoPSConvenio::find($id_convenio_arr[$i]);
+
+                if(strlen($pago_convenio_ps) > 0){
+                    $fecha = Carbon::now()->format('Y-m');
+                    $pago_convenio_ps->fecha_pagado = $fecha."-10";
+                    $pago_convenio_ps->status = "Pagado";
+                    $pago_convenio_ps->update();
+
+                    // DB::table('pagos')->where('memo', "Pago de comisión ($numero_pago_convenio_arr[$i])")->delete();
+
+                    $pago = new Pago;
+                    $pago->id_contrato = $pago_convenio_ps->convenio_id;
+                    $pago->memo = "Pago de comisión ($numero_pago_convenio_arr[$i]) CONVENIO";
+                    $pago->tipo_cambio = $request->dolar;
+                    if (gettype($request->tipo_pago) != 'NULL'){
+                        $tipos_pagos = "";
+                        foreach ($request->tipo_pago as $tipo_pago) {
+                            if($tipo_pago != ""){
+                                $tipos_pagos .= $tipo_pago.',';
+                            }
+                        }
+                        $pago->tipo_pago = $tipos_pagos;
+                    }
+                    if(count($request->monto) > 0 ){
+                        $montos = "";
+                        foreach ($request->monto as $monto) {
+                            if($monto > 0){
+                                $montos .= $monto.',';
+                            }
+                        }
+                        $pago->monto = $montos;
+                    }
+                    $pago->save();
+
+                    $log = new Log;
+                    $log->tipo_accion = "Actualización";
+                    $log->tabla = "Pago de PS";
+                    $log->id_tabla = $id_convenio_arr[$i];
+                    $log->bitacora_id = session('bitacora_id');
+                    $log->save();
+                }
+            }
+        }
+
 
         return response('success');
     }

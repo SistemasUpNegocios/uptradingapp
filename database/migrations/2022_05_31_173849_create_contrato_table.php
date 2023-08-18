@@ -33,21 +33,26 @@ class CreateContratoTable extends Migration
             $table->unsignedBigInteger('tipo_id');
             $table->foreign('tipo_id')->references('id')->on('tipo_contrato')->onUpdate('cascade')->onDelete('cascade');
             $table->double('porcentaje');
-            $table->double('inversion');
             $table->double('tipo_cambio')->default(20)->nullable();
-            $table->double('inversion_us');
+            $table->double('tipo_cambio_eur')->default(20)->nullable();
+            $table->double('tipo_cambio_chf')->default(20)->nullable();
+            $table->double('inversion');
             $table->string('inversion_letra', 100);
-            $table->string('inversion_letra_us', 100);
-            $table->date('fecha_reintegro');
-            $table->enum('status_reintegro', ['pendiente', 'pagado', 'cancelado'])->nullable();
-            $table->string('memo_reintegro', 100)->nullable();
+            $table->double('inversion_us')->nullable();
+            $table->string('inversion_letra_us', 100)->nullable();
+            $table->double('inversion_eur')->nullable();
+            $table->string('inversion_letra_eur', 100)->nullable();
+            $table->double('inversion_chf')->nullable();
+            $table->string('inversion_letra_chf', 100)->nullable();
             $table->string('status', 30);
             $table->mediumtext('memo_status', 100)->nullable();
-            $table->unsignedBigInteger('pendiente_id')->nullable();
-            $table->foreign('pendiente_id')->references('id')->on('pendiente')->onUpdate('cascade')->onDelete('cascade');
             $table->string('tipo_pago', 100)->nullable();
             $table->string('monto_pago', 100)->nullable();
+            $table->mediumtext('referencia_pago', 100)->nullable();
             $table->string('comprobante_pago', 255)->nullable();
+            $table->mediumtext('nota_contarto')->nullable();
+            $table->string('autorizacion_nota', 5)->nullable();
+            $table->string('moneda', 25)->default("dolares")->nullable();
         });
     }
 

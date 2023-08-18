@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Gestión de pagos')
+@section('title', 'Historial de pagos')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -9,11 +9,11 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Gestión de pagos</h1>
+        <h1>Historial de pagos</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Gestión de pagos</li>
+                <li class="breadcrumb-item active">Historial de pagos</li>
             </ol>
         </nav>
     </div>
@@ -24,12 +24,13 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <table class="table table-striped table-bordered nowrap text-center" id="pagos">
-                            <thead>
+                            <thead style="vertical-align: middle">
                                 <tr>
                                     <th data-priority="0" scope="col">Contrato</th>
-                                    <th data-priority="0" scope="col">Tipo de pago</th>
                                     <th data-priority="0" scope="col">Monto</th>
-                                    <th data-priority="0" scope="col">Dolar</th>
+                                    <th data-priority="0" scope="col">Tipo de pago</th>
+                                    <th data-priority="0" scope="col">Moneda</th>
+                                    <th data-priority="0" scope="col">Tipo de cambio</th>
                                     <th data-priority="0" scope="col">Memo</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>

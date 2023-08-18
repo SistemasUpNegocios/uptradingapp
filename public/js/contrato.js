@@ -1,37 +1,3 @@
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $(".image-upload-wrapScanner1").hide();
-
-            $(".file-upload-imageScanner1").attr("src", e.target.result);
-            $(".file-upload-contentScanner1").show();
-
-            $(".image-titleScanner1").html(input.files[0].name);
-        };
-
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        removeUpload();
-    }
-}
-
-function removeUpload() {
-    $(".file-upload-inputScanner1").replaceWith(
-        $(".file-upload-inputScanner1").clone()
-    );
-    $(".file-upload-contentScanner1").hide();
-    $(".image-upload-wrapScanner1").show();
-}
-
-$(".image-upload-wrapScanner1").bind("dragover", function () {
-    $(".image-upload-wrapScanner1").addClass("image-droppingScanner1");
-});
-$(".image-upload-wrapScanner1").bind("dragleave", function () {
-    $(".image-upload-wrapScanner1").removeClass("image-droppingScanner1");
-});
-
 $(document).ready(function () {
     let acc = "";
     let casilla = false;
@@ -1225,7 +1191,7 @@ $(document).ready(function () {
             },
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar _MENU_ contratos pendientes de activación",
+                lengthMenu: "Mostrar _MENU_ contratos",
                 zeroRecords: "No se encontraron resultados",
                 emptyTable:
                     "No se ha registrado ningún contrato pendiente de activación",
@@ -1729,38 +1695,6 @@ $(document).ready(function () {
         });
     });
 
-    $("#scannerForm").on("submit", function (e) {
-        e.preventDefault();
-        var url = $(this).attr("action");
-        $("#alertMessage").text("");
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: new FormData(this),
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function () {
-                $("#scannerModal").modal("hide");
-                $("#scannerForm")[0].reset();
-                table.ajax.reload(null, false);
-                Swal.fire({
-                    icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Escaner subido</h1>',
-                    html: '<p style="font-family: Poppins">El escaner ha sido subido correctamente</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            },
-            error: function (err) {
-                console.log(err);
-            },
-        });
-    });
-
     $(document).on("click", ".new", function (e) {
         $("#contratoForm")[0].reset();
 
@@ -1813,9 +1747,6 @@ $(document).ready(function () {
         $("#inversionInputCHF").prop("readonly", false);
         $("#inversionLetInputEUR").prop("readonly", false);
         $("#inversionLetInputCHF").prop("readonly", false);
-        $("#fechaReinInput").prop("readonly", false);
-        $("#statusReinInput").prop("disabled", false);
-        $("#memoReinInput").prop("readonly", false);
         $("#statusInput").prop("disabled", false);
         $("#beneficiariosInput").prop("disabled", false);
         $("#nombreBen1Input").prop("readonly", false);
@@ -1867,12 +1798,30 @@ $(document).ready(function () {
         $("#comprobantePagoInput").removeClass("is-valid");
         $("#comprobantePagoInput").removeClass("is-invalid");
 
-        $(".status_reintegro").hide();
-        $(".memo_reintegro").hide();
-
         $("#monedaDolaresInput").prop("disabled", false);
         $("#monedaEurosInput").prop("disabled", false);
         $("#monedaFrancosInput").prop("disabled", false);
+
+        let monedaDolaresChecked = $("#monedaDolaresInput").is(":checked");
+        let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+        let monedaFrancosChecked = $("#monedaFrancosInput").is(":checked");
+
+        if (monedaDolaresChecked) {
+            $(".contEuro").hide();
+            $(".contFranco").hide();
+
+            $(".contDolar").show();
+        } else if (monedaEurosChecked) {
+            $(".contDolar").hide();
+            $(".contFranco").hide();
+
+            $(".contEuro").show();
+        } else if (monedaFrancosChecked) {
+            $(".contDolar").hide();
+            $(".contEuro").hide();
+
+            $(".contFranco").show();
+        }
 
         $("#modalTitle").text("Añadir contrato");
         $("#btnSubmit").text("Añadir contrato");
@@ -1952,20 +1901,20 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "https://api.currencyapi.com/v3/latest?apikey=cur_live_5M1goOJMnU9vgGYLZIGNkbHFI2fvMUGTR063XuVO&currencies=MXN&base_currency=CHF",
+            url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
             success: function (response) {
-                //FRANCO SUIZO
-                let franco = response.data.MXN.value;
-                $("#tipoCambioInputCHF").val(franco.toFixed(2));
+                //EURO
+                let euro = response.conversion_rate;
+                $("#tipoCambioInputEUR").val(euro.toFixed(2));
             },
         });
 
         $.ajax({
-            url: "https://api.currencyapi.com/v3/latest?apikey=cur_live_5M1goOJMnU9vgGYLZIGNkbHFI2fvMUGTR063XuVO&currencies=MXN&base_currency=EUR",
+            url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
             success: function (response) {
-                //EURO
-                let euro = response.data.MXN.value;
-                $("#tipoCambioInputEUR").val(euro.toFixed(2));
+                //FRANCO SUIZO
+                let franco = response.conversion_rate;
+                $("#tipoCambioInputCHF").val(franco.toFixed(2));
             },
         });
 
@@ -2019,9 +1968,6 @@ $(document).ready(function () {
         var inversionlet_eur = $(this).data("inversionleteur");
         var inversionlet_chf = $(this).data("inversionletchf");
         var inversionletus = $(this).data("inversionletus");
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
         var status = $(this).data("status");
         var moneda = $(this).data("moneda");
 
@@ -2085,7 +2031,6 @@ $(document).ready(function () {
 
         porcentaje = porcentaje.toString().replace(",", ".");
         $("#porcentajeInput").val(porcentaje);
-        // $("#porcentajeInput").prop("readonly", true);
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
@@ -2131,16 +2076,7 @@ $(document).ready(function () {
         $("#inversionLetInputCHF").val(inversionlet_chf);
         $("#inversionLetInputCHF").prop("readonly", true);
 
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", true);
-
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", true);
-
         $("#cambiarPorcentajeInput").prop("disabled", true);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
@@ -2441,9 +2377,6 @@ $(document).ready(function () {
             },
         });
 
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
-
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
 
@@ -2517,7 +2450,6 @@ $(document).ready(function () {
         inversionMXN = parseFloat(inversionMXN);
 
         inversionUSD = parseFloat(inversionUSD);
-        // var inversionInicialUSD = parseFloat(inversionUSD);
 
         var porcentaje = $("#porcentajeInput").val();
         porcentaje = parseFloat(porcentaje);
@@ -2578,12 +2510,16 @@ $(document).ready(function () {
             var fechaInput = fecha.split("/").reverse().join("-");
 
             if (porcentaje.length < 3 && porcentaje.length > 0) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
+                if (porcentaje.length == 2) {
+                    var porcentaje2 = `0.${porcentaje}`;
                 } else {
-                    var porcentaje2 = `0.0${porcentaje}`;
+                    var posicion = porcentaje.indexOf(".");
+                    if (posicion > 0) {
+                        var porcentaje2 = porcentaje.replace(".", "");
+                        porcentaje2 = `0.0${porcentaje2}`;
+                    } else {
+                        var porcentaje2 = `0.0${porcentaje}`;
+                    }
                 }
             } else if (porcentaje.length == 3) {
                 var posicion = porcentaje.indexOf(".");
@@ -2658,59 +2594,6 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", ".scanner", function (e) {
-        $("#scannerForm")[0].reset();
-
-        acc = "scanner";
-        e.preventDefault();
-
-        $("#scannerForm").attr("action", "/admin/addScanner");
-
-        var id = $(this).data("id");
-        var contrato = $(this).data("contrato");
-
-        $("#idInputScanner").val(id);
-        $("#contratoInputScanner").val(contrato);
-
-        $(".image-upload-wrapScanner1").show();
-        $(".file-upload-imageScanner1").attr("src", "");
-        $(".file-upload-contentScanner1").hide();
-
-        $.get({
-            url: "/admin/checkScanner",
-            data: {
-                id: id,
-            },
-            success: function (res) {
-                if (res != "none") {
-                    acc = "edit";
-                    $("#scannerForm").attr("action", "/admin/editScanner");
-
-                    if (res[0].img != null) {
-                        $(".image-upload-wrapScanner1").hide();
-                        $(".file-upload-imageScanner1").attr(
-                            "src",
-                            "/documentos/contrato_escaneado" + "/" + res[0].img
-                        );
-                        $(".file-upload-contentScanner1").show();
-                    }
-                } else if (res == "none") {
-                    $("#scannerForm").attr("action", "/admin/addScanner");
-                    console.log(res);
-                } else {
-                    console.log(res);
-                }
-            },
-            error: function (error) {
-                console.log(error);
-            },
-        });
-
-        $("#modalTitleScanner").text(`Contrato escaneado: ${contrato}`);
-        $("#btnSubmitScanner").text("Guardar cambios");
-        $("#scannerModal").modal("show");
-    });
-
     $(document).on("click", ".edit", function (e) {
         $("#contratoForm")[0].reset();
 
@@ -2742,9 +2625,6 @@ $(document).ready(function () {
         var tipocambio = $(this).data("tipocambio");
         var inversionlet = $(this).data("inversionlet");
         var inversionletus = $(this).data("inversionletus");
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
         var status = $(this).data("status");
         var moneda = $(this).data("moneda");
         var tipocambio_eur = $(this).data("tipocambioeur");
@@ -2819,15 +2699,6 @@ $(document).ready(function () {
         tipocambio = tipocambio.toString().replace(",", ".");
         $("#tipoCambioInput").val(tipocambio);
         $("#tipoCambioInput").prop("readonly", false);
-
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", false);
-
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", false);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", false);
 
         $("#inversionLetInput").val(inversionlet);
         $("#inversionLetInput").prop("readonly", false);
@@ -3160,9 +3031,6 @@ $(document).ready(function () {
             },
         });
 
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
-
         $("#clienteIdInput").next().children().first().empty();
         $("#clienteIdInput").next().children().first().text(nombrecliente);
         $("#clienteIdInput")
@@ -3250,7 +3118,6 @@ $(document).ready(function () {
         inversionMXN = parseFloat(inversionMXN);
 
         inversionUSD = parseFloat(inversionUSD);
-        // var inversionInicialUSD = parseFloat(inversionUSD);
 
         var porcentaje = $("#porcentajeInput").val();
         porcentaje = parseFloat(porcentaje);
@@ -3308,12 +3175,16 @@ $(document).ready(function () {
             var fechaInput = fecha.split("/").reverse().join("-");
 
             if (porcentaje.length < 3 && porcentaje.length > 0) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
+                if (porcentaje.length == 2) {
+                    var porcentaje2 = `0.${porcentaje}`;
                 } else {
-                    var porcentaje2 = `0.0${porcentaje}`;
+                    var posicion = porcentaje.indexOf(".");
+                    if (posicion > 0) {
+                        var porcentaje2 = porcentaje.replace(".", "");
+                        porcentaje2 = `0.0${porcentaje2}`;
+                    } else {
+                        var porcentaje2 = `0.0${porcentaje}`;
+                    }
                 }
             } else if (porcentaje.length == 3) {
                 var posicion = porcentaje.indexOf(".");
@@ -3331,8 +3202,6 @@ $(document).ready(function () {
             var monto_redito = monto + redito;
 
             if (tipo_contrato == "Rendimiento compuesto") {
-                // rendimiento = inversionUSD * porcentaje2 + rendimiento;
-
                 $("#tablaBody").append(` 
                 <tr>
                     <th scope="row">${i + 1}</th>
@@ -3687,10 +3556,6 @@ $(document).ready(function () {
             fechaRenovacion = formatDate(new Date(fechaRenovacion));
             fechaRenovacion = fechaRenovacion.split("/").reverse().join("-");
             $("#fechaRenInput").val(fechaRenovacion);
-
-            fechaReintegro = formatDate(new Date(fechaReintegro));
-            fechaReintegro = fechaReintegro.split("/").reverse().join("-");
-            $("#fechaReinInput").val(fechaReintegro);
         }
 
         if (
@@ -3827,12 +3692,16 @@ $(document).ready(function () {
                 var fechaInput = fecha.split("/").reverse().join("-");
 
                 if (porcentaje.length < 3 && porcentaje.length > 0) {
-                    var posicion = porcentaje.indexOf(".");
-                    if (posicion > 0) {
-                        var porcentaje2 = porcentaje.replace(".", "");
-                        porcentaje2 = `0.0${porcentaje2}`;
+                    if (porcentaje.length == 2) {
+                        var porcentaje2 = `0.${porcentaje}`;
                     } else {
-                        var porcentaje2 = `0.0${porcentaje}`;
+                        var posicion = porcentaje.indexOf(".");
+                        if (posicion > 0) {
+                            var porcentaje2 = porcentaje.replace(".", "");
+                            porcentaje2 = `0.0${porcentaje2}`;
+                        } else {
+                            var porcentaje2 = `0.0${porcentaje}`;
+                        }
                     }
                 } else if (porcentaje.length == 3) {
                     var posicion = porcentaje.indexOf(".");
@@ -3883,8 +3752,6 @@ $(document).ready(function () {
                 );
 
                 if (tipo_contrato == "Rendimiento compuesto") {
-                    // rendimiento = inversionUSD * porcentaje2 + rendimiento;
-
                     $("#tablaBody").append(` 
                     <tr>
                         <th scope="row">${i + 1}</th>
@@ -4029,7 +3896,6 @@ $(document).ready(function () {
                 inversionMXN = parseFloat(inversionMXN);
 
                 inversionUSD = parseFloat(inversionUSD);
-                // var inversionInicialUSD = parseFloat(inversionUSD);
 
                 var porcentaje = $("#porcentajeInput").val();
                 porcentaje = parseFloat(porcentaje);
@@ -4065,10 +3931,6 @@ $(document).ready(function () {
                     .reverse()
                     .join("-");
                 $("#fechaRenInput").val(fechaRenovacion);
-
-                fechaReintegro = formatDate(new Date(fechaReintegro));
-                fechaReintegro = fechaReintegro.split("/").reverse().join("-");
-                $("#fechaReinInput").val(fechaReintegro);
 
                 var formatterUSD = new Intl.NumberFormat("en-US", {
                     style: "currency",
@@ -4106,7 +3968,6 @@ $(document).ready(function () {
                     numeroALetrasCHF($("#inversionUsInput").val())
                 );
 
-                // var rendimiento = 0;
                 var fechaFeb = $("#fechaInicioInput").val();
                 fechaFeb = fechaFeb.split("-");
                 for (var i = 0; i < meses; i++) {
@@ -4143,12 +4004,16 @@ $(document).ready(function () {
                     var fechaInput = fecha.split("/").reverse().join("-");
 
                     if (porcentaje.length < 3 && porcentaje.length > 0) {
-                        var posicion = porcentaje.indexOf(".");
-                        if (posicion > 0) {
-                            var porcentaje2 = porcentaje.replace(".", "");
-                            porcentaje2 = `0.0${porcentaje2}`;
+                        if (porcentaje.length == 2) {
+                            var porcentaje2 = `0.${porcentaje}`;
                         } else {
-                            var porcentaje2 = `0.0${porcentaje}`;
+                            var posicion = porcentaje.indexOf(".");
+                            if (posicion > 0) {
+                                var porcentaje2 = porcentaje.replace(".", "");
+                                porcentaje2 = `0.0${porcentaje2}`;
+                            } else {
+                                var porcentaje2 = `0.0${porcentaje}`;
+                            }
                         }
                     } else if (porcentaje.length == 3) {
                         var posicion = porcentaje.indexOf(".");
@@ -4376,10 +4241,6 @@ $(document).ready(function () {
                     .join("-");
                 $("#fechaRenInput").val(fechaRenovacion);
 
-                fechaReintegro = formatDate(new Date(fechaReintegro));
-                fechaReintegro = fechaReintegro.split("/").reverse().join("-");
-                $("#fechaReinInput").val(fechaReintegro);
-
                 var formatterUSD = new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "USD",
@@ -4442,12 +4303,16 @@ $(document).ready(function () {
                     var fechaInput = fecha.split("/").reverse().join("-");
 
                     if (porcentaje.length < 3 && porcentaje.length > 0) {
-                        var posicion = porcentaje.indexOf(".");
-                        if (posicion > 0) {
-                            var porcentaje2 = porcentaje.replace(".", "");
-                            porcentaje2 = `0.0${porcentaje2}`;
+                        if (porcentaje.length == 2) {
+                            var porcentaje2 = `0.${porcentaje}`;
                         } else {
-                            var porcentaje2 = `0.0${porcentaje}`;
+                            var posicion = porcentaje.indexOf(".");
+                            if (posicion > 0) {
+                                var porcentaje2 = porcentaje.replace(".", "");
+                                porcentaje2 = `0.0${porcentaje2}`;
+                            } else {
+                                var porcentaje2 = `0.0${porcentaje}`;
+                            }
                         }
                     } else if (porcentaje.length == 3) {
                         var posicion = porcentaje.indexOf(".");
@@ -4771,33 +4636,6 @@ $(document).ready(function () {
                         );
                     } else {
                         if (beneficiarios == 4) {
-                            // var sumaPorcentajes =
-                            //     porcentajeben1 +
-                            //     porcentajeben2 +
-                            //     porcentajeben3;
-
-                            // if (sumaPorcentajes > 100.0) {
-                            //     var porcentajeRestante =
-                            //         100 -
-                            //         (porcentajeben1 +
-                            //             porcentajeben2 +
-                            //             porcentajeben3);
-                            //     $("#porcentajeBen4Input").val(
-                            //         porcentajeRestante
-                            //     );
-                            // } else {
-                            //     var porcentajeRestante =
-                            //         (100 - porcentajeben3) / 3;
-                            //     $("#porcentajeBen1Input").val(
-                            //         porcentajeRestante
-                            //     );
-                            //     $("#porcentajeBen2Input").val(
-                            //         porcentajeRestante
-                            //     );
-                            //     $("#porcentajeBen4Input").val(
-                            //         porcentajeRestante
-                            //     );
-                            // }
                             var porcentajeRestante =
                                 100 -
                                 (porcentajeben1 +
@@ -5311,7 +5149,7 @@ $(document).ready(function () {
         $("#referenciaTransMXPOOLCont").hide();
         $("#referenciaHSBCCont").hide();
         $("#referenciaWiseCont").hide();
-        //rendimientos no sale
+
         $("#montoEfectivoInput").prop("required", false);
         $("#montoTransSwissPOOLInput").prop("required", false);
         $("#montoTransMXPOOLInput").prop("required", false);

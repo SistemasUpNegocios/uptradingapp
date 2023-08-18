@@ -27,6 +27,7 @@
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Fecha</th>
+                                    <th data-priority="0" scope="col">Moneda</th>
                                     <th data-priority="0" scope="col">Valor</th>
                                     <th data-priority="0" scope="col"># Contrato</th>
                                     <th data-priority="0" scope="col">Memo</th>

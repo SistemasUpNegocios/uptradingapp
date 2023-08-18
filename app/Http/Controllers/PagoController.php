@@ -26,7 +26,8 @@ class PagoController extends Controller
     public function getPagos()
     {
         $pagos = Pago::join('contrato', "contrato.id", "=", "pagos.id_contrato")
-            ->select(DB::raw("pagos.id, contrato.contrato, pagos.memo, pagos.monto, pagos.tipo_pago, pagos.dolar"))
+            ->select(DB::raw("pagos.id, contrato.contrato, pagos.memo, pagos.monto, pagos.tipo_pago, pagos.tipo_cambio, contrato.moneda"))
+            ->orderBy('pagos.id', 'desc')
             ->get();
 
         return datatables()->of($pagos)->addColumn('btn', 'pagos.buttons')->rawColumns(['btn'])->toJson();

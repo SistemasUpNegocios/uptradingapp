@@ -342,7 +342,6 @@ $(document).ready(function () {
         var capertura = $(this).data("capertura");
         var cmensual = $(this).data("cmensual");
         var clienteid = $(this).data("clienteid");
-        var pendienteid = $(this).data("pendienteid");
         var tipoid = $(this).data("tipoid");
         var porcentaje = $(this).data("porcentaje");
         var folio = $(this).data("folio");
@@ -354,9 +353,6 @@ $(document).ready(function () {
         var inversionletus = $(this).data("inversionletus");
         var pagocomisionS1 = (capertura + cmensual) * inversionus;
         var pagocomisionSN = cmensual * inversionus;
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
         var status = $(this).data("status");
 
         $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
@@ -401,9 +397,6 @@ $(document).ready(function () {
         $("#clienteIdInput").val(clienteid);
         $("#clienteIdInput").prop("disabled", true);
 
-        $("#pendienteIdInput").val(pendienteid);
-        $("#pendienteIdInput").prop("disabled", true);
-
         $("#tipoIdInput").val(tipoid);
         $("#tipoIdInput").prop("disabled", true);
 
@@ -440,15 +433,6 @@ $(document).ready(function () {
 
         $("#inversionLetUsInput").val(inversionletus);
         $("#inversionLetUsInput").prop("readonly", true);
-
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", true);
-
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", true);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
@@ -670,9 +654,6 @@ $(document).ready(function () {
             },
         });
 
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
-
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
 
@@ -868,7 +849,6 @@ $(document).ready(function () {
         var capertura = $(this).data("capertura");
         var cmensual = $(this).data("cmensual");
         var clienteid = $(this).data("clienteid");
-        var pendienteid = $(this).data("pendienteid");
         var tipoid = $(this).data("tipoid");
         var porcentaje = $(this).data("porcentaje");
         var folio = $(this).data("folio");
@@ -880,9 +860,6 @@ $(document).ready(function () {
         var tipocambio = $(this).data("tipocambio");
         var inversionlet = $(this).data("inversionlet");
         var inversionletus = $(this).data("inversionletus");
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
         var status = $(this).data("status");
 
         $("#contratoForm").attr("action", "/admin/editContratoTerminado");
@@ -927,9 +904,6 @@ $(document).ready(function () {
         $("#clienteIdInput").val(clienteid);
         $("#clienteIdInput").prop("disabled", true);
 
-        $("#pendienteIdInput").val(pendienteid);
-        $("#pendienteIdInput").prop("disabled", true);
-
         $("#tipoIdInput").val(tipoid);
         $("#tipoIdInput").prop("disabled", true);
 
@@ -959,15 +933,6 @@ $(document).ready(function () {
         tipocambio = tipocambio.toString().replace(",", ".");
         $("#tipoCambioInput").val(tipocambio);
         $("#tipoCambioInput").prop("readonly", true);
-
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", true);
-
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", true);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", true);
 
         $("#inversionLetInput").val(inversionlet);
         $("#inversionLetInput").prop("readonly", true);
@@ -1193,9 +1158,6 @@ $(document).ready(function () {
                 }
             },
         });
-
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
 
         $("#modalTitle").text(`Editar contrato de: ${nombrecliente}`);
         $("#btnSubmit").show();

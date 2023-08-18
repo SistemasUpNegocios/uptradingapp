@@ -65,6 +65,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    $(document).on("change", "#asignadoAInput", function () {
+        if ($(this).val() == "1" || $(this).val() == "4") {
+            $("#colorInput").val("#D71313");
+        } else if ($(this).val() == "2" || $(this).val() == "246") {
+            $("#colorInput").val("#01BBCC");
+        } else if ($(this).val() == "3") {
+            $("#colorInput").val("#557A46");
+        } else if ($(this).val() == "234" || $(this).val() == "235") {
+            $("#colorInput").val("#CB01A6");
+        }
+    });
+
     $("#agendaForm").on("submit", function (e) {
         e.preventDefault();
         $("#alertMessage").text("");

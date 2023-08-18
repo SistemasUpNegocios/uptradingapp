@@ -22,8 +22,13 @@
     .page-break {
       page-break-after: always;
     }
-    th, td {
+    th{
         font-size: 14px !important;
+        padding: 0 6px !important;
+    }
+    td {
+        font-size: 13px !important;
+        padding: 0 6px !important;
     }
   </style>
 </head>
@@ -32,15 +37,19 @@
     <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
     <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">  
 
-    <div style="margin-top: 8rem;">
-        <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important;">
+    <div style="margin-top: 6rem;">
+        <div style="margin-bottom: 1rem" class="text-center">
+            <p style="font-size: 17px; text-transform: uppercase;"><b>Conteo de convenios de PS</b></p>
+        </div>
+        
+        <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-bottom: 6rem !important;">
             <thead>
                 <tr>
                     <th data-priority="0" scope="col">PS</th>
-                    <th data-priority="0" scope="col">Clientes</th>
+                    <th data-priority="0" scope="col">Convenios</th>
                     <th data-priority="0" scope="col">Total</th>
-                    <th data-priority="0" scope="col">Total (USD)</th>
-                    <th data-priority="0" scope="col">Total (MXN)</th>
+                    <th data-priority="0" scope="col">$USD</th>
+                    <th data-priority="0" scope="col">$MXN</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,16 +67,29 @@
                             ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
                             ->count();
 
-                        $count_clientes = DB::table('convenio')
+                        $convenios = DB::table('convenio')
+                            ->select('folio')
                             ->where('ps_id', $ps->id)
                             ->where('status', "Activado")
                             ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
-                            ->distinct('cliente_id')
-                            ->count();
+                            ->get();
+
+                        $conv = "";
+                        foreach ($convenios as $convenio){
+                            $conv .= $convenio->folio.", ";
+                        }
+
+                        $conv = substr($conv, 0, -2);
                     @endphp
                     <tr>
                         <td>{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
-                        <td>{{ $count_clientes }}</td>
+                        <td>
+                            @if (strlen($conv) > 0)
+                                {{$conv}}.
+                            @else
+                                <b>No se encontraron resultados</b>
+                            @endif
+                        </td>
                         <td>{{ $count_convenio }}</td>
                         <td>${{ number_format($sum_convenio, 2) }}</td>
                         <td>${{ number_format($sum_convenio * $dolar, 2) }}</td>
@@ -76,9 +98,5 @@
             </tbody>
         </table>
     </div>
-
-    <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
-    <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">
 </body>
-
 </html>

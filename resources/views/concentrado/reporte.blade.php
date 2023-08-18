@@ -144,21 +144,37 @@
                 @endphp
                 <div class="col-md-6 col-12" style="margin-bottom: -2rem !important;">
                     <div class="subtitle" style="margin-bottom: -1rem !important;"><b>Contrato mensual:</b> {{$contrato->contrato}} <i>(pago {{ $pago }}).</i></div>
-                    <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
-                    <br />
+                    @if($contrato->moneda == "dolares")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
+                        <br />
+                    @elseif($contrato->moneda == "euros")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_eur, 2) }} euros).</u></i></div>
+                        <br />
+                    @elseif($contrato->moneda == "francos")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_chf, 2) }} francos suizos).</u></i></div>
+                        <br />
+                    @endif
                 </div>
             @endforeach
             @foreach ($contratos_comp_tot as $contrato)
                 <div class="col-md-6 col-12" style="margin-bottom: -2rem !important;">
                     <div class="subtitle" style="margin-bottom: -1rem !important;"><b>Contrato compuesto:</b> {{$contrato->contrato}} <i>({{ \Carbon\Carbon::parse($contrato->fecha_pago)->format('d/m/Y') }}).</i></div>
-                    <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
-                    <br />
+                    @if($contrato->moneda == "dolares")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
+                        <br />
+                    @elseif($contrato->moneda == "euros")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
+                        <br />
+                    @elseif($contrato->moneda == "francos")
+                        <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($contrato->inversion, 2) }} MXN. (${{ number_format($contrato->inversion_us, 2) }} dólares).</u></i></div>
+                        <br />
+                    @endif
                 </div>
             @endforeach
             @foreach ($convenio_tot as $convenio)
                 <div class="col-md-6 col-12" style="margin-bottom: -2rem !important;">
                     <div class="subtitle" style="margin-bottom: -1rem !important;"><b>Convenio:</b> {{$convenio->folio}}.</div>
-                    <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($convenio->monto*19.5, 2) }} MXN. (${{ number_format($convenio->monto, 2) }} dólares).</u></i></div>
+                    <div class="subtitle"><b>Invertido:</b> <i><u>${{ number_format($convenio->monto * $dolar, 2) }} MXN. (${{ number_format($convenio->monto, 2) }} dólares).</u></i></div>
                     <br />
                 </div>
             @endforeach
@@ -194,21 +210,21 @@
             </div>
         </div>
 
-        <div class="mt-1">                    
+        <div class="mt-1">
             <div class="col-md-12 text-center" style="margin-bottom: -0.5rem !important;">
-                <div class="subtitle"><b>Inversión total en contrato mensual:</b> ${{ number_format($contratos_inv_mens, 2) }} MXN. (${{ number_format($contratos_inv_dol_mens, 2) }} dólares)</div>
-            </div>
-        
-            <div class="col-md-12 text-center" style="margin-bottom: -0.5rem !important;">
-                <div class="subtitle"><b>Inversión total en contrato compuesto:</b> ${{ number_format($contratos_inv_comp, 2) }} MXN. (${{ number_format($contratos_inv_dol_comp, 2) }} dólares)</div>
+                <div class="subtitle"><b>Total convenios:</b> ${{ number_format($convenios_monto, 2) }} MXN. (${{ number_format($convenios_monto_dol, 2) }} dólares)</div>
             </div>
             
             <div class="col-md-12 text-center" style="margin-bottom: -0.5rem !important;">
-                <div class="subtitle"><b>Inversión total en convenios:</b> ${{ number_format($convenios_monto, 2) }} MXN. (${{ number_format($convenios_monto_dol, 2) }} dólares)</div>
+                <div class="subtitle"><b>Total mensual:</b> ${{ number_format($contratos_inv_mens, 2) }} MXN. (${{ number_format($contratos_inv_dol_mens, 2) }} dólares, ${{ number_format($contratos_inv_eur_mens, 2) }} euros, ${{ number_format($contratos_inv_chf_mens, 2) }} francos)</div>
             </div>
         
             <div class="col-md-12 text-center" style="margin-bottom: -0.5rem !important;">
-                <div class="subtitle"><b>Inversión total final:</b> ${{ number_format($total_pesos, 2) }} (${{ number_format($total_dolares, 2) }} dólares)</div>
+                <div class="subtitle"><b>Total compuesto:</b> ${{ number_format($contratos_inv_comp, 2) }} MXN. (${{ number_format($contratos_inv_dol_comp, 2) }} dólares, ${{ number_format($contratos_inv_eur_comp, 2) }} euros, ${{ number_format($contratos_inv_chf_comp, 2) }} francos)</div>
+            </div>
+        
+            <div class="col-md-12 text-center" style="margin-bottom: -0.5rem !important;">
+                <div class="subtitle"><b>Total final:</b> ${{ number_format($total_pesos, 2) }} (${{ number_format($total_dolares, 2) }} dólares, ${{ number_format($total_euros, 2) }} euros, ${{ number_format($total_francos, 2) }} francos)</div>
             </div>
         </div>
     </div>

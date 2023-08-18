@@ -63,14 +63,32 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-12 mb-3 text-center">
+                                <label for="" style="margin-right: 20px">Pagar en</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaDolaresInput" type="radio" name="moneda" value="dolares" checked>
+                                    <label class="form-check-label" for="monedaDolaresInput">dólares</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaEurosInput" type="radio" name="moneda" value="euros">
+                                    <label class="form-check-label" for="monedaEurosInput">euros</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="monedaFrancosInput" type="radio" name="moneda" value="francos">
+                                    <label class="form-check-label" for="monedaFrancosInput">francos suizos</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-floating mb-3">
+                                <div class="form-floating mb-2">
                                     <input type="date" class="form-control" id="fechaInicioInput" name="fecha_inicio">
                                     <label for="fechaInicioInput">Fecha de inicio</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating mb-3">
+                                <div class="form-floating mb-2">
                                     <input type="date" class="form-control" id="fechaFinInput" name="fecha_fin">
                                     <label for="fechaFinInput">Fecha de fin</label>
                                 </div>
@@ -79,22 +97,37 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-floating mb-3">
+                                <div class="form-floating mb-2">
                                     <input type="date" class="form-control" id="dateInput" placeholder="echa a imprimir">
                                     <label for="dateInput">Fecha a imprimir</label>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row contDolar">
                             <div class="col-12">
-                                <div class="input-group mb-3">
-                                    <div class="mt-2 form-floating" style="width: 80% !important">
-                                        <input type="number" class="form-control" id="dolarInput" placeholder="Valor del dolar actual" aria-label="Valor del dolar actual" aria-describedby="botonActualizar">
-                                        <label for="dolarInput">Valor del dolar actual</label>
-                                    </div>
-                                    <button class="mt-2 btn btn-outline-success d-none" type="button" id="botonActualizar"><i class="bi bi-cash-stack"> Actualizar</i> </button>
+                                <div class="mb-2 form-floating">
+                                    <input type="number" class="form-control" id="dolarInput" placeholder="Valor del dolar actual" aria-label="Valor del dolar actual" aria-describedby="botonActualizar">
+                                    <label for="dolarInput">Valor del dolar actual</label>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="row contEuro">
+                            <div class="col-12">
+                                <div class="mb-2 form-floating">
+                                    <input type="number" class="form-control" id="euroInput" placeholder="Valor del euro actual" aria-label="Valor del euro actual" aria-describedby="botonActualizar">
+                                    <label for="euroInput">Valor del euro actual</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row contFranco">
+                            <div class="col-12">
+                                <div class="mb-2 form-floating">
+                                    <input type="number" class="form-control" id="francoInput" placeholder="Valor del franco actual" aria-label="Valor del franco suizo actual" aria-describedby="botonActualizar">
+                                    <label for="francoInput">Valor del franco suizo actual</label>
+                                </div>
                             </div>
                         </div>
 

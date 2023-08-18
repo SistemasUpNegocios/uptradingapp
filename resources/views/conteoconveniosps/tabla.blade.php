@@ -3,7 +3,7 @@
 <table class="table table-striped table-bordered nowrap text-center" style="width: 100%" id="conteo">
     <thead>
         <tr>
-            <th data-priority="0" scope="col">Nombre</th>
+            <th data-priority="0" scope="col">PS</th>
             <th data-priority="0" scope="col">Convenios</th>
             <th data-priority="0" scope="col">Total</th>
             <th data-priority="0" scope="col">$USD</th>

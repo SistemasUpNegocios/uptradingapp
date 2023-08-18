@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
         // Tareas para refrendar contratos
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", "2024-08-05")
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -143,14 +143,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -239,10 +235,6 @@ class Kernel extends ConsoleKernel
                             $pagops->tipo_pago = 'Pendiente';
                             $pagops->save();
                         }
-    
-                        $amortizacion = new Amortizacion;
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
                         
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
@@ -257,31 +249,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
                         $monto = ($monto + $redito);
-    
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -344,11 +332,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -362,25 +345,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -388,9 +368,26 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
+                }
+
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
                 }
             }
 
@@ -471,7 +468,8 @@ class Kernel extends ConsoleKernel
                 }
             }
         })
-        ->dailyAt("09:00")
+        // ->dailyAt("09:00")
+        ->everyMinute()
         ->timezone('America/Mexico_City');
 
         $schedule->call(function () {
@@ -521,14 +519,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -636,31 +630,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $monto = ($monto + $redito);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -723,11 +713,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -741,25 +726,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -767,11 +749,27 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
                 }
 
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
@@ -864,14 +862,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -979,31 +973,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $monto = ($monto + $redito);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -1066,11 +1056,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -1084,25 +1069,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -1110,11 +1092,27 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
                 }
 
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
@@ -1207,14 +1205,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -1322,31 +1316,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $monto = ($monto + $redito);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -1409,11 +1399,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -1427,25 +1412,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -1453,11 +1435,27 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
                 }
 
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
@@ -1550,14 +1548,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -1665,31 +1659,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $monto = ($monto + $redito);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -1752,11 +1742,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -1770,25 +1755,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -1796,11 +1778,27 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
                 }
 
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
@@ -1893,14 +1891,10 @@ class Kernel extends ConsoleKernel
                 $contrato->fecha_renovacion = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->fecha_pago = Carbon::parse($contrato_update->fecha_pago)->addYear()->format('Y-m-d');
                 $contrato->fecha_limite = Carbon::parse($contrato_update->fecha_limite)->addYear()->format('Y-m-d');
-                $contrato->fecha_reintegro = Carbon::parse($contrato_update->fecha_renovacion)->addYear()->format('Y-m-d');
                 $contrato->status = "Activado";
 
                 // Dejar todo por defecto
-                $contrato->status_reintegro = "pendiente";
-                $contrato->memo_reintegro = NULL;
                 $contrato->memo_status = "Contrato activado por id:1";
-                $contrato->pendiente_id = NULL;
                 $contrato->nota_contrato = NULL;
                 $contrato->autorizacion_nota = NULL;
 
@@ -2008,31 +2002,27 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $monto = ($monto + $redito);
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
-                        $amortizacion->save();
                     }
     
-                    $pago_cliente = $amortizacion->saldo_con_redito;
-                    $fecha_pago_cliente_inicial = $amortizacion->fecha;
+                    $pago_cliente = $amortizacion_saldo_con_redito;
+                    $fecha_pago_cliente_inicial = $amortizacion_fecha;
     
                     $fecha_pago_cliente = Carbon::parse($fecha_pago_cliente_inicial);
     
@@ -2095,11 +2085,6 @@ class Kernel extends ConsoleKernel
                             $pagops->save();
                         }
     
-                        $amortizacion = new Amortizacion;
-    
-                        $amortizacion->contrato_id = $contrato_update->id;
-                        $amortizacion->serie = ($i + 1);
-    
                         $mes_cond = $fecha_cond->format('m');
                         if($mes_cond == 1){
                             $fechaFeb->subDays(3)->addMonth()->format('Y-m-d');
@@ -2113,25 +2098,22 @@ class Kernel extends ConsoleKernel
     
                         if ($fecha_mes == 2){
                             if ($fecha_dia == 29 || $fecha_dia == 30 || $fecha_dia == 31) {
-                                $amortizacion->fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->subWeek()->addMonth()->endOfMonth()->format('Y-m-d');
                             }else{
-                                $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                                $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                             }
                         }else if ($fecha_dia == 31){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia")->subWeek()->endOfMonth();
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else if($fecha_dia == 29 || $fecha_dia == 30){
                             $fecha_amortizacion = Carbon::parse("$fecha_anio-$fecha_mes-$fecha_dia");
-                            $amortizacion->fecha = $fecha_amortizacion->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->format('Y-m-d');
                         }else{
-                            $amortizacion->fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
+                            $amortizacion_fecha = $fecha_amortizacion->addMonth()->format('Y-m-d');
                         }
     
-                        $amortizacion->monto = round($monto, 2);
                         $redito = $monto * $rendimiento;
-                        $amortizacion->redito = round($redito, 2);
-                        $amortizacion->saldo_con_redito = round(($monto + $redito), 2);
-                        $amortizacion->save();
+                        $amortizacion_saldo_con_redito = round(($monto + $redito), 2);
     
                         $pago_cliente_table = new PagoCliente;
                         $pago_cliente_table->contrato_id = $contrato_update->id;
@@ -2139,11 +2121,27 @@ class Kernel extends ConsoleKernel
                         $pago_cliente_table->pago = $redito;
                         $pago_cliente_table->status = "Pendiente";
                         $pago_cliente_table->tipo_pago = "Pendiente";
-                        $pago_cliente_table->fecha_pago = $amortizacion->fecha;
+                        $pago_cliente_table->fecha_pago = $amortizacion_fecha;
                         $pago_cliente_table->save();
                     }
                 }
 
+                //Actualización de tabla de amortizaciones
+                $amortizaciones = Amortizacion::where("contrato_id", $contrato_update->id)->get();
+                foreach ($amortizaciones as $amortizacion_update) {
+                    $amortizacion = Amortizacion::find($amortizacion_update->id);
+                    $amortizacion->fecha = Carbon::parse($amortizacion_update->fecha)->addYear()->format('Y-m-d');
+                    $amortizacion->monto = $monto;
+                    if ($tipo_contrato->id == 2) {
+                        $redito = $monto * $porcentaje;
+                        $saldo_con_redito = $monto + $redito;
+                        $monto = $saldo_con_redito;
+                    }
+
+                    $amortizacion->redito = $redito;
+                    $amortizacion->saldo_con_redito = $saldo_con_redito;
+                    $amortizacion->update();
+                }
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")

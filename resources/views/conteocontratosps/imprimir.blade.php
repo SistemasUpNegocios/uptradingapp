@@ -22,8 +22,13 @@
     .page-break {
       page-break-after: always;
     }
-    th, td {
+    th{
         font-size: 14px !important;
+        padding: 0 10px !important;
+    }
+    td {
+        font-size: 13px !important;
+        padding: 0 10px !important;
     }
   </style>
 </head>
@@ -32,25 +37,53 @@
     <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
     <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">  
 
-    <div style="margin-top: 8rem;">
-        <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important;">
+    <div style="margin-top: 6rem" class="text-center">
+        <p style="font-size: 17px; text-transform: uppercase;"><b>Conteo de contratos de PS</b></p>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-bottom: 3rem !important;">
             <thead>
                 <tr>
                     <th data-priority="0" scope="col">PS</th>
-                    <th data-priority="0" scope="col">Clientes</th>
+                    <th data-priority="0" scope="col">Mensuales</th>
+                    <th data-priority="0" scope="col">Compuestos</th>
                     <th data-priority="0" scope="col">Total</th>
-                    <th data-priority="0" scope="col">Total (USD)</th>
-                    <th data-priority="0" scope="col">Total (MXN)</th>
+                    <th data-priority="0" scope="col">$USD</th>
+                    <th data-priority="0" scope="col">$EUR</th>
+                    <th data-priority="0" scope="col">$CHF</th>
+                    <th data-priority="0" scope="col">$MXN</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($lista_ps as $ps)
                     @php
-                        $sum_contrato = DB::table('contrato')
+                        $sum_contrato_eur = DB::table('contrato')
+                            ->where('ps_id', $ps->id)
+                            ->where('status', "Activado")
+                            ->where('moneda', "euros")
+                            ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                            ->sum("inversion_eur");
+
+                        $sum_contrato_chf = DB::table('contrato')
+                            ->where('ps_id', $ps->id)
+                            ->where('status', "Activado")
+                            ->where('moneda', "francos")
+                            ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                            ->sum("inversion_chf");
+
+                        $sum_contrato_usd = DB::table('contrato')
+                            ->where('ps_id', $ps->id)
+                            ->where('status', "Activado")
+                            ->where('moneda', "dolares")
+                            ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                            ->sum("inversion_us");
+
+                        $sum_contrato_mxn = DB::table('contrato')
                             ->where('ps_id', $ps->id)
                             ->where('status', "Activado")
                             ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                            ->sum("inversion_us");
+                            ->sum("inversion");
 
                         $count_contrato = DB::table('contrato')
                             ->where('ps_id', $ps->id)
@@ -58,27 +91,63 @@
                             ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
                             ->count();
 
-                        $count_clientes = DB::table('contrato')
+                        // Todo sobre los contratos mensuales
+                        $contratos_mensuales = DB::table('contrato')
+                            ->select('contrato')
                             ->where('ps_id', $ps->id)
                             ->where('status', "Activado")
+                            ->where('tipo_id', 1)
                             ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                            ->distinct('cliente_id')
-                            ->count();
+                            ->get();
+
+                        $contratos_men = "";
+                        foreach ($contratos_mensuales as $contrato){
+                            $contratos_men .= $contrato->contrato.", ";
+                        }
+
+                        $contratos_men = substr($contratos_men, 0, -2);
+
+                        // Todo sobre los contratos compuestos
+                        $contratos_compuestos = DB::table('contrato')
+                            ->select('contrato')
+                            ->where('ps_id', $ps->id)
+                            ->where('status', "Activado")
+                            ->where('tipo_id', 2)
+                            ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
+                            ->get();
+
+                        $contratos_comp = "";
+                        foreach ($contratos_compuestos as $contrato){
+                            $contratos_comp .= $contrato->contrato.", ";
+                        }
+
+                        $contratos_comp = substr($contratos_comp, 0, -2);
                     @endphp
                     <tr>
                         <td>{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
-                        <td>{{ $count_clientes }}</td>
+                        <td>
+                            @if (strlen($contratos_men) > 0)
+                                {{$contratos_men}}.
+                            @else
+                                <b>No se encontraron resultados</b>
+                            @endif
+                        </td>
+                        <td>
+                            @if (strlen($contratos_comp) > 0)
+                                {{$contratos_comp}}.
+                            @else
+                                <b>No se encontraron resultados</b>
+                            @endif
+                        </td>
                         <td>{{ $count_contrato }}</td>
-                        <td>${{ number_format($sum_contrato, 2) }}</td>
-                        <td>${{ number_format($sum_contrato * $dolar, 2) }}</td>
+                        <td>${{ number_format($sum_contrato_usd, 2) }}</td>
+                        <td>${{ number_format($sum_contrato_eur, 2) }}</td>
+                        <td>${{ number_format($sum_contrato_chf, 2) }}</td>
+                        <td>${{ number_format($sum_contrato_mxn, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-
-    <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
-    <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">
 </body>
-
 </html>

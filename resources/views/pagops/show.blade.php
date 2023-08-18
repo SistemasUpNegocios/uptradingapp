@@ -371,35 +371,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de reintegro"
-                                        id="fechaReinInput" name="fecha_reintegro" required>
-                                    <label for="fechaReinInput">Fecha de reintegro</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select name="status_reintegro" class="form-control" id="statusReinInput">
-                                        <option value="" disabled>Selecciona..</option>
-                                        <option value="pendiente" selected>Pendiente</option>
-                                        <option value="pagado">Pagado</option>
-                                        <option value="cancelado">Cancelado</option>
-                                    </select>
-                                    <label for="statusReinInput">Status del reintegro</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="Ingresa el memo de reintegro"
-                                        id="memoReinInput" name="memo_reintegro" style="height: 100px"></textarea>
-                                    <label for="memoReinInput">Memo de reintegro</label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row cont-tabla"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cerrar vista previa</button>

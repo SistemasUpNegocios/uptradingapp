@@ -925,9 +925,6 @@ $(document).ready(function () {
         var tipocambio = $(this).data("tipocambio");
         var inversionlet = $(this).data("inversionlet");
         var inversionletus = $(this).data("inversionletus");
-        var fecharein = $(this).data("fecharein");
-        var statusrein = $(this).data("statusrein");
-        var memorein = $(this).data("memorein");
         var status = $(this).data("status");
 
         $("#modalTitle").text(`Vista previa de contrato de: ${nombrecliente}`);
@@ -991,20 +988,8 @@ $(document).ready(function () {
         $("#inversionLetUsInput").val(inversionletus);
         $("#inversionLetUsInput").prop("readonly", true);
 
-        $("#fechaReinInput").val(fecharein);
-        $("#fechaReinInput").prop("readonly", true);
-
-        $("#statusReinInput").val(statusrein);
-        $("#statusReinInput").prop("disabled", true);
-
-        $("#memoReinInput").val(memorein);
-        $("#memoReinInput").prop("readonly", true);
-
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
-
-        $(".status_reintegro").show();
-        $(".memo_reintegro").show();
 
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();

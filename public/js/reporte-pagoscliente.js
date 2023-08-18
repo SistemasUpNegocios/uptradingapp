@@ -32,20 +32,45 @@ $(document).ready(function () {
         },
     });
 
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
+        success: function (response) {
+            //EURO
+            let euro = response.conversion_rate;
+            $("#euroInput").val(euro.toFixed(2));
+            datos();
+        },
+    });
+
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
+        success: function (response) {
+            //FRANCO SUIZO
+            let franco = response.conversion_rate;
+            $("#francoInput").val(franco.toFixed(2));
+            datos();
+        },
+    });
+
     const datos = () => {
         let fecha = formatDate(new Date());
         fecha = fecha.split("/").reverse().join("-");
         $("#botonActualizar").removeClass("d-none");
         dolar = $("#dolarInput").val();
+        euro = $("#euroInput").val();
+        franco = $("#francoInput").val();
 
         $.ajax({
             type: "GET",
-            data: { fecha: fecha, dolar: dolar },
+            data: { fecha: fecha, dolar: dolar, euro: euro, franco: franco },
             url: url_filtro,
             success: function (response) {
                 $("#tablaResumen").empty();
                 $("#tablaResumen").html(response);
                 tablaResumen();
+
+                $(".contEuro").hide();
+                $(".contFranco").hide();
 
                 let vacio = $("#vacioInput").val();
                 if (vacio == "vacio") {
@@ -75,7 +100,7 @@ $(document).ready(function () {
     $("#dateInput").val(date);
 
     const tablaResumen = () => {
-        table = $("#resumenPagoCliente").DataTable({
+        table = $(".resumenPagoClienteMonedas").DataTable({
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar _MENU_ pagos",
@@ -278,7 +303,16 @@ $(document).ready(function () {
         let contratoid = $(this).data("contratoid");
         let pago = $(this).data("pago");
         let statusValor = $(this).val();
+        let moneda = $(this).data("moneda");
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
+
+        if (moneda == "euros") {
+            dolar = euro;
+        } else if (moneda == "francos") {
+            dolar = franco;
+        }
 
         const Toast = Swal.mixin({
             toast: true,
@@ -321,6 +355,8 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         dolar = $("#dolarInput").val();
+        euros = $("#euroInput").val();
+        francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";
@@ -360,6 +396,8 @@ $(document).ready(function () {
                         fecha_inicio: fecha_inicio,
                         fecha_fin: fecha_fin,
                         dolar: dolar,
+                        euro: euros,
+                        franco: francos,
                     },
                     url: url_filtro,
                     success: function (response) {
@@ -372,6 +410,29 @@ $(document).ready(function () {
                             $("#contImprimirResum").addClass("d-none");
                         } else {
                             $("#contImprimirResum").removeClass("d-none");
+                        }
+
+                        let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                            ":checked"
+                        );
+                        let monedaEurosChecked =
+                            $("#monedaEurosInput").is(":checked");
+                        let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                            ":checked"
+                        );
+
+                        if (monedaDolaresChecked) {
+                            $(".contEuro").hide();
+                            $(".contFranco").hide();
+                            $(".contDolar").show();
+                        } else if (monedaEurosChecked) {
+                            $(".contDolar").hide();
+                            $(".contFranco").hide();
+                            $(".contEuro").show();
+                        } else if (monedaFrancosChecked) {
+                            $(".contDolar").hide();
+                            $(".contEuro").hide();
+                            $(".contFranco").show();
                         }
                     },
                     error: function (response) {
@@ -398,6 +459,8 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         dolar = $("#dolarInput").val();
+        euros = $("#euroInput").val();
+        francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";
@@ -437,6 +500,8 @@ $(document).ready(function () {
                         fecha_inicio: fecha_inicio,
                         fecha_fin: fecha_fin,
                         dolar: dolar,
+                        euro: euros,
+                        franco: francos,
                     },
                     url: url_filtro,
                     success: function (response) {
@@ -449,6 +514,29 @@ $(document).ready(function () {
                             $("#contImprimirResum").addClass("d-none");
                         } else {
                             $("#contImprimirResum").removeClass("d-none");
+                        }
+
+                        let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                            ":checked"
+                        );
+                        let monedaEurosChecked =
+                            $("#monedaEurosInput").is(":checked");
+                        let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                            ":checked"
+                        );
+
+                        if (monedaDolaresChecked) {
+                            $(".contEuro").hide();
+                            $(".contFranco").hide();
+                            $(".contDolar").show();
+                        } else if (monedaEurosChecked) {
+                            $(".contDolar").hide();
+                            $(".contFranco").hide();
+                            $(".contEuro").show();
+                        } else if (monedaFrancosChecked) {
+                            $(".contDolar").hide();
+                            $(".contEuro").hide();
+                            $(".contFranco").show();
                         }
                     },
                     error: function (response) {
@@ -493,10 +581,12 @@ $(document).ready(function () {
         }
 
         dolar = $("#dolarInput").val();
+        euros = $("#euroInput").val();
+        francos = $("#francoInput").val();
 
         $.ajax({
             type: "GET",
-            data: { fecha: fecha, dolar: dolar },
+            data: { fecha: fecha, dolar: dolar, euro: euros, franco: francos },
             url: url_filtro,
             success: function (response) {
                 $("#tablaResumen").empty();
@@ -508,6 +598,28 @@ $(document).ready(function () {
                     $("#contImprimirResum").addClass("d-none");
                 } else {
                     $("#contImprimirResum").removeClass("d-none");
+                }
+
+                let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                    ":checked"
+                );
+                let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+                let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                    ":checked"
+                );
+
+                if (monedaDolaresChecked) {
+                    $(".contEuro").hide();
+                    $(".contFranco").hide();
+                    $(".contDolar").show();
+                } else if (monedaEurosChecked) {
+                    $(".contDolar").hide();
+                    $(".contFranco").hide();
+                    $(".contEuro").show();
+                } else if (monedaFrancosChecked) {
+                    $(".contDolar").hide();
+                    $(".contEuro").hide();
+                    $(".contFranco").show();
                 }
             },
             error: function (response) {
@@ -531,9 +643,11 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
 
         window.open(
-            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`,
+            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`,
             "_blank"
         );
     });
@@ -542,9 +656,11 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
 
         window.open(
-            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}`
+            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`
         );
     });
 
@@ -561,12 +677,6 @@ $(document).ready(function () {
     $(document).on("click", "#imprimirReporte", function () {
         let date_valor = $("#dateInput").val();
         if (date_valor.length > 0) {
-            let formatearCantidad = new Intl.NumberFormat("es-MX", {
-                style: "currency",
-                currency: "MXN",
-                minimumFractionDigits: 2,
-            });
-
             let pago = $(this).data("pago");
             let cliente = $(this).data("cliente");
             let rendimiento = $(this).data("rendimiento");
@@ -576,12 +686,25 @@ $(document).ready(function () {
             let contratoid = $(this).data("contratoid");
             let tipo = $(this).data("tipo");
             let reporte = $(this).data("reporte");
+            let moneda = $(this).data("moneda");
             let dolar = $("#dolarInput").val();
+            let euro = $("#euroInput").val();
+            let franco = $("#francoInput").val();
             let inversionus = $(this).data("inversionus");
+            let inversioneuros = $(this).data("inversioneuros");
+            let inversionfrancos = $(this).data("inversionfrancos");
             let letra = "";
+            let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
 
             if (reporte == "liquidacion") {
-                rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+                if (moneda == "dolares") {
+                    rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+                } else if (moneda == "euros") {
+                    rendimiento = parseFloat(inversioneuros) * parseFloat(euro);
+                } else if (moneda == "francos") {
+                    rendimiento =
+                        parseFloat(inversionfrancos) * parseFloat(franco);
+                }
                 letra = numeroALetrasMXN(rendimiento);
             } else {
                 rendimiento = rendimiento
@@ -590,10 +713,18 @@ $(document).ready(function () {
                 letra = numeroALetrasMXN(rendimiento);
             }
 
-            let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
+            if (moneda == "dolares") {
+                letra_dolares = numeroALetrasUSD(rendimiento_dolar);
+            } else if (moneda == "euros") {
+                letra_dolares = numeroALetrasEUR(rendimiento_dolar);
+                dolar = euro;
+            } else if (moneda == "francos") {
+                letra_dolares = numeroALetrasCHF(rendimiento_dolar);
+                dolar = franco;
+            }
 
             window.open(
-                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}`,
+                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}&moneda=${moneda}`,
                 "_blank"
             );
         } else {
@@ -620,6 +751,7 @@ $(document).ready(function () {
         let fecha = $(this).data("fecha");
         let cliente = $(this).data("cliente");
         let contrato = $(this).data("contrato");
+        let moneda = $(this).data("moneda");
         let tipo = $(this).data("tipo");
         let rendimiento = String($(this).data("rendimiento"))
             .replaceAll("$", "")
@@ -629,14 +761,32 @@ $(document).ready(function () {
             .replaceAll(",", "");
         let reporte = $(this).data("reporte");
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
+        let inversioneuros = $(this).data("inversioneuros");
+        let inversionfrancos = $(this).data("inversionfrancos");
         let inversionus = $(this).data("inversionus");
         let letra = "";
 
         if (reporte == "liquidacion") {
-            rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+            if (moneda == "dolares") {
+                rendimiento = parseFloat(inversionus) * parseFloat(dolar);
+            } else if (moneda == "euros") {
+                rendimiento = parseFloat(inversioneuros) * parseFloat(euro);
+            } else if (moneda == "francos") {
+                rendimiento = parseFloat(inversionfrancos) * parseFloat(franco);
+            }
+
             letra = numeroALetrasMXN(rendimiento);
         } else {
             letra = numeroALetrasMXN(rendimiento);
+        }
+
+        if (moneda == "euros") {
+            dolar = euro;
+        } else if (moneda == "francos") {
+            rendimiento = parseFloat(inversionfrancos) * parseFloat(franco);
+            dolar = franco;
         }
 
         $("#pagoInput").val(pago);
@@ -651,6 +801,7 @@ $(document).ready(function () {
         $("#contratoIdInput").val(id);
         $("#tipoInput").val(tipo);
         $("#reporteInput").val(reporte);
+        $("#monedaInput").val(moneda);
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {
@@ -669,13 +820,25 @@ $(document).ready(function () {
         let contrato = $("#contratoInput").val();
         let letra = numeroALetrasMXN(rendimiento);
         let dolar = $("#dolarInput").val();
-        let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
+        let moneda = $("#monedaInput").val();
         let contratoid = $("#contratoIdInput").val();
         let tipo = $("#tipoInput").val();
         let reporte = $("#reporteInput").val();
 
+        let letra_dolares = numeroALetrasUSD(rendimiento_dolar);
+
+        if (moneda == "euros") {
+            letra_dolares = numeroALetrasEUR(rendimiento_dolar);
+            dolar = euro;
+        } else if (moneda == "francos") {
+            letra_dolares = numeroALetrasCHF(rendimiento_dolar);
+            dolar = franco;
+        }
+
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}`,
+            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&moneda=${moneda}`,
             "_blank"
         );
     });
@@ -711,6 +874,8 @@ $(document).ready(function () {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
                 dolar: dolar_nuevo,
+                euro: $("#euroInput").val(),
+                franco: $("#francoInput").val(),
             },
             url: url_filtro,
             success: function (response) {
@@ -723,6 +888,138 @@ $(document).ready(function () {
                 } else {
                     $("#contImprimirResum").removeClass("d-none");
                 }
+
+                $(".contEuro").hide();
+                $(".contFranco").hide();
+                $(".contDolar").show();
+            },
+            error: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center mt-4">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+            },
+        });
+    });
+
+    $(document).on("keyup", "#euroInput", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let euro_nuevo = $("#euroInput").val();
+        if (euro_nuevo == 0 || euro_nuevo == "") {
+            $("#euroInput").val(euro);
+            euro_nuevo = $("#dolarInput").val();
+        }
+
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            ("/admin/getResumenPagoClienteCompuesto");
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                euro: euro_nuevo,
+                franco: $("#francoInput").val(),
+                dolar: $("#dolarInput").val(),
+            },
+            url: url_filtro,
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+
+                $(".contDolar").hide();
+                $(".contFranco").hide();
+                $(".contEuro").show();
+            },
+            error: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(
+                    `
+                        <div class="text-center mt-4">
+                            <div class="spinner-border text-danger" role="status"></div>
+                            <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
+                        </div>
+                    `
+                );
+            },
+        });
+    });
+
+    $(document).on("keyup", "#francoInput", function () {
+        let fecha_inicio = $("#fechaInicioInput").val();
+        let fecha_fin = $("#fechaFinInput").val();
+        let franco_nuevo = $("#francoInput").val();
+        if (franco_nuevo == 0 || franco_nuevo == "") {
+            $("#francoInput").val(franco);
+            franco_nuevo = $("#francoInput").val();
+        }
+
+        $("#tablaResumen").empty();
+        $("#tablaResumen").html(
+            `
+                <div class="text-center mt-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
+                </div>
+            `
+        );
+
+        if (filtro == "mensual") {
+            url_filtro = "/admin/getResumenPagoClienteMensual";
+        } else if (filtro == "compuesto") {
+            ("/admin/getResumenPagoClienteCompuesto");
+        }
+
+        $.ajax({
+            type: "GET",
+            data: {
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                franco: franco_nuevo,
+                euro: $("#euroInput").val(),
+                dolar: $("#dolarInput").val(),
+            },
+            url: url_filtro,
+            success: function (response) {
+                $("#tablaResumen").empty();
+                $("#tablaResumen").html(response);
+                tablaResumen();
+                let vacio = $("#vacioInput").val();
+                if (vacio == "vacio") {
+                    $("#contImprimirResum").addClass("d-none");
+                } else {
+                    $("#contImprimirResum").removeClass("d-none");
+                }
+
+                $(".contDolar").hide();
+                $(".contEuro").hide();
+                $(".contFranco").show();
             },
             error: function (response) {
                 $("#tablaResumen").empty();
@@ -756,6 +1053,10 @@ $(document).ready(function () {
         let fecha = $(this).data("fecha");
         let tipo = $(this).data("tipo");
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
+        let moneda = $(this).data("moneda");
+        let moneda_tipo = "dólares";
         let pos = rendimiento.toString().indexOf(",");
         let rendimiento_remp = "";
         if (pos != -1) {
@@ -764,11 +1065,23 @@ $(document).ready(function () {
             rendimiento_remp = rendimiento;
         }
 
-        let dolares = parseFloat(rendimiento_remp) / parseFloat(dolar);
+        let dolares = 0;
+        if (moneda == "dolares") {
+            dolares = parseFloat(rendimiento_remp) / parseFloat(dolar);
+        } else if (moneda == "euros") {
+            dolares = parseFloat(rendimiento_remp) / parseFloat(euro);
+            dolar = euro;
+            moneda_tipo = "euros";
+        } else if (moneda == "francos") {
+            dolares = parseFloat(rendimiento_remp) / parseFloat(franco);
+            dolar = franco;
+            moneda_tipo = "francos suizos";
+        }
+
         dolares = dolares.toFixed(2);
 
         if (tipo == 1) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago del rendimiento mensual del día ${fecha} con relación al contrato ${contrato} (pago ${pago}), correspondiente a $${dolares} dólares al tipo de cambio $${dolar}, sin que al momento exista algún adeudo.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago del rendimiento mensual del día ${fecha} con relación al contrato ${contrato} (pago ${pago}), correspondiente a $${dolares} ${moneda_tipo} al tipo de cambio $${dolar}, sin que al momento exista algún adeudo.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
             mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta por la cantidad de $${rendimiento} pesos, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
@@ -804,17 +1117,25 @@ $(document).ready(function () {
         let inversionus = $(this).data("inversionus");
         let fecha = $(this).data("fecha");
         let tipo = $(this).data("tipo");
+        let moneda = $(this).data("moneda");
+        let moneda_tipo = "dólares";
+
+        if (moneda == "euros") {
+            moneda_tipo = "euros";
+        } else if (moneda == "francos") {
+            moneda_tipo = "francos suizos";
+        }
 
         if (tipo == 1) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} ${moneda_tipo}, por el rendimiento del día ${fecha} con relación al contrato ${contrato} (pago ${pago}).\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         } else if (tipo == 2) {
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} dólares, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de $${rendimiento} ${moneda_tipo}, por concepto de pago de rendimiento y liquidación del contrato compuesto ${contrato} con fecha de inicio ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         if (reporte == "liquidacion") {
             rendimiento = formatearCantidad.format(inversionus);
 
-            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de ${rendimiento} dólares, por concepto de pago de liquidación del contrato mensual ${contrato} de fecha ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
+            mensaje = `Buen día ${cliente}, se ha realizado una transferencia a su cuenta Swissquote por la cantidad de ${rendimiento} ${moneda_tipo}, por concepto de pago de liquidación del contrato mensual ${contrato} de fecha ${fecha}.\n%0AAtte: Departamento de pagos - Up Trading Experts.`;
         }
 
         $("#nombreClienteInput").val(cliente);
@@ -847,6 +1168,8 @@ $(document).ready(function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         dolar = $("#dolarInput").val();
+        euros = $("#euroInput").val();
+        francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
             url_filtro = "/admin/getResumenPagoClienteMensual";
@@ -862,6 +1185,8 @@ $(document).ready(function () {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
                 dolar: dolar,
+                euro: euros,
+                franco: francos,
             },
             url: url_filtro,
             success: function (response) {
@@ -874,6 +1199,28 @@ $(document).ready(function () {
                     $("#contImprimirResum").addClass("d-none");
                 } else {
                     $("#contImprimirResum").removeClass("d-none");
+                }
+
+                let monedaDolaresChecked = $("#monedaDolaresInput").is(
+                    ":checked"
+                );
+                let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
+                let monedaFrancosChecked = $("#monedaFrancosInput").is(
+                    ":checked"
+                );
+
+                if (monedaDolaresChecked) {
+                    $(".contEuro").hide();
+                    $(".contFranco").hide();
+                    $(".contDolar").show();
+                } else if (monedaEurosChecked) {
+                    $(".contDolar").hide();
+                    $(".contFranco").hide();
+                    $(".contEuro").show();
+                } else if (monedaFrancosChecked) {
+                    $(".contDolar").hide();
+                    $(".contEuro").hide();
+                    $(".contFranco").show();
                 }
             },
             error: function (response) {
@@ -975,7 +1322,16 @@ $(document).ready(function () {
         let pagoid = $(this).data("pagoid");
         let contratoid = $(this).data("contratoid");
         let pago = $(this).data("pago");
+        let moneda = $(this).data("moneda");
         let dolar = $("#dolarInput").val();
+        let euro = $("#euroInput").val();
+        let franco = $("#francoInput").val();
+
+        if (moneda == "euros") {
+            dolar = euro;
+        } else if (moneda == "francos") {
+            dolar = franco;
+        }
 
         let monto = $(this).data("monto");
         pesos = $(this).data("pesos").toString().replaceAll(",", "");
@@ -1249,5 +1605,26 @@ $(document).ready(function () {
                 </div>
             `);
         }
+    });
+
+    $(document).on("click", "#monedaDolaresInput", function () {
+        $(".contEuro").hide();
+        $(".contFranco").hide();
+
+        $(".contDolar").show();
+    });
+
+    $(document).on("click", "#monedaEurosInput", function () {
+        $(".contDolar").hide();
+        $(".contFranco").hide();
+
+        $(".contEuro").show();
+    });
+
+    $(document).on("click", "#monedaFrancosInput", function () {
+        $(".contDolar").hide();
+        $(".contEuro").hide();
+
+        $(".contFranco").show();
     });
 });

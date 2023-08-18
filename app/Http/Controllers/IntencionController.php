@@ -241,7 +241,7 @@ class IntencionController extends Controller
 
     public function getIntencion(Request $request)
     {
-        $intencion = IntencionInversion::all();
+        $intencion = IntencionInversion::select()->orderBy("id", "DESC")->get();
 
         return datatables()->of($intencion)->addColumn('btn', 'intencioninversion.buttons')->rawColumns(['btn'])->toJson();
     }

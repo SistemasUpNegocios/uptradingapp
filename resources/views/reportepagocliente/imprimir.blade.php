@@ -22,6 +22,12 @@
     .page-break {
       page-break-after: always;
     }
+    th {
+      font-size: 13px !important;
+    }
+    td {
+      font-size: 12px !important;
+    }
   </style>
 </head>
 
@@ -36,7 +42,7 @@
   </div>
 
   <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important;">
-    <thead>
+    <thead style="vertical-align: middle !important">
       <tr>
         <th data-priority="0" scope="col">Contrato</th>
         <th data-priority="0" scope="col">Cliente</th>
@@ -62,30 +68,138 @@
         @endphp
         @if ($resumen->tipo_id == 1)                                    
           <tr>
-            <td style="font-size: 15px !important;">
+            <td>
               {{ $contrato }}
             </td>
-            <td style="font-size: 15px !important;">{{ $cliente }}</td>
-            <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
-            <td style="font-size: 15px !important;">${{ number_format($resumen->pago, 2) }}</td>
-            <td style="font-size: 15px !important;">
+            <td>{{ $cliente }}</td>
+            <td>${{ $rendimiento }}</td>
+            <td>${{ number_format($resumen->pago, 2) }}</td>
+            <td>
               {{ $pago }}
             </td>
           </tr>
         @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
           <tr>
-            <td style="font-size: 15px !important;">
+            <td>
               {{ $contrato }}
             </td>
-            <td style="font-size: 15px !important;">{{ $cliente }}</td>
-            <td style="font-size: 15px !important;">${{ $rendimiento }}</td>
-            <td style="font-size: 15px !important;">${{ number_format($resumen->pago, 2) }}</td>
-            <td style="font-size: 15px !important;">Compuesto</td>
+            <td>{{ $cliente }}</td>
+            <td>${{ $rendimiento }}</td>
+            <td>${{ number_format($resumen->pago, 2) }}</td>
+            <td>Compuesto</td>
           </tr>
         @endif
       @endforeach
     </tbody>
   </table>
+
+  @if(count($resumenes_contrato_eur) > 0)
+    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important;">
+      <thead style="vertical-align: middle !important">
+        <tr>
+          <th data-priority="0" scope="col">Contrato</th>
+          <th data-priority="0" scope="col">Cliente</th>
+          <th data-priority="0" scope="col">Rendimiento (MXN)</th>
+          <th data-priority="0" scope="col">Rendimiento (EUR)</th>
+          <th data-priority="0" scope="col">Pago</th>
+        </tr>
+      </thead>
+      <tbody id="resuemnBody">
+        @foreach ($resumenes_contrato_eur as $resumen)
+          @php
+            if (strlen($resumen->contrato) == 11){
+              $contrato = substr($resumen->contrato, 0, -2);
+            }else{
+              $contrato = substr($resumen->contrato, 0, -3);
+            }
+            $cliente = $resumen->clientenombre;
+            $rendimiento = number_format($resumen->pago * $dolar, 2);
+            if ($resumen->tipo_id == 1){
+              $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
+            }
+            $fecha = $resumen->fecha;
+          @endphp
+          @if ($resumen->tipo_id == 1)                                    
+            <tr>
+              <td>
+                {{ $contrato }}
+              </td>
+              <td>{{ $cliente }}</td>
+              <td>${{ $rendimiento }}</td>
+              <td>${{ number_format($resumen->pago, 2) }}</td>
+              <td>
+                {{ $pago }}
+              </td>
+            </tr>
+          @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
+            <tr>
+              <td>
+                {{ $contrato }}
+              </td>
+              <td>{{ $cliente }}</td>
+              <td>${{ $rendimiento }}</td>
+              <td>${{ number_format($resumen->pago, 2) }}</td>
+              <td>Compuesto</td>
+            </tr>
+          @endif
+        @endforeach
+      </tbody>
+    </table>
+  @endif
+
+  @if(count($resumenes_contrato_chf) > 0)
+    <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important;">
+      <thead style="vertical-align: middle !important">
+        <tr>
+          <th data-priority="0" scope="col">Contrato</th>
+          <th data-priority="0" scope="col">Cliente</th>
+          <th data-priority="0" scope="col">Rendimiento (MXN)</th>
+          <th data-priority="0" scope="col">Rendimiento (CHF)</th>
+          <th data-priority="0" scope="col">Pago</th>
+        </tr>
+      </thead>
+      <tbody id="resuemnBody">
+        @foreach ($resumenes_contrato_chf as $resumen)
+          @php
+            if (strlen($resumen->contrato) == 11){
+              $contrato = substr($resumen->contrato, 0, -2);
+            }else{
+              $contrato = substr($resumen->contrato, 0, -3);
+            }
+            $cliente = $resumen->clientenombre;
+            $rendimiento = number_format($resumen->pago * $dolar, 2);
+            if ($resumen->tipo_id == 1){
+              $pago = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
+            }
+            $fecha = $resumen->fecha;
+          @endphp
+          @if ($resumen->tipo_id == 1)                                    
+            <tr>
+              <td>
+                {{ $contrato }}
+              </td>
+              <td>{{ $cliente }}</td>
+              <td>${{ $rendimiento }}</td>
+              <td>${{ number_format($resumen->pago, 2) }}</td>
+              <td>
+                {{ $pago }}
+              </td>
+            </tr>
+          @elseif ($resumen->tipo_id == 2 && $resumen->serie_pago == 12)
+            <tr>
+              <td>
+                {{ $contrato }}
+              </td>
+              <td>{{ $cliente }}</td>
+              <td>${{ $rendimiento }}</td>
+              <td>${{ number_format($resumen->pago, 2) }}</td>
+              <td>Compuesto</td>
+            </tr>
+          @endif
+        @endforeach
+      </tbody>
+    </table>
+  @endif
 </body>
 
 </html>

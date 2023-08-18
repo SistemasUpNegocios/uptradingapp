@@ -33,7 +33,7 @@ class FlujoDineroController extends Controller
 
         $flujodinero = Contrato::join('cliente', 'cliente.id', '=', 'contrato.cliente_id')        
             ->join('ps', 'ps.id', 'contrato.ps_id')
-            ->select(DB::raw("contrato.contrato, contrato.fecha, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, contrato.tipo_pago, contrato.monto_pago"))
+            ->select(DB::raw("contrato.contrato, contrato.fecha, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, contrato.tipo_pago, contrato.monto_pago, contrato.moneda"))
             ->where('contrato.tipo_pago', "!=", NULL)
             ->where('fecha', "like", "$request->fecha%")
             ->orderBy("contrato.fecha", "DESC")

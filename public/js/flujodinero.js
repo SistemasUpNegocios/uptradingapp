@@ -34,6 +34,18 @@ $(document).ready(function () {
             {
                 data: "psnombre",
             },
+            {
+                data: "moneda",
+                render: function (data) {
+                    if (data == "dolares") {
+                        return "Dólares";
+                    } else if (data == "euros") {
+                        return "Euros";
+                    } else if (data == "francos") {
+                        return "Francos";
+                    }
+                },
+            },
             //Swiss a POOL
             {
                 data: function (data) {
@@ -417,6 +429,7 @@ $(document).ready(function () {
                         <th data-priority="0" scope="col">Fecha</th>
                         <th data-priority="0" scope="col">Cliente</th>
                         <th data-priority="0" scope="col">PS</th>
+                        <th data-priority="0" scope="col">Moneda</th>
         
                         <th data-priority="0" scope="col">Swissquote a POOL</th>
                         <th data-priority="0" scope="col">Rendimientos</th>
@@ -452,6 +465,18 @@ $(document).ready(function () {
                         },
                         {
                             data: "psnombre",
+                        },
+                        {
+                            data: "moneda",
+                            render: function (data) {
+                                if (data == "dolares") {
+                                    return "Dólares";
+                                } else if (data == "euros") {
+                                    return "Euros";
+                                } else if (data == "francos") {
+                                    return "Francos";
+                                }
+                            },
                         },
                         //Swiss a POOL
                         {

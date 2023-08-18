@@ -6,9 +6,7 @@
     data-porcentaje="{{ $porcentaje }}" data-folio="{{ $folio }}" data-inversion="{{ $inversion }}"
     data-tipocambio="{{ $tipo_cambio }}" data-inversionus="{{ $inversion_us }}"
     data-inversionlet="{{ $inversion_letra }}" data-inversionletus="{{ $inversion_letra_us }}"
-    data-status="{{ $status }}" data-fecharein="{{ $fecha_reintegro }}" data-statusrein="{{ $status_reintegro }}"
-    data-memorein="{{ $memo_reintegro }}" data-pendienteid="{{ $pendienteid }}"
-    data-fechalimite="{{ $fecha_limite }}" data-tipopago="{{ $tipo_pago }}" data-montopago="{{ $monto_pago }}"
+    data-status="{{ $status }}" data-fechalimite="{{ $fecha_limite }}" data-tipopago="{{ $tipo_pago }}" data-montopago="{{ $monto_pago }}"
     data-comprobantepago="{{ $comprobante_pago }}" type="button" title="Vista previa"
     class="ms-1 btn btn-primary btn-sm btn-icon view mb-1"> <i class="bi bi-eye"></i></a>
 

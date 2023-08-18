@@ -23,6 +23,18 @@ $(document).ready(function () {
                 },
             },
             {
+                data: "moneda",
+                render: function (data) {
+                    if (data == "dolares") {
+                        return "Dólares";
+                    } else if (data == "euros") {
+                        return "Euros";
+                    } else if (data == "francos") {
+                        return "Francos";
+                    }
+                },
+            },
+            {
                 data: "valor",
                 render: function (data) {
                     return formatearCantidad.format(data);
