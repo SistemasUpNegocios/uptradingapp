@@ -37,6 +37,54 @@
         },
     });
 
+    $("#tipoCambioInputUSD").on("keyup", function () {
+        let usd = $("#dolaresInput").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = usd * tipo_cambio_usd;
+        dolar_peso = dolar_peso.toFixed(2);
+        $("#pesosInput").val(dolar_peso);
+
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = dolar_peso / tipo_cambio_eur;
+        $("#eurosInput").val(euro_peso.toFixed(2));
+
+        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let franco_peso = dolar_peso / tipo_cambio_francos;
+        $("#francosInput").val(franco_peso.toFixed(2));
+    });
+
+    $("#tipoCambioInputEUR").on("keyup", function () {
+        let eur = $("#eurosInput").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = eur * tipo_cambio_eur;
+        euro_peso = euro_peso.toFixed(2);
+        $("#pesosInput").val(euro_peso);
+
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = euro_peso / tipo_cambio_usd;
+        $("#dolaresInput").val(dolar_peso.toFixed(2));
+
+        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let franco_peso = euro_peso / tipo_cambio_francos;
+        $("#francosInput").val(franco_peso.toFixed(2));
+    });
+
+    $("#tipoCambioInputCHF").on("keyup", function () {
+        let chf = $("#francosInput").val();
+        let tipo_cambio_chf = $("#tipoCambioInputCHF").val();
+        let franco_peso = chf * tipo_cambio_chf;
+        franco_peso = franco_peso.toFixed(2);
+        $("#pesosInput").val(franco_peso);
+
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = franco_peso / tipo_cambio_usd;
+        $("#dolaresInput").val(dolar_peso.toFixed(2));
+
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = franco_peso / tipo_cambio_eur;
+        $("#eurosInput").val(euro_peso.toFixed(2));
+    });
+
     $("#formPreguntas").on("keyup submit", function (e) {
         e.preventDefault();
 
