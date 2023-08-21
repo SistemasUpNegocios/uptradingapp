@@ -142,12 +142,6 @@ class ReportePagoPsController extends Controller
                     $fecha = Carbon::now()->format('Y-m');
                     $pago_ps->fecha_pagado = $fecha."-10";
 
-                    $tipo_cambio = new TipoCambio;
-                    $tipo_cambio->valor = number_format($request->dolar, 2);
-                    $tipo_cambio->contrato_id = $pago_ps->contrato_id;
-                    $tipo_cambio->memo = "Pago de comisión";
-                    $tipo_cambio->save();
-
                     $log = new Log;
                     $log->tipo_accion = "Actualización";
                     $log->tabla = "Pago de PS por el contrato $pago_ps->contrato_id";

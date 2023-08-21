@@ -252,6 +252,9 @@ $(document).ready(function () {
                     data: "folio",
                 },
                 {
+                    data: "loggin",
+                },
+                {
                     data: "status",
                 },
                 {
@@ -459,6 +462,7 @@ $(document).ready(function () {
                 },
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
             },
+            aaSorting: [],
         });
 
         estilos(
@@ -489,6 +493,9 @@ $(document).ready(function () {
                     data: "folio",
                 },
                 {
+                    data: "loggin",
+                },
+                {
                     data: "status",
                 },
                 {
@@ -696,6 +703,7 @@ $(document).ready(function () {
                 },
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
             },
+            aaSorting: [],
         });
 
         estilos(
@@ -724,6 +732,9 @@ $(document).ready(function () {
                     data: "folio",
                 },
                 {
+                    data: "loggin",
+                },
+                {
                     data: "status",
                 },
                 {
@@ -931,6 +942,7 @@ $(document).ready(function () {
                 },
                 info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
             },
+            aaSorting: [],
         });
 
         estilos(

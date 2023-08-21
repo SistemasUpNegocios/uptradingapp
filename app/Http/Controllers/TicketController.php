@@ -125,7 +125,7 @@ class TicketController extends Controller
         ->whereIn('ticket.id', $tickets_arr_term)
         ->get();
 
-        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("status", "ASC")->get();
+        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
@@ -245,7 +245,7 @@ class TicketController extends Controller
             ->whereIn('ticket.id', $tickets_arr_term)
             ->get();
 
-        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("status", "ASC")->get();
+        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
@@ -437,7 +437,7 @@ class TicketController extends Controller
             ->where(function ($query) {
                 $query->where('status', 'Abierto')
                 ->orWhere('status', 'En proceso');
-            })->orderBy("status", "asc")
+            })->orderBy("id", "DESC")
             ->get();
 
         if (sizeof($tickets) <= 0) {
