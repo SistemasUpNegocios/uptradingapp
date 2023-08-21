@@ -57,8 +57,72 @@
                     <h5 class="modal-title" id="modalTitleSearch"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="resultadosBusqueda">
+                <div class="modal-body" id="resultadosBusqueda"></div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="formModalCalc" tabindex="-1" aria-labelledby="modalTitleCal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleCal">Conversor de divisas <i class="bi bi-cash-coin"></i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio USD" id="tipoCambioInputUSD">
+                                <label for="tipoCambioInput">MXN - USD</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio EUR" id="tipoCambioInputEUR">
+                                <label for="tipoCambioInputEUR">MXN - EUR</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio CHF" id="tipoCambioInputCHF">
+                                <label for="tipoCambioInputCHF">MXN - CHF</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" placeholder="Ingresa el monto en USD" id="dolaresInput">
+                                <label for="dolaresInput">Dólares</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" placeholder="Ingresa el monto en EUR" id="eurosInput">
+                                <label for="eurosInput">Euros</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" placeholder="Ingresa el monto en CHF" id="francosInput">
+                                <label for="francosInput">Francos suizos</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" placeholder="Ingresa el monto en MXN" id="pesosInput">
+                                <label for="pesosInput">Pesos</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancelCal" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="reset" class="btn btn-success" id="btnReset">Borrar campos</button>
                 </div>
             </div>
         </div>

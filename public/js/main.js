@@ -1,6 +1,42 @@
 (function () {
     "use strict";
 
+    $.ajax({
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp",
+        success: function (response) {
+            var series = response.bmx.series;
+            for (var i in series) {
+                var serie = series[i];
+
+                var precioDolar = parseFloat(serie.datos[0].dato);
+
+                $("#valor_dolar_dashboard").text(
+                    "$" + precioDolar.toFixed(2) + " USD"
+                );
+
+                $("#tipoCambioInputUSD").val(precioDolar.toFixed(2));
+            }
+        },
+    });
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
+        success: function (response) {
+            //EURO
+            let euro = response.conversion_rate;
+            $("#tipoCambioInputEUR").val(euro.toFixed(2));
+        },
+    });
+    $.ajax({
+        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
+        success: function (response) {
+            //FRANCO SUIZO
+            let franco = response.conversion_rate;
+            $("#tipoCambioInputCHF").val(franco.toFixed(2));
+        },
+    });
+
     $("#formPreguntas").on("keyup submit", function (e) {
         e.preventDefault();
 
@@ -28,22 +64,77 @@
         });
     });
 
-    $.ajax({
-        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
-        jsonp: "callback",
-        dataType: "jsonp",
-        success: function (response) {
-            var series = response.bmx.series;
-            for (var i in series) {
-                var serie = series[i];
+    $("#dolaresInput").on("keyup", function () {
+        let usd = $("#dolaresInput").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = usd * tipo_cambio_usd;
+        dolar_peso = dolar_peso.toFixed(2);
+        $("#pesosInput").val(dolar_peso);
 
-                var precioDolar = parseFloat(serie.datos[0].dato);
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = dolar_peso / tipo_cambio_eur;
+        $("#eurosInput").val(euro_peso.toFixed(2));
 
-                $("#valor_dolar_dashboard").text(
-                    "$" + precioDolar.toFixed(2) + " c/d"
-                );
-            }
-        },
+        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let franco_peso = dolar_peso / tipo_cambio_francos;
+        $("#francosInput").val(franco_peso.toFixed(2));
+    });
+
+    $("#eurosInput").on("keyup", function () {
+        let eur = $("#eurosInput").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = eur * tipo_cambio_eur;
+        euro_peso = euro_peso.toFixed(2);
+        $("#pesosInput").val(euro_peso);
+
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = euro_peso / tipo_cambio_usd;
+        $("#dolaresInput").val(dolar_peso.toFixed(2));
+
+        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let franco_peso = euro_peso / tipo_cambio_francos;
+        $("#francosInput").val(franco_peso.toFixed(2));
+    });
+
+    $("#francosInput").on("keyup", function () {
+        let chf = $("#francosInput").val();
+        let tipo_cambio_chf = $("#tipoCambioInputCHF").val();
+        let franco_peso = chf * tipo_cambio_chf;
+        franco_peso = franco_peso.toFixed(2);
+        $("#pesosInput").val(franco_peso);
+
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = franco_peso / tipo_cambio_usd;
+        $("#dolaresInput").val(dolar_peso.toFixed(2));
+
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = franco_peso / tipo_cambio_eur;
+        $("#eurosInput").val(euro_peso.toFixed(2));
+    });
+
+    $("#pesosInput").on("keyup", function () {
+        let mxn = $("#pesosInput").val();
+
+        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let dolar_peso = mxn / tipo_cambio_usd;
+        $("#dolaresInput").val(dolar_peso.toFixed(2));
+
+        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let euro_peso = mxn / tipo_cambio_eur;
+        $("#eurosInput").val(euro_peso.toFixed(2));
+
+        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let franco_peso = mxn / tipo_cambio_francos;
+        $("#francosInput").val(franco_peso.toFixed(2));
+    });
+
+    $("#btnReset").on("click", function (e) {
+        e.preventDefault();
+
+        $("#dolaresInput").val(0.0);
+        $("#eurosInput").val(0.0);
+        $("#francosInput").val(0.0);
+        $("#pesosInput").val(0.0);
     });
 
     /**

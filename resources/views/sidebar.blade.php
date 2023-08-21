@@ -41,21 +41,24 @@
                 </li>
             @endif
 
-            <li class="nav-item dropdown" id="notificaciones">
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+                <li class="nav-item" id="calculadora" title="Convertir divisas">
+                    <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalCalc">
+                        <i class="bi bi-calculator"></i>
+                    </a>
+                </li>
+            @endif
 
+            <li class="nav-item dropdown" id="notificaciones">
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                     <i class="bi bi-bell"></i>
                     <span class="badge bg-primary badge-number" id="numeroNotifBadge"></span>
                 </a>
-
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" id="contNotificaciones"></ul>
-
             </li>
 
             <li class="nav-item dropdown pe-3">
-
                 <?php $foto = auth()->user()->foto_perfil;  ?>
-
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil"
                         class="rounded-circle profilephoto2">
