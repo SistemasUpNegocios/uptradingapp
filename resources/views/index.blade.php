@@ -73,20 +73,20 @@
                     <div class="row">
                         <div class="col-md-4 col-12">
                             <div class="form-floating mb-3">
-                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio USD" id="tipoCambioInputUSD">
-                                <label for="tipoCambioInput">MXN - USD</label>
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio USD" id="tipoCambioInputUSDCal">
+                                <label for="tipoCambioInputUSDCal">MXN - USD</label>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-floating mb-3">
-                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio EUR" id="tipoCambioInputEUR">
-                                <label for="tipoCambioInputEUR">MXN - EUR</label>
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio EUR" id="tipoCambioInputEURCal">
+                                <label for="tipoCambioInputEURCal">MXN - EUR</label>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="form-floating mb-3">
-                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio CHF" id="tipoCambioInputCHF">
-                                <label for="tipoCambioInputCHF">MXN - CHF</label>
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el tipo de cambio CHF" id="tipoCambioInputCHFCal">
+                                <label for="tipoCambioInputCHFCal">MXN - CHF</label>
                             </div>
                         </div>
                     </div>

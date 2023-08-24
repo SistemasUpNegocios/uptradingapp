@@ -7,6 +7,7 @@ use DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\Convenio;
+use App\Models\IncrementoConvenio;
 use Carbon\Carbon;
 
 class CuentasMam implements FromCollection,WithHeadings
@@ -48,19 +49,19 @@ class CuentasMam implements FromCollection,WithHeadings
         ->get();
 
         foreach ($cuentas as $cuenta) {
-            $incrementos = \App\Models\IncrementoConvenio::select()
+            $incrementos = IncrementoConvenio::select()
             ->where('convenio_id', $cuenta->convenioid)
             ->first();
 
-            $incrementos_count = \App\Models\IncrementoConvenio::select()
+            $incrementos_count = IncrementoConvenio::select()
             ->where('convenio_id', $cuenta->convenioid)
             ->count();
 
-            $mes = \Carbon\Carbon::parse($cuenta->fecha_inicio)->format("m");
-            $anio = \Carbon\Carbon::parse($cuenta->fecha_inicio)->format("Y");
+            $mes = Carbon::parse($cuenta->fecha_inicio)->format("m");
+            $anio = Carbon::parse($cuenta->fecha_inicio)->format("Y");
 
-            $fecha_inicio = \Carbon\Carbon::parse("01-$mes-$anio");
-            $fecha_actual = \Carbon\Carbon::now();
+            $fecha_inicio = Carbon::parse("01-$mes-$anio");
+            $fecha_actual = Carbon::now();
 
             $periodo = $fecha_actual->diffInMonths($fecha_inicio);
             

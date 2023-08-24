@@ -16,7 +16,7 @@
                     "$" + precioDolar.toFixed(2) + " USD"
                 );
 
-                $("#tipoCambioInputUSD").val(precioDolar.toFixed(2));
+                $("#tipoCambioInputUSDCal").val(precioDolar.toFixed(2));
             }
         },
     });
@@ -25,7 +25,8 @@
         success: function (response) {
             //EURO
             let euro = response.conversion_rate;
-            $("#tipoCambioInputEUR").val(euro.toFixed(2));
+            console.log(euro.toFixed(2));
+            $("#tipoCambioInputEURCal").val(euro.toFixed(2));
         },
     });
     $.ajax({
@@ -33,54 +34,54 @@
         success: function (response) {
             //FRANCO SUIZO
             let franco = response.conversion_rate;
-            $("#tipoCambioInputCHF").val(franco.toFixed(2));
+            $("#tipoCambioInputCHFCal").val(franco.toFixed(2));
         },
     });
 
-    $("#tipoCambioInputUSD").on("keyup", function () {
+    $("#tipoCambioInputUSDCal").on("keyup", function () {
         let usd = $("#dolaresInput").val();
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = usd * tipo_cambio_usd;
         dolar_peso = dolar_peso.toFixed(2);
         $("#pesosInput").val(dolar_peso);
 
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = dolar_peso / tipo_cambio_eur;
         $("#eurosInput").val(euro_peso.toFixed(2));
 
-        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_francos = $("#tipoCambioInputCHFCal").val();
         let franco_peso = dolar_peso / tipo_cambio_francos;
         $("#francosInput").val(franco_peso.toFixed(2));
     });
 
-    $("#tipoCambioInputEUR").on("keyup", function () {
+    $("#tipoCambioInputEURCal").on("keyup", function () {
         let eur = $("#eurosInput").val();
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = eur * tipo_cambio_eur;
         euro_peso = euro_peso.toFixed(2);
         $("#pesosInput").val(euro_peso);
 
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = euro_peso / tipo_cambio_usd;
         $("#dolaresInput").val(dolar_peso.toFixed(2));
 
-        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_francos = $("#tipoCambioInputCHFCal").val();
         let franco_peso = euro_peso / tipo_cambio_francos;
         $("#francosInput").val(franco_peso.toFixed(2));
     });
 
-    $("#tipoCambioInputCHF").on("keyup", function () {
+    $("#tipoCambioInputCHFCal").on("keyup", function () {
         let chf = $("#francosInput").val();
-        let tipo_cambio_chf = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_chf = $("#tipoCambioInputCHFCal").val();
         let franco_peso = chf * tipo_cambio_chf;
         franco_peso = franco_peso.toFixed(2);
         $("#pesosInput").val(franco_peso);
 
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = franco_peso / tipo_cambio_usd;
         $("#dolaresInput").val(dolar_peso.toFixed(2));
 
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = franco_peso / tipo_cambio_eur;
         $("#eurosInput").val(euro_peso.toFixed(2));
     });
@@ -114,48 +115,48 @@
 
     $("#dolaresInput").on("keyup", function () {
         let usd = $("#dolaresInput").val();
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = usd * tipo_cambio_usd;
         dolar_peso = dolar_peso.toFixed(2);
         $("#pesosInput").val(dolar_peso);
 
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = dolar_peso / tipo_cambio_eur;
         $("#eurosInput").val(euro_peso.toFixed(2));
 
-        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_francos = $("#tipoCambioInputCHFCal").val();
         let franco_peso = dolar_peso / tipo_cambio_francos;
         $("#francosInput").val(franco_peso.toFixed(2));
     });
 
     $("#eurosInput").on("keyup", function () {
         let eur = $("#eurosInput").val();
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = eur * tipo_cambio_eur;
         euro_peso = euro_peso.toFixed(2);
         $("#pesosInput").val(euro_peso);
 
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = euro_peso / tipo_cambio_usd;
         $("#dolaresInput").val(dolar_peso.toFixed(2));
 
-        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_francos = $("#tipoCambioInputCHFCal").val();
         let franco_peso = euro_peso / tipo_cambio_francos;
         $("#francosInput").val(franco_peso.toFixed(2));
     });
 
     $("#francosInput").on("keyup", function () {
         let chf = $("#francosInput").val();
-        let tipo_cambio_chf = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_chf = $("#tipoCambioInputCHFCal").val();
         let franco_peso = chf * tipo_cambio_chf;
         franco_peso = franco_peso.toFixed(2);
         $("#pesosInput").val(franco_peso);
 
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = franco_peso / tipo_cambio_usd;
         $("#dolaresInput").val(dolar_peso.toFixed(2));
 
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = franco_peso / tipo_cambio_eur;
         $("#eurosInput").val(euro_peso.toFixed(2));
     });
@@ -163,15 +164,15 @@
     $("#pesosInput").on("keyup", function () {
         let mxn = $("#pesosInput").val();
 
-        let tipo_cambio_usd = $("#tipoCambioInputUSD").val();
+        let tipo_cambio_usd = $("#tipoCambioInputUSDCal").val();
         let dolar_peso = mxn / tipo_cambio_usd;
         $("#dolaresInput").val(dolar_peso.toFixed(2));
 
-        let tipo_cambio_eur = $("#tipoCambioInputEUR").val();
+        let tipo_cambio_eur = $("#tipoCambioInputEURCal").val();
         let euro_peso = mxn / tipo_cambio_eur;
         $("#eurosInput").val(euro_peso.toFixed(2));
 
-        let tipo_cambio_francos = $("#tipoCambioInputCHF").val();
+        let tipo_cambio_francos = $("#tipoCambioInputCHFCal").val();
         let franco_peso = mxn / tipo_cambio_francos;
         $("#francosInput").val(franco_peso.toFixed(2));
     });
