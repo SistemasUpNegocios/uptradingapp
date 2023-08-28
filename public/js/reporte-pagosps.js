@@ -5,6 +5,9 @@ $(document).ready(function () {
     let dolares = 0;
     var table = "";
 
+    $(".contEuro").hide();
+    $(".contFranco").hide();
+
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
         jsonp: "callback",
@@ -18,28 +21,26 @@ $(document).ready(function () {
                 dolar = parseFloat(dolar);
                 dolar = dolar.toFixed(2);
                 $("#dolarInput").val(dolar);
-                datos();
+
+                $.ajax({
+                    url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
+                    success: function (response) {
+                        //EURO
+                        let euro = response.conversion_rate;
+                        $("#euroInput").val(euro.toFixed(2));
+
+                        $.ajax({
+                            url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
+                            success: function (response) {
+                                //FRANCO SUIZO
+                                let franco = response.conversion_rate;
+                                $("#francoInput").val(franco.toFixed(2));
+                                datos();
+                            },
+                        });
+                    },
+                });
             }
-        },
-    });
-
-    $.ajax({
-        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
-        success: function (response) {
-            //EURO
-            let euro = response.conversion_rate;
-            $("#euroInput").val(euro.toFixed(2));
-            datos();
-        },
-    });
-
-    $.ajax({
-        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
-        success: function (response) {
-            //FRANCO SUIZO
-            let franco = response.conversion_rate;
-            $("#francoInput").val(franco.toFixed(2));
-            datos();
         },
     });
 

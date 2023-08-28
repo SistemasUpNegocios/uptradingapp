@@ -430,9 +430,9 @@
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
                                 <input type="datetime-local" class="form-control"
-                                    placeholder="Selecciona la fecha actual" id="fechaActuakInput" name="fecha_actual"
+                                    placeholder="Selecciona la fecha actual" id="fechaActualInput" name="fecha_actual"
                                     disabled value="{{\Carbon\Carbon::now()->format("Y-m-d H:i")}}">
-                                <label for="fechaActuakInput">Fecha de generación</label>
+                                <label for="fechaActualInput">Fecha de generación</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">

@@ -55,6 +55,7 @@ $(document).ready(function () {
         var id = $(this).data("id");
         var departamento = $(this).data("departamento");
         var asignado = $(this).data("asignado");
+        var fechagenerado = $(this).data("fechagenerado");
         var fechalimite = $(this).data("fechalimite");
         var asunto = $(this).data("asunto");
         var descripcion = $(this).data("descripcion");
@@ -67,6 +68,8 @@ $(document).ready(function () {
 
         $("#departamentoInput").val(departamento);
         $("#departamentoInput").prop("disabled", false);
+
+        $("#fechaActualInput").val(fechagenerado);
 
         $("#fechaLimiteInput").val(fechalimite);
         $("#fechaLimiteInput").prop("readonly", false);
