@@ -124,6 +124,8 @@
 @php
     use App\Models\User;
     $ps_golds = User::where('privilegio', 'ps_gold')->orWhere('privilegio', 'ps_diamond')->get();
+    $usuarios_adm = User::where("privilegio", "admin")->orWhere("privilegio", "procesos")->get();
+    $usuarios_cont = User::where("privilegio", "contabilidad")->get();
 @endphp
 
 <div class="sidebar-nav sidebar offcanvas offcanvas-start" tabindex="-1" id="sidebar">
@@ -163,53 +165,43 @@
                 <ul id="chat-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_ps_diamond)
                         <li class="nav-heading">Departamento de administración</li>
-                        @if (auth()->user()->id != 234)
-                            <li>
-                                <a href="#" id="deptoAdmin" class="chatModal" data-chatid="234">
-                                    <i class="bi bi-circle"></i><span>Maru</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if (auth()->user()->id != 235)
-                            <li>
-                                <a href="#" id="deptoAdmin" class="chatModal" data-chatid="235">
-                                    <i class="bi bi-circle"></i><span>Karen</span>
-                                </a>
-                            </li>
-                        @endif
+                        @foreach ($usuarios_adm as $admin)
+                            @if (auth()->user()->id != $admin->id)
+                                <li>
+                                    <a href="#" id="deptoAdmin" class="chatModal" data-chatid="{{$admin->id}}">
+                                        <i class="bi bi-circle"></i><span>{{ucwords(strtolower($admin->nombre))}}</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
                     @endif
 
                     @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
                         @if (auth()->user()->id != 1)
                             <li>
                                 <a href="#" id="deptoSistemas" class="chatModal" data-chatid="1">
-                                    <i class="bi bi-circle"></i><span>Departamento de sistemas</span>
+                                    <i class="bi bi-circle"></i><span>Sistemas</span>
                                 </a>
                             </li>
                         @endif
                         @if (auth()->user()->id != 246)
                             <li>
                                 <a href="#" id="deptoEgresos" class="chatModal" data-chatid="246">
-                                    <i class="bi bi-circle"></i><span>Departamento de egresos</span>
+                                    <i class="bi bi-circle"></i><span>Egresos</span>
                                 </a>
                             </li>
                         @endif
 
                         <li class="nav-heading">Departamento de contabilidad</li>
-                        @if (auth()->user()->id != 236)
-                            <li>
-                                <a href="#" id="deptoConta" class="chatModal" data-chatid="236">
-                                    <i class="bi bi-circle"></i><span>Valeria</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if (auth()->user()->id != 239)
-                            <li>
-                                <a href="#" id="deptoConta" class="chatModal" data-chatid="239">
-                                    <i class="bi bi-circle"></i><span>Ofelia</span>
-                                </a>
-                            </li>
-                        @endif
+                        @foreach ($usuarios_cont as $contabilidad)
+                            @if (auth()->user()->id != $contabilidad->id)
+                                <li>
+                                    <a href="#" id="deptoConta" class="chatModal" data-chatid="{{$contabilidad->id}}">
+                                        <i class="bi bi-circle"></i><span>{{ucwords(strtolower($contabilidad->nombre))}}</span>
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
 
                         @if (!auth()->user()->is_ps_gold && !auth()->user()->is_ps_bronze)
                             <li class="nav-heading">PS GOLD</li>
@@ -217,7 +209,10 @@
                                 @if (auth()->user()->id != $ps->id)
                                     <li>
                                         <a href="#" class="chatModal deptoPs" data-chatid="{{ $ps->id }}">
-                                            <i class="bi bi-circle"></i><span>{{ $ps->nombre }} {{ $ps->apellido_p }}</span>
+                                            <i class="bi bi-circle"></i>
+                                            <span>
+                                                {{ucwords(strtolower("$ps->nombre $ps->apellido_p"))}}
+                                            </span>
                                         </a>
                                     </li>
                                 @endif
