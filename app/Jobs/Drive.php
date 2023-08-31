@@ -134,7 +134,6 @@ class Drive implements ShouldQueue
         
         //Enviar correos
 		Mail::to("javiersalazar@uptradingexperts.com")->send(new BackupEmail($link));
-		Mail::to("paolarosales@uptradingexperts.com")->send(new BackupEmail($link));
 
         ini_set('memory_limit', '512M');
     }
