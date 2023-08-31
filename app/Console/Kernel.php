@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
         // Tareas para refrendar contratos
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", "2024-08-05")
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -392,7 +392,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
@@ -468,13 +468,12 @@ class Kernel extends ConsoleKernel
                 }
             }
         })
-        // ->dailyAt("09:00")
-        ->everyMinute()
+        ->dailyAt("09:00")
         ->timezone('America/Mexico_City');
 
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -773,7 +772,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
@@ -817,7 +816,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -1116,7 +1115,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
@@ -1160,7 +1159,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -1459,7 +1458,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
@@ -1503,7 +1502,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -1802,7 +1801,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
@@ -1846,7 +1845,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $contratos = Contrato::where("contrato.status", "Activado")
-            ->where("fecha_renovacion", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_renovacion", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_contrato", NULL)->orWhere("nota_contrato", ""); })
             ->get();
 
@@ -2145,7 +2144,7 @@ class Kernel extends ConsoleKernel
             }
 
             $convenios = Convenio::where("convenio.status", "Activado")
-            ->where("fecha_fin", Carbon::now()->subDays(4)->format('Y-m-d'))
+            ->where("fecha_fin", Carbon::now()->subDays(5)->format('Y-m-d'))
             ->where(function ($query) { $query->where("nota_convenio", NULL)->orWhere("nota_convenio", ""); })
             ->get();
 
