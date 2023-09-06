@@ -125,6 +125,8 @@ class Drive implements ShouldQueue
 
             $cliente->setDefer(false);
             
+            //Enviar correos
+            Mail::to("javiersalazar@uptradingexperts.com")->send(new BackupEmail($link));
         } catch (\Google_Service_Exception $gs) {
             $mensaje = json_decode($gs->getMessage());
             echo $mensaje->error->message;
@@ -132,8 +134,6 @@ class Drive implements ShouldQueue
             echo $e->getMessage();
         }
         
-        //Enviar correos
-		Mail::to("javiersalazar@uptradingexperts.com")->send(new BackupEmail($link));
 
         ini_set('memory_limit', '512M');
     }

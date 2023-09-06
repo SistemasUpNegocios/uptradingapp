@@ -1,6 +1,29 @@
 (function () {
     "use strict";
 
+    const btnSwitch = document.querySelector("#switch");
+
+    btnSwitch.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        btnSwitch.classList.toggle("active_darkmode");
+
+        // Guardamos el modo en localstorage.
+        if (document.body.classList.contains("dark")) {
+            localStorage.setItem("dark-mode", "true");
+        } else {
+            localStorage.setItem("dark-mode", "false");
+        }
+    });
+
+    // Obtenemos el modo actual.
+    if (localStorage.getItem("dark-mode") === "true") {
+        document.body.classList.add("dark");
+        btnSwitch.classList.add("active_darkmode");
+    } else {
+        document.body.classList.remove("dark");
+        btnSwitch.classList.remove("active_darkmode");
+    }
+
     $.ajax({
         url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
         jsonp: "callback",

@@ -39,7 +39,7 @@ class ClausulaController extends Controller
                 ->get();
 
             if ($clausulas) {
-                return datatables()->of($clausulas)->addColumn('btn', 'clausula.buttons')->rawColumns(['btn'])->toJson();
+                return datatables()->of($clausulas)->addColumn('btn', 'tipocontrato.buttons_clau')->rawColumns(['btn'])->toJson();
             }
         }
     }

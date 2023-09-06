@@ -16,7 +16,7 @@
   @laravelPWA
 </head>
 
-<body class="">
+<body>
 
   <div id="loader" class="loader">
     <h1></h1>
@@ -29,6 +29,7 @@
 
   @yield('script')
   <script src="{{ asset('js/preloader.js') }}"></script>
+  <script src="{{ asset('js/login.js') }}"></script>
 </body>
 
 </html>

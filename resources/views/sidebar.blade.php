@@ -555,7 +555,13 @@
                     @endif
                 </ul>
             </li>            
-        @endif        
+        @endif
+        <li class="nav-item">
+            <button class="switch" id="switch">
+                <i class="bi bi-sun-fill"></i>
+                <i class="bi bi-moon-fill"></i>
+            </button>
+        </li>
 
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
             <li class="nav-heading">Configuración</li>

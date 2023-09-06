@@ -262,6 +262,8 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".new", function (e) {
+        $("#modeloForm")[0].reset();
+
         $("#alertMessage").text("");
         acc = "new";
 

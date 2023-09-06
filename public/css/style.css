@@ -38,7 +38,7 @@ label:focus,
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #fff;
+    background: #f6f9ff;
 }
 
 /* Handle */
@@ -65,6 +65,7 @@ body {
     font-family: "Open Sans", sans-serif;
     background: #f6f9ff;
     color: #444444;
+    transition: 1s;
 }
 
 a {
@@ -3034,4 +3035,374 @@ pre {
         width: 100%;
         margin-top: 10px;
     }
+}
+
+#formModalChat .modal-content {
+    background: none;
+    border: none;
+}
+
+#formModalChat .modal-header {
+    border-bottom: none;
+}
+
+#formModalChat .modal-header button {
+    display: none;
+}
+
+/*----------------------------------------------
+                  DARK MODE
+-----------------------------------------------*/
+.switch {
+    background: #343d5b;
+    border-radius: 1000px;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: space-around;
+    outline: none;
+    width: 60px;
+    margin-left: 15px;
+    transition: 1s;
+}
+
+.switch::after {
+    content: "";
+    display: block;
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    background: #f1f1f1;
+    top: 0;
+    left: 0;
+    right: unset;
+    border-radius: 100px;
+    -webkit-transition: 0.3s ease all;
+    transition: 0.3s ease all;
+    -webkit-box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.switch.active_darkmode {
+    background: orange;
+    color: #000;
+}
+
+.switch.active_darkmode::after {
+    right: 0;
+    left: unset;
+}
+
+.switch span {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    background: none;
+    color: #fff;
+}
+
+body.dark::-webkit-scrollbar-track {
+    background-color: #383838 !important;
+}
+
+body.dark::-webkit-scrollbar-thumb,
+body.dark .card .card-body div.mt-4::-webkit-scrollbar-thumb,
+body.dark #contPendientes::-webkit-scrollbar-thumb,
+body.dark #tablaResumen .contDolar::-webkit-scrollbar-thumb,
+body.dark #tablaResumen .contEuro::-webkit-scrollbar-thumb,
+body.dark #tablaResumen .contFranco::-webkit-scrollbar-thumb {
+    background-color: #7c7c7c !important;
+}
+
+body.dark .sidebar::-webkit-scrollbar-track,
+body.dark .card .card-body div.mt-4::-webkit-scrollbar-track,
+body.dark #contPendientes::-webkit-scrollbar-track,
+body.dark #tablaResumen .contDolar::-webkit-scrollbar-track,
+body.dark #tablaResumen .contEuro::-webkit-scrollbar-track,
+body.dark #tablaResumen .contFranco::-webkit-scrollbar-track {
+    background-color: #272829 !important;
+}
+
+body.dark {
+    background: #383838;
+    color: #f6f9ff;
+}
+
+body.dark .card {
+    background: #272829;
+    color: #fff;
+    box-shadow: 0px 0 30px rgb(0 0 0 / 25%);
+}
+
+body.dark .pagetitle h1 {
+    color: #fff;
+}
+
+body.dark .breadcrumb-item a {
+    color: #d3dcec;
+}
+
+body.dark .breadcrumb-item.active {
+    color: #b9c0cc;
+}
+
+body.dark .card-title a,
+body.dark .card-body h5,
+body.dark .card-body h6,
+body.dark .card-body .num-card,
+body.dark .card-body .d-flex .ps-3 p,
+body.dark .footer .copyright,
+body.dark .footer .credits,
+body.dark .dropdown-menu .dropdown-item,
+body.dark .sidebar .nav-link i,
+body.dark .sidebar-nav .nav-content a,
+body.dark #busquedaForm input::placeholder,
+body.dark #busquedaForm button i {
+    color: #fff;
+}
+
+body.dark .dropdown-menu {
+    background: #383838;
+}
+
+body.dark .dropdown-menu .text-start h6 {
+    color: #d3dcec;
+}
+
+body.dark .dropdown-menu .dropdown-item:hover {
+    background: #272829;
+}
+
+body.dark .dropdown-menu-arrow::before {
+    background: #383838;
+    border-top: 1px solid #383838;
+    border-left: 1px solid #383838;
+}
+
+body.dark .dropdown-menu .dropdown-header h6,
+body.dark .dropdown-menu .dropdown-header #numeroNotif,
+body.dark .modal-header button.btn-close,
+body.dark #agenda .fc-col-header-cell-cushion,
+body.dark #agenda .fc-daygrid-day-number,
+body.dark .dropdown-menu input::placeholder,
+body.dark #myTab .nav-link,
+body.dark .dataTable thead th,
+body.dark .dataTable tbody td,
+body.dark #contTabla .table-responsive .table thead th,
+body.dark #contTabla .table-responsive .table tbody th,
+body.dark .cont-tabla .table-responsive .table thead th,
+body.dark .cont-tabla .table-responsive .table tbody th {
+    color: #fff;
+}
+
+body.dark .dropdown-menu .dropdown-header span,
+body.dark .dropdown-menu .message-item div p,
+body.dark .dropdown-menu .dropdown-footer a {
+    color: #d3dcec;
+}
+
+body.dark .dropdown-menu .message-item:hover {
+    background: #272829;
+}
+
+body.dark .dropdown-menu .dropdown-divider {
+    color: #6c6c6c;
+}
+
+body.dark .sidebar,
+body.dark .sidebar .nav-link.collapsed,
+body.dark .card .card-footer {
+    background: #272829;
+    color: #fff;
+}
+
+body.dark .sidebar .nav-link {
+    background: #343434;
+    color: #fff;
+}
+
+body.dark #busquedaForm input {
+    background: #383838;
+    color: #fff;
+}
+
+body.dark .sidebar-nav .nav-content a:hover {
+    color: #899bbd;
+}
+
+body.dark .modal-content {
+    background: #272829;
+    color: #fff;
+}
+
+body.dark .modal-header {
+    border-bottom-color: #6c6c6c;
+}
+
+body.dark .modal-footer {
+    border-top-color: #6c6c6c;
+}
+
+body.dark .form-control,
+body.dark .form-select {
+    background-color: #272829;
+    border: 1px solid #6c6c6c;
+    color: #fff;
+}
+
+body.dark input:-webkit-autofill,
+body.dark input:-webkit-autofill:hover,
+body.dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #272829 inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+body.dark .form-control:disabled,
+body.dark .form-control[readonly],
+body.dark .form-select:disabled,
+body.dark .form-select[readonly] {
+    background: #434343;
+}
+
+body.dark .accordion-item {
+    background: #272829 !important;
+    box-shadow: 0px 0 30px rgb(0 0 0 / 25%) !important;
+}
+
+body.dark .accordion-item h2 button,
+body.dark .accordion-body,
+body.dark .filters label,
+body.dark .selectSearch .dselect-placeholder {
+    color: #fff !important;
+}
+
+body.dark .file-upload {
+    background: #272829;
+}
+
+body.dark .text-muted,
+body.dark .dataTables_info,
+body.dark .dataTables_length,
+body.dark .dataTables_filter {
+    color: #a9a9a9 !important;
+}
+
+body.dark .dataTables_paginate .pagination li a,
+body.dark .dataTables_length select,
+body.dark #detallesModal .accordion-header #collapseBtn,
+body.dark #busquedaModal .accordion-header .accordion-button {
+    background: #272829 !important;
+    color: #fff;
+    border-color: #404040;
+}
+
+body.dark .cont-tabla .table-responsive .table thead,
+body.dark .cont-tabla .table-responsive .table tbody,
+body.dark .cont-tabla .table-responsive .table thead,
+body.dark .cont-tabla .table-responsive .table tbody,
+body.dark .dataTable thead,
+body.dark .dataTable tbody,
+body.dark .dataTables_filter input[type="search"] {
+    border-color: #404040;
+}
+
+body.dark .alert-primary {
+    border-color: transparent;
+}
+
+body.dark .dataTable .btn-dark,
+body.dark .bg-dark {
+    background: #eeeeee !important;
+    border-color: #eeeeee !important;
+    color: #212529 !important;
+}
+
+body.dark #agenda #verCitasInput {
+    background-color: #272829 !important;
+    border: 1px solid #6c6c6c !important;
+    color: #fff !important;
+}
+
+body.dark #myTab .nav-link.active {
+    background: #272829;
+    color: #a9a9a9;
+}
+
+body.dark .fc-theme-standard .fc-scrollgrid,
+body.dark .fc-theme-standard td,
+body.dark .fc-theme-standard th,
+body.dark .card-footer {
+    border-color: #5b5b5b;
+}
+
+body.dark #contTabla .table-responsive .table tbody td,
+body.dark .cont-tabla .table-responsive .table tbody td {
+    color: #dadada;
+}
+
+body.dark #contPendientes .accordion-item {
+    background-color: #a9a9a9 !important;
+}
+
+body.dark #detallesModal .accordion-item,
+body.dark #busquedaModal .accordion-item {
+    border-color: #404040;
+}
+
+body.dark
+    .swal2-container:not(.swal2-top):not(.swal2-top-start):not(
+        .swal2-top-end
+    ):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(
+        .swal2-center-end
+    ):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(
+        .swal2-bottom-start
+    ):not(.swal2-bottom-end):not(.swal2-bottom-left):not(
+        .swal2-bottom-right
+    ):not(.swal2-grow-fullscreen)
+    > .swal2-modal {
+    background: #343434;
+    color: #fff;
+}
+
+body.dark .swal2-header .swal2-title,
+body.dark .swal2-content .swal2-html-container {
+    color: #fff;
+}
+
+body.dark .sidebar,
+body.dark .sidebar .nav-link,
+body.dark .card {
+    transition: 1s;
+}
+
+body.dark .sidebar-nav .nav-link:hover {
+    background: #343434 !important;
+    color: #fff;
+}
+
+body.dark .msger {
+    border-color: #272829;
+}
+
+body.dark .msger-header,
+body.dark .msger-inputarea {
+    background: #272829;
+    color: #fff;
+}
+
+body.dark .msger-inputarea input {
+    background: #424242;
+    color: #fff;
+}
+
+body.dark .msger-inputarea input::placeholder {
+    color: #fff;
+}
+
+body.dark .msger-chat {
+    background-image: url("../img/fondo_chat_dark.jpg");
 }

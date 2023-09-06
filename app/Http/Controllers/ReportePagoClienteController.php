@@ -49,10 +49,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.tipo_id", 1)
             ->distinct("contrato.id")
             ->orderBy('contrato.id', 'DESC')
@@ -90,10 +87,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.tipo_id", 1)
             ->orderBy('contrato.id', 'DESC')
             ->distinct()
@@ -131,10 +125,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.tipo_id", 2)
             ->orderBy('contrato.id', 'DESC')
             ->distinct()
@@ -172,10 +163,7 @@ class ReportePagoClienteController extends Controller
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
             ->where("contrato.tipo_id", 2)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->distinct()
             ->get();
@@ -211,10 +199,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.tipo_id", 1)
             ->where("pago_cliente.serie", 12)
             ->distinct("contrato.id")
@@ -254,10 +239,7 @@ class ReportePagoClienteController extends Controller
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
             ->where("pago_cliente.serie", 12)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->orderBy('contrato.id', 'DESC')
             ->distinct()
             ->get();
@@ -295,10 +277,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.moneda", "dolares")
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
@@ -317,10 +296,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.moneda", "euros")
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')
@@ -339,10 +315,7 @@ class ReportePagoClienteController extends Controller
                 ->orWhere("contrato.cliente_id", "like", $clienteid);
             })
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Activado")
-                ->orWhere("contrato.status", "Finiquitado");
-            })
+            ->where("contrato.status", "Activado")
             ->where("contrato.moneda", "francos")
             ->distinct("clientenombre")
             ->orderBy('contrato.id', 'DESC')

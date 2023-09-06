@@ -137,7 +137,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control" placeholder="Ingresa la redacción de la cláusula" id="redaccionInput" name="redaccion" style="height: 100px; text-transform: none !important;" required></textarea>
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la redacción de la cláusula" id="redaccionInput" name="redaccion" style="height: 220px; text-transform: none !important;" required></textarea>
                                     <label for="redaccionInput">Redacción de la cláusula</label>
                                 </div>
                             </div>

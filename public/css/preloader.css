@@ -8,7 +8,7 @@
     transition: all 1s ease;
     z-index: 999999999999;
     top: 0;
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -51,7 +51,7 @@
 .loader h1 {
     color: #fff;
     margin-top: 6rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 1.5rem;
 }
 
@@ -143,4 +143,16 @@
     100% {
         -o-transform: translateX(-20px);
     }
+}
+
+body.dark .loader {
+    background: #353637 !important;
+}
+
+body.dark .loader span:nth-child(3) {
+    background: #00aec6 !important;
+}
+
+body.dark .loader span:nth-child(4) {
+    background: #008a9c !important;
 }
