@@ -468,6 +468,7 @@ class ContratoController extends Controller
             $contrato->fecha_carga = date('Y-m-d H:i:s', strtotime("now"));
             $contrato->moneda = $request->input('moneda');
 
+            $contratoNum = 0;
             if (empty($request->status)) {
                 $contrato->contrato = strtoupper($request->input('contrato'));
                 $contrato->status = "Pendiente de activación";
@@ -655,7 +656,11 @@ class ContratoController extends Controller
             }
             
             $capertura = $tipo_contrato[0]->capertura;
-            $capertura = $capertura * .01;
+            if($request->status == "Refrendado" && $contratoNum != 0){
+                $capertura = 2 * .01;
+            }else{
+                $capertura = $capertura * .01;
+            }
 
             $cmensual = $tipo_contrato[0]->cmensual;
             $cmensual = $cmensual * .001;
@@ -984,6 +989,9 @@ class ContratoController extends Controller
             $contrato->inversion_chf = $request->input('inversion_chf');
             $contrato->inversion_letra_chf = $request->input('inversion_letra_chf');
             $contrato->moneda = $request->input('moneda');
+
+            $contratoRef = 0;
+            $contratoRefCond = 0;
             if ($request->status == "Refrendado") {
                 $contrato->status = "Activado";
                 $contratoAct = explode("-", $request->contrato);
@@ -992,6 +1000,9 @@ class ContratoController extends Controller
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
                 $contrato->contrato = strtoupper($contratoRef);
             } else {
+                $contratoAct = explode("-", $request->contrato);
+                $contratoRefCond = intval($contratoAct[2]) + 1;
+
                 $contrato->contrato = strtoupper($request->input('contrato'));
                 $contrato->status = $request->input('status');
             }
@@ -1074,8 +1085,13 @@ class ContratoController extends Controller
             DB::table('beneficiario')->where('contrato_id', '=', $contrato_id)->delete();
             DB::table('amortizacion')->where('contrato_id', '=', $contrato_id)->delete();
             if($request->status != "Refrendado"){
-                DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->delete();
-                DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->delete();
+                if($contratoRefCond > 0){
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(13)->delete();
+                    DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(13)->delete();
+                }else{
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->delete();
+                    DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->delete();
+                }
             }
 
             $periodo = $request->input('periodo');
@@ -1128,7 +1144,15 @@ class ContratoController extends Controller
             }
 
             $capertura = $tipo_contrato[0]->capertura;
-            $capertura = $capertura * .01;
+            if($request->status == "Refrendado" && $contratoRef != 0){
+                $capertura = 2 * .01;
+            }else{
+                if($contratoRefCond > 0){
+                    $capertura = 2 * .01;
+                }else{
+                    $capertura = $capertura * .01;
+                }
+            }
 
             $cmensual = $tipo_contrato[0]->cmensual;
             $cmensual = $cmensual * .001;
@@ -1507,17 +1531,17 @@ class ContratoController extends Controller
 
     public function enviarTelegram(Request $request)
     {
-        $contrato = explode("Número de contrato: ", $request->mensaje);
-        \Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-            'parse_mode' => 'HTML',
-            'text' => $contrato[0]
-        ]);
+        // $contrato = explode("Número de contrato: ", $request->mensaje);
+        // \Telegram::sendMessage([
+        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+        //     'parse_mode' => 'HTML',
+        //     'text' => $contrato[0]
+        // ]);
 
-        \Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-            'parse_mode' => 'HTML',
-            'text' => $contrato[1]
-        ]);
+        // \Telegram::sendMessage([
+        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+        //     'parse_mode' => 'HTML',
+        //     'text' => $contrato[1]
+        // ]);
     }
 }

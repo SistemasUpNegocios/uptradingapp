@@ -3105,6 +3105,10 @@ pre {
     color: #fff;
 }
 
+#switch i {
+    color: #fff;
+}
+
 body.dark::-webkit-scrollbar-track {
     background-color: #383838 !important;
 }
@@ -3192,6 +3196,8 @@ body.dark .dropdown-menu input::placeholder,
 body.dark #myTab .nav-link,
 body.dark .dataTable thead th,
 body.dark .dataTable tbody td,
+body.dark #contOficinas .card .card-body .table thead th,
+body.dark #contOficinas .card .card-body .table tbody td,
 body.dark #contTabla .table-responsive .table thead th,
 body.dark #contTabla .table-responsive .table tbody th,
 body.dark .cont-tabla .table-responsive .table thead th,
@@ -3300,8 +3306,8 @@ body.dark #busquedaModal .accordion-header .accordion-button {
     border-color: #404040;
 }
 
-body.dark .cont-tabla .table-responsive .table thead,
-body.dark .cont-tabla .table-responsive .table tbody,
+body.dark #contOficinas .card .card-body .table thead,
+body.dark #contOficinas .card .card-body .table tbody,
 body.dark .cont-tabla .table-responsive .table thead,
 body.dark .cont-tabla .table-responsive .table tbody,
 body.dark .dataTable thead,
@@ -3405,4 +3411,8 @@ body.dark .msger-inputarea input::placeholder {
 
 body.dark .msger-chat {
     background-image: url("../img/fondo_chat_dark.jpg");
+}
+
+body.dark .swal2-input {
+    color: #fff;
 }

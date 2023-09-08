@@ -43,21 +43,38 @@
             }
         },
     });
+    //EURO
     $.ajax({
-        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/EUR/MXN",
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF46410/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp", //Se utiliza JSONP para realizar la consulta cross-site
         success: function (response) {
-            //EURO
-            let euro = response.conversion_rate;
-            console.log(euro.toFixed(2));
-            $("#tipoCambioInputEURCal").val(euro.toFixed(2));
+            //Handler de la respuesta
+            var series = response.bmx.series;
+            for (var i in series) {
+                var serie = series[i];
+
+                var precioEuro = parseFloat(serie.datos[0].dato);
+
+                $("#tipoCambioInputEURCal").val(precioEuro.toFixed(2));
+            }
         },
     });
+    //FRANCO SUIZO
     $.ajax({
-        url: "https://v6.exchangerate-api.com/v6/5ca3cf09daf4c0bb88a456a0/pair/CHF/MXN",
+        url: "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF57905/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b",
+        jsonp: "callback",
+        dataType: "jsonp", //Se utiliza JSONP para realizar la consulta cross-site
         success: function (response) {
-            //FRANCO SUIZO
-            let franco = response.conversion_rate;
-            $("#tipoCambioInputCHFCal").val(franco.toFixed(2));
+            //Handler de la respuesta
+            var series = response.bmx.series;
+            for (var i in series) {
+                var serie = series[i];
+
+                var precioFranco = parseFloat(serie.datos[0].dato);
+
+                $("#tipoCambioInputCHFCal").val(precioFranco.toFixed(2));
+            }
         },
     });
 

@@ -46,7 +46,7 @@
         @foreach ($lista_ps as $ps)
           @php
 
-            $contratosPS = new \ArrayObject(array());
+            // $contratosPS = new \ArrayObject(array());
             $contratos = DB::table('contrato')
               ->join('ps', 'ps.id', '=', 'contrato.ps_id')
               ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -59,22 +59,22 @@
               ->where("contrato.status", "Activado")
               ->get();
 
-            foreach ($contratos as $resum) {
-              $psCorreoCon = DB::table('contrato')
-              ->join('ps', 'ps.id', 'contrato.ps_id')
-              ->join('cliente', 'cliente.id', 'contrato.cliente_id')
-              ->where('ps.id', $ps->id)
-              ->where('ps.correo_institucional', $resum->correops)
-              ->where('cliente.correo_institucional', $resum->correops)
-              ->get();
+            // foreach ($contratos as $resum) {
+            //   $psCorreoCon = DB::table('contrato')
+            //   ->join('ps', 'ps.id', 'contrato.ps_id')
+            //   ->join('cliente', 'cliente.id', 'contrato.cliente_id')
+            //   ->where('ps.id', $ps->id)
+            //   ->where('ps.correo_institucional', $resum->correops)
+            //   ->where('cliente.correo_institucional', $resum->correops)
+            //   ->get();
 
-              $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-              if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) > 0) {
-                $contratosPS->append($resum);
-              }
-            }
+            //   $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
+            //   if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) > 0) {
+            //     $contratosPS->append($resum);
+            //   }
+            // }
 
-            $conveniosPS = new \ArrayObject(array());
+            // $conveniosPS = new \ArrayObject(array());
             $convenios = DB::table('convenio')
               ->join('ps', 'ps.id', '=', 'convenio.ps_id')
               ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
@@ -87,28 +87,28 @@
               ->where("convenio.status", "Activado")
               ->get();
 
-            foreach ($convenios as $resum) {
-              $psCorreoCon = DB::table('convenio')
-              ->join('ps', 'ps.id', 'convenio.ps_id')
-              ->join('cliente', 'cliente.id', 'convenio.cliente_id')
-              ->where('ps.id', $ps->id)
-              ->where('ps.correo_institucional', $resum->correops)
-              ->where('cliente.correo_institucional', $resum->correops)
-              ->get();
+            // foreach ($convenios as $resum) {
+            //   $psCorreoCon = DB::table('convenio')
+            //   ->join('ps', 'ps.id', 'convenio.ps_id')
+            //   ->join('cliente', 'cliente.id', 'convenio.cliente_id')
+            //   ->where('ps.id', $ps->id)
+            //   ->where('ps.correo_institucional', $resum->correops)
+            //   ->where('cliente.correo_institucional', $resum->correops)
+            //   ->get();
 
-              $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-              if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) <= 0) {
-                $conveniosPS->append($resum);
-              }
-            }
+            //   $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
+            //   if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) <= 0) {
+            //     $conveniosPS->append($resum);
+            //   }
+            // }
 
             $pago_total = 0;
 
-            foreach ($contratosPS as $contrato) {
+            foreach ($contratos as $contrato) {
               $pago_total += $contrato->pago;
             }
 
-            foreach ($conveniosPS as $convenio) {
+            foreach ($convenios as $convenio) {
               $pago_total += $convenio->pago;
             }
 
