@@ -140,6 +140,7 @@ Route::get('/admin/editStatusConvenioOficina', [App\Http\Controllers\ConvenioCon
 Route::get('/admin/cuentasmam', [App\Http\Controllers\CuentaMamController::class, 'index'])->name('cuentamam');
 Route::get('/admin/showCuentasMam', [App\Http\Controllers\CuentaMamController::class, 'getCuentasMam']);
 Route::get('/admin/generarCuentaMam', [App\Http\Controllers\CuentaMamController::class, 'generarCuentaMam']);
+Route::post('/admin/enviarReporteMam', [App\Http\Controllers\CuentaMamController::class, 'import']);
 
 // Rutas para gestión de convenio terminado
 Route::get('/admin/convenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'index'])->name('convenioTerminado');
@@ -439,3 +440,29 @@ Route::get('/admin/notas', [App\Http\Controllers\NotaController::class, 'index']
 Route::post('/admin/addNota', [App\Http\Controllers\NotaController::class, 'addNota']);
 Route::post('/admin/editNota', [App\Http\Controllers\NotaController::class, 'editNota']);
 Route::post('/admin/deleteNota', [App\Http\Controllers\NotaController::class, 'deleteNota']);
+
+// Rutas para pagos anteriores a clientes
+Route::get('/admin/pago-anterior-cliente', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'index'])->name('reportepagoclienteanterior');
+Route::get('/admin/getResumenPagoClienteMensualAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteMensual']);
+Route::get('/admin/getResumenPagoClienteDiaMensualAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteDiaMensual']);
+Route::get('/admin/getResumenPagoClienteCompuestoAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteCompuesto']);
+Route::get('/admin/getResumenPagoClienteDiaCompuestoAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteDiaCompuesto']);
+Route::get('/admin/getResumenPagoClienteLiquidacionAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteLiquidacion']);
+Route::get('/admin/getResumenPagoClienteDiaLiquidacionAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getResumenPagoClienteDiaLiquidacion']);
+Route::get('/admin/imprimirResumenClienteAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'imprimirResumenCliente']);
+Route::get('/admin/imprimirReporteClienteAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getReportePago']);
+Route::get('/admin/tiposPagosClientesAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'tiposPagosClientes']);
+Route::get('/admin/exportarResumenClienteAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'export']);
+Route::get('/admin/showClavePagoClienteAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'getClave']);
+Route::get('/admin/editStatusPagoClienteAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'editStatus']);
+Route::post('/admin/guardarPagoAnterior', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'guardarPago']);
+
+// Rutas para pagos anteriores a PS
+Route::get('/admin/pago-anterior-ps', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'index'])->name('reportepagopsanterior');
+Route::get('/admin/getResumenPagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'getResumenPagoPs']);
+Route::get('/admin/getResumenPagoPsDiaAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'getResumenPagoPsDia']);
+Route::get('/admin/imprimirReportePsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'getReportePagoPs']);
+Route::get('/admin/exportarResumenPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'exportPs']);
+Route::get('/admin/showClavePagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'getClave']);
+Route::get('/admin/editStatusPagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'editStatus']);
+Route::post('/admin/guardarPagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'guardarPago']);

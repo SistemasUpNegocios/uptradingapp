@@ -108,13 +108,13 @@ class TicketController extends Controller
         $tickets_user_abiertos = Ticket::join("users", "users.id", "ticket.generado_por")
         ->select(DB::raw("ticket.id as ticketid, CONCAT(users.nombre, ' ', users.apellido_p, ' ', users.apellido_m) AS usuarionombre, ticket.fecha_generado, ticket.asignado_a, ticket.fecha_limite, ticket.departamento, ticket.asunto, ticket.descripcion, ticket.status"))
         ->whereIn('ticket.id', $tickets_arr_abier)
-        ->orderBy("ticket.id", "ASC")
+        ->orderBy("ticket.id", "DESC")
         ->get();
 
         $tickets_user_procesos = Ticket::join("users", "users.id", "ticket.generado_por")
         ->select(DB::raw("ticket.id as ticketid, CONCAT(users.nombre, ' ', users.apellido_p, ' ', users.apellido_m) AS usuarionombre, ticket.fecha_generado, ticket.asignado_a, ticket.fecha_limite, ticket.departamento, ticket.asunto, ticket.descripcion, ticket.status"))
         ->whereIn('ticket.id', $tickets_arr_proce)
-        ->orderBy("ticket.id", "ASC")
+        ->orderBy("ticket.id", "DESC")
         ->get();
 
         $tickets_user_cancelados = Ticket::join("users", "users.id", "ticket.generado_por")

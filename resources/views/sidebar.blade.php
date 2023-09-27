@@ -463,6 +463,26 @@
                 </ul>
             </li>
         @endif
+
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#pagos-anteriores-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-cash-stack"></i><span>Otros pagos</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="pagos-anteriores-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ URL::to('admin/pago-anterior-ps') }}">
+                            <i class="bi bi-circle"></i><span>Pago a PS (cancelados/terminados)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/pago-anterior-cliente') }}">
+                            <i class="bi bi-circle"></i><span>Pagos a clientes (cancelados/terminados)</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
         
         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
             <li class="nav-item">
@@ -558,8 +578,8 @@
         @endif
         <li class="nav-item">
             <button class="switch" id="switch">
-                <i class="bi bi-sun-fill"></i>
                 <i class="bi bi-moon-fill"></i>
+                <i class="bi bi-sun-fill"></i>
             </button>
         </li>
 

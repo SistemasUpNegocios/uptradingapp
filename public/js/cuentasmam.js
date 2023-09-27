@@ -299,6 +299,62 @@ $(document).ready(function () {
         // );
     });
 
+    $("#cuentaMamFormReporte").on("submit", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '<h2 style="font-family: Poppins;">Se están generando los reportes y enviando por correo, por favor espere...</h2>',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/enviarReporteMam",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function () {
+                Swal.close();
+                $("#formModalReporte").modal("hide");
+                Swal.fire({
+                    icon: "success",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Reporte enviado</h1>',
+                    html: '<p style="font-family: Poppins">El reporte MAM ha sido enviado correctamente</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+            error: function (response) {
+                Swal.close();
+
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Reporte no enviado</h1>',
+                    html: '<p style="font-family: Poppins">El reporte MAM no pudo enviarse</p>',
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+
+                console.log(response);
+            },
+        });
+    });
+
+    $(document).on("click", ".generar_reporte", function (e) {
+        e.preventDefault();
+        $("#cuentaMamFormReporte")[0].reset();
+        $("#formModalReporte").modal("show");
+    });
+
     $(document).on("click", ".edit", function (e) {
         $("#cuentaMamForm")[0].reset();
 

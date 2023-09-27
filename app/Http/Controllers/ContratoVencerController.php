@@ -90,14 +90,15 @@ class ContratoVencerController extends Controller
         $log->bitacora_id = $bitacora_id;
         $log->save();
 
+        $fecha_renovacion_contrato = Carbon::parse($contrato_completo->fecha_renovacion)->format('d/m/Y');
         $ticket = new Ticket;
         $ticket->generado_por = auth()->user()->id;
         $ticket->asignado_a = "246".','.Carbon::now()->toDateTimeString();
         $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-        $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
+        $ticket->fecha_limite = Carbon::parse("$contrato_completo->fecha_renovacion 23:59")->toDateTimeString();
         $ticket->departamento = "Egresos";
         $ticket->asunto = "Nota de contrato a vencer";
-        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.\nFecha de termino: $contrato_completo->fecha_renovacion.";
+        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.\nFecha de termino: $fecha_renovacion_contrato.\nLink: <a href='https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id' target='_blank'>https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id</a>";
         $ticket->status = "Abierto";
         $ticket->save();
 

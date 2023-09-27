@@ -77,7 +77,14 @@ $(document).ready(function () {
         $("#asuntoInput").val(asunto);
         $("#asuntoInput").prop("readonly", false);
 
-        $("#descripcionInput").val(descripcion);
+        let posicion = descripcion.indexOf("Link:");
+        if (posicion !== -1) {
+            let link = descripcion.slice(posicion + 6);
+            let link_limpio = link.replace(/<\/?[^>]+(>|$)/g, "");
+            $("#descripcionInput").val(descripcion.replace(link, link_limpio));
+        } else {
+            $("#descripcionInput").val(descripcion);
+        }
         $("#descripcionInput").prop("readonly", false);
 
         $.ajax({
@@ -128,7 +135,14 @@ $(document).ready(function () {
         $("#fecha_limite").text(fechalimite);
         $("#departamento").text(departamento);
         $("#asunto").text(asunto);
-        $("#descripcion").text(descripcion);
+        let posicion = descripcion.indexOf("Link:");
+        if (posicion !== -1) {
+            let link = descripcion.slice(posicion + 6);
+            link = `<a href="${link}" target="_blank">${link}</a>`;
+            $("#descripcion").html(descripcion.replace(link, ""));
+        } else {
+            $("#descripcion").text(descripcion);
+        }
         $("#estatus").text(status);
 
         $("#historial").empty();

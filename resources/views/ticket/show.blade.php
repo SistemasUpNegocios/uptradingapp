@@ -454,7 +454,7 @@
                     </div>
                     <div class="row">
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" placeholder="Ingresa la descripción del ticket" id="descripcionInput" name="descripcion" style="height: 150px; text-transform: none !important;" required></textarea>
+                            <textarea class="form-control" placeholder="Ingresa la descripción del ticket" id="descripcionInput" name="descripcion" style="height: 250px; text-transform: none !important;" required></textarea>
                             <label for="descripcionInput" class="ps-4">Descripción del ticket</label>
                         </div>
                     </div>

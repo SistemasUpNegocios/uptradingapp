@@ -6,6 +6,7 @@ use App\Models\Banco;
 use App\Models\Cliente;
 use App\Models\BeneficiarioConvenio;
 use App\Models\Convenio;
+use App\Models\IncrementoConvenio;
 use App\Models\Log;
 use App\Models\Oficina;
 use App\Models\Notificacion;
@@ -108,7 +109,7 @@ class ConvenioController extends Controller
                 ->get();
         }
 
-        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->addColumn('incremento', 'convenio.incremento')->rawColumns(['btn'])->toJson();
     }
 
     public function getConvenioActivado()
@@ -169,7 +170,7 @@ class ConvenioController extends Controller
                 ->get();
         }
 
-        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->addColumn('incremento', 'convenio.incremento')->rawColumns(['btn'])->toJson();
     }
 
     public function getConvenioPendiente()
@@ -230,7 +231,7 @@ class ConvenioController extends Controller
                 ->get();
         }
 
-        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($convenio)->addColumn('btn', 'convenio.buttons')->addColumn('incremento', 'convenio.incremento')->rawColumns(['btn'])->toJson();
     }
 
     public function addConvenio(Request $request)
@@ -722,37 +723,32 @@ class ConvenioController extends Controller
             $opc = $request->opc;
 
             if ($opc == 1) {
-                $cliente = DB::table("cliente")
-                    ->select("codigoCliente")
-                    ->where("id", "=", $id)
-                    ->get();
 
+                $id_convenios = DB::table("convenio")->select("id")->where("cliente_id", "=", $id)->get();
+
+                $cliente = DB::table("cliente")->select("codigoCliente")->where("id", "=", $id)->get();
                 $codigoCliente = $cliente[0]->codigoCliente;
                 $codigoCliente = explode("-", $codigoCliente);
-
                 $codigoCliente = $codigoCliente[2];
 
-                $convenios = Convenio::where("cliente_id", $id)
-                    ->count();
+                $convenios = Convenio::where("cliente_id", $id)->count();
+
+                foreach ($id_convenios as $id_convenio) {
+                    $incremento_convenio = IncrementoConvenio::where("convenio_id", $id_convenio->id)->count();
+                    $convenios = $convenios + $incremento_convenio;
+                }
 
                 $convenios++;
 
-                if (strlen(strval($convenios)) == 1) {
-                    $convenios = '-MAM-0' . $convenios;
-                } else {
-                    $convenios = '-MAM-' . $convenios;
-                }
+                $convenios = str_pad($convenios, 2, "0", STR_PAD_LEFT);
+                $convenios = "-MAM-$convenios";
 
                 return response($codigoCliente . $convenios . '-00', 200);
             } elseif ($opc == 2) {
-                $ps = Ps::where("id", $id)
-                    ->get();
+                $ps = Ps::where("id", $id)->get();
 
                 $oficina_id = $ps[0]->oficina_id;
-
-                $oficina = Oficina::where("id", $oficina_id)
-                    ->get();
-
+                $oficina = Oficina::where("id", $oficina_id)->get();
                 $codigo_oficina = $oficina[0]->codigo_oficina;
 
                 return response($codigo_oficina, 200);

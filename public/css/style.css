@@ -3054,7 +3054,8 @@ pre {
                   DARK MODE
 -----------------------------------------------*/
 .switch {
-    background: #343d5b;
+    background: #ffa500;
+    color: #000;
     border-radius: 1000px;
     border: none;
     position: relative;
@@ -3087,8 +3088,8 @@ pre {
 }
 
 .switch.active_darkmode {
-    background: orange;
-    color: #000;
+    background: #343d5b;
+    color: #fff;
 }
 
 .switch.active_darkmode::after {
@@ -3286,7 +3287,8 @@ body.dark .selectSearch .dselect-placeholder {
     color: #fff !important;
 }
 
-body.dark .file-upload {
+body.dark .file-upload,
+body.dark .file-uploadScanner1 {
     background: #272829;
 }
 
@@ -3350,6 +3352,11 @@ body.dark .cont-tabla .table-responsive .table tbody td {
     color: #dadada;
 }
 
+body.dark .page-item.active .page-link {
+    background: #3c4650 !important;
+    border-color: #3c4650 !important;
+}
+
 body.dark #contPendientes .accordion-item {
     background-color: #a9a9a9 !important;
 }
@@ -3369,7 +3376,9 @@ body.dark
     ):not(.swal2-bottom-end):not(.swal2-bottom-left):not(
         .swal2-bottom-right
     ):not(.swal2-grow-fullscreen)
-    > .swal2-modal {
+    > .swal2-modal,
+body.dark .swal2-popup.swal2-toast,
+body.dark .swal2-footer {
     background: #343434;
     color: #fff;
 }
@@ -3377,12 +3386,6 @@ body.dark
 body.dark .swal2-header .swal2-title,
 body.dark .swal2-content .swal2-html-container {
     color: #fff;
-}
-
-body.dark .sidebar,
-body.dark .sidebar .nav-link,
-body.dark .card {
-    transition: 1s;
 }
 
 body.dark .sidebar-nav .nav-link:hover {

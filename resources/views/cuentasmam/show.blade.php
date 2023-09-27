@@ -23,6 +23,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
+                        <div class="mb-4">
+                            <button class="btn principal-button generar_reporte">Enviar reporte general <i class="bi bi-file-earmark-pdf"></i></button>
+                        </div>
                         <table class="table table-striped table-bordered nowrap text-center" id="cuentasmam">
                             <thead>
                                 <tr>
@@ -145,6 +148,43 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn principal-button" id="btnSubmit">Enviar reporte</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="formModalReporte" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleReporte">Enviar reporte general</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="cuentaMamFormReporte" method="post">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Subir reporte completo
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-12 mb-3">
+                                <label for="documentoReporteInput" class="form-label">Reporte general</label>
+                                <input type="file" id="documentoReporteInput" class="form-control form-control-sm" name="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancelReporte" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn principal-button" id="btnSubmitReporte">Enviar reporte</button>
                     </div>
                 </form>
             </div>

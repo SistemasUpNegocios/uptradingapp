@@ -462,10 +462,6 @@ $(document).ready(function () {
             "btn-outline-primary",
             "btn-outline-primary",
             "btn-outline-primary",
-            "btn-outline-primary",
-            "btn-outline-primary",
-            "btn-primary",
-            "btn-primary",
             "btn-primary",
             "btn-primary"
         );

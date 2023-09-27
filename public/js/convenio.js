@@ -24,6 +24,9 @@ $(document).ready(function () {
                 data: "loggin",
             },
             {
+                data: "incremento",
+            },
+            {
                 data: "status",
             },
             {
@@ -255,6 +258,9 @@ $(document).ready(function () {
                     data: "loggin",
                 },
                 {
+                    data: "incremento",
+                },
+                {
                     data: "status",
                 },
                 {
@@ -470,10 +476,6 @@ $(document).ready(function () {
             "btn-outline-primary",
             "btn-outline-primary",
             "btn-outline-primary",
-            "btn-outline-primary",
-            "btn-outline-primary",
-            "btn-primary",
-            "btn-primary",
             "btn-primary",
             "btn-primary"
         );
@@ -494,6 +496,9 @@ $(document).ready(function () {
                 },
                 {
                     data: "loggin",
+                },
+                {
+                    data: "incremento",
                 },
                 {
                     data: "status",
@@ -733,6 +738,9 @@ $(document).ready(function () {
                 },
                 {
                     data: "loggin",
+                },
+                {
+                    data: "incremento",
                 },
                 {
                     data: "status",

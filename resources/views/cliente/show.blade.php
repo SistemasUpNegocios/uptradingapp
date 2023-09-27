@@ -32,12 +32,12 @@
 
                 <div class="card">
                     <div class="card-body mt-3">
-                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
+                        {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                             <div class="d-flex justify-content-between align-items-center">
                                 <a class="btn principal-button mb-3 cuenta_mam me-1"> <i class="bi bi-printer-fill"></i> Obtener cuentas MAM (PDF)</a>
                                 <a id="exportarCuentasMam" class="btn principal-button mb-3 me-1"> <i class="bi bi-file-earmark-excel-fill"></i> Obtener cuentas MAM (Excel)</a>
                             </div>
-                        @endif
+                        @endif --}}
                         <div class="d-flex justify-content-between align-items-center">
                             @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_diamond)
                                 <a class="btn principal-button mb-3 new me-1" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo cliente</a>

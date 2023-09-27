@@ -80,23 +80,27 @@
     <tbody>
         <tr>
             <td><b>Capital inicial de inversión</b></td>
-            <td>${{ number_format($capital, 2) }}</td>
+            <td>${{$capital}}</td>
         </tr>
         <tr>
             <td><b>Aumento a capital</b></td>
-            <td>${{ number_format($aumento, 2) }}</td>
+            <td>${{$aumento}}</td>
+        </tr>
+        <tr>
+          <td><b>Fecha de aumento a capital</b></td>
+          <td>{{$fecha_aumento}}</td>
         </tr>
         <tr>
             <td><b>Balance de la cuenta</b></td>
-            <td>${{ number_format($balance, 2) }}</td>
+            <td>${{$balance}}</td>
         </tr>
         <tr>
             <td><b>Flotante total</b></td>
-            <td>${{ number_format($flotante, 2) }}</td>
+            <td>${{$flotante}}</td>
         </tr>
         <tr>
             <td><b>Retiro sugerido</b></td>
-            <td>${{ number_format($retiro, 2) }}</td>
+            <td>${{$retiro}}</td>
         </tr>
     </tbody>
   </table>

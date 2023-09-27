@@ -5,7 +5,7 @@ $(document).ready(function () {
         },
     });
 
-    let url_filtro = "/admin/getResumenPagoClienteDiaMensual";
+    let url_filtro = "/admin/getResumenPagoClienteDiaMensualAnterior";
     let filtro = "mensual";
     let dolar = 0;
     let table = "";
@@ -344,7 +344,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "/admin/editStatusPagoCliente",
+            url: "/admin/editStatusPagoClienteAnterior",
             data: {
                 id: id,
                 status: statusValor,
@@ -375,9 +375,9 @@ $(document).ready(function () {
         francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteCompuestoAnterior";
         }
 
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
@@ -479,9 +479,9 @@ $(document).ready(function () {
         francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteCompuestoAnterior";
         }
 
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
@@ -591,9 +591,9 @@ $(document).ready(function () {
         $("#botonActualizar").removeClass("d-none");
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteDiaMensual";
+            url_filtro = "/admin/getResumenPagoClienteDiaMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteDiaCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteDiaCompuestoAnterior";
         }
 
         dolar = $("#dolarInput").val();
@@ -663,7 +663,7 @@ $(document).ready(function () {
         let franco = $("#francoInput").val();
 
         window.open(
-            `/admin/imprimirResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`,
+            `/admin/imprimirResumenClienteAnterior?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`,
             "_blank"
         );
     });
@@ -676,7 +676,7 @@ $(document).ready(function () {
         let franco = $("#francoInput").val();
 
         window.open(
-            `/admin/exportarResumenCliente?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`
+            `/admin/exportarResumenClienteAnterior?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&dolar=${dolar}&euro=${euro}&franco=${franco}`
         );
     });
 
@@ -685,7 +685,7 @@ $(document).ready(function () {
         let fecha_fin = $("#fechaFinInput").val();
 
         window.open(
-            `/admin/tiposPagosClientes?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
+            `/admin/tiposPagosClientesAnterior?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`,
             "_blank"
         );
     });
@@ -740,7 +740,7 @@ $(document).ready(function () {
             }
 
             window.open(
-                `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}&moneda=${moneda}`,
+                `/admin/imprimirReporteClienteAnterior?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&reporte=${reporte}&moneda=${moneda}`,
                 "_blank"
             );
         } else {
@@ -854,7 +854,7 @@ $(document).ready(function () {
         }
 
         window.open(
-            `/admin/imprimirReporteCliente?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&moneda=${moneda}`,
+            `/admin/imprimirReporteClienteAnterior?pago=${pago}&cliente=${cliente}&rendimiento=${rendimiento}&fecha=${fecha}&contrato=${contrato}&letra=${letra}&rendimiento_dolar=${rendimiento_dolar}&letra_dolares=${letra_dolares}&reporte=${reporte}&dolar=${dolar}&contratoid=${contratoid}&fecha_imprimir=${date_valor}&tipo=${tipo}&moneda=${moneda}`,
             "_blank"
         );
     });
@@ -879,9 +879,9 @@ $(document).ready(function () {
         );
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteCompuestoAnterior";
         }
 
         $.ajax({
@@ -943,9 +943,9 @@ $(document).ready(function () {
         );
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteCompuestoAnterior";
         }
 
         $.ajax({
@@ -1007,9 +1007,9 @@ $(document).ready(function () {
         );
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            ("/admin/getResumenPagoClienteCompuestoAnterior");
         }
 
         $.ajax({
@@ -1188,11 +1188,11 @@ $(document).ready(function () {
         francos = $("#francoInput").val();
 
         if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
+            url_filtro = "/admin/getResumenPagoClienteMensualAnterior";
         } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
+            url_filtro = "/admin/getResumenPagoClienteCompuestoAnterior";
         } else if (filtro == "liquidacion") {
-            url_filtro = "/admin/getResumenPagoClienteLiquidacion";
+            url_filtro = "/admin/getResumenPagoClienteLiquidacionAnterior";
         }
 
         $.ajax({
@@ -1452,7 +1452,7 @@ $(document).ready(function () {
         $("#pagoInputNota").val(pago);
         $("#dolarInputNota").val(dolar);
 
-        $("#notaForm").attr("action", "/admin/guardarPago");
+        $("#notaForm").attr("action", "/admin/guardarPagoAnterior");
     });
 
     $(document).on("change", "#efectivoInput", () => {

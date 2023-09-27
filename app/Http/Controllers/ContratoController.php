@@ -1001,7 +1001,7 @@ class ContratoController extends Controller
                 $contrato->contrato = strtoupper($contratoRef);
             } else {
                 $contratoAct = explode("-", $request->contrato);
-                $contratoRefCond = intval($contratoAct[2]) + 1;
+                $contratoRefCond = intval($contratoAct[2]);
 
                 $contrato->contrato = strtoupper($request->input('contrato'));
                 $contrato->status = $request->input('status');
@@ -1531,17 +1531,17 @@ class ContratoController extends Controller
 
     public function enviarTelegram(Request $request)
     {
-        // $contrato = explode("Número de contrato: ", $request->mensaje);
-        // \Telegram::sendMessage([
-        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-        //     'parse_mode' => 'HTML',
-        //     'text' => $contrato[0]
-        // ]);
+        $contrato = explode("Número de contrato: ", $request->mensaje);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[0]
+        ]);
 
-        // \Telegram::sendMessage([
-        //     'chat_id' => env('TELEGRAM_CHANNEL_ID'),
-        //     'parse_mode' => 'HTML',
-        //     'text' => $contrato[1]
-        // ]);
+        \Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID'),
+            'parse_mode' => 'HTML',
+            'text' => $contrato[1]
+        ]);
     }
 }
