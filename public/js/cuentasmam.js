@@ -240,6 +240,7 @@ $(document).ready(function () {
 
         let id = $("#idInput").val();
         let folio = $("#folioInput").val();
+        let loggin = $("#logginInput").val();
         let cliente = $("#clienteInput").val();
         let correo = $("#correoInput").val();
         let fecha_inicio = $("#fechaInicioInput").val();
@@ -248,12 +249,15 @@ $(document).ready(function () {
         let balance = $("#balanceInput").val();
         let flotante = $("#flotanteInput").val();
         let retiro = $("#retiroInput").val();
+        let fecha_aumento = $("#fechaAumentoInput").val();
+        let aumento = $("#aumentoInput").val();
 
         $.ajax({
             type: "GET",
             data: {
                 id,
                 folio,
+                loggin,
                 cliente,
                 correo,
                 fecha_inicio,
@@ -262,6 +266,8 @@ $(document).ready(function () {
                 balance,
                 flotante,
                 retiro,
+                fecha_aumento,
+                aumento,
             },
             url: "/admin/generarCuentaMam",
             success: function (response) {
@@ -292,11 +298,6 @@ $(document).ready(function () {
                 console.log(response);
             },
         });
-
-        // window.open(
-        //     `/admin/generarCuentaMam?id=${id}&folio=${folio}&cliente=${cliente}&fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}&capital=${capital}&balance=${balance}&flotante=${flotante}&retiro=${retiro}`,
-        //     "_blank"
-        // );
     });
 
     $("#cuentaMamFormReporte").on("submit", function (e) {
@@ -364,6 +365,7 @@ $(document).ready(function () {
 
         var id = $(this).data("id");
         var folio = $(this).data("folio");
+        var loggin = $(this).data("loggin");
         var nombrecliente = $(this).data("nombrecliente");
         var correocliente = $(this).data("correocliente");
         var monto = $(this).data("monto");
@@ -375,6 +377,7 @@ $(document).ready(function () {
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
+        $("#logginInput").val(loggin);
         $("#correoInput").val(correocliente);
 
         $("#clienteInput").val(nombrecliente);

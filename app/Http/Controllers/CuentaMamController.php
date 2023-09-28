@@ -65,25 +65,18 @@ class CuentaMamController extends Controller
             $serie = str_pad($serie->serie, 2, "0", STR_PAD_LEFT);
         }
 
-        $aumento = IncrementoConvenio::where("convenio_id", $request->id)->get();
-        if(count($aumento) > 0){
-            $aumento = $aumento[0]->cantidad_incremento;
-            $fecha_aumento = $aumento[0]->fecha_inicio_incremento;
-        }else{
-            $aumento = 0;
-            $fecha_aumento = "NA";
-        }
-
         $fecha_inicio = Carbon::parse($request->fecha_inicio)->formatLocalized('%d de %B de %Y');
+        $request->fecha_aumento == '' ? $fecha_aumento = 'NA' : $fecha_aumento = Carbon::parse($request->fecha_aumento)->formatLocalized('%d de %B de %Y');
 
         $data = array(
             "convenio_id" => $request->id,
             "folio" => $request->folio,
+            "loggin" => $request->loggin,
             "cliente" => $request->cliente,
             "fecha_inicio" => $fecha_inicio,
             "fecha_fin" => $request->fecha_fin,
             "capital" => number_format($request->capital, 2),
-            "aumento" => number_format($aumento, 2),
+            "aumento" => number_format($request->aumento, 2),
             "fecha_aumento" => $fecha_aumento,
             "balance" => number_format($request->balance, 2),
             "flotante" => number_format($request->flotante, 2),
@@ -112,7 +105,6 @@ class CuentaMamController extends Controller
 
         $reader = new Xlsx();
         $excel = $reader->load($file);
-        $excel->setActiveSheetIndex(0);
         $numeroFilas = $excel->setActiveSheetIndex(0)->getHighestRow();
         
         for ($i = 2; $i <= $numeroFilas; $i++) { 
@@ -136,6 +128,7 @@ class CuentaMamController extends Controller
 
                 $data = array(
                     "folio" => $folio,
+                    "loggin" => $loggin,
                     "cliente" => $cliente,
                     "fecha_inicio" => $fecha_inicio,
                     "capital" => $capital,

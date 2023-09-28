@@ -64,6 +64,7 @@
                         @csrf
                         <input type="hidden" name="id" id="idInput">
                         <input type="hidden" name="correo" id="correoInput">
+                        <input type="hidden" name="loggin" id="logginInput">
                         <div class="col-12">
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
@@ -140,6 +141,22 @@
                                         placeholder="Ingresa el retiro sugerido" id="retiroInput" name="retiro"
                                         required>
                                     <label for="retiroInput">Retiro sugerido</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control"
+                                        placeholder="Ingresa la fecha del aumento" id="fechaAumentoInput" name="fecha_aumento">
+                                    <label for="fechaAumentoInput">Fecha del aumento</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="any" class="form-control"
+                                        placeholder="Ingresa el aumento" id="aumentoInput" name="aumento">
+                                    <label for="aumentoInput">Aumento a capital</label>
                                 </div>
                             </div>
                         </div>

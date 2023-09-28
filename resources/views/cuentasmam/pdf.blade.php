@@ -66,7 +66,7 @@
 
   <div class="mt-5 mr-5 ml-5 mb-3">
     <p class="parrafo_cuenta">
-        De conformidad con el convenio <b>{{$folio}}</b> de cuenta MAM a nombre de <b>{{$cliente}}</b>, se hace de su conocimiento, que al día de hoy con respecto a la operativa que se ha llevado en este periodo, tenemos como resultado acumulado, lo siguiente:
+        De conformidad con el convenio <b>{{$folio}}</b> de cuenta MAM a nombre de <b>{{$cliente}}</b> con login <b>{{$loggin}}</b>, se hace de su conocimiento, que al día de hoy con respecto a la operativa que se ha llevado en este periodo, tenemos como resultado acumulado, lo siguiente:
     </p>
   </div>
 
