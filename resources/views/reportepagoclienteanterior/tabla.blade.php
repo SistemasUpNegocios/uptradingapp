@@ -99,9 +99,9 @@
                         @elseif ($resumen->tipo_id == 1 && $reporte == "liquidacion")
                             <td class="d-flex align-items-center justify-content-center">
                                 @if($pagos_bd)
-                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-dolares="{{$resumen->pago}}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}" data-moneda="dolares"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-secondary nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $resumen->inversion_us }}" data-dolares="{{$resumen->pago}}" data-pago="{{$pago}}" data-id="{{$pagos_bd->id}}" data-monto="{{$pagos_bd->monto}}" data-tipopago="{{$pagos_bd->tipo_pago}}" data-moneda="dolares" data-reporte="{{$reporte}}"> <i class="bi bi-journal-text"></i></button>
                                 @else
-                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $rendimiento }}" data-dolares="{{$resumen->pago}}" data-pago="{{$pago}}" data-tipopagocliente="{{$resumen->tipo_pago}}" data-moneda="dolares"> <i class="bi bi-journal-text"></i></button>
+                                    <button title="Información de pago" class="btn btn-dark nota ms-1" style="font-size: 13px; padding: 7px" data-pagoid="{{$resumen->pagoid}}" data-contratoid="{{$resumen->contratoid}}" data-pesos="{{ $resumen->inversion_us }}" data-dolares="{{$resumen->pago}}" data-pago="{{$pago}}" data-tipopagocliente="{{$resumen->tipo_pago}}" data-moneda="dolares" data-reporte="{{$reporte}}"> <i class="bi bi-journal-text"></i></button>
                                 @endif
                                 
                                 <button class="btn btn-warning ms-1 reporte" style="font-size: 13px; padding: 7px" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$rendimiento}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{$fecha}}" data-contrato="{{$contrato}}" data-contratoid="{{ $resumen->contratoid }}" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-reporte="liquidacion" data-inversioneuros="{{$resumen->inversion_eur}}" data-inversionfrancos="{{$resumen->inversion_chf}}" data-moneda="dolares" title="Imprimir pago" id="imprimirReporte"><i class="bi bi-clipboard-data"></i></button>
@@ -169,8 +169,8 @@
                         $rendimiento = number_format($resumen->pago * $euro, 2);
 
                         if ($resumen->tipo_id == 1 && $reporte == "liquidacion"){
-                            $rendimiento_liquidacion = number_format($resumen->inversion_eur * $euro, 2);
-                            $pago_euros_liquidacion = number_format($resumen->inversion_eur, 2);
+                            $rendimiento_liquidacion = number_format($resumen->inversion_us * $euro, 2);
+                            $pago_euros_liquidacion = number_format($resumen->inversion_us, 2);
                         }else{
                             $rendimiento_liquidacion = $rendimiento;
                             $pago_euros_liquidacion = number_format($resumen->pago, 2);
@@ -281,8 +281,8 @@
                         $rendimiento = number_format($resumen->pago * $franco, 2);
 
                         if ($resumen->tipo_id == 1 && $reporte == "liquidacion"){
-                            $rendimiento_liquidacion = number_format($resumen->inversion_chf * $franco, 2);
-                            $pago_francos_liquidacion = number_format($resumen->inversion_chf, 2);
+                            $rendimiento_liquidacion = number_format($resumen->inversion_us * $franco, 2);
+                            $pago_francos_liquidacion = number_format($resumen->inversion_us, 2);
                         }else{
                             $rendimiento_liquidacion = $rendimiento;
                             $pago_francos_liquidacion = number_format($resumen->pago, 2);

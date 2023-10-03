@@ -1337,6 +1337,7 @@ $(document).ready(function () {
 
         let pagoid = $(this).data("pagoid");
         let contratoid = $(this).data("contratoid");
+        let reporte = $(this).data("reporte");
         let pago = $(this).data("pago");
         let moneda = $(this).data("moneda");
         let dolar = $("#dolarInput").val();
@@ -1351,10 +1352,16 @@ $(document).ready(function () {
 
         let monto = $(this).data("monto");
         pesos = $(this).data("pesos").toString().replaceAll(",", "");
+        let dolar_liq = $(this).data("pesos").toString().replaceAll(",", "");
         dolares = $(this).data("dolares").toString().replaceAll(",", ".");
         dolares = parseFloat(dolares);
         let tipopago = $(this).data("tipopago");
         let tipopagocliente = $(this).data("tipopagocliente");
+
+        if (reporte == "liquidacion") {
+            pesos = parseFloat(pesos) * parseFloat(dolar);
+            dolares = parseFloat(dolar_liq);
+        }
 
         let checkbox = [
             "#efectivoInput",

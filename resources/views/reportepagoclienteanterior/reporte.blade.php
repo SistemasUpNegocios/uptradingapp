@@ -50,9 +50,12 @@
       <p style="font-size: 12px; margin-bottom: 0 !important; color: #000">
         <b>Victoria de Durango, Durango a {{ \Carbon\Carbon::parse($fecha_imprimir)->formatLocalized('%d de %B de %Y') }}.</b>
       </p>
-      <p style="font-size: 13px; color: #000">
-        <u>Pago: {{ $pago }}</u>
-      </p>
+
+      @if($reporte == "mensual")
+        <p style="font-size: 13px; color: #000">
+          <u>Pago: {{ $pago }}</u>
+        </p>
+      @endif
     </div>
 
     @php
