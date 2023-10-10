@@ -38,8 +38,8 @@
             <div class="d-flex">
                 <div class="horizontal-card-bg-img"></div>
                 <div class="card-body">
-                    <h5 class="card-title">Oficina en {{ $oficina->ciudad }}</h5>
-                    <p class="card-text">Presiona el botón para ver los PS de la oficina en {{ $oficina->ciudad }}.</p>
+                    <h5 class="card-title">Oficina de {{ $oficina->ciudad }}</h5>
+                    <p class="card-text">Presiona el botón para ver los PS de la oficina de {{ $oficina->ciudad }}.</p>
                     <a href="#" data-id="{{ $oficina->id }}" class="btn btn-sm principal-button verOficina">Ver PS de {{ $oficina->ciudad }}</a>
                 </div>
             </div>
