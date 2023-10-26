@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\Drive;
 use Luecano\NumeroALetras\NumeroALetras;
+use Illuminate\Support\Facades\Http;
+use App\Models\TipoCambio;
 
 class Kernel extends ConsoleKernel
 {
@@ -2187,7 +2189,16 @@ class Kernel extends ConsoleKernel
         ->timezone('America/Mexico_City');
 
         //Tarea para mandar mensaje de cumpleaños
-        $schedule->call(function () { 
+        $schedule->call(function () {
+            $response = Http::get('https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=57389428453f8d1754c30564b6b915070587dc7102dd5fff2f5174edd623c90b');
+            $dolar = $response->json()['bmx']['series'][0]['datos'][0]['dato'];
+
+            $tipo_cambio = new TipoCambio;
+            $tipo_cambio->valor = $dolar;
+            $tipo_cambio->contrato_id = 478;
+            $tipo_cambio->memo = "Tipo de cambio del día";
+            $tipo_cambio->save();
+
             $clientes = DB::table('cliente')
                 ->select('id', 'nombre', 'correo_personal', 'mensaje')
                 ->whereRaw('DAY(fecha_nac) = DAY(CURDATE())')
@@ -2216,10 +2227,10 @@ class Kernel extends ConsoleKernel
         //Tareas para Bakups de archivos y base de datos y envier correos.
         $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
         $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
-        $schedule->call(function () { 
-            Drive::dispatch(); 
-        })->dailyAt("22:00")->timezone('America/Mexico_City');
-        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
+        // $schedule->call(function () { 
+        //     Drive::dispatch(); 
+        // })->dailyAt("22:00")->timezone('America/Mexico_City');
+        // $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**

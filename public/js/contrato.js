@@ -5209,4 +5209,8 @@ $(document).ready(function () {
         $("#contratosActivados").removeClass(contact_rem);
         $("#contratosPendientes").removeClass(contpend_rem);
     };
+
+    setInterval(() => {
+        table.ajax.reload(null, false);
+    }, 15000);
 });
