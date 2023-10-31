@@ -271,7 +271,6 @@ class TicketController extends Controller
     {
         if($request->privilegio == 'Administración') {
             $usuarios = User::select("id", "nombre", "apellido_p")
-                ->where("id", "!=", auth()->user()->id)
                 ->where(function ($query) {
                     $query->where('privilegio', 'admin')
                     ->orWhere('privilegio', "procesos");
@@ -280,19 +279,16 @@ class TicketController extends Controller
         }elseif($request->privilegio == 'Sistemas') {
             $usuarios = User::select("id", "nombre", "apellido_p")
                 ->where('id', 1)
-                ->where("id", "!=", auth()->user()->id)
                 ->get();
             return response($usuarios);
         }elseif($request->privilegio == 'Contabilidad') {
             $usuarios = User::select("id", "nombre", "apellido_p")
                 ->where('privilegio', 'contabilidad')
-                ->where("id", "!=", auth()->user()->id)
                 ->get();
             return response($usuarios);
         }elseif($request->privilegio == 'Egresos') {
             $usuarios = User::select("id", "nombre", "apellido_p")
                 ->where('privilegio', 'egresos')
-                ->where("id", "!=", auth()->user()->id)
                 ->get();
             return response($usuarios);
         }elseif($request->privilegio == 'edit_user') {

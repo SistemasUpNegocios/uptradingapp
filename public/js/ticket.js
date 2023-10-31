@@ -384,25 +384,6 @@ $(document).ready(function () {
                 archivado,
             },
             success: function () {
-                if (archivado == "si") {
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: sans-serif; font-weight: 700;">Ticket archivado</h1>',
-                        html: '<p style="font-family: sans-serif">El ticket ha sido archivado exitosamente</p>',
-                        confirmButtonText:
-                            '<a style="font-family: sans-serif">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "success",
-                        title: '<h1 style="font-family: sans-serif; font-weight: 700;">Ticket desarchivado</h1>',
-                        html: '<p style="font-family: sans-serif">El ticket ha sido desarchivado exitosamente</p>',
-                        confirmButtonText:
-                            '<a style="font-family: sans-serif">Aceptar</a>',
-                        confirmButtonColor: "#01bbcc",
-                    });
-                }
                 tabsTickets();
             },
             error: function () {

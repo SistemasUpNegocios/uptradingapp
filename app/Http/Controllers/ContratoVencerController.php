@@ -59,7 +59,7 @@ class ContratoVencerController extends Controller
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.comprobante_pago, contrato.nota_contrato, contrato.autorizacion_nota"))
             ->where("contrato.status", "Activado")
-            ->where("fecha_renovacion", "<=", Carbon::now()->addDays(15)->format('Y-m-d'))
+            ->where("fecha_renovacion", "<=", Carbon::now()->addDays(30)->format('Y-m-d'))
             ->where("fecha_renovacion", ">=", Carbon::now()->format('Y-m-d'))
             ->orderBy("fecha_renovacion", "ASC")
             ->get();
@@ -93,10 +93,10 @@ class ContratoVencerController extends Controller
         $fecha_renovacion_contrato = Carbon::parse($contrato_completo->fecha_renovacion)->format('d/m/Y');
         $ticket = new Ticket;
         $ticket->generado_por = auth()->user()->id;
-        $ticket->asignado_a = "246".','.Carbon::now()->toDateTimeString();
+        $ticket->asignado_a = $request->ticket_persona.','.Carbon::now()->toDateTimeString();
         $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-        $ticket->fecha_limite = Carbon::parse("$contrato_completo->fecha_renovacion 23:59")->toDateTimeString();
-        $ticket->departamento = "Egresos";
+        $ticket->fecha_limite = Carbon::parse("$contrato_completo->fecha_renovacion 23:59")->addDays(3)->toDateTimeString();
+        $ticket->departamento = $request->ticket_persona == '246' ? "Egresos" : "Administración";
         $ticket->asunto = "Nota de contrato a vencer";
         $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.\nFecha de termino: $fecha_renovacion_contrato.\nLink: <a href='https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id' target='_blank'>https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id</a>";
         $ticket->status = "Abierto";
@@ -115,7 +115,7 @@ class ContratoVencerController extends Controller
             $notificacion->titulo = "Ticket abierto";
             $notificacion->mensaje = "Tienes un nuevo ticket abierto con asunto: Nota de contrato a vencer";
             $notificacion->status = "Pendiente";
-            $notificacion->user_id = 246;
+            $notificacion->user_id = $request->ticket_persona;
             $notificacion->save();
 
             return response($ticket);

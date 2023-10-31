@@ -43,8 +43,6 @@
                                 <tr>
                                     <th data-priority="0" scope="col">Contrato</th>
                                     <th data-priority="0" scope="col">Cliente</th>
-                                    {{-- <th data-priority="0" scope="col">Inversión (USD)</th> --}}
-                                    {{-- <th data-priority="0" scope="col">Inversión (MXN)</th> --}}
                                     <th data-priority="0" scope="col">Fecha de inicio</th>
                                     <th data-priority="0" scope="col">Fecha de vencimiento</th>
                                     <th data-priority="0" scope="col">Acciones</th>
@@ -494,6 +492,19 @@
                     <form id="contratoFormNota" method="post">
                         @csrf
                         <input type="hidden" name="id" id="idInputNota">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label class="form-check-label me-2">¿Para quién es?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ticket_persona" id="maruInput" value="234" checked>
+                                    <label class="form-check-label" for="maruInput">Maru</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="ticket_persona" id="marlenInput" value="246">
+                                    <label class="form-check-label" for="marlenInput">Marlen</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">

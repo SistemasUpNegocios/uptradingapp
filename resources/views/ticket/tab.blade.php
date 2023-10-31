@@ -35,6 +35,24 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+    }elseif(sizeof($tickets_generado) > 0){
+        $clase_abiertos = '';
+        $nav_abiertos = '';
+
+        $clase_procesos = '';
+        $nav_procesos = '';
+
+        $clase_cancelados = '';
+        $nav_cancelados = '';
+
+        $clase_terminados = '';
+        $nav_terminados = '';
+
+        $clase_generados = 'show active';
+        $nav_generados = 'active';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }elseif(sizeof($tickets_user_cancelados) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -68,24 +86,6 @@
 
         $clase_generados = '';
         $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_generado) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = 'show active';
-        $nav_generados = 'active';
 
         $clase_archivados = '';
         $nav_archivados = '';

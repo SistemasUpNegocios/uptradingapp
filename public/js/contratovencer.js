@@ -11,35 +11,11 @@ $(document).ready(function () {
         confirmButtonColor: "#01bbcc",
     });
 
-    // const formatearCantidad = new Intl.NumberFormat("en-US", {
-    //     style: "currency",
-    //     currency: "USD",
-    //     minimumFractionDigits: 2,
-    // });
-
-    // const formatearCantidadMXN = new Intl.NumberFormat("es-MX", {
-    //     style: "currency",
-    //     currency: "MXN",
-    //     minimumFractionDigits: 2,
-    // });
-
     var table = $("#contratoVencer").DataTable({
         ajax: "/admin/showContratoVencer",
         columns: [
             { data: "contrato" },
             { data: "clientenombre" },
-            // {
-            //     data: "inversion_us",
-            //     render: function (data) {
-            //         return formatearCantidad.format(data);
-            //     },
-            // },
-            // {
-            //     data: "inversion",
-            //     render: function (data) {
-            //         return formatearCantidadMXN.format(data);
-            //     },
-            // },
             {
                 data: "fecha",
                 render: function (data) {
