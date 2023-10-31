@@ -13,7 +13,10 @@
         $nav_terminados = '';
 
         $clase_generados = '';
-        $nav_generados = ''; 
+        $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }elseif(sizeof($tickets_user_procesos) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -29,6 +32,9 @@
 
         $clase_generados = '';
         $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }elseif(sizeof($tickets_user_cancelados) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -44,6 +50,9 @@
 
         $clase_generados = '';
         $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }elseif(sizeof($tickets_user_terminados) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -59,6 +68,9 @@
 
         $clase_generados = '';
         $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }elseif(sizeof($tickets_generado) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -74,6 +86,27 @@
 
         $clase_generados = 'show active';
         $nav_generados = 'active';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
+    }elseif(sizeof($tickets_archivados) > 0){
+        $clase_abiertos = '';
+        $nav_abiertos = '';
+
+        $clase_procesos = '';
+        $nav_procesos = '';
+
+        $clase_cancelados = '';
+        $nav_cancelados = '';
+
+        $clase_terminados = '';
+        $nav_terminados = '';
+
+        $clase_generados = '';
+        $nav_generados = '';
+
+        $clase_archivados = 'show active';
+        $nav_archivados = 'active';
     }else{
         $clase_abiertos = 'show active';
         $nav_abiertos = 'active';
@@ -88,7 +121,10 @@
         $nav_terminados = '';
 
         $clase_generados = '';
-        $nav_generados = ''; 
+        $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
     }
 @endphp
 
@@ -132,10 +168,10 @@
             </div>
 
             <div class="card">
-                <div class="card-body mt-3">
+                <div class="card-body mt-3" id="contenidoTicket">
                     <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
                     @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">                            
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Tickets generados</button>
                             </li>
@@ -206,7 +242,10 @@
                                 <button class="nav-link {{$nav_terminados}}" id="terminados-tab" data-bs-toggle="tab" data-bs-target="#terminados-tab-pane" type="button" role="tab" aria-controls="terminados-tab-pane" aria-selected="false">Atendidos</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_generados}}" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Tickets generados</button>
+                                <button class="nav-link {{$nav_generados}}" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Generados</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {{$nav_archivados}}" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false">Archivados</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -378,6 +417,57 @@
                                                     </div>
                                                     <div class="boton_auto_ticket">
                                                         <a class="btn btn-sm btn-success edit" data-id="{{$ticket_generado->id}}" data-generado="{{$ticket_generado->usuarionombre}}" data-asignado="{{$ticket_generado->asignado_a}}" data-fechagenerado="{{$ticket_generado->fecha_generado}}" data-fechalimite="{{$ticket_generado->fecha_limite}}" data-departamento="{{$ticket_generado->departamento}}" data-asunto="{{$ticket_generado->asunto}}" data-descripcion="{{$ticket_generado->descripcion}}" data-status="{{$ticket_generado->status}}" title="Editar ticket">Editar ticket</a>
+                                                        <a class="btn btn-sm btn-secondary archivar" data-id="{{$ticket_generado->id}}" data-archivado="si" title="Archivar ticket">Archivar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="tab-pane fade {{$clase_archivados}}" id="archivados-tab-pane" role="tabpanel" aria-labelledby="archivados-tab" tabindex="0">
+                                @foreach ($tickets_archivado as $ticket_archivado)
+                                    <div class="col-lg-12 ps-3 pe-3">
+                                        <div class="card border-0 mb-4 mt-4">
+                                            <div class="flex-fill horizontal-card-bg-img2">
+                                                <div class="card-body ticket_body">
+                                                    <div>
+                                                        @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_archivado->fecha_limite)
+                                                            @php
+                                                                $now = Carbon\Carbon::now();
+                                                                $limit = Carbon\Carbon::parse($ticket_archivado->fecha_limite);
+                                                                $diff = $limit->diffForHumans();
+                                                            @endphp
+                                                            @if ($ticket_archivado->status == "Abierto" || $ticket_archivado->status == "En proceso")
+                                                                <span class="badge bg-danger mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket venció {{ $diff }} y no fue atendido ni cancelado</span>
+                                                            @elseif($ticket_archivado->status == "Cancelado")
+                                                                <span class="badge bg-warning text-dark mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue cancelado</span>
+                                                            @elseif($ticket_archivado->status == "Terminado")
+                                                                <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
+                                                            @endif
+                                                        @else
+                                                            @if ($ticket_archivado->status == "Abierto")
+                                                                <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket está abierto</span>
+                                                            @elseif($ticket_archivado->status == "En proceso")
+                                                                <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket está en proceso</span>
+                                                            @elseif($ticket_archivado->status == "Cancelado")
+                                                                <span class="badge bg-warning text-dark mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue cancelado</span>
+                                                            @elseif($ticket_archivado->status == "Terminado")
+                                                                <span class="badge bg-success mt-3"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
+                                                            @endif
+                                                        @endif
+                                                        <div class="font-weight-bold mt-3"><b>{{ $ticket_archivado->asunto }}</b></div>
+                                                        <div class="mb-3">
+                                                            @if (strlen($ticket_archivado->descripcion) >= 80)
+                                                                {{ substr($ticket_archivado->descripcion, 0, 80) }}...
+                                                            @else
+                                                                {{ substr($ticket_archivado->descripcion, 0, 30) }}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="boton_auto_ticket">
+                                                        <a class="btn btn-sm btn-success edit" data-id="{{$ticket_archivado->id}}" data-generado="{{$ticket_archivado->usuarionombre}}" data-asignado="{{$ticket_archivado->asignado_a}}" data-fechagenerado="{{$ticket_archivado->fecha_generado}}" data-fechalimite="{{$ticket_archivado->fecha_limite}}" data-departamento="{{$ticket_archivado->departamento}}" data-asunto="{{$ticket_archivado->asunto}}" data-descripcion="{{$ticket_archivado->descripcion}}" data-status="{{$ticket_archivado->status}}" title="Editar ticket">Editar ticket</a>
+                                                        <a class="btn btn-sm btn-secondary desarchivar" data-id="{{$ticket_archivado->id}}" data-archivado="no" title="Desarchivar ticket">Desarchivar</a>
                                                     </div>
                                                 </div>
                                             </div>

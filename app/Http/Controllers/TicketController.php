@@ -129,7 +129,8 @@ class TicketController extends Controller
         ->orderBy("ticket.id", "DESC")
         ->get();
 
-        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("id", "DESC")->get();
+        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
+        $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
@@ -138,6 +139,7 @@ class TicketController extends Controller
             "tickets_user_cancelados" => $tickets_user_cancelados,
             "tickets_user_terminados" => $tickets_user_terminados,
             "tickets_generado" => $tickets_generado,
+            "tickets_archivado" => $tickets_archivado,
         );
 
         return response()->view('ticket.show', $data, 200);
@@ -249,7 +251,8 @@ class TicketController extends Controller
             ->whereIn('ticket.id', $tickets_arr_term)
             ->get();
 
-        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->orderBy("id", "DESC")->get();
+        $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
+        $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
@@ -258,6 +261,7 @@ class TicketController extends Controller
             "tickets_user_cancelados" => $tickets_user_cancelados,
             "tickets_user_terminados" => $tickets_user_terminados,
             "tickets_generado" => $tickets_generado,
+            "tickets_archivado" => $tickets_archivado,
         );
 
         return response()->view('ticket.tab', $data, 200);
@@ -457,5 +461,26 @@ class TicketController extends Controller
         $tickets = Ticket::where('status', 'Abierto')->where('asignado_a', 'like', "%,$id,%")->count();
 
         return response($tickets);
+    }
+
+    public function archivarTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->id);
+        $ticket->archivado = "$request->archivado";
+        $ticket->save();
+
+        $ticket_id = $ticket->id;
+        $bitacora_id = session('bitacora_id');
+
+        $log = new Log;
+
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Ticket";
+        $log->id_tabla = $ticket_id;
+        $log->bitacora_id = $bitacora_id;
+
+        if ($log->save()) {
+            return response($ticket);
+        }
     }
 }

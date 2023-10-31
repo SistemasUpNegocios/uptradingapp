@@ -13,23 +13,13 @@ $(document).ready(function () {
             type: "GET",
             url: "/admin/showTabsTickets",
             success: function (response) {
-                $("#myTabContent").empty();
-                $("#myTabContent").append(response);
+                $("#contenidoTicket").empty();
+                $("#contenidoTicket").append(response);
                 let count = $("#countInput").val();
                 $("#countTickets").text(count);
-                if (estatus == "Abierto") {
-                    $("#abiertos-tab-pane").addClass("active");
-                    $("#abiertos-tab-pane").addClass("show");
-                } else if (estatus == "En proceso") {
-                    $("#proceso-tab-pane").addClass("active");
-                    $("#proceso-tab-pane").addClass("show");
-                } else if (estatus == "Cancelado") {
-                    $("#cancelados-tab-pane").addClass("active");
-                    $("#cancelados-tab-pane").addClass("show");
-                } else if (estatus == "Terminado") {
-                    $("#terminados-tab-pane").addClass("active");
-                    $("#terminados-tab-pane").addClass("show");
-                }
+            },
+            error: function () {
+                console.log("Error");
             },
         });
     };
@@ -377,6 +367,53 @@ $(document).ready(function () {
                         `<div class="badge bg-danger" style="text-align: left !important;">*${validacion[clave][0]}</div><br>`
                     );
                 }
+            },
+        });
+    });
+
+    $(document).on("click", ".archivar, .desarchivar", function (e) {
+        e.preventDefault();
+        let id = $(this).data("id");
+        let archivado = $(this).data("archivado");
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/archivarTicket",
+            data: {
+                id,
+                archivado,
+            },
+            success: function () {
+                if (archivado == "si") {
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: sans-serif; font-weight: 700;">Ticket archivado</h1>',
+                        html: '<p style="font-family: sans-serif">El ticket ha sido archivado exitosamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: sans-serif">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: '<h1 style="font-family: sans-serif; font-weight: 700;">Ticket desarchivado</h1>',
+                        html: '<p style="font-family: sans-serif">El ticket ha sido desarchivado exitosamente</p>',
+                        confirmButtonText:
+                            '<a style="font-family: sans-serif">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                }
+                tabsTickets();
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: sans-serif; font-weight: 700;">Error al archivar</h1>',
+                    html: '<p style="font-family: sans-serif">El ticket no se ha podido archivar, comunicate con sistemas</p>',
+                    confirmButtonText:
+                        '<a style="font-family: sans-serif">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
             },
         });
     });

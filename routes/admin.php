@@ -388,6 +388,7 @@ Route::post('/admin/editStatusTicket', [App\Http\Controllers\TicketController::c
 Route::post('/admin/traspasarTicket', [App\Http\Controllers\TicketController::class, 'traspasarTicket']);
 Route::get('/admin/getTicketsAlerta', [App\Http\Controllers\TicketController::class, 'getTicketsAlerta']);
 Route::get('/admin/getTicketsAbiertos', [App\Http\Controllers\TicketController::class, 'getTicketsAbiertos']);
+Route::get('/admin/archivarTicket', [App\Http\Controllers\TicketController::class, 'archivarTicket']);
 
 //Rutas auxuliares (usar con cuidado)
 //Actualizar todos los pagos a PS, pagos a cliente y amortizaciones (Compuesto y mensual)
