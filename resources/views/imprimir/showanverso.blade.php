@@ -446,6 +446,8 @@
           <hr class="contenedor_firma__hr">
           <div class=" text-center">
               <p class="contrato_parrafo_firmas">
+                  <span>TESTIGO</span>
+                  <br>
                   <span>UP TRADING EXPERTS</span>
                   <br>
                   <span>GERENTE GENERAL</span>
