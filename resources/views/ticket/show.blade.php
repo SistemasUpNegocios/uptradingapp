@@ -1,7 +1,7 @@
 @php
-    if(sizeof($tickets_user_abiertos) > 0){
-        $clase_abiertos = 'show active';
-        $nav_abiertos = 'active';
+    if(sizeof($tickets_generado) > 0){
+        $clase_abiertos = '';
+        $nav_abiertos = '';
 
         $clase_procesos = '';
         $nav_procesos = '';
@@ -12,8 +12,8 @@
         $clase_terminados = '';
         $nav_terminados = '';
 
-        $clase_generados = '';
-        $nav_generados = '';
+        $clase_generados = 'show active';
+        $nav_generados = 'active';
 
         $clase_archivados = '';
         $nav_archivados = '';
@@ -35,9 +35,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
-    }elseif(sizeof($tickets_generado) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
+    }elseif(sizeof($tickets_user_abiertos) > 0){
+        $clase_abiertos = 'show active';
+        $nav_abiertos = 'active';
 
         $clase_procesos = '';
         $nav_procesos = '';
@@ -48,8 +48,8 @@
         $clase_terminados = '';
         $nav_terminados = '';
 
-        $clase_generados = 'show active';
-        $nav_generados = 'active';
+        $clase_generados = '';
+        $nav_generados = '';
 
         $clase_archivados = '';
         $nav_archivados = '';
@@ -230,22 +230,22 @@
                     @else
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_abiertos}}" id="abiertos-tab" data-bs-toggle="tab" data-bs-target="#abiertos-tab-pane" type="button" role="tab" aria-controls="abiertos-tab-pane" aria-selected="true">Abiertos</button>
+                                <button class="nav-link {{$nav_abiertos}}" id="abiertos-tab" data-bs-toggle="tab" data-bs-target="#abiertos-tab-pane" type="button" role="tab" aria-controls="abiertos-tab-pane" aria-selected="true" data-opc="abiertos">Abiertos</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_procesos}}" id="proceso-tab" data-bs-toggle="tab" data-bs-target="#proceso-tab-pane" type="button" role="tab" aria-controls="proceso-tab-pane" aria-selected="false">En proceso</button>
+                                <button class="nav-link {{$nav_procesos}}" id="proceso-tab" data-bs-toggle="tab" data-bs-target="#proceso-tab-pane" type="button" role="tab" aria-controls="proceso-tab-pane" aria-selected="false" data-opc="proceso">En proceso</button>
                             </li>                        
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_cancelados}}" id="cancelados-tab" data-bs-toggle="tab" data-bs-target="#cancelados-tab-pane" type="button" role="tab" aria-controls="cancelados-tab-pane" aria-selected="false">Cancelados</button>
+                                <button class="nav-link {{$nav_cancelados}}" id="cancelados-tab" data-bs-toggle="tab" data-bs-target="#cancelados-tab-pane" type="button" role="tab" aria-controls="cancelados-tab-pane" aria-selected="false" data-opc="cancelados">Cancelados</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_terminados}}" id="terminados-tab" data-bs-toggle="tab" data-bs-target="#terminados-tab-pane" type="button" role="tab" aria-controls="terminados-tab-pane" aria-selected="false">Atendidos</button>
+                                <button class="nav-link {{$nav_terminados}}" id="terminados-tab" data-bs-toggle="tab" data-bs-target="#terminados-tab-pane" type="button" role="tab" aria-controls="terminados-tab-pane" aria-selected="false" data-opc="atendidos">Atendidos</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_generados}}" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Generados</button>
+                                <button class="nav-link {{$nav_generados}}" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false" data-opc="generados">Generados</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{$nav_archivados}}" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false">Archivados</button>
+                                <button class="nav-link {{$nav_archivados}}" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false" data-opc="archivados">Archivados</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">

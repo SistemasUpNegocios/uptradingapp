@@ -1,6 +1,8 @@
 $(document).ready(function () {
     let acc = "";
     let estatus = "";
+    let opc = "generados";
+    let button = "generados-tab";
 
     $.ajaxSetup({
         headers: {
@@ -17,6 +19,7 @@ $(document).ready(function () {
                 $("#contenidoTicket").append(response);
                 let count = $("#countInput").val();
                 $("#countTickets").text(count);
+                opcTab(opc, button);
             },
             error: function () {
                 console.log("Error");
@@ -30,6 +33,8 @@ $(document).ready(function () {
         $("#ticketForm")[0].reset();
         $("#ticketForm").attr("action", "/admin/addTicket");
         $("#idInput").val("");
+
+        $("#fechaActualInput").val(moment().format("YYYY-MM-DD hh:mm"));
 
         $("#modalTitle").text("Abrir ticket");
         $("#btnSubmit").text("Abrir ticket");
@@ -314,14 +319,6 @@ $(document).ready(function () {
                 $("#statusModal").modal("hide");
                 $("#ticketEstatusForm")[0].reset();
                 tabsTickets();
-                Swal.fire({
-                    icon: "success",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Estatus actualizado</h1>',
-                    html: '<p style="font-family: Poppins">El estatus del ticket ha sido actualizado correctamente</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
             },
             error: function (jqXHR, exception) {
                 var validacion = jqXHR.responseJSON.errors;
@@ -398,4 +395,33 @@ $(document).ready(function () {
             },
         });
     });
+
+    $(document).on(
+        "click",
+        "#abiertos-tab, #proceso-tab, #cancelados-tab, #terminados-tab, #generados-tab, #archivados-tab",
+        function (e) {
+            e.preventDefault();
+
+            opc = $(this).data("opc");
+            button = this.id;
+        }
+    );
+
+    const opcTab = (opc, button) => {
+        $(`#${button}`).addClass("active");
+
+        if (opc == "abiertos") {
+            $("#abiertos-tab-pane").addClass("show active");
+        } else if (opc == "proceso") {
+            $("#proceso-tab-pane").addClass("show active");
+        } else if (opc == "cancelados") {
+            $("#cancelados-tab-pane").addClass("show active");
+        } else if (opc == "atendidos") {
+            $("#terminados-tab-pane").addClass("sho active");
+        } else if (opc == "generados") {
+            $("#generados-tab-pane").addClass("show active");
+        } else if (opc == "archivados") {
+            $("#archivados-tab-pane").addClass("show active");
+        }
+    };
 });

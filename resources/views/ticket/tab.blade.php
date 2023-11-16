@@ -1,133 +1,3 @@
-@php
-    if(sizeof($tickets_user_abiertos) > 0){
-        $clase_abiertos = 'show active';
-        $nav_abiertos = 'active';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_user_procesos) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = 'show active';
-        $nav_procesos = 'active';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_generado) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = 'show active';
-        $nav_generados = 'active';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_user_cancelados) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = 'show active';
-        $nav_cancelados = 'active';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_user_terminados) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = 'show active';
-        $nav_terminados = 'active';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }elseif(sizeof($tickets_archivados) > 0){
-        $clase_abiertos = '';
-        $nav_abiertos = '';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = 'show active';
-        $nav_archivados = 'active';
-    }else{
-        $clase_abiertos = 'show active';
-        $nav_abiertos = 'active';
-
-        $clase_procesos = '';
-        $nav_procesos = '';
-
-        $clase_cancelados = '';
-        $nav_cancelados = '';
-
-        $clase_terminados = '';
-        $nav_terminados = '';
-
-        $clase_generados = '';
-        $nav_generados = '';
-
-        $clase_archivados = '';
-        $nav_archivados = '';
-    }
-@endphp
-
 <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
 @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
     <ul class="nav nav-tabs" id="myTab" role="tablist">                            
@@ -189,26 +59,26 @@
 @else
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_abiertos}}" id="abiertos-tab" data-bs-toggle="tab" data-bs-target="#abiertos-tab-pane" type="button" role="tab" aria-controls="abiertos-tab-pane" aria-selected="true">Abiertos</button>
+            <button class="nav-link" id="abiertos-tab" data-bs-toggle="tab" data-bs-target="#abiertos-tab-pane" type="button" role="tab" aria-controls="abiertos-tab-pane" aria-selected="true" data-opc="abiertos">Abiertos</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_procesos}}" id="proceso-tab" data-bs-toggle="tab" data-bs-target="#proceso-tab-pane" type="button" role="tab" aria-controls="proceso-tab-pane" aria-selected="false">En proceso</button>
+            <button class="nav-link" id="proceso-tab" data-bs-toggle="tab" data-bs-target="#proceso-tab-pane" type="button" role="tab" aria-controls="proceso-tab-pane" aria-selected="false" data-opc="proceso">En proceso</button>
         </li>                        
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_cancelados}}" id="cancelados-tab" data-bs-toggle="tab" data-bs-target="#cancelados-tab-pane" type="button" role="tab" aria-controls="cancelados-tab-pane" aria-selected="false">Cancelados</button>
+            <button class="nav-link" id="cancelados-tab" data-bs-toggle="tab" data-bs-target="#cancelados-tab-pane" type="button" role="tab" aria-controls="cancelados-tab-pane" aria-selected="false" data-opc="cancelados">Cancelados</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_terminados}}" id="terminados-tab" data-bs-toggle="tab" data-bs-target="#terminados-tab-pane" type="button" role="tab" aria-controls="terminados-tab-pane" aria-selected="false">Atendidos</button>
+            <button class="nav-link" id="terminados-tab" data-bs-toggle="tab" data-bs-target="#terminados-tab-pane" type="button" role="tab" aria-controls="terminados-tab-pane" aria-selected="false" data-opc="atendidos">Atendidos</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_generados}}" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false">Generados</button>
+            <button class="nav-link" id="generados-tab" data-bs-toggle="tab" data-bs-target="#generados-tab-pane" type="button" role="tab" aria-controls="generados-tab-pane" aria-selected="false" data-opc="generados">Generados</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link {{$nav_archivados}}" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false">Archivados</button>
+            <button class="nav-link" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false" data-opc="archivados">Archivados</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade {{$clase_abiertos}}" id="abiertos-tab-pane" role="tabpanel" aria-labelledby="abiertos-tab" tabindex="0">
+        <div class="tab-pane fade" id="abiertos-tab-pane" role="tabpanel" aria-labelledby="abiertos-tab" tabindex="0">
             @foreach ($tickets_user_abiertos as $ticket_abierto)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">
@@ -243,7 +113,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="tab-pane fade {{$clase_procesos}}" id="proceso-tab-pane" role="tabpanel" aria-labelledby="proceso-tab" tabindex="0">
+        <div class="tab-pane fade" id="proceso-tab-pane" role="tabpanel" aria-labelledby="proceso-tab" tabindex="0">
             @foreach ($tickets_user_procesos as $ticket_proceso)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">
@@ -278,7 +148,7 @@
                 </div>
             @endforeach
         </div>                        
-        <div class="tab-pane fade {{$clase_cancelados}}" id="cancelados-tab-pane" role="tabpanel" aria-labelledby="cancelados-tab" tabindex="0">
+        <div class="tab-pane fade" id="cancelados-tab-pane" role="tabpanel" aria-labelledby="cancelados-tab" tabindex="0">
             @foreach ($tickets_user_cancelados as $ticket_cancelado)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">
@@ -307,7 +177,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="tab-pane fade {{$clase_terminados}}" id="terminados-tab-pane" role="tabpanel" aria-labelledby="terminados-tab" tabindex="0">
+        <div class="tab-pane fade" id="terminados-tab-pane" role="tabpanel" aria-labelledby="terminados-tab" tabindex="0">
             @foreach ($tickets_user_terminados as $ticket_terminado)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">
@@ -334,7 +204,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="tab-pane fade {{$clase_generados}}" id="generados-tab-pane" role="tabpanel" aria-labelledby="generados-tab" tabindex="0">
+        <div class="tab-pane fade" id="generados-tab-pane" role="tabpanel" aria-labelledby="generados-tab" tabindex="0">
             @foreach ($tickets_generado as $ticket_generado)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">
@@ -384,7 +254,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="tab-pane fade {{$clase_archivados}}" id="archivados-tab-pane" role="tabpanel" aria-labelledby="archivados-tab" tabindex="0">
+        <div class="tab-pane fade" id="archivados-tab-pane" role="tabpanel" aria-labelledby="archivados-tab" tabindex="0">
             @foreach ($tickets_archivado as $ticket_archivado)
                 <div class="col-lg-12 ps-3 pe-3">
                     <div class="card border-0 mb-4 mt-4">

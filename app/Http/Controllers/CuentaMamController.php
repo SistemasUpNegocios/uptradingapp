@@ -108,7 +108,13 @@ class CuentaMamController extends Controller
         $numeroFilas = $excel->setActiveSheetIndex(0)->getHighestRow();
         
         for ($i = 2; $i <= $numeroFilas; $i++) { 
-            $fecha_inicio = Carbon::instance(Date::excelToDateTimeObject($excel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()))->formatLocalized('%d de %B de %Y');
+            if (strlen($excel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()) >= 9) {
+                $fecha_inicio = Carbon::createFromFormat("d/m/Y", $excel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue());
+                $fecha_inicio = Carbon::instance($fecha_inicio)->formatLocalized('%d de %B de %Y');
+            } else {
+                $fecha_inicio = Carbon::instance(Date::excelToDateTimeObject($excel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()))->formatLocalized('%d de %B de %Y');
+            }
+            
             $periodo = $excel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue();
             $periodo == '' ? $periodo = 0 : $periodo = $periodo;
             $loggin = $excel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue();
@@ -123,11 +129,8 @@ class CuentaMamController extends Controller
             $fecha_impresion = Carbon::instance(Date::excelToDateTimeObject($excel->getActiveSheet()->getCell('L'.$i)->getCalculatedValue()))->formatLocalized('%d de %B de %Y');
 
             if ($fecha_inicio != '' && $periodo != '' && $loggin != '' && $cliente != '' && $correo != '' && $capital != '' && $aumento != '' && $fecha_aumento != '' && $balance != '' && $flotante != '' && $retiro != '' && $fecha_impresion != '') {
-                $convenio = Convenio::where("loggin", $loggin)->first();
-                $folio = $convenio->folio;
 
                 $data = array(
-                    "folio" => $folio,
                     "loggin" => $loggin,
                     "cliente" => $cliente,
                     "fecha_inicio" => $fecha_inicio,
