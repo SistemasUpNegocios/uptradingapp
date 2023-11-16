@@ -417,7 +417,7 @@ $(document).ready(function () {
         } else if (opc == "cancelados") {
             $("#cancelados-tab-pane").addClass("show active");
         } else if (opc == "atendidos") {
-            $("#terminados-tab-pane").addClass("sho active");
+            $("#terminados-tab-pane").addClass("show active");
         } else if (opc == "generados") {
             $("#generados-tab-pane").addClass("show active");
         } else if (opc == "archivados") {
