@@ -3421,3 +3421,7 @@ body.dark .msger-chat {
 body.dark .swal2-input {
     color: #fff;
 }
+
+body.dark .left-msg .msg-bubble {
+    background: #4a4a4a;
+}
