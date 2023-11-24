@@ -3425,3 +3425,7 @@ body.dark .swal2-input {
 body.dark .left-msg .msg-bubble {
     background: #4a4a4a;
 }
+
+body.dark .btn-close {
+    background-image: url("../img/btn-close-dark.png") !important;
+}
