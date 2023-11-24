@@ -78,25 +78,6 @@ class Kernel extends ConsoleKernel
                 $contratoRef = str_pad($contratoRef, 2, "0", STR_PAD_LEFT);
                 $contratoRef = $contratoAct[0] . "-" . $contratoAct[1] . "-" . $contratoRef;
 
-                // Crear ticket
-                $ticket = new Ticket;
-                $ticket->generado_por = 1;
-                $ticket->asignado_a = "234".','.Carbon::now()->toDateTimeString();
-                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Administración";
-                $ticket->asunto = "Contrato refrendado para imprimir";
-                $ticket->descripcion = "Contrato: ".strtoupper($contratoRef);
-                $ticket->status = "Abierto";
-                $ticket->save();
-
-                $notificacion = new Notificacion;
-                $notificacion->titulo = "Ticket abierto";
-                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                $notificacion->status = "Pendiente";
-                $notificacion->user_id = 234;
-                $notificacion->save();
-
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
                 $ticket->asignado_a = "235".','.Carbon::now()->toDateTimeString();
@@ -406,25 +387,6 @@ class Kernel extends ConsoleKernel
                 $refrendo = intval($folio[4]) + 1;
                 $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
                 $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
-
-                // Crear ticket
-                $ticket = new Ticket;
-                $ticket->generado_por = 1;
-                $ticket->asignado_a = "234".','.Carbon::now()->toDateTimeString();
-                $ticket->fecha_generado = Carbon::now()->toDateTimeString();
-                $ticket->fecha_limite = Carbon::now()->addDays(5)->toDateTimeString();
-                $ticket->departamento = "Administración";
-                $ticket->asunto = "Convenio refrendado para imprimir";
-                $ticket->descripcion = "Convenio: ".strtoupper($folio_completo);
-                $ticket->status = "Abierto";
-                $ticket->save();
-
-                $notificacion = new Notificacion;
-                $notificacion->titulo = "Ticket abierto";
-                $notificacion->mensaje = "Puede ser que tengas algún ticket abierto";
-                $notificacion->status = "Pendiente";
-                $notificacion->user_id = 234;
-                $notificacion->save();
 
                 $ticket = new Ticket;
                 $ticket->generado_por = 1;
