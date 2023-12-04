@@ -3429,3 +3429,8 @@ body.dark .left-msg .msg-bubble {
 body.dark .btn-close {
     background-image: url("../img/btn-close-dark.png") !important;
 }
+
+#valor_dolar_dashboard {
+    font-size: 14px;
+    color: #fff;
+}

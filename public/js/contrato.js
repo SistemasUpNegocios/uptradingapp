@@ -1601,7 +1601,7 @@ $(document).ready(function () {
                 table.ajax.reload(null, false);
                 if (acc == "new") {
                     if (casilla && rendimiento > 0) {
-                        let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\nEn este mismo contrato se pide cambiar el porcentaje del rendimiento al ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
+                        let mensaje = `Se ha generado un nuevo contrato, por favor actívalo.\n\nEN ESTE MISMO CONTRATO SE PIDE CAMBIAR EL PORCENTAJE DEL RENDIMIENTO AL ${rendimiento}%.\nNúmero de contrato: ${contrato_numero}`;
                         $.get({
                             url: "/admin/enviarTelegram",
                             data: {
@@ -2454,8 +2454,6 @@ $(document).ready(function () {
                         $("#curpBen4Input").val("sin curp");
                         $("#parentescoBen4Input").val("sin parentesco");
                     }
-
-                    console.log("entró 1");
                 } else {
                     $("#beneficiariosInput").val(1);
                     $("#contBeneficiarios").empty();
@@ -2519,8 +2517,6 @@ $(document).ready(function () {
                             </div>
                         </div>
                     `);
-
-                    console.log("entró 2");
                 }
             },
         });

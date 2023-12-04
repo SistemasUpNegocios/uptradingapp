@@ -1,6 +1,6 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between administrador_up">
+    <div class="d-flex align-items-center justify-content-start">
         <a href="{{ url('/admin/dashboard') }}" class="logo d-flex align-items-center">
             <span class="d-none d-lg-block">Administrador Up Trading</span>
         </a>
@@ -11,30 +11,33 @@
         </a>
     </div>
 
-    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-        <div class="search-bar">
-            <form id="busquedaForm" class="search-form d-flex align-items-center" method="POST"
-                action="/admin/buscarCliente">
-                @csrf
-                <input type="text" name="query" placeholder="Buscar cliente" title="Ingresa el nombre del cliente" required>
-                <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
-            </form>
-        </div>
-    @endif
-
-    <div class="align-items-center text-center text-white w-100 valor_dolar_menu" style="font-size: 14px;"><b id="valor_dolar_dashboard"></b></div>
-
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
+            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                <li class="nav-item px-1">
+                    <div class="search-bar">
+                        <form id="busquedaForm" class="search-form d-flex align-items-center" method="POST"
+                            action="/admin/buscarCliente">
+                            @csrf
+                            <input type="text" name="query" placeholder="Buscar cliente" title="Ingresa el nombre del cliente" required>
+                            <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                </li>
+            @endif
 
-            <li class="nav-item d-block d-lg-none">
+            <li class="nav-item px-1">
+                <b id="valor_dolar_dashboard"></b>
+            </li>
+
+            <li class="nav-item d-block d-lg-none px-1">
                 <a class="nav-link nav-icon search-bar-toggle" href="#" onClick="return false;">
                     <i class="bi bi-search"></i>
                 </a>
             </li>
 
             @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
-                <li class="nav-item" id="preguntas" title="Preguntas Frecuentes">
+                <li class="nav-item px-1" id="preguntas" title="Preguntas Frecuentes">
                     <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalFaq">
                         <i class="bi bi-question-octagon"></i>
                     </a>
@@ -42,7 +45,7 @@
             @endif
 
             @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
-                <li class="nav-item" id="calculadora" title="Convertir divisas">
+                <li class="nav-item px-1" id="calculadora" title="Convertir divisas">
                     <a class="nav-link nav-icon fs-5" href="#" data-bs-toggle="modal" data-bs-target="#formModalCalc">
                         <i class="bi bi-calculator"></i>
                     </a>
