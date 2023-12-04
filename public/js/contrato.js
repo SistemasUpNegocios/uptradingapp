@@ -2,6 +2,10 @@ $(document).ready(function () {
     let acc = "";
     let casilla = false;
 
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+    var numeroContrato = urlParams.get("con");
+
     $(".contEuro").hide();
     $(".contFranco").hide();
 
@@ -1390,6 +1394,10 @@ $(document).ready(function () {
         $("#contenedor_filtros").toggle();
     });
 
+    if (numeroContrato != null && numeroContrato != "") {
+        table.search(numeroContrato).draw();
+    }
+
     const config = {
         search: true,
     };
@@ -1504,6 +1512,14 @@ $(document).ready(function () {
                                             $(this).prop("checked", false);
                                         }
                                     });
+
+                                    table.search("").draw();
+
+                                    history.replaceState(
+                                        {},
+                                        document.title,
+                                        window.location.pathname
+                                    );
                                 }
                             );
                         } else {
@@ -1679,6 +1695,14 @@ $(document).ready(function () {
                             <label for="curpBen1Input">CURP del beneficiario</label>
                         </div>
                     </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control"
+                                placeholder="Ingresa el parentesco" id="parentescoBen1Input"
+                                name="parentesco-ben1">
+                            <label for="parentescoBen1Input">Parentesco con el beneficiario</label>
+                        </div>
+                    </div>
                 `);
                 casilla = false;
             },
@@ -1754,16 +1778,19 @@ $(document).ready(function () {
         $("#telefonoBen1Input").prop("readonly", false);
         $("#correoBen1Input").prop("readonly", false);
         $("#curpBen1Input").prop("readonly", false);
+        $("#parentescoBen1Input").prop("readonly", false);
         $("#nombreBen2Input").prop("readonly", false);
         $("#porcentajeBen2Input").prop("readonly", false);
         $("#telefonoBen2Input").prop("readonly", false);
         $("#correoBen2Input").prop("readonly", false);
         $("#curpBen2Input").prop("readonly", false);
+        $("#parentescoBen2Input").prop("readonly", false);
         $("#nombreBen3Input").prop("readonly", false);
         $("#porcentajeBen3Input").prop("readonly", false);
         $("#telefonoBen3Input").prop("readonly", false);
         $("#correoBen3Input").prop("readonly", false);
         $("#curpBen3Input").prop("readonly", false);
+        $("#parentescoBen3Input").prop("readonly", false);
         $("#tipoPagoInput").prop("disabled", false);
         $("#comprobantePagoInput").prop("disabled", false);
         $("#efectivoInput").prop("disabled", false);
@@ -1801,6 +1828,9 @@ $(document).ready(function () {
         $("#monedaDolaresInput").prop("disabled", false);
         $("#monedaEurosInput").prop("disabled", false);
         $("#monedaFrancosInput").prop("disabled", false);
+
+        $("#siInput").prop("disabled", false);
+        $("#noInput").prop("disabled", false);
 
         let monedaDolaresChecked = $("#monedaDolaresInput").is(":checked");
         let monedaEurosChecked = $("#monedaEurosInput").is(":checked");
@@ -1879,6 +1909,14 @@ $(document).ready(function () {
                         placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
                         name="curp-ben1" minlength="3" maxlength="100">
                     <label for="curpBen1Input">CURP del beneficiario</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control"
+                        placeholder="Ingresa el parentesco" id="parentescoBen1Input"
+                        name="parentesco-ben1">
+                    <label for="parentescoBen1Input">Parentesco con el beneficiario</label>
                 </div>
             </div>
         `);
@@ -1988,6 +2026,7 @@ $(document).ready(function () {
         var inversionletus = $(this).data("inversionletus");
         var status = $(this).data("status");
         var moneda = $(this).data("moneda");
+        var firmaelectronica = $(this).data("firmaelectronica");
 
         $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
 
@@ -2029,7 +2068,53 @@ $(document).ready(function () {
         $("#fechaPagInput").val(fechapag);
         $("#fechaPagInput").prop("readonly", true);
 
-        $("#fechaLimiteInput").val(fechalimite);
+        let fechalimite2 = moment(fechapag).format("YYYY-MM-DD");
+
+        var nuevaFechaLimite = getSinFestivosNiFinDeSemana(fechalimite2, 15);
+
+        function getSinFestivosNiFinDeSemana(fecha, diasAdd) {
+            var arrFecha = fecha.split("-");
+            var fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
+            var festivos = [
+                // Agregamos los festivos (dia, mes)
+                [1, 1],
+                [1, 5],
+                [16, 9],
+                [2, 11],
+                [20, 11],
+                [25, 12],
+            ];
+
+            for (var i = 0; i < diasAdd; i++) {
+                var diaInvalido = false;
+                fecha.setDate(fecha.getDate() + 1); // Sumamos de dia en dia
+                for (var j = 0; j < festivos.length; j++) {
+                    // Verificamos si el dia + 1 es festivo
+                    var mesDia = festivos[j];
+                    if (
+                        fecha.getMonth() + 1 == mesDia[1] &&
+                        fecha.getDate() == mesDia[0]
+                    ) {
+                        diaInvalido = true;
+                        break;
+                    }
+                }
+                if (fecha.getDay() == 0 || fecha.getDay() == 6) {
+                    // Verificamos si es sábado o domingo
+                    diaInvalido = true;
+                }
+                if (diaInvalido) diasAdd++; // Si es fin de semana o festivo le sumamos un dia
+            }
+            return (
+                fecha.getFullYear() +
+                "-" +
+                (fecha.getMonth() + 1).toString().padStart(2, "0") +
+                "-" +
+                fecha.getDate().toString().padStart(2, "0")
+            );
+        }
+
+        $("#fechaLimiteInput").val(nuevaFechaLimite);
         $("#fechaLimiteInput").prop("readonly", true);
 
         $("#periodoInput").val(periodo);
@@ -2129,6 +2214,15 @@ $(document).ready(function () {
             $(".contEuro").hide();
 
             $(".contFranco").show();
+        }
+
+        $("#siInput").prop("disabled", true);
+        $("#noInput").prop("disabled", true);
+
+        if (firmaelectronica == "SI") {
+            $("#siInput").prop("checked", true);
+        } else {
+            $("#noInput").prop("checked", true);
         }
 
         $("#beneficiariosInput").prop("disabled", true);
@@ -2239,6 +2333,14 @@ $(document).ready(function () {
                                     <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa el parentesco del ${adjetivo} beneficiario" id="parentescoBen${i}Input"
+                                        name="parentesco-ben${i}">
+                                    <label for="parentescoBen${i}Input">Parentesco con el ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
                         `);
 
                         $(`#nombreBen${i}Input`).prop("readonly", true);
@@ -2246,7 +2348,7 @@ $(document).ready(function () {
                         $(`#telefonoBen${i}Input`).prop("readonly", true);
                         $(`#correoBen${i}Input`).prop("readonly", true);
                         $(`#curpBen${i}Input`).prop("readonly", true);
-                        $(`#curpBen${i}InputCheck`).prop("disabled", true);
+                        $(`#parentescoBen${i}Input`).prop("readonly", true);
                     }
 
                     if (response.beneficiarios[0]) {
@@ -2257,18 +2359,22 @@ $(document).ready(function () {
                         var correoben1 =
                             response.beneficiarios[0].correo_electronico;
                         var curpben1 = response.beneficiarios[0].curp;
+                        var parentescoben1 =
+                            response.beneficiarios[0].parentesco;
 
                         $("#nombreBen1Input").val(nombreben1);
                         $("#porcentajeBen1Input").val(porcentajeben1);
                         $("#telefonoBen1Input").val(telefonoben1);
                         $("#correoBen1Input").val(correoben1);
                         $("#curpBen1Input").val(curpben1);
+                        $("#parentescoBen1Input").val(parentescoben1);
                     } else {
                         $("#nombreBen1Input").val("sin beneficiario");
                         $("#porcentajeBen1Input").val(0);
                         $("#telefonoBen1Input").val("sin telefono de contácto");
                         $("#correoBen1Input").val("sin correo de contácto");
                         $("#curpBen1Input").val("sin curp");
+                        $("#parentescoBen1Input").val("sin parentesco");
                     }
 
                     if (response.beneficiarios[1]) {
@@ -2279,18 +2385,22 @@ $(document).ready(function () {
                         var correoben2 =
                             response.beneficiarios[1].correo_electronico;
                         var curpben2 = response.beneficiarios[1].curp;
+                        var parentescoben2 =
+                            response.beneficiarios[1].parentesco;
 
                         $("#nombreBen2Input").val(nombreben2);
                         $("#porcentajeBen2Input").val(porcentajeben2);
                         $("#telefonoBen2Input").val(telefonoben2);
                         $("#correoBen2Input").val(correoben2);
                         $("#curpBen2Input").val(curpben2);
+                        $("#parentescoBen2Input").val(parentescoben2);
                     } else {
                         $("#nombreBen2Input").val("sin beneficiario");
                         $("#porcentajeBen2Input").val(0);
                         $("#telefonoBen2Input").val("sin telefono de contácto");
                         $("#correoBen2Input").val("sin correo de contácto");
                         $("#curpBen2Input").val("sin curp");
+                        $("#parentescoBen2Input").val("sin parentesco");
                     }
 
                     if (response.beneficiarios[2]) {
@@ -2301,18 +2411,22 @@ $(document).ready(function () {
                         var correoben3 =
                             response.beneficiarios[2].correo_electronico;
                         var curpben3 = response.beneficiarios[2].curp;
+                        var parentescoben3 =
+                            response.beneficiarios[2].parentesco;
 
                         $("#nombreBen3Input").val(nombreben3);
                         $("#porcentajeBen3Input").val(porcentajeben3);
                         $("#telefonoBen3Input").val(telefonoben3);
                         $("#correoBen3Input").val(correoben3);
                         $("#curpBen3Input").val(curpben3);
+                        $("#parentescoBen3Input").val(parentescoben3);
                     } else {
                         $("#nombreBen3Input").val("sin beneficiario");
                         $("#porcentajeBen3Input").val(0);
                         $("#telefonoBen3Input").val("sin telefono de contácto");
                         $("#correoBen3Input").val("sin correo de contácto");
                         $("#curpBen3Input").val("sin curp");
+                        $("#parentescoBen3Input").val("sin parentesco");
                     }
 
                     if (response.beneficiarios[3]) {
@@ -2323,74 +2437,90 @@ $(document).ready(function () {
                         var correoben4 =
                             response.beneficiarios[3].correo_electronico;
                         var curpben4 = response.beneficiarios[3].curp;
+                        var parentescoben4 =
+                            response.beneficiarios[3].parentesco;
 
                         $("#nombreBen4Input").val(nombreben4);
                         $("#porcentajeBen4Input").val(porcentajeben4);
                         $("#telefonoBen4Input").val(telefonoben4);
                         $("#correoBen4Input").val(correoben4);
                         $("#curpBen4Input").val(curpben4);
+                        $("#parentescoBen4Input").val(parentescoben4);
                     } else {
                         $("#nombreBen4Input").val("sin beneficiario");
                         $("#porcentajeBen4Input").val(0);
                         $("#telefonoBen4Input").val("sin telefono de contácto");
                         $("#correoBen4Input").val("sin correo de contácto");
                         $("#curpBen4Input").val("sin curp");
+                        $("#parentescoBen4Input").val("sin parentesco");
                     }
+
+                    console.log("entró 1");
                 } else {
                     $("#beneficiariosInput").val(1);
                     $("#contBeneficiarios").empty();
                     $("#contBeneficiarios").append(`
-                    <div class="col-12">
-                        <div class="alert alert-primary d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                                <use xlink:href="#info-fill" />
-                            </svg>
-                            <div>
-                                Ingresa al beneficiario en caso de fallecimiento del cliente:
+                        <div class="col-12">
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                    <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                    Ingresa al beneficiario en caso de fallecimiento del cliente:
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-floating mb-2">
-                            <input readonly type="text" class="form-control"
-                                placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
-                                name="nombre-ben1" minlength="3" maxlength="255">
-                            <label for="nombreBen1Input">Nombre del beneficiario</label>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input readonly type="text" class="form-control"
+                                    placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
+                                    name="nombre-ben1" minlength="3" maxlength="255">
+                                <label for="nombreBen1Input">Nombre del beneficiario</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-floating mb-2">
-                            <input readonly type="number" step="any" class="form-control"
-                                placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
-                                name="porcentaje-ben1" value="0">
-                            <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input readonly type="number" step="any" class="form-control"
+                                    placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
+                                    name="porcentaje-ben1" value="0">
+                                <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-floating mb-2">
-                            <input readonly type="number" class="form-control"
-                                placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
-                                name="telefono-ben1" minlength="3" maxlength="100">
-                            <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-2">
+                                <input readonly type="number" class="form-control"
+                                    placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
+                                    name="telefono-ben1" minlength="3" maxlength="100">
+                                <label for="telefonoBen1Input">Teléfono del beneficiario</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-floating mb-3">                                
-                            <input readonly type="text" class="form-control"
-                                placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
-                                name="correo-ben1" minlength="3" maxlength="100">
-                            <label for="correoBen1Input">Correo del beneficiario</label>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">                                
+                                <input readonly type="text" class="form-control"
+                                    placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
+                                    name="correo-ben1" minlength="3" maxlength="100">
+                                <label for="correoBen1Input">Correo del beneficiario</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-12">
-                        <div class="form-floating mb-3">
-                            <input readonly type="text" class="form-control"
-                                placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
-                                name="curp-ben1" minlength="3" maxlength="100">
-                            <label for="curpBen1Input">CURP del beneficiario</label>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input readonly type="text" class="form-control"
+                                    placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
+                                    name="curp-ben1" minlength="3" maxlength="100">
+                                <label for="curpBen1Input">CURP del beneficiario</label>
+                            </div>
                         </div>
-                    </div>
-                `);
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input readonly type="text" class="form-control"
+                                    placeholder="Ingresa el parentesco" id="parentescoBen1Input"
+                                    name="parentesco-ben1">
+                                <label for="parentescoBen1Input">Parentesco con el beneficiario</label>
+                            </div>
+                        </div>
+                    `);
+
+                    console.log("entró 2");
                 }
             },
         });
@@ -2651,6 +2781,7 @@ $(document).ready(function () {
         var inversion_chf = $(this).data("inversionchf");
         var inversionlet_eur = $(this).data("inversionleteur");
         var inversionlet_chf = $(this).data("inversionletchf");
+        var firmaelectronica = $(this).data("firmaelectronica");
 
         dataInversionUS = $(this).data("inversionus");
         dataInversionMXN = $(this).data("inversion");
@@ -2782,6 +2913,15 @@ $(document).ready(function () {
             $(".contFranco").show();
         }
 
+        $("#siInput").prop("disabled", false);
+        $("#noInput").prop("disabled", false);
+
+        if (firmaelectronica == "SI") {
+            $("#siInput").prop("checked", true);
+        } else {
+            $("#noInput").prop("checked", true);
+        }
+
         $("#beneficiariosInput").prop("disabled", false);
 
         containerHide();
@@ -2894,6 +3034,14 @@ $(document).ready(function () {
                                     <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control"
+                                        placeholder="Ingresa el parentesco del ${adjetivo} beneficiario" id="parentescoBen${i}Input"
+                                        name="parentesco-ben${i}">
+                                    <label for="parentescoBen${i}Input">Parentesco con el ${adjetivo} beneficiario</label>
+                                </div>
+                            </div>
                         `);
 
                         $(`#nombreBen${i}Input`).prop("readonly", false);
@@ -2901,7 +3049,7 @@ $(document).ready(function () {
                         $(`#telefonoBen${i}Input`).prop("readonly", false);
                         $(`#correoBen${i}Input`).prop("readonly", false);
                         $(`#curpBen${i}Input`).prop("readonly", false);
-                        $(`#curpBen${i}InputCheck`).prop("disabled", false);
+                        $(`#parentescoBen${i}Input`).prop("readonly", false);
                     }
                     if (response.beneficiarios[0]) {
                         var nombreben1 = response.beneficiarios[0].nombre;
@@ -2911,18 +3059,22 @@ $(document).ready(function () {
                         var correoben1 =
                             response.beneficiarios[0].correo_electronico;
                         var curpben1 = response.beneficiarios[0].curp;
+                        var parentescoben1 =
+                            response.beneficiarios[0].parentesco;
 
                         $("#nombreBen1Input").val(nombreben1);
                         $("#porcentajeBen1Input").val(porcentajeben1);
                         $("#telefonoBen1Input").val(telefonoben1);
                         $("#correoBen1Input").val(correoben1);
                         $("#curpBen1Input").val(curpben1);
+                        $("#parentescoBen1Input").val(parentescoben1);
                     } else {
                         $("#nombreBen1Input").val("");
                         $("#porcentajeBen1Input").val(0);
                         $("#telefonoBen1Input").val("");
                         $("#correoBen1Input").val("");
                         $("#curpBen1Input").val("");
+                        $("#parentescoBen1Input").val("");
                     }
 
                     if (response.beneficiarios[1]) {
@@ -2933,18 +3085,22 @@ $(document).ready(function () {
                         var correoben2 =
                             response.beneficiarios[1].correo_electronico;
                         var curpben2 = response.beneficiarios[1].curp;
+                        var parentescoben2 =
+                            response.beneficiarios[1].parentesco;
 
                         $("#nombreBen2Input").val(nombreben2);
                         $("#porcentajeBen2Input").val(porcentajeben2);
                         $("#telefonoBen2Input").val(telefonoben2);
                         $("#correoBen2Input").val(correoben2);
                         $("#curpBen2Input").val(curpben2);
+                        $("#parentescoBen2Input").val(parentescoben2);
                     } else {
                         $("#nombreBen2Input").val("");
                         $("#porcentajeBen2Input").val(0);
                         $("#telefonoBen2Input").val("");
                         $("#correoBen2Input").val("");
                         $("#curpBen2Input").val("");
+                        $("#parentescoBen2Input").val("");
                     }
 
                     if (response.beneficiarios[2]) {
@@ -2955,18 +3111,22 @@ $(document).ready(function () {
                         var correoben3 =
                             response.beneficiarios[2].correo_electronico;
                         var curpben3 = response.beneficiarios[2].curp;
+                        var parentescoben3 =
+                            response.beneficiarios[2].parentesco;
 
                         $("#nombreBen3Input").val(nombreben3);
                         $("#porcentajeBen3Input").val(porcentajeben3);
                         $("#telefonoBen3Input").val(telefonoben3);
                         $("#correoBen3Input").val(correoben3);
                         $("#curpBen3Input").val(curpben3);
+                        $("#parentescoBen3Input").val(parentescoben3);
                     } else {
                         $("#nombreBen3Input").val("");
                         $("#porcentajeBen3Input").val(0);
                         $("#telefonoBen3Input").val("");
                         $("#correoBen3Input").val("");
                         $("#curpBen3Input").val("");
+                        $("#parentescoBen3Input").val("");
                     }
 
                     if (response.beneficiarios[3]) {
@@ -2977,18 +3137,21 @@ $(document).ready(function () {
                         var correoben4 =
                             response.beneficiarios[3].correo_electronico;
                         var curpben4 = response.beneficiarios[3].curp;
+                        var parentescoben4 = response.beneficiarios[3].curp;
 
                         $("#nombreBen4Input").val(nombreben4);
                         $("#porcentajeBen4Input").val(porcentajeben4);
                         $("#telefonoBen4Input").val(telefonoben4);
                         $("#correoBen4Input").val(correoben4);
                         $("#curpBen4Input").val(curpben4);
+                        $("#parentescoBen4Input").val(parentescoben4);
                     } else {
                         $("#nombreBen4Input").val("");
                         $("#porcentajeBen4Input").val(0);
                         $("#telefonoBen4Input").val("");
                         $("#correoBen4Input").val("");
                         $("#curpBen4Input").val("");
+                        $("#parentescoBen4Input").val("");
                     }
                 } else {
                     $("#beneficiariosInput").val(1);
@@ -3042,6 +3205,14 @@ $(document).ready(function () {
                                     placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
                                     name="curp-ben1" minlength="3" maxlength="100">
                                 <label for="curpBen1Input">CURP del beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa el parentesco" id="parentescoBen1Input"
+                                    name="parentesco-ben1">
+                                <label for="parentescoBen1Input">Parentesco con el beneficiario</label>
                             </div>
                         </div>
                 `);
@@ -4493,6 +4664,14 @@ $(document).ready(function () {
                                     placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
                                     name="curp-ben${i}" minlength="3" maxlength="100">
                                 <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control"
+                                    placeholder="Ingresa el parentesco del ${adjetivo} beneficiario" id="parentescoBen${i}Input"
+                                    name="parentesco-ben${i}">
+                                <label for="parentescoBen${i}Input">Parentesco con el ${adjetivo} beneficiario</label>
                             </div>
                         </div>
                     `);

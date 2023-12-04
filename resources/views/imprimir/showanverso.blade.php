@@ -412,9 +412,11 @@
     </div> --}}
     <div class="contenedor_firma">
       <div class="contenedor_firma__izquierda" style="margin-top: -2rem">
-        <div style="position: relative;">
-          <img style="position: absolute; left: 80px;  top: -90px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="130" height="130">
-        </div>
+        @if ($contratos[0]->firma_electronica == 'SI')
+          <div style="position: relative;">
+            <img style="position: absolute; left: 80px;  top: -90px;" src="{{ public_path('img/firma.png') }}" alt="Rubrica" width="130" height="130">
+          </div>
+        @endif
         <hr class="contenedor_firma__hr">
         <div class="text-center" style="position: relative">
           @if (!empty($holograma2))

@@ -108,6 +108,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label class="form-check-label me-2">¿Firma digital?</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="firma_electronica" id="siInput" value="SI" checked>
+                                    <label class="form-check-label" for="siInput">SI</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="firma_electronica" id="noInput" value="NO">
+                                    <label class="form-check-label" for="noInput">NO</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
@@ -196,14 +209,25 @@
                                     <label for="fechaPagInput">Fecha termino de contrato</label>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="date" class="form-control"
-                                        placeholder="Ingresa la fecha limite de liquidación" id="fechaLimiteInput"
-                                        name="fecha_limite" required>
-                                    <label for="fechaLimiteInput">Fecha limite de liquidación</label>
+                            @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="date" class="form-control"
+                                            placeholder="Ingresa la fecha limite de liquidación" id="fechaLimiteInput"
+                                            name="fecha_limite" required>
+                                        <label for="fechaLimiteInput">Fecha limite de liquidación</label>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="col-md-6 col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control"
+                                            placeholder="Ingresa la fecha limite de liquidación" id="fechaLimitePSInput"
+                                            name="fecha_limite" required value="15 días hábiles a la fecha de termino del contrato" readonly>
+                                        <label for="fechaLimitePSInput">Fecha limite de liquidación</label>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-12">
@@ -702,7 +726,8 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
     <script src="{{ asset('js/contrato.js') }}"></script>
 @endsection
