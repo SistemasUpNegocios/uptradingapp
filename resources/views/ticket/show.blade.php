@@ -17,6 +17,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }elseif(count($tickets_user_procesos) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -35,6 +38,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }elseif(count($tickets_user_abiertos) > 0){
         $clase_abiertos = 'show active';
         $nav_abiertos = 'active';
@@ -53,6 +59,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }elseif(count($tickets_user_cancelados) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -71,6 +80,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }elseif(count($tickets_user_terminados) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -89,6 +101,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }elseif(count($tickets_archivado) > 0){
         $clase_abiertos = '';
         $nav_abiertos = '';
@@ -107,6 +122,30 @@
 
         $clase_archivados = 'show active';
         $nav_archivados = 'active';
+
+        $clase_todos = '';
+        $nav_todos = '';
+    }elseif(count($tickets_todos) > 0){
+        $clase_abiertos = '';
+        $nav_abiertos = '';
+
+        $clase_procesos = '';
+        $nav_procesos = '';
+
+        $clase_cancelados = '';
+        $nav_cancelados = '';
+
+        $clase_terminados = '';
+        $nav_terminados = '';
+
+        $clase_generados = '';
+        $nav_generados = '';
+
+        $clase_archivados = '';
+        $nav_archivados = '';
+
+        $clase_todos = 'show active';
+        $nav_todos = 'active';
     }else{
         $clase_abiertos = 'show active';
         $nav_abiertos = 'active';
@@ -125,6 +164,9 @@
 
         $clase_archivados = '';
         $nav_archivados = '';
+
+        $clase_todos = '';
+        $nav_todos = '';
     }
 @endphp
 
@@ -253,6 +295,11 @@
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link {{$nav_archivados}}" id="archivados-tab" data-bs-toggle="tab" data-bs-target="#archivados-tab-pane" type="button" role="tab" aria-controls="archivados-tab-pane" aria-selected="false" data-opc="archivados">Archivados</button>
                                 </li>
+                                @if (auth()->user()->id == 1)
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link {{$nav_todos}}" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos-tab-pane" type="button" role="tab" aria-controls="todos-tab-pane" aria-selected="false" data-opc="todos">Todos</button>
+                                    </li>
+                                @endif
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade {{$clase_abiertos}}" id="abiertos-tab-pane" role="tabpanel" aria-labelledby="abiertos-tab" tabindex="0">
@@ -517,6 +564,77 @@
                                         </div>
                                     @endif
                                 </div>
+                                <div class="tab-pane fade {{$clase_todos}}" id="todos-tab-pane" role="tabpanel" aria-labelledby="todos-tab" tabindex="0">
+                                    @if (count($tickets_todo) > 0)
+                                        @foreach ($tickets_todo as $ticket_todo)
+                                            <div class="col-lg-12 ps-3 pe-3">
+                                                <div class="card border-0 mb-4 mt-4">
+                                                    <div class="flex-fill horizontal-card-bg-img2">
+                                                        <div class="card-body ticket_body">
+                                                            <div>
+                                                                @php
+                                                                    $asignado_a = $ticket_todo->asignado_a;
+                                                                    $asignado_a_array = explode(',', $asignado_a);
+                                                                    foreach($asignado_a_array as $key => $asignado_item) {
+                                                                        //Si es el último item
+                                                                        if (!next($asignado_a_array)) {
+                                                                            //Como el último item es la fecha, el id es la posición anterior
+                                                                            $current_id = $asignado_a_array[$key - 1];
+                                                                            $user_ticket = App\Models\User::where('id', $current_id)->first();
+                                                                        }
+                                                                    }
+                                                                    $user_ticket_generado = App\Models\User::where('id', $ticket_todo->generado_por)->first();
+                                                                @endphp
+                                                                <div style="margin-top: -10px !important">
+                                                                    <span class="text-muted" style="font-size: 10px;">Ticket asignado a {{$user_ticket->nombre}} por parte de {{$user_ticket_generado->nombre}}.</span>
+                                                                </div>
+                                                                @if (Carbon\Carbon::now()->toDateTimeString() >= $ticket_todo->fecha_limite)
+                                                                    @php
+                                                                        $now = Carbon\Carbon::now();
+                                                                        $limit = Carbon\Carbon::parse($ticket_todo->fecha_limite);
+                                                                        $diff = $limit->diffForHumans();
+                                                                    @endphp
+                                                                    @if ($ticket_todo->status == "Abierto" || $ticket_todo->status == "En proceso")
+                                                                        <span class="badge bg-danger mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket venció {{ $diff }} y no fue atendido ni cancelado</span>
+                                                                    @elseif($ticket_todo->status == "Cancelado")
+                                                                        <span class="badge bg-warning text-dark mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue cancelado</span>
+                                                                    @elseif($ticket_todo->status == "Terminado")
+                                                                        <span class="badge bg-success mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
+                                                                    @endif
+                                                                @else
+                                                                    @if ($ticket_todo->status == "Abierto")
+                                                                        <span class="badge bg-success mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket está abierto</span>
+                                                                    @elseif($ticket_todo->status == "En proceso")
+                                                                        <span class="badge bg-success mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket está en proceso</span>
+                                                                    @elseif($ticket_todo->status == "Cancelado")
+                                                                        <span class="badge bg-warning text-dark mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue cancelado</span>
+                                                                    @elseif($ticket_todo->status == "Terminado")
+                                                                        <span class="badge bg-success mt-2"><i class="bi bi-info-circle-fill me-1"></i>Este ticket fue atendido con exito</span>
+                                                                    @endif
+                                                                @endif
+                                                                <div class="font-weight-bold mt-2"><b>{{ $ticket_todo->asunto }}</b></div>
+                                                                <div class="mb-1">
+                                                                    @if (strlen($ticket_todo->descripcion) >= 80)
+                                                                        {{ substr($ticket_todo->descripcion, 0, 80) }}...
+                                                                    @else
+                                                                        {{ substr($ticket_todo->descripcion, 0, 30) }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="boton_auto_ticket">
+                                                                <a class="mx-2 btn btn-sm principal-button detalles" data-id="{{$ticket_todo->id}}" data-generado="{{$user_ticket_generado->nombre}} {{$user_ticket_generado->apellido_p}} {{$user_ticket_generado->apellido_m}}" data-asignado="{{$user_ticket->nombre}} {{$user_ticket->apellido_p}} {{$user_ticket->apellido_m}}" data-fechagenerado="{{$ticket_todo->fecha_generado}}" data-fechalimite="{{$ticket_todo->fecha_limite}}" data-departamento="{{$ticket_todo->departamento}}" data-asunto="{{$ticket_todo->asunto}}" data-descripcion="{{$ticket_todo->descripcion}}" data-status="{{$ticket_todo->status}}" data-todo="true" title="Ver detalles del ticket">Ver detalles del ticket</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="alert alert-info mt-3 mb-0" role="alert">
+                                            <h4 class="alert-heading mb-0" style="font-size: 17px">No hay tickets</h4>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -612,7 +730,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 col-12 mb-2">
-                            <b>Asignado a</b>: <span>{{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}</span>
+                            <b>Asignado a</b>: <span id="asignado">{{ auth()->user()->nombre }} {{ auth()->user()->apellido_p }} {{ auth()->user()->apellido_m }}</span>
                         </div>
                         <div class="col-md-6 col-12 mb-2">
                             <b>Departamento</b>: <span id="departamento"></span>

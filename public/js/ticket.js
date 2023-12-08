@@ -43,6 +43,72 @@ $(document).ready(function () {
         $("#btnCancel").text("Cancelar");
     });
 
+    $(document).on("click", ".view", function (e) {
+        $("#alertMessage").text("");
+        acc = "view";
+        e.preventDefault();
+        var id = $(this).data("id");
+        var departamento = $(this).data("departamento");
+        var asignado = $(this).data("asignado");
+        var fechagenerado = $(this).data("fechagenerado");
+        var fechalimite = $(this).data("fechalimite");
+        var asunto = $(this).data("asunto");
+        var descripcion = $(this).data("descripcion");
+
+        asignado = asignado.split(",");
+        let asignadoCount = asignado.length;
+        let user_id = asignado[asignadoCount - 2];
+
+        $("#idInput").val(id);
+
+        $("#departamentoInput").val(departamento);
+        $("#departamentoInput").prop("disabled", true);
+
+        $("#fechaActualInput").val(fechagenerado);
+
+        $("#fechaLimiteInput").val(fechalimite);
+        $("#fechaLimiteInput").prop("readonly", true);
+
+        $("#asuntoInput").val(asunto);
+        $("#asuntoInput").prop("readonly", true);
+
+        let posicion = descripcion.indexOf("Contrato:");
+        if (posicion !== -1) {
+            let link = descripcion.slice(posicion + 6);
+            let link_limpio = link.replace(/<\/?[^>]+(>|$)/g, "");
+            $("#descripcionInput").val(descripcion.replace(link, link_limpio));
+        } else {
+            $("#descripcionInput").val(descripcion);
+        }
+        $("#descripcionInput").prop("readonly", true);
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/showUsuariosTickets",
+            data: {
+                privilegio: "edit_user",
+                id: user_id,
+            },
+            success: function (user) {
+                $("#asignadoAInput").prop("disabled", true);
+                $("#asignadoAInput").empty();
+                $("#asignadoAInput").append(`
+                    <option value="" disabled>Selecciona...</option>
+                `);
+
+                $("#asignadoAInput").append(`
+                    <option value="${user[0].id}" selected>${user[0].nombre} ${user[0].apellido_p}</option>
+                `);
+
+                $("#modalTitle").text("Ver ticket");
+                $("#btnSubmit").hide();
+                $("#btnCancel").text("Cancelar");
+                $("#formModal").modal("show");
+                $("#ticketForm").attr("action", "/admin/editTicket");
+            },
+        });
+    });
+
     $(document).on("click", ".edit", function (e) {
         $("#alertMessage").text("");
         acc = "edit";
@@ -72,7 +138,7 @@ $(document).ready(function () {
         $("#asuntoInput").val(asunto);
         $("#asuntoInput").prop("readonly", false);
 
-        let posicion = descripcion.indexOf("Link:");
+        let posicion = descripcion.indexOf("Contrato:");
         if (posicion !== -1) {
             let link = descripcion.slice(posicion + 6);
             let link_limpio = link.replace(/<\/?[^>]+(>|$)/g, "");
@@ -113,6 +179,8 @@ $(document).ready(function () {
         e.preventDefault();
         $("#detallesModal").modal("show");
 
+        var todo = $(this).data("todo");
+        var asignado = $(this).data("asignado");
         var generado = $(this).data("generado");
         var fechagenerado = moment($(this).data("fechagenerado")).format(
             "DD/MM/YYYY hh:mm A"
@@ -125,12 +193,15 @@ $(document).ready(function () {
         var descripcion = $(this).data("descripcion");
         var status = $(this).data("status");
 
+        if (todo == true) {
+            $("#asignado").text(asignado);
+        }
         $("#generado").text(generado);
         $("#fecha_generado").text(fechagenerado);
         $("#fecha_limite").text(fechalimite);
         $("#departamento").text(departamento);
         $("#asunto").text(asunto);
-        let posicion = descripcion.indexOf("Link:");
+        let posicion = descripcion.indexOf("Contrato:");
         if (posicion !== -1) {
             let link = descripcion.slice(posicion + 6);
             link = `<a href="${link}" target="_blank">${link}</a>`;
@@ -398,7 +469,7 @@ $(document).ready(function () {
 
     $(document).on(
         "click",
-        "#abiertos-tab, #proceso-tab, #cancelados-tab, #terminados-tab, #generados-tab, #archivados-tab",
+        "#abiertos-tab, #proceso-tab, #cancelados-tab, #terminados-tab, #generados-tab, #archivados-tab, #todos-tab",
         function (e) {
             e.preventDefault();
 
@@ -422,6 +493,8 @@ $(document).ready(function () {
             $("#generados-tab-pane").addClass("show active");
         } else if (opc == "archivados") {
             $("#archivados-tab-pane").addClass("show active");
+        } else if (opc == "todos") {
+            $("#todos-tab-pane").addClass("show active");
         }
     };
 });

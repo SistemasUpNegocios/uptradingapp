@@ -98,7 +98,7 @@ class ContratoVencerController extends Controller
         $ticket->fecha_limite = Carbon::parse("$contrato_completo->fecha_renovacion 23:59")->addDays(3)->toDateTimeString();
         $ticket->departamento = $request->ticket_persona == '246' ? "Egresos" : "Administración";
         $ticket->asunto = "Nota de contrato a vencer";
-        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nContrato: $contrato->contrato.\nFecha de termino: $fecha_renovacion_contrato.\nLink: <a href='https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id' target='_blank'>https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id</a>";
+        $ticket->descripcion = "$request->nota_contrato.\nCliente: $contrato_completo->cliente.\nFecha de termino: $fecha_renovacion_contrato.\nContrato: <a href='https://admin.uptradingexperts.com/admin/contrato/vercontrato?id=$contrato->id' target='_blank'>$contrato->contrato.</a>";
         $ticket->status = "Abierto";
         $ticket->save();
 

@@ -131,6 +131,7 @@ class TicketController extends Controller
 
         $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
         $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
+        $tickets_todo = Ticket::all();
 
         $data = array(
             "count" => $count,
@@ -140,6 +141,7 @@ class TicketController extends Controller
             "tickets_user_terminados" => $tickets_user_terminados,
             "tickets_generado" => $tickets_generado,
             "tickets_archivado" => $tickets_archivado,
+            "tickets_todo" => $tickets_todo,
         );
 
         return response()->view('ticket.show', $data, 200);
@@ -253,6 +255,7 @@ class TicketController extends Controller
 
         $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
         $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
+        $tickets_todo = Ticket::all();
 
         $data = array(
             "count" => $count,
@@ -262,6 +265,7 @@ class TicketController extends Controller
             "tickets_user_terminados" => $tickets_user_terminados,
             "tickets_generado" => $tickets_generado,
             "tickets_archivado" => $tickets_archivado,
+            "tickets_todo" => $tickets_todo,
         );
 
         return response()->view('ticket.tab', $data, 200);
@@ -405,6 +409,7 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($request->id);
         $ticket->asignado_a = $ticket->asignado_a.','.$request->asignado_a.','.Carbon::now()->toDateTimeString();
+        $ticket->departamento = $request->departamento;
 
         $notificacion = new Notificacion;
         $notificacion->titulo = "Traspaso de ticket";

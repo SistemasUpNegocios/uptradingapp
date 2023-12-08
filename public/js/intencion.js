@@ -443,31 +443,31 @@ $(document).ready(function () {
             $("#contCliente").empty();
 
             $("#contCliente").append(`
-            <div class="col-md-6 col-12">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control"
-                    placeholder="Ingresa el nombre completo" id="nombreInput"
-                    name="nombre" required style="text-transform: none;">
-                <label for="nombreInput">Nombre completo del inversor</label>
-            </div>
-        </div>
-        <div class="col-md-3 col-12">
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control"
-                placeholder="Ingresa el correo electrónico" id="emailInput"
-                name="email" required style="text-transform: none;">
-            <label for="emailInput">Correo electrónico</label>
-        </div>
-    </div>
-    <div class="col-md-3 col-12">
-        <div class="form-floating mb-3">
-            <input type="number" step="any" class="form-control"
-                placeholder="Ingresa la cantidad de inversión" id="telefonoInput"
-                name="telefono" required>
-            <label for="telefonoInput">Número de teléfono</label>
-        </div>
-    </div>
-        `);
+                <div class="col-md-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control"
+                            placeholder="Ingresa el nombre completo" id="nombreInput"
+                            name="nombre" required pattern="[a-zA-z]+" style="text-transform: none;">
+                        <label for="nombreInput">Nombre completo del inversor (solo letras)</label>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control"
+                            placeholder="Ingresa el correo electrónico" id="emailInput"
+                            name="email" required style="text-transform: none;">
+                        <label for="emailInput">Correo electrónico</label>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="number" step="any" class="form-control"
+                            placeholder="Ingresa la cantidad de inversión" id="telefonoInput"
+                            name="telefono" required>
+                        <label for="telefonoInput">Número de teléfono</label>
+                    </div>
+                </div>
+            `);
         } else {
             $.ajax({
                 type: "POST",

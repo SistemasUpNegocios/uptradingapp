@@ -58,8 +58,8 @@
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control"
                                                 placeholder="Ingresa el nombre completo" id="nombreInput"
-                                                name="nombre" required style="text-transform: none;">
-                                            <label for="nombreInput">Nombre completo del inversor</label>
+                                                name="nombre" required pattern="[a-zA-z]+" style="text-transform: none;">
+                                            <label for="nombreInput">Nombre completo del inversor (solo letras)</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
