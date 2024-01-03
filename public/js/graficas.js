@@ -64,6 +64,7 @@ $(document).ready(function () {
 
             graficas();
         }
+        $("#contenedor_filtros").toggle();
     });
 
     $("#contenedor_filtros").hide();
@@ -80,18 +81,6 @@ $(document).ready(function () {
             success: function (data) {
                 const grafica = document.querySelector("#grafica1");
                 const etiquetas = [
-                    "Enero - 2022",
-                    "Febrero - 2022",
-                    "Marzo - 2022",
-                    "Abril - 2022",
-                    "Mayo - 2022",
-                    "Junio - 2022",
-                    "Julio - 2022",
-                    "Agosto - 2022",
-                    "Septiembre - 2022",
-                    "Octubre - 2022",
-                    "Noviembre - 2022",
-                    "Diciembre - 2022",
                     "Enero - 2023",
                     "Febrero - 2023",
                     "Marzo - 2023",
@@ -104,6 +93,18 @@ $(document).ready(function () {
                     "Octubre - 2023",
                     "Noviembre - 2023",
                     "Diciembre - 2023",
+                    "Enero - 2024",
+                    "Febrero - 2024",
+                    "Marzo - 2024",
+                    "Abril - 2024",
+                    "Mayo - 2024",
+                    "Junio - 2024",
+                    "Julio - 2024",
+                    "Agosto - 2024",
+                    "Septiembre - 2024",
+                    "Octubre - 2024",
+                    "Noviembre - 2024",
+                    "Diciembre - 2024",
                 ];
 
                 let totalContData = [];
@@ -165,18 +166,6 @@ $(document).ready(function () {
             success: function (data) {
                 const grafica2 = document.querySelector("#grafica2");
                 const etiquetas2 = [
-                    "Enero - 2022",
-                    "Febrero - 2022",
-                    "Marzo - 2022",
-                    "Abril - 2022",
-                    "Mayo - 2022",
-                    "Junio - 2022",
-                    "Julio - 2022",
-                    "Agosto - 2022",
-                    "Septiembre - 2022",
-                    "Octubre - 2022",
-                    "Noviembre - 2022",
-                    "Diciembre - 2022",
                     "Enero - 2023",
                     "Febrero - 2023",
                     "Marzo - 2023",
@@ -189,6 +178,18 @@ $(document).ready(function () {
                     "Octubre - 2023",
                     "Noviembre - 2023",
                     "Diciembre - 2023",
+                    "Enero - 2024",
+                    "Febrero - 2024",
+                    "Marzo - 2024",
+                    "Abril - 2024",
+                    "Mayo - 2024",
+                    "Junio - 2024",
+                    "Julio - 2024",
+                    "Agosto - 2024",
+                    "Septiembre - 2024",
+                    "Octubre - 2024",
+                    "Noviembre - 2024",
+                    "Diciembre - 2024",
                 ];
 
                 let totalContMens = [];

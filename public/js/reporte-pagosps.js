@@ -520,6 +520,15 @@ $(document).ready(function () {
         $("#letraInput").val(letra);
         $("#letraDolaresInput").val(letra_dolares);
         $("#fechaMesInput").val(fecha_mes);
+
+        $(document).on("keyup", "#comisionInput", function () {
+            let comision = $(this)
+                .val()
+                .replaceAll("$", "")
+                .replaceAll(",", "");
+            let letra = numeroALetrasMXN(comision);
+            $("#letraInput").val(letra);
+        });
     });
 
     $(document).on("click", "#imprimirReporteModal", function () {

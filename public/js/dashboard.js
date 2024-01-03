@@ -150,7 +150,7 @@ $.ajax({
                 }).then((result) => {
                     if (result.isConfirmed) {
                         localStorage.removeItem("Tickets pendientes");
-                        window.location.href = "./convenio";
+                        window.location.href = "./tickets";
                     }
                 });
             } else if (data == 1) {

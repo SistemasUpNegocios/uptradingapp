@@ -52,8 +52,6 @@
                                 <tr>
                                     <th data-priority="0" scope="col">Código cliente</th>
                                     <th data-priority="0" scope="col">Nombre</th>
-                                    <th data-priority="0" scope="col">Apellido paterno</th>
-                                    <th data-priority="0" scope="col">Apellido materno</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
                             </thead>

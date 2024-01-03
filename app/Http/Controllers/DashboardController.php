@@ -209,8 +209,8 @@ class DashboardController extends Controller
     public function getContConvCount()
     {
 
-        $inicio = Carbon::parse("2022-01-01");
-        $fin = Carbon::parse("2023-12-31");
+        $inicio = Carbon::parse("2023-01-01");
+        $fin = Carbon::parse("2024-12-31");
 
         for ($i = $inicio; $i <= $fin; $i->addMonth()) {
             $fecha = Carbon::parse($i)->format("Y-m-d");
@@ -233,8 +233,8 @@ class DashboardController extends Controller
 
     public function getContMensCompCount()
     {
-        $inicio = Carbon::parse("2022-01-01");
-        $fin = Carbon::parse("2023-12-31");
+        $inicio = Carbon::parse("2023-01-01");
+        $fin = Carbon::parse("2024-12-31");
 
         for ($i = $inicio; $i <= $fin; $i->addMonth()) {
             $fecha = Carbon::parse($i)->format("Y-m-d");

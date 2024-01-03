@@ -496,11 +496,11 @@
                             <div class="col-12">
                                 <label class="form-check-label me-2">¿Para quién es?</label>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ticket_persona" id="maruInput" value="234" checked>
+                                    <input class="form-check-input" type="radio" name="ticket_persona" id="maruInput" value="234">
                                     <label class="form-check-label" for="maruInput">Maru</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="ticket_persona" id="marlenInput" value="246">
+                                    <input class="form-check-input" type="radio" name="ticket_persona" id="marlenInput" value="246" checked>
                                     <label class="form-check-label" for="marlenInput">Marlen</label>
                                 </div>
                             </div>

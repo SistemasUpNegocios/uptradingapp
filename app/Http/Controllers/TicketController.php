@@ -131,7 +131,7 @@ class TicketController extends Controller
 
         $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
         $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
-        $tickets_todo = Ticket::all();
+        $tickets_todo = Ticket::select()->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
@@ -255,7 +255,7 @@ class TicketController extends Controller
 
         $tickets_generado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'no')->orderBy("id", "DESC")->get();
         $tickets_archivado = Ticket::where('generado_por', auth()->user()->id)->where('archivado', 'si')->orderBy("id", "DESC")->get();
-        $tickets_todo = Ticket::all();
+        $tickets_todo = Ticket::select()->orderBy("id", "DESC")->get();
 
         $data = array(
             "count" => $count,
