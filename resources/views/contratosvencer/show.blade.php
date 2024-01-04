@@ -505,6 +505,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="hamInput">¿Le interesa a Hamilton?</label>
+                                    <input class="form-check-input" type="checkbox" value="si" id="hamInput" name="opcion">
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">

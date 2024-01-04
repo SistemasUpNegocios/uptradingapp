@@ -40,9 +40,9 @@
                                         <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil" class="rounded-circle text-center" width="66px">
                                     </div>
                                     @if (strlen($notificacion->mensaje) > 50)
-                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
+                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{$notificacion->titulo}}: {{ $notificacion->mensaje }}.</span></div>
                                     @else
-                                        <div class="col-md-6" style="text-align: center;"><span class="text-muted">{{ $notificacion->mensaje }}.</span></div>
+                                        <div class="col-md-6" style="text-align: center;"><span class="text-muted">{{$notificacion->titulo}}: {{ $notificacion->mensaje }}.</span></div>
                                     @endif
                                     <div class="col-md-3 text-center"><span class="text-muted">{{ str_replace('hace', 'Hace', \Carbon\Carbon::parse($notificacion->created_at)->diffForHumans()) }}</span></div>
                                     <div class="col-md-2 text-center">
