@@ -93,7 +93,7 @@ class AgendaController extends Controller
         $notificacion->user_id = $request->asignado_a;
         $notificacion->save();
 
-        $agenda_id = $request->id;
+        $agenda_id = $agenda->id;
         $bitacora_id = session('bitacora_id');
 
         $log = new Log;

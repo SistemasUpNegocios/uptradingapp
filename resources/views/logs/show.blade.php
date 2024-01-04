@@ -42,10 +42,11 @@
                 <div class="card">
                     <div class="card-body mt-3">
                         <table class="table table-striped table-bordered nowrap text-center" style="width: 100%; font-size: 14px !important" id="cambios">
-                            <thead>
+                            <thead style="vertical-align: middle;">
                                 <tr>
                                     <th data-priority="0" scope="col">Tipo de acción</th>
                                     <th data-priority="0" scope="col">Tabla</th>
+                                    <th data-priority="0" scope="col">ID registro</th>
                                     <th data-priority="0" scope="col">Usuario</th>
                                     <th data-priority="0" scope="col">Fecha y hora</th>
                                     <th data-priority="0" scope="col">Acciones</th>
@@ -176,5 +177,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/es.js"></script>
     <script src="{{ asset('js/logs.js') }}"></script>
 @endsection

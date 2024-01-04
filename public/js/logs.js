@@ -4,21 +4,17 @@ $(document).ready(function () {
         columns: [
             { data: "tipos" },
             { data: "tabla" },
-            { data: "user_correo" },
+            {
+                data: "registro",
+            },
             {
                 data: function (data) {
-                    var fecha_hora = new Date(data.hora_fecha);
-                    var opciones = {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                    };
-                    let date = fecha_hora.toLocaleString("es-MX", opciones);
-
-                    return date;
+                    return `${data.user_nombre} ${data.user_apellidop}`;
+                },
+            },
+            {
+                data: function (data) {
+                    return moment(data.hora_fecha).format("L hh:mm A");
                 },
             },
             { data: "btn" },

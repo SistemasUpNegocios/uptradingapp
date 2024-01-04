@@ -179,11 +179,10 @@ class IntencionController extends Controller
             $bitacora_id = session('bitacora_id');
 
             $log = new Log;
-    
             $log->tipo_accion = "Inserción";
             $log->tabla = "Intención de inversión";
+            $log->id_tabla = $id;
             $log->bitacora_id = $bitacora_id;
-    
             $log->save();
 
             $pdf = PDF::loadView('intencioninversion.pdf', $data);

@@ -27,7 +27,7 @@ class LogController extends Controller
         $logs = DB::table('logs')
         ->join('bitacora_acceso', 'bitacora_acceso.id', '=', 'logs.bitacora_id')
         ->join('users', 'users.id', '=', 'bitacora_acceso.user_id')
-        ->select(DB::raw("bitacora_acceso.id, bitacora_acceso.direccion_ip, bitacora_acceso.fecha_entrada, bitacora_acceso.fecha_salida, bitacora_acceso.dispositivo, bitacora_acceso.sistema_operativo, bitacora_acceso.navegador, bitacora_acceso.user_id, users.nombre AS user_nombre, users.apellido_p AS user_apellidop, users.apellido_m AS users_apellidom, users.correo AS user_correo, users.privilegio AS user_privilegio, users.foto_perfil AS user_fotoperfil, logs.hora_fecha, logs.tipo_accion, logs.tabla, logs.id AS logsid"))
+        ->select(DB::raw("bitacora_acceso.id, bitacora_acceso.direccion_ip, bitacora_acceso.fecha_entrada, bitacora_acceso.fecha_salida, bitacora_acceso.dispositivo, bitacora_acceso.sistema_operativo, bitacora_acceso.navegador, bitacora_acceso.user_id, users.nombre AS user_nombre, users.apellido_p AS user_apellidop, users.apellido_m AS users_apellidom, users.correo AS user_correo, users.privilegio AS user_privilegio, users.foto_perfil AS user_fotoperfil, logs.hora_fecha, logs.tipo_accion, logs.tabla, logs.id AS logsid, logs.id_tabla AS registro"))
         ->orderByDesc('logs.hora_fecha')
         ->get();
 
