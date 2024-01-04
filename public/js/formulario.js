@@ -25,13 +25,9 @@ $(document).ready(function () {
                     data: "codigoCliente",
                 },
                 {
-                    data: "nombre",
-                },
-                {
-                    data: "apellido_p",
-                },
-                {
-                    data: "apellido_m",
+                    data: function (data) {
+                        return `${data.nombre} ${data.apellido_p} ${data.apellido_m}`;
+                    },
                 },
                 {
                     data: "btn",

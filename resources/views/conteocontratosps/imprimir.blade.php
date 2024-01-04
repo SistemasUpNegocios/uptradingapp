@@ -37,8 +37,9 @@
     <img class="imgUP_superior" src="{{ public_path('img/logo_sup.png') }}" alt="Logo uptrading">
     <img class="imgUP_inferior" src="{{ public_path('img/logo_latam.png') }}" alt="Logo uptrading">  
 
-    <div style="margin-top: 6rem" class="text-center">
+    <div style="margin-top: 6rem; margin-bottom: 3rem" class="text-center">
         <p style="font-size: 17px; text-transform: uppercase;"><b>Conteo de contratos de PS</b></p>
+        <p style="font-size: 13px; text-transform: uppercase; margin-top: -20px;">Del {{\Carbon\Carbon::parse($fecha_inicio)->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::parse($fecha_fin)->formatLocalized('%d de %B de %Y')}}</p>
     </div>
 
     <div style="margin-top: 1rem;">

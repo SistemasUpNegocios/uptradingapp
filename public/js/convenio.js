@@ -24,9 +24,6 @@ $(document).ready(function () {
                 data: "loggin",
             },
             {
-                data: "incremento",
-            },
-            {
                 data: "status",
             },
             {
@@ -256,9 +253,6 @@ $(document).ready(function () {
                 },
                 {
                     data: "loggin",
-                },
-                {
-                    data: "incremento",
                 },
                 {
                     data: "status",
@@ -498,9 +492,6 @@ $(document).ready(function () {
                     data: "loggin",
                 },
                 {
-                    data: "incremento",
-                },
-                {
                     data: "status",
                 },
                 {
@@ -738,9 +729,6 @@ $(document).ready(function () {
                 },
                 {
                     data: "loggin",
-                },
-                {
-                    data: "incremento",
                 },
                 {
                     data: "status",

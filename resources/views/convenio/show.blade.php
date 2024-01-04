@@ -53,7 +53,6 @@
                                 <tr>
                                     <th data-priority="0" scope="col">Folio</th>
                                     <th data-priority="0" scope="col">A/C</th>
-                                    <th data-priority="0" scope="col">Aumentos</th>
                                     <th data-priority="0" scope="col">Estatus</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>

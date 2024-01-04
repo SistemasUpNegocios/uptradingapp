@@ -40,63 +40,66 @@
     <div style="margin-top: 6rem;">
         <div style="margin-bottom: 1rem" class="text-center">
             <p style="font-size: 17px; text-transform: uppercase;"><b>Conteo de convenios de PS</b></p>
+            <p style="font-size: 13px; text-transform: uppercase; margin-top: -20px;">Del {{\Carbon\Carbon::parse($fecha_inicio)->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::parse($fecha_fin)->formatLocalized('%d de %B de %Y')}}</p>
         </div>
         
-        <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-bottom: 6rem !important;">
-            <thead>
-                <tr>
-                    <th data-priority="0" scope="col">PS</th>
-                    <th data-priority="0" scope="col">Convenios</th>
-                    <th data-priority="0" scope="col">Total</th>
-                    <th data-priority="0" scope="col">$USD</th>
-                    <th data-priority="0" scope="col">$MXN</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($lista_ps as $ps)
-                    @php
-                        $sum_convenio = DB::table('convenio')
-                            ->where('ps_id', $ps->id)
-                            ->where('status', "Activado")
-                            ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
-                            ->sum("monto");
-
-                        $count_convenio = DB::table('convenio')
-                            ->where('ps_id', $ps->id)
-                            ->where('status', "Activado")
-                            ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
-                            ->count();
-
-                        $convenios = DB::table('convenio')
-                            ->select('folio')
-                            ->where('ps_id', $ps->id)
-                            ->where('status', "Activado")
-                            ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
-                            ->get();
-
-                        $conv = "";
-                        foreach ($convenios as $convenio){
-                            $conv .= $convenio->folio.", ";
-                        }
-
-                        $conv = substr($conv, 0, -2);
-                    @endphp
+        <div style="margin-top: 3rem;">
+            <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-bottom: 6rem !important;">
+                <thead>
                     <tr>
-                        <td>{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
-                        <td>
-                            @if (strlen($conv) > 0)
-                                {{$conv}}.
-                            @else
-                                <b>No se encontraron resultados</b>
-                            @endif
-                        </td>
-                        <td>{{ $count_convenio }}</td>
-                        <td>${{ number_format($sum_convenio, 2) }}</td>
-                        <td>${{ number_format($sum_convenio * $dolar, 2) }}</td>
+                        <th data-priority="0" scope="col">PS</th>
+                        <th data-priority="0" scope="col">Convenios</th>
+                        <th data-priority="0" scope="col">Total</th>
+                        <th data-priority="0" scope="col">$USD</th>
+                        <th data-priority="0" scope="col">$MXN</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($lista_ps as $ps)
+                        @php
+                            $sum_convenio = DB::table('convenio')
+                                ->where('ps_id', $ps->id)
+                                ->where('status', "Activado")
+                                ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
+                                ->sum("monto");
+
+                            $count_convenio = DB::table('convenio')
+                                ->where('ps_id', $ps->id)
+                                ->where('status', "Activado")
+                                ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
+                                ->count();
+
+                            $convenios = DB::table('convenio')
+                                ->select('folio')
+                                ->where('ps_id', $ps->id)
+                                ->where('status', "Activado")
+                                ->whereBetween('fecha_inicio', [$fecha_inicio, $fecha_fin])
+                                ->get();
+
+                            $conv = "";
+                            foreach ($convenios as $convenio){
+                                $conv .= $convenio->folio.", ";
+                            }
+
+                            $conv = substr($conv, 0, -2);
+                        @endphp
+                        <tr>
+                            <td>{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
+                            <td>
+                                @if (strlen($conv) > 0)
+                                    {{$conv}}.
+                                @else
+                                    <b>No se encontraron resultados</b>
+                                @endif
+                            </td>
+                            <td>{{ $count_convenio }}</td>
+                            <td>${{ number_format($sum_convenio, 2) }}</td>
+                            <td>${{ number_format($sum_convenio * $dolar, 2) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

@@ -74,6 +74,7 @@ class ContratoTerminadoController extends Controller
             ->where("contrato.status", "!=", "Pendiente de activación")
             ->where("contrato.status", "!=", "Activado")
             ->where("contrato.status", "!=", "Refrendado")
+            ->orderBy("contrato.id", "desc")
             ->get();        
 
         return datatables()->of($contrato)->addColumn('btn', 'contratoterminado.buttons')->rawColumns(['btn'])->toJson();
