@@ -26,43 +26,44 @@
                         @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
                             <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Añadir un nuevo documento</a>
                         @endif
-                        <div id="contenedorDocumentos">
+                        <div>
                             <ol class="ps-3 mt-2">
-                                    <div class="ps-2 row align-items-center mb-2">  
-                                @foreach ($documentos as $documento)
-                                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                                        <li>
-                                            <div class="ps-2 row align-items-center mb-2">
-                                                <div class="col-12 col-md-6 col-sm-6 col-xs-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
-                                                <div class="col-12 col-md-6 col-sm-6 col-xs-6 text-end accion_documentos">
-                                                    <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
-                                                    <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
-                                                    <a href="" data-id="{{ $documento->id }}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
-                                                    <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
+                                <div class="ps-2 row align-items-center mb-2" id="contenedorDocumentos">  
+                                    @foreach ($documentos as $documento)
+                                        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+                                            <li>
+                                                <div class="ps-2 row align-items-center mb-2">
+                                                    <div class="col-12 col-md-6 col-sm-6 col-xs-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
+                                                    <div class="col-12 col-md-6 col-sm-6 col-xs-6 text-end accion_documentos">
+                                                        <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
+                                                        <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
+                                                        <a href="" data-id="{{ $documento->id }}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
+                                                        <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    @elseif (auth()->user()->is_cliente && $documento->tipo_documento == "cliente")
-                                        <li>
-                                            <div class="ps-2 row align-items-center mb-2">
-                                                <div class="col-md-6"><p>{{ $documento->nombre }}</p></div>
-                                                <div class="col-md-6 text-end accion_documentos">
-                                                    <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
+                                            </li>
+                                        @elseif (auth()->user()->is_cliente && $documento->tipo_documento == "cliente")
+                                            <li>
+                                                <div class="ps-2 row align-items-center mb-2">
+                                                    <div class="col-md-6"><p>{{ $documento->nombre }}</p></div>
+                                                    <div class="col-md-6 text-end accion_documentos">
+                                                        <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    @elseif (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
-                                        <li>
-                                            <div class="ps-2 row align-items-center mb-2">
-                                                <div class="col-md-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
-                                                <div class="col-md-6 text-end accion_documentos">
-                                                    <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
-                                                    <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
+                                            </li>
+                                        @elseif (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+                                            <li>
+                                                <div class="ps-2 row align-items-center mb-2">
+                                                    <div class="col-md-6"><p>{{ $documento->nombre }} ({{ $documento->tipo_documento }})</p></div>
+                                                    <div class="col-md-6 text-end accion_documentos">
+                                                        <a href="" data-id="{{ $documento->id }}" data-tipo="{{ $documento->tipo_documento }}" data-nombre="{{ $documento->nombre }}" data-documento="{{ $documento->documento }}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
+                                                        <a href="{{ "../documentos/$documento->tipo_documento/$documento->documento" }}" download="{{ $documento->documento }}" title="Descargar {{ $documento->nombre }}" class="btn btn-secondary btn-lg btn-icon download"><i class="bi bi-download"></i></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                @endforeach
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                </div>
                             </ol>
                         </div>
                     </div>

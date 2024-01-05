@@ -44,12 +44,14 @@ $(document).ready(function () {
                 }
 
                 $("#contenedorDocumentos").empty();
+                var contDocumentos = "";
                 response.map(function (documentos) {
                     contDocumentos += `
                         <li>
-                            <div class="ps-2 d-flex justify-content-between align-items-center">
-                                <div><p>${documentos.nombre} (${documentos.tipo_documento})</p></div>
-                                <div>
+                            <div class="ps-2 row align-items-center mb-2">
+                                <div class="col-12 col-md-6 col-sm-6 col-xs-6"><p>${documentos.nombre} (${documentos.tipo_documento})</p></div>
+                                <div class="col-12 col-md-6 col-sm-6 col-xs-6 text-end accion_documentos">
+                                    <a href="" data-id="${documentos.id}" data-tipo="${documentos.tipo_documento}" data-nombre="${documentos.nombre}" data-documento="${documentos.documento}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
                                     <a href="" data-id="${documentos.id}" data-tipo="${documentos.tipo_documento}" data-nombre="${documentos.nombre}" data-documento="${documentos.documento}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
                                     <a href="" data-id="${documentos.id}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
                                     <a href="../documentos/uptrading/${documentos.documento}" download="${documentos.documento}" title="Descargar ${documentos.nombre}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
@@ -58,7 +60,6 @@ $(document).ready(function () {
                         </li>
                     `;
                 });
-                contDocumentos += "</ol>";
                 $("#contenedorDocumentos").append(contDocumentos);
             },
             error: function (jqXHR, exception) {
@@ -181,12 +182,14 @@ $(document).ready(function () {
                     { id: id },
                     function (response) {
                         $("#contenedorDocumentos").empty();
+                        var contDocumentos = "";
                         response.map(function (documentos) {
                             contDocumentos += `
                                 <li>
-                                    <div class="ps-2 d-flex justify-content-between align-items-center">
-                                        <div><p>${documentos.nombre} (${documentos.tipo_documento})</p></div>
-                                        <div>
+                                    <div class="ps-2 row align-items-center mb-2">
+                                        <div class="col-12 col-md-6 col-sm-6 col-xs-6"><p>${documentos.nombre} (${documentos.tipo_documento})</p></div>
+                                        <div class="col-12 col-md-6 col-sm-6 col-xs-6 text-end accion_documentos">
+                                            <a href="" data-id="${documentos.id}" data-tipo="${documentos.tipo_documento}" data-nombre="${documentos.nombre}" data-documento="${documentos.documento}" type="button" title="Vista previa" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
                                             <a href="" data-id="${documentos.id}" data-tipo="${documentos.tipo_documento}" data-nombre="${documentos.nombre}" data-documento="${documentos.documento}" type="button" title="Editar documento" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>
                                             <a href="" data-id="${documentos.id}" type="button" title="Eliminar documento" class="btn btn-danger btn-sm btn-icon delete"> <i class="bi bi-trash"></i></a>
                                             <a href="../documentos/uptrading/${documentos.documento}" download="${documentos.documento}" title="Descargar ${documentos.nombre}" class="btn btn-secondary btn-sm btn-icon download"><i class="bi bi-download"></i></a>
@@ -195,7 +198,6 @@ $(document).ready(function () {
                                 </li>
                             `;
                         });
-                        contDocumentos += "</ol>";
                         $("#contenedorDocumentos").append(contDocumentos);
 
                         Swal.fire({

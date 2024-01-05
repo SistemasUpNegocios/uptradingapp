@@ -369,6 +369,16 @@ class TicketController extends Controller
         $ticket->descripcion = $request->descripcion;
         $ticket->save();
 
+        $user = User::select()->where("id", auth()->user()->id)->first();
+        $nombre = ucfirst(strtolower($user->nombre))." ".ucfirst(strtolower($user->apellido_p));
+
+        $notificacion = new Notificacion;
+        $notificacion->titulo = "Ticket actualizado por: $nombre";
+        $notificacion->mensaje = "Asunto: $request->asunto.\nDescripción: $request->descripcion.\nEstatus $ticket->status";
+        $notificacion->status = 'Pendiente';
+        $notificacion->user_id = $request->asignado_a;
+        $notificacion->save();
+
         $ticket_id = $ticket->id;
         $bitacora_id = session('bitacora_id');
 
