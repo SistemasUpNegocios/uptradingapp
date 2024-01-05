@@ -176,6 +176,18 @@ class ReportePagoPsController extends Controller
                     $fecha = Carbon::now()->format('Y-m');
                     $pago_ps->fecha_pagado = $fecha."-10";
                     $pago_ps->status = "Pagado";
+
+                    $tipo_pago_if = $request->tipo_pago[0];
+                    if ($tipo_pago_if == "transferencia") {
+                        $tipo_pago_if = "Transferencia MX";
+                    }elseif($tipo_pago_if == "transferenciaSwiss") {
+                        $tipo_pago_if = "Transferencia Swissquote";
+                    }elseif($tipo_pago_if == "efectivo") {
+                        $tipo_pago_if = "Efectivo";
+                    }else{
+                        $tipo_pago_if = "Pendiente";
+                    }
+                    $pago_ps->tipo_pago = $tipo_pago_if;
                     $pago_ps->update();
 
                     // DB::table('pagos')->where("id_contrato", $id_arr[$i])->where('memo', "Pago de comisión ($numero_pago_arr[$i])")->delete();

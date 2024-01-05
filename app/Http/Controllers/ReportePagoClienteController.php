@@ -464,6 +464,20 @@ class ReportePagoClienteController extends Controller
         $pago->id_contrato = $request->contrato_id;
         $pago->memo = $request->memo;
         $pago->tipo_cambio = $request->dolar;
+
+        $tipo_pago_if = $request->tipo_pago[0];
+        if ($tipo_pago_if == "transferencia") {
+            $tipo_pago_if = "Transferencia MX";
+        }elseif($tipo_pago_if == "transferenciaSwiss") {
+            $tipo_pago_if = "Transferencia Swissquote";
+        }elseif($tipo_pago_if == "inversiones") {
+            $tipo_pago_if = "Inversiones";
+        }elseif($tipo_pago_if == "efectivo") {
+            $tipo_pago_if = "Efectivo";
+        }else{
+            $tipo_pago_if = "Pendiente";
+        }
+        
         if (gettype($request->tipo_pago) != 'NULL'){
             $tipos_pagos = "";
             foreach ($request->tipo_pago as $tipo_pago) {
@@ -486,6 +500,7 @@ class ReportePagoClienteController extends Controller
 
         $pago_cliente = PagoCliente::find($request->id);
         $pago_cliente->fecha_pagado = Carbon::now()->format('Y-m-d');
+        $pago_cliente->tipo_pago = $tipo_pago_if;
         $pago_cliente->status = "Pagado";
         $pago_cliente->update();
 
