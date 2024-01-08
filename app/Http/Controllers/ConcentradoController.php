@@ -70,13 +70,18 @@ class ConcentradoController extends Controller
             ->distinct("contrato.contrato")
             ->get();
 
-        $contratos_comp_tot = Contrato::join("pago_cliente", "pago_cliente.contrato_id", "contrato.id")
+        $contratos_comp_tot_prim = Contrato::join("pago_cliente", "pago_cliente.contrato_id", "contrato.id")
             ->select("contrato.contrato", "pago_cliente.fecha_pago", "contrato.tipo_id", "contrato.inversion", "contrato.inversion_us", "contrato.inversion_eur", "contrato.inversion_chf", "contrato.moneda")
             ->where("contrato.cliente_id", $request->id)
             ->where("contrato.tipo_id", 2)
             ->orderBy("tipo_id", "ASC")
             ->distinct("contrato.contrato")
             ->get();
+
+        $contratos_comp_tot = array();
+        foreach($contratos_comp_tot_prim->unique('contrato') as $contrato_comp_tot){
+            array_push($contratos_comp_tot, $contrato_comp_tot);
+        }
 
         $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
 
