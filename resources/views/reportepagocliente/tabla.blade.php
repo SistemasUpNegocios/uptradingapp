@@ -1,6 +1,25 @@
 @if (sizeof($resumenes_contrato) > 0)
+    {{-- @php
+        $pago_final = 0;
+        $rendimiento_liquidacion = 0;
+    @endphp --}}
+
     @foreach ($resumenes_contrato as $resumen)
         @php
+            // $pago2 = str_pad($resumen->serie_pago, 2, "0", STR_PAD_LEFT).'/12';
+            // $pagos_bd_2 = App\Models\Pago::where('id_contrato', $resumen->contratoid)->where("memo", "Pago a cliente ($pago2)")->first();
+
+            // $rendimiento = $resumen->pago * $dolar;
+
+            // if(!$pagos_bd_2){
+            //     if ($resumen->tipo_id == 1 && $reporte == "liquidacion"){
+            //         $rendimiento_liquidacion = $resumen->inversion_us * $dolar;
+            //     }else{
+            //         $rendimiento_liquidacion = $rendimiento;
+            //     }
+            // }
+
+            // $pago_final = $rendimiento_liquidacion + $pago_final;
             $tipo_pago = explode(",", $resumen->tipo_pago);
             
             foreach ($tipo_pago as $tipo) {
@@ -27,6 +46,9 @@
         <div class="col-md-4 col-6 text-center">
             <p><b>Transferencia Swiss:</b> {{$transferenciaSwiss}}</p>
         </div>
+        {{-- <div class="col-12 text-center">
+            <p><b>Total de no pagados:</b> ${{number_format($pago_final, 2)}}</p>
+        </div> --}}
     </div>
 
     <div class="mt-2 contDolar" style="overflow-x: auto;">

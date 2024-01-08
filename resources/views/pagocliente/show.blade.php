@@ -167,16 +167,21 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" title="Campo obligatorio / Solo letras" minlength="3" maxlength="75" pattern="[a-zA-Zá-úÁ-Ú ]+" placeholder="Ingresa el operador"
-                                        id="operadorInput" name="operador" value="Hilario Hamilton Herrera Cossain" required>
-                                    <label for="operadorInput">Operador</label>
+                                    <select name="cliente_id" class="form-control" id="clienteIdInput" required>
+                                        <option value="" disabled selected>Selecciona..</option>
+                                        @foreach($lista_clientes as $cliente)
+                                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }} {{ $cliente->apellido_p }}
+                                            {{ $cliente->apellido_m }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="clienteIdInput">Cliente</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="3" maxlength="30" class="form-control" placeholder="Ingresa el lugar de firma"
-                                        id="lugarFirmaInput" name="lugar_firma" value="Durango, Dgo. México" required>
-                                    <label for="lugarFirmaInput">Lugar de firma</label>
+                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="5" maxlength="10" class="form-control" placeholder="Ingresa el contrato"
+                                        id="contratoInput" name="contrato" value="00000-000" required readonly>
+                                    <label for="contratoInput">Contrato</label>
                                 </div>
                             </div>
                         </div>
@@ -221,18 +226,11 @@
                                 <div class="form-floating mb-3">
                                     <input type="date" class="form-control" placeholder="Ingresa la fecha de pago"
                                         id="fechaPagInput" name="fecha_pago" required>
-                                    <label for="fechaPagInput">Fecha de pago</label>
+                                    <label for="fechaPagInput">Fecha termino de contrato</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="text" title="Campo obligatorio / Solo letras" minlength="5" maxlength="10" class="form-control" placeholder="Ingresa el contrato"
-                                        id="contratoInput" name="contrato" value="00000-000" required readonly>
-                                    <label for="contratoInput">Contrato</label>
-                                </div>
-                            </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" id="psIdInput" required>
@@ -243,20 +241,6 @@
                                         @endforeach
                                     </select>
                                     <label for="psIdInput">PS</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select name="cliente_id" class="form-control" id="clienteIdInput" required>
-                                        <option value="" disabled selected>Selecciona..</option>
-                                        @foreach($lista_clientes as $cliente)
-                                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }} {{ $cliente->apellido_p }}
-                                            {{ $cliente->apellido_m }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="clienteIdInput">Cliente</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -274,41 +258,12 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión de apertura"
-                                        id="cAperturaInput" name="capertura" required>
-                                    <label for="cAperturaInput">Comisión de apertura (%)</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión mensual"
-                                        id="cMensualInput" name="cmensual" required>
-                                    <label for="cMensualInput">Comisión mensual (%)</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa el porcentaje" id="porcentajeInput"
                                         name="porcentaje" value="6" required>
                                     <label for="porcentajeInput">Porcentaje (%)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select name="modelo_id" class="form-control" id="modeloIdInput" required>
-                                        <option value="" disabled selected>Selecciona..</option>
-                                        @foreach($lista_modelos as $modelo)
-                                        <option value="{{ $modelo->id }}">{{ $modelo->modelo }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="modeloIdInput">Modelo</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control"
                                         placeholder="Ingresa el tipo de cambio" id="tipoCambioInput"
@@ -333,16 +288,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra"
                                         id="inversionLetInput" name="inversion_letra" style="height: 100px" required></textarea>
                                     <label for="inversionLetInput">Cantidad de inversión en letra (MXN)</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra"
                                         id="inversionLetUsInput" name="inversion_letra_us" style="height: 100px" required></textarea>
@@ -365,11 +318,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row cont-tabla"></div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cerrar vista previa</button>
-                        </div>
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cerrar vista previa</button>
                 </div>
             </div>
         </div>

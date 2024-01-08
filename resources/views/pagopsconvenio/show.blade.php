@@ -199,18 +199,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingresa el folio del convenio" id="folioInput" name="folio"
-                                        value="000-00000-MAM-00-00" required>
+                                    <input type="text" class="form-control" placeholder="Ingresa el folio del convenio" id="folioInput" name="folio" value="000-00000-MAM-00-00" required>
                                     <label for="folioInput">Folio del convenio</label>
-                                    <div class="row mb-3">
-                                        <div class="col-12 d-flex justify-content-between">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="modifySwitch">
-                                                <label class="form-check-label" for="modifySwitch">Modificar folio manualmente</label>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -269,34 +259,35 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión por apertura" id="cAperturaInput" value="3" name="capertura" required>
                                     <label for="cAperturaInput">Comisión por apertura del PS (%)</label>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-12">
+                            <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
                                     <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión mensual" id="cMensualInput" value="0.5" name="cmensual" required>
                                     <label for="cMensualInput">Comisión mensual del PS (%)</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"  placeholder="Ingresa la comisión trimestral" id="cTrimestralInput" value="0.3" name="ctrimestral" required>
-                                    <label for="cTrimestralInput">Comisión trimestral del PS (%)</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
+                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"  placeholder="Ingresa la comisión trimestral" id="cTrimestralInput" value="0.3" name="ctrimestral" required>
+                                    <label for="cTrimestralInput">Comisión trimestral del PS (%)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-floating mb-3">
                                     <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en USD" id="montoInput" name="monto" required>
                                     <label for="montoInput">Cantidad de inversión (USD)</label>
                                 </div>
                             </div>
-    
-                            <div class="col-md-6 col-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="form-floating mb-3">
                                     <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput" name="monto_letra" style="height: 100px" required></textarea>
                                     <label for="montoLetraInput">Cantidad de inversión en letra (USD)</label>
@@ -331,14 +322,6 @@
                                         @endforeach
                                     </select>
                                     <label for="bancoIdInput">Banco</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    <input type="text" step="any" class="form-control" placeholder="Ingresa el número de cuenta" id="numeroCuentaInput" value="CH" name="numerocuenta" required>
-                                    <label for="numeroCuentaInput">Número de cuenta</label>
                                 </div>
                             </div>
                         </div>
