@@ -17,7 +17,7 @@
 
         @if (auth()->user()->is_root)
             <input id="contratoStatusInputs" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-status="{{ $status }}" data-celular="{{ $celular }}" data-contrato="{{ $contrato }}" @if ($status=="Activado" ) {{"checked"}} @endif>
-            <label class="form-check-label ms-1" for="contratoStatusInput">@if ($status == "Activado") Desactivar contrato @else Activar contrato @endif</label>
+            <label class="form-check-label ms-1" for="contratoStatusInput">@if ($status == "Activado") Desactivar @else Activar @endif</label>
         @endif
     </div>
 @endif

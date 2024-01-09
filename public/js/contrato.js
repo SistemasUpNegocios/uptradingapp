@@ -13,6 +13,11 @@ $(document).ready(function () {
         ajax: "/admin/showContrato",
         columns: [
             { data: "contrato" },
+            {
+                data: function (data) {
+                    return moment(data.fecha).format("LL");
+                },
+            },
             { data: "tipo" },
             { data: "status" },
             { data: "btn" },
