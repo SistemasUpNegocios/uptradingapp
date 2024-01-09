@@ -632,7 +632,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-12 col-12">
                                 <div class="form-check form-check-inline mb-3">
-                                    <input class="form-check-input" type="checkbox" id="cambiarPorcentajeInput" name="cambiar_porcentaje">
+                                    <input class="form-check-input" type="checkbox" id="cambiarPorcentajeInput" value="SI" name="cambiar_porcentaje">
                                     <label class="form-check-label" for="cambiarPorcentajeInput">¿Cambiar porcentaje de rendimiento?</label>
                                 </div>
                             </div>

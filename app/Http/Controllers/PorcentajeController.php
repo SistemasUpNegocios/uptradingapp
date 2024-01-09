@@ -65,6 +65,8 @@ class PorcentajeController extends Controller
         if ($request->ajax()) {
             $contrato = Contrato::find($request->id);
             $contrato->porcentaje = $request->porcentaje;
+            $contrato->cambiar_porcentaje = "NO";
+            $contrato->porcentaje_rendimiento = 0;
             $contrato->update();
 
             $rendimiento = $contrato->porcentaje * .01;

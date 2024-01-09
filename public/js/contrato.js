@@ -1453,112 +1453,128 @@ $(document).ready(function () {
     let dataFechaInicio = "";
 
     table.on("change", ".status", function () {
-        var checked = $(this).is(":checked");
+        let cambiar_porcentaje = $(this).data("cambiarporcentaje");
+        let porcentaje_rendimiento = $(this).data("porcentajerendimiento");
+        if (cambiar_porcentaje == "SI") {
+            $(this).prop("checked", false);
 
-        if (checked) {
-            $(this).val("Activado");
+            Swal.fire({
+                icon: "warning",
+                title: '<h1 style="font-family: Poppins; font-weight: 700;">Recuerda cambiar el porcentaje</h1>',
+                html: `<p style="font-family: Poppins">El porcentaje a cambiar es al ${porcentaje_rendimiento}%</p>`,
+                confirmButtonText:
+                    '<a style="font-family: Poppins">Aceptar</a>',
+                confirmButtonColor: "#01bbcc",
+            });
         } else {
-            $(this).val("Pendiente de activación");
-        }
+            var checked = $(this).is(":checked");
 
-        let input = this;
+            if (checked) {
+                $(this).val("Activado");
+            } else {
+                $(this).val("Pendiente de activación");
+            }
 
-        var id = $(this).data("id");
-        var statusValor = $(this).val();
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-        });
-        Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
-            cancelButtonColor: "#01bbcc",
-            confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
-            confirmButtonColor: "#198754",
-            input: "password",
-            showLoaderOnConfirm: true,
-            preConfirm: (clave) => {
-                $.ajax({
-                    type: "GET",
-                    url: "/admin/showClave",
-                    data: {
-                        clave: clave,
-                        id: id,
-                        status: statusValor,
-                    },
-                    success: function (result) {
-                        if (result == "success") {
-                            $.get(
-                                "/admin/editStatus",
-                                {
-                                    id: id,
-                                    status: statusValor,
-                                },
-                                function () {
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Estatus actualizado",
-                                    });
+            let input = this;
 
-                                    table.ajax.reload(function () {
-                                        if (statusValor == "Activado") {
-                                            $(this).prop("checked", true);
-                                        } else {
-                                            $(this).prop("checked", false);
-                                        }
-                                    });
+            var id = $(this).data("id");
+            var statusValor = $(this).val();
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener("mouseenter", Swal.stopTimer);
+                    toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+            });
+            Swal.fire({
+                title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar estatus</h1>',
+                html: '<p style="font-family: Poppins">Necesitas una clave para editar el estatus</p>',
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText:
+                    '<a style="font-family: Poppins">Cancelar</a>',
+                cancelButtonColor: "#01bbcc",
+                confirmButtonText: '<a style="font-family: Poppins">Editar</a>',
+                confirmButtonColor: "#198754",
+                input: "password",
+                showLoaderOnConfirm: true,
+                preConfirm: (clave) => {
+                    $.ajax({
+                        type: "GET",
+                        url: "/admin/showClave",
+                        data: {
+                            clave: clave,
+                            id: id,
+                            status: statusValor,
+                        },
+                        success: function (result) {
+                            if (result == "success") {
+                                $.get(
+                                    "/admin/editStatus",
+                                    {
+                                        id: id,
+                                        status: statusValor,
+                                    },
+                                    function () {
+                                        Toast.fire({
+                                            icon: "success",
+                                            title: "Estatus actualizado",
+                                        });
 
-                                    table.search("").draw();
+                                        table.ajax.reload(function () {
+                                            if (statusValor == "Activado") {
+                                                $(this).prop("checked", true);
+                                            } else {
+                                                $(this).prop("checked", false);
+                                            }
+                                        });
 
-                                    history.replaceState(
-                                        {},
-                                        document.title,
-                                        window.location.pathname
-                                    );
-                                }
-                            );
-                        } else {
+                                        table.search("").draw();
+
+                                        history.replaceState(
+                                            {},
+                                            document.title,
+                                            window.location.pathname
+                                        );
+                                    }
+                                );
+                            } else {
+                                estatusClaveIncorrecta(input);
+
+                                Toast.fire({
+                                    icon: "error",
+                                    title: "Clave incorrecta",
+                                });
+                            }
+                        },
+                        error: function () {
                             estatusClaveIncorrecta(input);
-
                             Toast.fire({
                                 icon: "error",
                                 title: "Clave incorrecta",
                             });
-                        }
-                    },
-                    error: function () {
-                        estatusClaveIncorrecta(input);
-                        Toast.fire({
-                            icon: "error",
-                            title: "Clave incorrecta",
-                        });
-                    },
-                });
-            },
-            allowOutsideClick: () => !Swal.isLoading(),
-        }).then((result) => {
-            if (!result.isConfirmed) {
-                estatusClaveIncorrecta();
-                Swal.fire({
-                    icon: "error",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            }
-        });
+                        },
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    estatusClaveIncorrecta(this);
+                    Swal.fire({
+                        icon: "error",
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
+                        html: '<p style="font-family: Poppins">El estatus no se ha actualizado</p>',
+                        confirmButtonText:
+                            '<a style="font-family: Poppins">Aceptar</a>',
+                        confirmButtonColor: "#01bbcc",
+                    });
+                }
+            });
+        }
     });
 
     $.ajaxSetup({
