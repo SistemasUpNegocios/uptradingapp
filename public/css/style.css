@@ -573,14 +573,14 @@ h6 {
 .search-form-ticket button[type="submit"] {
     border: 0;
     padding: 0;
-    margin-left: -35px;
+    margin-left: -23px;
     background: none;
 }
 
 .search-form-ticket button[type="reset"] {
     border: 0;
     padding: 0;
-    margin-left: -23px;
+    margin-left: -35px;
     background: none;
 }
 

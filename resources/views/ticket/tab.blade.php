@@ -7,8 +7,8 @@
             @csrf
             <input type="text" name="query_ticket" placeholder="Buscar ticket" id="busquedaTicketInput" title="Buscar ticket">
             <input type="hidden" name="tab_ticket" id="tabTicketInput" value="generados">
-            <button id="resetButton" type="reset" title="Buscar"><i class="bi bi-x-octagon"></i></button>
             <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
+            <button class="d-none" id="resetButton" type="reset" title="Buscar"><i class="bi bi-x-octagon"></i></button>
         </form>
     </div>
 </div>

@@ -499,6 +499,7 @@ $(document).ready(function () {
                 $("#countTickets").text(count);
                 opcTab(opc, button);
                 $("#busquedaTicketInput").val(busqueda);
+                $("#resetButton").removeClass("d-none");
             },
             error: function (res) {
                 Swal.fire({
@@ -516,8 +517,14 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("keyup", "#busquedaTicketInput", function (e) {
+        e.preventDefault();
+        $("#resetButton").removeClass("d-none");
+    });
+
     $(document).on("click", "#resetButton", function (e) {
         tabsTickets();
+        $("#resetButton").addClass("d-none");
     });
 
     const opcTab = (opc, button) => {
