@@ -475,8 +475,50 @@ $(document).ready(function () {
 
             opc = $(this).data("opc");
             button = this.id;
+
+            $("#tabTicketInput").val(opc);
         }
     );
+
+    $(document).on("submit", "#busquedaTicketForm", function (e) {
+        e.preventDefault();
+        let url = $(this).attr("action");
+        let busqueda = $("#busquedaTicketInput").val();
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (res) {
+                $("#contenidoTicket").empty();
+                $("#contenidoTicket").append(res);
+                let count = $("#countInput").val();
+                $("#countTickets").text(count);
+                opcTab(opc, button);
+                $("#busquedaTicketInput").val(busqueda);
+            },
+            error: function (res) {
+                Swal.fire({
+                    icon: "error",
+                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Sin resultados</h1>',
+                    html:
+                        '<p style="font-family: Poppins">No hay coincidencias para tu búsqueda: <span class="fw-bolder">' +
+                        res.responseText +
+                        "</span>. Por favor, intenta de nuevo</p>",
+                    confirmButtonText:
+                        '<a style="font-family: Poppins">Aceptar</a>',
+                    confirmButtonColor: "#01bbcc",
+                });
+            },
+        });
+    });
+
+    $(document).on("click", "#resetButton", function (e) {
+        tabsTickets();
+    });
 
     const opcTab = (opc, button) => {
         $(`#${button}`).addClass("active");

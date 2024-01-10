@@ -33,20 +33,25 @@
   </div>
 
     <table class="table table-striped table-bordered nowrap text-center tabla_resumen" style="width: 100%; padding-top: 1rem !important; padding-bottom: 3rem !important; vertical-align: middle !important; line-height: 18px;">
-      <thead>
+      <thead style="vertical-align: middle !important;">
         <tr>
-          <th data-priority="0" scope="col" colspan="2" style="font-size: 16px; text-transform: uppercase;">{{ \Carbon\Carbon::parse("$fecha-10")->formatLocalized('%B') }}</th>
+          <th data-priority="0" scope="col" colspan="4" style="font-size: 16px; text-transform: uppercase;">{{ \Carbon\Carbon::parse("$fecha-10")->formatLocalized('%B') }}</th>
         </tr>
-        <tr style="vertical-align: middle !important;">
-          <th data-priority="0" scope="col">PS</th>
-          <th data-priority="0" scope="col">Pago (USD)</th>
+        <tr>
+          <th data-priority="0" scope="col" style=" padding: 8px !important; font-size: 14px !important; vertical-align: middle !important">PS</th>
+          <th data-priority="0" scope="col" style=" padding: 8px !important; font-size: 14px !important; vertical-align: middle !important">Contratos del mes anterior</th>
+          <th data-priority="0" scope="col" style=" padding: 8px !important; font-size: 14px !important; vertical-align: middle !important">Acumulados</th>
+          <th data-priority="0" scope="col" style=" padding: 8px !important; font-size: 14px !important; vertical-align: middle !important">Pago (USD)</th>
         </tr>
       </thead>
       <tbody id="resuemnBody" class="text-center" style="vertical-align: middle !important;">
+          @php
+            $total_contratos = 0;
+            $total_anteriores = 0;
+          @endphp
         @foreach ($lista_ps as $ps)
           @php
 
-            // $contratosPS = new \ArrayObject(array());
             $contratos = DB::table('contrato')
               ->join('ps', 'ps.id', '=', 'contrato.ps_id')
               ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
@@ -59,22 +64,6 @@
               ->where("contrato.status", "Activado")
               ->get();
 
-            // foreach ($contratos as $resum) {
-            //   $psCorreoCon = DB::table('contrato')
-            //   ->join('ps', 'ps.id', 'contrato.ps_id')
-            //   ->join('cliente', 'cliente.id', 'contrato.cliente_id')
-            //   ->where('ps.id', $ps->id)
-            //   ->where('ps.correo_institucional', $resum->correops)
-            //   ->where('cliente.correo_institucional', $resum->correops)
-            //   ->get();
-
-            //   $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            //   if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) > 0) {
-            //     $contratosPS->append($resum);
-            //   }
-            // }
-
-            // $conveniosPS = new \ArrayObject(array());
             $convenios = DB::table('convenio')
               ->join('ps', 'ps.id', '=', 'convenio.ps_id')
               ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
@@ -86,21 +75,6 @@
               ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
               ->where("convenio.status", "Activado")
               ->get();
-
-            // foreach ($convenios as $resum) {
-            //   $psCorreoCon = DB::table('convenio')
-            //   ->join('ps', 'ps.id', 'convenio.ps_id')
-            //   ->join('cliente', 'cliente.id', 'convenio.cliente_id')
-            //   ->where('ps.id', $ps->id)
-            //   ->where('ps.correo_institucional', $resum->correops)
-            //   ->where('cliente.correo_institucional', $resum->correops)
-            //   ->get();
-
-            //   $psContrato = DB::table('ps')->where('correo_institucional', $resum->correocliente)->get();
-            //   if (sizeof($psContrato) <= 0 || sizeof($psCorreoCon) <= 0) {
-            //     $conveniosPS->append($resum);
-            //   }
-            // }
 
             $pago_total = 0;
 
@@ -114,19 +88,92 @@
 
             $total += $pago_total;
 
+            $fechas_consulta = explode("-", $fecha);
+            $anio = $fechas_consulta[0];
+            if($fechas_consulta[1] == 1){
+              $mes = 12;
+              $anio = $anio-1;
+            }elseif($fechas_consulta[1] == 2){
+              $mes = 1;
+            }elseif($fechas_consulta[1] == 3){
+              $mes = 2;
+            }elseif($fechas_consulta[1] == 4){
+              $mes = 3;
+            }elseif($fechas_consulta[1] == 5){
+              $mes = 4;
+            }elseif($fechas_consulta[1] == 6){
+              $mes = 5;
+            }elseif($fechas_consulta[1] == 7){
+              $mes = 6;
+            }elseif($fechas_consulta[1] == 8){
+              $mes = 7;
+            }elseif($fechas_consulta[1] == 9){
+              $mes = 8;
+            }elseif($fechas_consulta[1] == 10){
+              $mes = 9;
+            }elseif($fechas_consulta[1] == 11){
+              $mes = 10;
+            }elseif($fechas_consulta[1] == 12){
+              $mes = 11;
+            }
+
+            $contratos_anterior = DB::table('contrato')
+              ->select('contrato')
+              ->where('ps_id', $ps->id)
+              ->where('ps_id', '!=', 1)
+              ->where('ps_id', '!=', 2)
+              ->where('status', "Activado")
+              ->whereBetween('fecha', ["$anio-$mes-01", "$anio-$mes-31"])
+              ->orderBy("tipo_id", "ASC")
+              ->get();
+
+            $count_anteriores = DB::table('contrato')
+              ->select('contrato')
+              ->where('ps_id', $ps->id)
+              ->where('ps_id', '!=', 1)
+              ->where('ps_id', '!=', 2)
+              ->where('status', "Activado")
+              ->whereBetween('fecha', ["$anio-$mes-01", "$anio-$mes-31"])
+              ->count();
+
+            $total_anteriores += $count_anteriores;
+
+            $count_contratos = DB::table('contrato')
+              ->where('ps_id', $ps->id)
+              ->where('ps_id', '!=', 1)
+              ->where('ps_id', '!=', 2)
+              ->where('status', "Activado")
+              ->count();
+
+            $total_contratos += $count_contratos;
+
+            $contrato_anterior = "";
+            foreach ($contratos_anterior as $contrato){
+              $contrato_anterior .= $contrato->contrato.", ";
+            }
+
+            $contrato_anterior = substr($contrato_anterior, 0, -2);
+
+            if(strlen($contrato_anterior) <= 0){
+              $contrato_anterior = "No hay contratos del mes";
+            }
           @endphp
 
           <tr>
             @if ($pago_total > 0)
-              <td style="font-size: 15px !important;">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
-              <td style="font-size: 15px !important;">${{ number_format($pago_total, 2) }}</td>
+              <td style="font-size: 13px !important;">{{ $ps->nombre }} {{ $ps->apellido_p }} {{ $ps->apellido_m }}</td>
+              <td style="font-size: 13px !important;">{{$contrato_anterior}}</td>
+              <td style="font-size: 13px !important;">{{$count_contratos}}</td>
+              <td style="font-size: 13px !important;">${{ number_format($pago_total, 2) }}</td>
             @endif
           </tr>
 
         @endforeach
         <tr>
-            <td><b>TOTAL</b></td>
-            <td>${{ number_format($total, 2) }}</td>
+            <td style="font-size: 14px !important;"><b>TOTAL</b></td>
+            <td style="font-size: 14px !important;">{{ $total_anteriores }}</td>
+            <td style="font-size: 14px !important;">{{ $total_contratos }}</td>
+            <td style="font-size: 14px !important;">${{ number_format($total, 2) }}</td>
         </tr>
       </tbody>
     </table>

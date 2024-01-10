@@ -508,13 +508,15 @@ h6 {
     color: #fff;
 }
 
-.header .search-bar {
+.header .search-bar,
+.search-bar-ticket {
     min-width: 360px;
     padding: 0 20px;
 }
 
 @media (max-width: 1199px) {
-    .header .search-bar {
+    .header .search-bar,
+    .search-bar-ticket {
         position: fixed;
         top: 50px;
         left: 0;
@@ -535,11 +537,13 @@ h6 {
     }
 }
 
-.header .search-form {
+.header .search-form,
+.search-form-ticket {
     width: 100%;
 }
 
-.header .search-form input {
+.header .search-form input,
+.search-form-ticket input {
     border: 0;
     font-size: 14px;
     color: #012970;
@@ -551,7 +555,9 @@ h6 {
 }
 
 .header .search-form input:focus,
-.header .search-form input:hover {
+.header .search-form input:hover,
+.search-form-ticket input:focus,
+.search-form-ticket input:hover {
     outline: none;
     box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
     border: 1px solid rgba(1, 41, 112, 0.3);
@@ -564,7 +570,22 @@ h6 {
     background: none;
 }
 
-.header .search-form button i {
+.search-form-ticket button[type="submit"] {
+    border: 0;
+    padding: 0;
+    margin-left: -35px;
+    background: none;
+}
+
+.search-form-ticket button[type="reset"] {
+    border: 0;
+    padding: 0;
+    margin-left: -23px;
+    background: none;
+}
+
+.header .search-form button i,
+.search-form-ticket button i {
     color: #012970;
 }
 
@@ -3168,7 +3189,9 @@ body.dark .dropdown-menu .dropdown-item,
 body.dark .sidebar .nav-link i,
 body.dark .sidebar-nav .nav-content a,
 body.dark #busquedaForm input::placeholder,
-body.dark #busquedaForm button i {
+body.dark #busquedaForm button i,
+body.dark #busquedaTicketForm input::placeholder,
+body.dark #busquedaTicketForm button i {
     color: #fff;
 }
 
@@ -3234,7 +3257,8 @@ body.dark .sidebar .nav-link {
     color: #fff;
 }
 
-body.dark #busquedaForm input {
+body.dark #busquedaForm input,
+body.dark #busquedaTicketForm input {
     background: #383838;
     color: #fff;
 }

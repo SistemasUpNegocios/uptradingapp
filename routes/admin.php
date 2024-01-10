@@ -402,6 +402,9 @@ Route::post('/admin/editPorcentajes', [App\Http\Controllers\PorcentajeController
 //Rutas de gestión de búsqueda de clientes
 Route::post('/admin/buscarCliente', [App\Http\Controllers\BusquedaController::class, 'buscarCliente'])->name('buscarcliente');
 
+//Rutas de gestión de búsqueda de ticket
+Route::post('/admin/buscarTicket', [App\Http\Controllers\BusquedaController::class, 'buscarTicket'])->name('buscarticket');
+
 //Rutas de gestión de agenda
 Route::get('/admin/agenda', [App\Http\Controllers\AgendaController::class, 'index'])->name('agenda');
 Route::get('/admin/showAgenda', [App\Http\Controllers\AgendaController::class, 'getAgenda']);

@@ -211,7 +211,21 @@
 
                 <div class="card">
                     <div class="card-body mt-3" id="contenidoTicket">
-                        <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
+                        <div class="row justify-content-between">
+                            <div class="col-md-5 col-12">
+                                <a class="btn principal-button mb-3 new" data-bs-toggle="modal" data-bs-target="#formModal"> <i class="bi-plus-lg me-1"> </i>Abrir un nuevo ticket</a>
+                            </div>
+                            <div class="col-md-5 col-12">
+                                <form id="busquedaTicketForm" class="search-form-ticket d-flex align-items-center" method="POST" action="/admin/buscarTicket">
+                                    @csrf
+                                    <input type="text" name="query_ticket" placeholder="Buscar ticket" id="busquedaTicketInput" title="Buscar ticket">
+                                    <input type="hidden" name="tab_ticket" id="tabTicketInput" value="generados">
+                                    <button id="resetButton" type="reset" title="Buscar"><i class="bi bi-x-octagon"></i></button>
+                                    <button type="submit" title="Buscar"><i class="bi bi-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+
                         @if (auth()->user()->is_ps_gold || auth()->user()->is_ps_bronze)
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
