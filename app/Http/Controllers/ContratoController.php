@@ -1098,8 +1098,8 @@ class ContratoController extends Controller
             DB::table('amortizacion')->where('contrato_id', '=', $contrato_id)->delete();
             if($request->status != "Refrendado"){
                 if($contratoRefCond > 0){
-                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(13)->delete();
-                    DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(13)->delete();
+                    DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(12)->delete();
+                    DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->orderBy('id','desc')->limit(12)->delete();
                 }else{
                     DB::table('pago_ps')->where('contrato_id', '=', $contrato_id)->delete();
                     DB::table('pago_cliente')->where('contrato_id', '=', $contrato_id)->delete();
