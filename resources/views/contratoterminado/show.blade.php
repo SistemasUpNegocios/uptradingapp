@@ -297,6 +297,7 @@
                                         <option value="Finiquitado">Finiquitado</option>
                                         <option value="Refrendado">Refrendado</option>
                                         <option value="Cancelado">Cancelado</option>
+                                        <option value="Nuevo contrato">Nuevo contrato</option>
                                     </select>
                                     <label for="statusInput">Status del contrato</label>
                                 </div>

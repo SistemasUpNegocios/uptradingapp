@@ -70,34 +70,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-12">
-                                <label class="form-check-label me-2">¿Quién firma?</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="firma" id="gerenteInput" value="MARIA EUGENIA RINCON ACEVAL" checked>
-                                    <label class="form-check-label" for="gerenteInput">Gerente general</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="firma" id="representanteInput" value="HILARIO HAMILTON HERRERA COSSAIN">
-                                    <label class="form-check-label" for="representanteInput">Representante legal</label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" placeholder="Ingresa el folio del convenio"
-                                        id="folioInput" name="folio" value="000-00000-MAM-00-00" required>
+                                    <input type="text" class="form-control" placeholder="Ingresa el folio del convenio" id="folioInput" name="folio" value="000-00000-MAM-00-00" required readonly>
                                     <label for="folioInput">Folio del convenio</label>
-                                    <div class="row mb-3">
-                                        <div class="col-12 d-flex justify-content-between">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="modifySwitch">
-                                                <label class="form-check-label" for="modifySwitch">Modificar folio
-                                                    manualmente</label>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -117,8 +94,7 @@
 
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                        class="form-select selectSearch" id="psIdInput">
+                                    <select name="ps_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-select selectSearch" id="psIdInput">
                                         <option value="" disabled selected>Selecciona..</option>
                                         @foreach($lista_ps as $ps)
                                         <option value="{{ $ps->id }}">{{ $ps->nombre }} {{ $ps->apellido_p }}
@@ -132,16 +108,14 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de inicio"
-                                        id="fechaInicioInput" name="fecha_inicio" required>
+                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de inicio" id="fechaInicioInput" name="fecha_inicio" required readonly>
                                     <label for="fechaInicioInput">Fecha de inicio</label>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de fin"
-                                        id="fechaFinInput" name="fecha_fin" required>
+                                    <input type="date" class="form-control" placeholder="Ingresa la fecha de fin" id="fechaFinInput" name="fecha_fin" required readonly>
                                     <label for="fechaFinInput">Fecha de fin</label>
                                 </div>
                             </div>
@@ -160,17 +134,13 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"
-                                        placeholder="Ingresa la comisión por apertura" id="cAperturaInput" value="3"
-                                        name="capertura" required>
+                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión por apertura" id="cAperturaInput" value="3" name="capertura" required readonly>
                                     <label for="cAperturaInput">Comisión por apertura del PS (%)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"
-                                        placeholder="Ingresa la comisión mensual" id="cMensualInput" value="0.5"
-                                        name="cmensual" required>
+                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión mensual" id="cMensualInput" value="0.5" name="cmensual" required readonly>
                                     <label for="cMensualInput">Comisión mensual del PS (%)</label>
                                 </div>
                             </div>
@@ -178,17 +148,13 @@
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control"
-                                        placeholder="Ingresa la comisión trimestral" id="cTrimestralInput" value="0.3"
-                                        name="ctrimestral" required>
+                                    <input type="number" step="any" pattern="[0-9.]+" class="form-control" placeholder="Ingresa la comisión trimestral" id="cTrimestralInput" value="0.3" name="ctrimestral" required readonly>
                                     <label for="cTrimestralInput">Comisión trimestral del PS (%)</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión en USD" id="montoInput" name="monto"
-                                        required>
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa la cantidad de inversión en USD" id="montoInput" name="monto" required readonly>
                                     <label for="montoInput">Cantidad de inversión (USD)</label>
                                 </div>
                             </div>
@@ -196,9 +162,7 @@
                         <div class="row">
                             <div class="col-md-12 col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea type="text" class="form-control"
-                                        placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput"
-                                        name="monto_letra" style="height: 100px" required></textarea>
+                                    <textarea type="text" class="form-control" placeholder="Ingresa la cantidad de inversión en letra" id="montoLetraInput" name="monto_letra" style="height: 100px" required readonly></textarea>
                                     <label for="montoLetraInput">Cantidad de inversión en letra (USD)</label>
                                 </div>
                             </div>
@@ -211,16 +175,15 @@
                                         <option value="Pendiente de activación" selected>Pendiente de activación</option>
                                         <option value="Activado">Activado</option>
                                         <option value="Finiquitado">Finiquitado</option>
-                                        <option value="Refrendado">Refrendado</option>
                                         <option value="Cancelado">Cancelado</option>
+                                        <option value="Nuevo convenio">Nuevo convenio</option>
                                     </select>
                                     <label for="statusInput">Status del convenio</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <select name="banco_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+"
-                                        class="form-control" id="bancoIdInput" required>
+                                    <select name="banco_id" minlength="3" maxlength="120" pattern="[a-zA-Zá-úÁ-Ú ]+" class="form-control" id="bancoIdInput" required readonly>
                                         <option value="" disabled>Selecciona..</option>
                                         @foreach($bancos as $banco)
                                         @if ($banco->nombre == "SWISSQUOTE")
@@ -237,8 +200,7 @@
                         <div class="row d-none" id="contMemoCan">
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="Ingresa el memo de cancelacion"
-                                        id="memoCanInput" name="memo_status" style="height: 100px"></textarea>
+                                    <textarea class="form-control" placeholder="Ingresa el memo de cancelacion" id="memoCanInput" name="memo_status" style="height: 100px" readonly></textarea>
                                     <label for="memoCanInput">Memo de cancelacion</label>
                                 </div>
                             </div>
@@ -246,17 +208,13 @@
                         <div class="row">
                             <div class="col-12 col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" step="any" class="form-control"
-                                        placeholder="Ingresa el número de cuenta" id="numeroCuentaInput" value="CH"
-                                        name="numerocuenta" required>
+                                    <input type="text" step="any" class="form-control" placeholder="Ingresa el número de cuenta" id="numeroCuentaInput" value="CH" name="numerocuenta" required readonly>
                                     <label for="numeroCuentaInput">Número de cuenta</label>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" step="any" class="form-control" style="text-transform: none !important;"
-                                        placeholder="Ingresa el loggin" id="logginInput"
-                                        name="loggin">
+                                    <input type="text" step="any" class="form-control" style="text-transform: none !important;" placeholder="Ingresa el loggin" id="logginInput" name="loggin" readonly>
                                     <label for="logginInput">Loggin</label>
                                 </div>
                             </div>
@@ -264,7 +222,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
-                                    <select class="form-control" id="beneficiariosInput">
+                                    <select class="form-control" id="beneficiariosInput" disabled>
                                         <option value="1" selected>1 beneficiario</option>
                                         <option value="2">2 beneficiarios</option>
                                         <option value="3">3 beneficiarios</option>

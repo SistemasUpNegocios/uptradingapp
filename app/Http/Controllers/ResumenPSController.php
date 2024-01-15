@@ -85,38 +85,37 @@ class ResumenPSController extends Controller
         $date2 = Carbon::parse("$anio-$mes-10");
 
         if($date2->lte($date1)){
-            $resumenContrato_pasado = DB::table('contrato')
+            $resumenContrato = DB::table('contrato')
                 ->join('ps', 'ps.id', '=', 'contrato.ps_id')
                 ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
                 ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
                 ->select(DB::raw("contrato.id as contratoid, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps.pago, pago_ps.memo, pago_ps.serie"))
                 ->where("contrato.ps_id", "=", $request->id)
                 ->where("pago_ps.fecha_limite", 'like', "$anio-$mes%")
-                ->where("contrato.status", "Finiquitado")
+                ->where("contrato.status", "!=", "Nuevo contrato")
                 ->orderBy('contrato.id', 'DESC')
                 ->get();
 
-            foreach ($resumenContrato_pasado as $pago) {
+            foreach ($resumenContrato as $pago) {
                 $pago_total += $pago->pago;
             }
 
-            $resumenConvenio_pasado = DB::table('convenio')
+            $resumenConvenio = DB::table('convenio')
                 ->join('ps', 'ps.id', '=', 'convenio.ps_id')
                 ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
                 ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
                 ->select(DB::raw("convenio.id as convenioid, convenio.folio, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps_convenio.pago, pago_ps_convenio.memo, pago_ps_convenio.serie"))
                 ->where("convenio.ps_id", "=", $request->id)
                 ->where("pago_ps_convenio.fecha_limite", 'like', "$anio-$mes%")
-                ->where("convenio.status", "Finiquitado")
+                ->where("convenio.status", "!=", "Nuevo convenio")
                 ->orderBy('convenio.id', 'DESC')
                 ->get();
 
-            foreach ($resumenConvenio_pasado as $pago) {
+            foreach ($resumenConvenio as $pago) {
                 $pago_total += $pago->pago;
             }
-        }
-
-        $resumenContrato = DB::table('contrato')
+        }else{
+            $resumenContrato = DB::table('contrato')
             ->join('ps', 'ps.id', '=', 'contrato.ps_id')
             ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
             ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
@@ -127,25 +126,26 @@ class ResumenPSController extends Controller
             ->orderBy('contrato.id', 'DESC')
             ->get();
 
-        foreach ($resumenContrato as $pago) {
-            $pago_total += $pago->pago;
+            foreach ($resumenContrato as $pago) {
+                $pago_total += $pago->pago;
+            }
+
+            $resumenConvenio = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
+                ->select(DB::raw("convenio.id as convenioid, convenio.folio, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps_convenio.pago, pago_ps_convenio.memo, pago_ps_convenio.serie"))
+                ->where("convenio.ps_id", "=", $request->id)
+                ->where("pago_ps_convenio.fecha_limite", 'like', "$anio-$mes%")
+                ->where("convenio.status", "Activado")
+                ->orderBy('convenio.id', 'DESC')
+                ->get();
+
+            foreach ($resumenConvenio as $pago) {
+                $pago_total += $pago->pago;
+            }
         }
-
-        $resumenConvenio = DB::table('convenio')
-            ->join('ps', 'ps.id', '=', 'convenio.ps_id')
-            ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-            ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
-            ->select(DB::raw("convenio.id as convenioid, convenio.folio, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.correo_institucional as correocliente, pago_ps_convenio.pago, pago_ps_convenio.memo, pago_ps_convenio.serie"))
-            ->where("convenio.ps_id", "=", $request->id)
-            ->where("pago_ps_convenio.fecha_limite", 'like', "$anio-$mes%")
-            ->where("convenio.status", "Activado")
-            ->orderBy('convenio.id', 'DESC')
-            ->get();
-
-        foreach ($resumenConvenio as $pago) {
-            $pago_total += $pago->pago;
-        }
-
+        
         $data = array(
             "resumenes_contrato" => $resumenContrato,
             "resumenes_convenio" => $resumenConvenio,

@@ -143,13 +143,12 @@ Route::get('/admin/generarCuentaMam', [App\Http\Controllers\CuentaMamController:
 Route::post('/admin/enviarReporteMam', [App\Http\Controllers\CuentaMamController::class, 'import']);
 
 // Rutas para gestión de convenio terminado
-Route::get('/admin/convenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'index'])->name('convenioTerminado');
+Route::get('/admin/convenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'index'])->name('convenioterminado');
 Route::get('/admin/showConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'getConvenio']);
 Route::post('/admin/editConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'editConvenio']);
 Route::post('/admin/deleteConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'deleteConvenio']);
 Route::get('/admin/getBeneficiariosConvenioTerminido', [App\Http\Controllers\ConvenioTerminadoController::class, 'getBeneficiarios']);
-Route::get('/admin/showClaveConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'getClave']);
-Route::get('/admin/editStatusConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'editStatus']);
+Route::get('/admin/validateClaveConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'validateClave']);
 
 Route::get('/admin/conveniovencer', [App\Http\Controllers\ConvenioVencerController::class, 'index'])->name('conveniovencer');
 Route::get('/admin/showConvenioVencer', [App\Http\Controllers\ConvenioVencerController::class, 'getConvenioVencer']);

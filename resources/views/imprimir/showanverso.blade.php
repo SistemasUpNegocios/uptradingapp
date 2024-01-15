@@ -58,44 +58,44 @@
     </p>
 
       <ol type="A" class="center" style="color: #000">
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Ser mayores de edad y se identifican con credencial oficial con fotografía.</p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Contar con capacidad legal para celebrar el presente acuerdo.</p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Actuar de buena fé y por consentimiento propio.</p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Contar con los recursos técnicos y económicos necesarios para cumplir con
                   el presente acuerdo.</p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem; line-height: 11px">En atención al desarrollo de su actividad económica
                   principal, “El Cliente”, tiene recursos de procedencia lícita que destinará al prestador de servicio
                   para su administración con la finalidad de obtener un rendimiento de inversión, utilizando para ello
                   plataformas tecnológicas lícitas.
               </p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Ambas partes reconocen los riesgos inherentes a cualquier proceso de
                   inversión.
               </p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem">Se estima un rendimiento del <u>{{ str_replace("0.0","",
                   $contratos[0]->porcentaje) }}%</u> mensual sobre el capital de inversión.
                   Ratificando ambas partes estar de acuerdo.
               </p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem; line-height: 11px">“El Cliente” confirma libertad de acción sobre la
                   inversión al proveedor de servicio. Ratificando estar de acuerdo con los criterios de selección en las
                   oportunidades de inversión.
               </p>
           </li>
-          <li style="font-size: 10px">
+          <li style="font-size: 9px">
               <p style="margin-bottom: -0.5rem; line-height: 11px">El inversionista confirma que cuenta con todas las
                   autorizaciones necesarias para celebrar el presente acuerdo y manifiesta que no le genera incumplimiento
                   a obligaciones previamente contraídas con terceros.

@@ -60,7 +60,10 @@ class ConvenioTerminadoController extends Controller
             ->join('banco', 'banco.id', '=', 'convenio.banco_id')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.fecha_carga, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.status_oficina, convenio.numerocuenta, convenio.loggin, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
-            ->where("convenio.status", "Finiquitado")
+            ->where(function ($query) {
+                $query->where("convenio.status", "Finiquitado")
+                ->orWhere("convenio.status", "Cancelado");
+            })
             ->orderBy("convenio.id", "desc")
             ->get();
 
@@ -71,142 +74,19 @@ class ConvenioTerminadoController extends Controller
     {
         if ($request->ajax()) {
 
-            $request->validate([
-                'folio' => 'required',
-                'cliente_id' => 'required',
-                'ps_id' => 'required',
-                'fecha_inicio' => 'required|date',
-                'fecha_fin' => 'required|date',
-                'capertura' => 'required',
-                'cmensual' => 'required',
-                'monto' => 'required',
-                'monto_letra' => 'required',
-                'status' => 'required',
-                'banco_id' => 'required',
-            ]);
-
             $convenio = Convenio::find($request->id);
-
-            $convenio->firma = $request->firma;
-            $convenio->monto = $request->input("monto");
-            $convenio->monto_letra = $request->input("monto_letra");
-            $convenio->fecha_inicio = $request->input('fecha_inicio');
-            $convenio->fecha_fin = $request->input('fecha_fin');
-            $convenio->capertura = $request->input('capertura');
-            $convenio->cmensual = $request->input('cmensual');
-            $convenio->ctrimestral = $request->input('ctrimestral');
-            $convenio->numerocuenta = $request->input('numerocuenta');
-            $convenio->loggin = $request->input('loggin');
-            $convenio->ps_id = $request->input('ps_id');
-            $convenio->cliente_id = $request->input('cliente_id');
-            $convenio->banco_id = $request->input('banco_id');
-
-            if ($request->status == "Refrendado") {
-                $convenio->status = "Activado";
-                $folio = explode("-", $request->folio);
-                $refrendo = intval($folio[4]) + 1;
-                $refrendo = str_pad($refrendo, 2, "0", STR_PAD_LEFT);
-                $folio_completo = $folio[0].'-'.$folio[1].'-'.$folio[2].'-'.$folio[3].'-'.$refrendo;
-
-                $convenio->folio = strtoupper($folio_completo);
-            } else {
-                $convenio->folio = strtoupper($request->folio);
-                $convenio->status = $request->status;
-            }
-
-            $convenio_id = $convenio->id;
-
-            DB::table('pago_ps_convenio')->where('convenio_id', '=', $convenio_id)->delete();
-            DB::table('beneficiario_convenio')->where('convenio_id', '=', $convenio_id)->delete();
-            for ($i = 0; $i <= 4; $i++) {
-                if ($request->input('nombre-ben' . $i)) {
-                    $nombre = 'nombre-ben' . ($i);
-                    $porcentaje = 'porcentaje-ben' . ($i);
-                    $telefono = 'telefono-ben' . ($i);
-                    $correo_electronico = 'correo-ben' . ($i);
-                    $curp = 'curp-ben' . ($i);
-
-                    $beneficiario = new BeneficiarioConvenio;
-
-                    $beneficiario->convenio_id = $convenio_id;
-                    $beneficiario->nombre = strtoupper($request->input($nombre));
-                    $beneficiario->porcentaje = $request->input($porcentaje);
-                    $beneficiario->telefono = $request->input($telefono);
-                    $beneficiario->correo_electronico = strtoupper($request->input($correo_electronico));
-                    $beneficiario->curp = strtoupper($request->input($curp));
-
-                    $beneficiario->save();
-                }
-            }
-
-            for ($i = 0; $i < 13; $i++) {
-                $serie = "serie-pagops" . $i;
-                $fechaPago = "fecha-pagops" . $i;
-                $fechaLimite = "fecha-limitepagops" . $i;
-                $pago = "pago-pagops" . $i;
-
-                $pagoPSConvenio = new PagoPSConvenio;
-                $pagoPSConvenio->tipo_pago = 'Pendiente';
-
-                if ($i == 3 || $i == 6 || $i == 9 || $i == 12) {
-                    $pagoPSConvenio->convenio_id = $convenio_id;
-                    $pagoPSConvenio->serie = $request->input($serie);
-                    $pagoPSConvenio->fecha_pago = $request->input($fechaPago);
-                    $pagoPSConvenio->fecha_limite = $request->input($fechaLimite);
-                    $pagoPSConvenio->pago = $request->input($pago);
-                    $pagoPSConvenio->status = "Pendiente";
-                    $pagoPSConvenio->memo = "Comisión mensual";
-
-                    $pagoPSConvenio->save();
-
-                    $pagoPSConvenio = new PagoPSConvenio;
-                    $pagoPSConvenio->tipo_pago = 'Pendiente';
-                    $pagoPSConvenio->convenio_id = $convenio_id;
-                    $pagoPSConvenio->serie = $request->input("serie-pagops" . $i . "trimestral");
-                    $pagoPSConvenio->fecha_pago = $request->input("fecha-pagops" . $i . "trimestral");
-                    $pagoPSConvenio->fecha_limite = $request->input("fecha-limitepagops" . $i . "trimestral");
-                    $pagoPSConvenio->pago = 0;
-                    $pagoPSConvenio->status = "Pendiente";
-                    $pagoPSConvenio->memo = "Comisión por rédito trimestral";
-
-                    $pagoPSConvenio->save();
-                } elseif ($i == 0) {
-                    $serie = intval($request->input($serie));
-                    $pagoPSConvenio->convenio_id = $convenio_id;
-                    $pagoPSConvenio->serie = ($serie + 1);
-                    $pagoPSConvenio->fecha_pago = $request->input($fechaPago);
-                    $pagoPSConvenio->fecha_limite = $request->input($fechaLimite);
-                    $pagoPSConvenio->pago = $request->input($pago);
-                    $pagoPSConvenio->status = "Pendiente";
-                    $pagoPSConvenio->memo = "Comisión por apertura";
-
-                    $pagoPSConvenio->save();
-                } else {
-                    $pagoPSConvenio->convenio_id = $convenio_id;
-                    $pagoPSConvenio->serie = $request->input($serie);
-                    $pagoPSConvenio->fecha_pago = $request->input($fechaPago);
-                    $pagoPSConvenio->fecha_limite = $request->input($fechaLimite);
-                    $pagoPSConvenio->pago = $request->input($pago);
-                    $pagoPSConvenio->status = "Pendiente";
-                    $pagoPSConvenio->memo = "Comisión mensual";
-
-                    $pagoPSConvenio->save();
-                }
-            }
-
+            $convenio->status = $request->status;
             $convenio->update();
 
+            $convenio_id = $convenio->id;
             $bitacora_id = session('bitacora_id');
 
             $log = new Log;
-
             $log->tipo_accion = "Actualización";
             $log->tabla = "Convenio";
             $log->id_tabla = $convenio_id;
             $log->bitacora_id = $bitacora_id;
-
             $log->save();
-
 
             return response($convenio);
         }

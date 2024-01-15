@@ -426,7 +426,7 @@ $(document).ready(function () {
         $("#beneficiariosInput").prop("disabled", true);
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosConvenio",
+            url: "/admin/getBeneficiariosConvenioTerminido",
             data: {
                 id: id,
             },
@@ -712,7 +712,7 @@ $(document).ready(function () {
             .attr("data-dselect-text", psnombre);
         $("#psIdInput").next().children().first().attr("disabled", false);
 
-        $("#convenioForm").attr("action", "/admin/editConvenio");
+        $("#convenioForm").attr("action", "/admin/editConvenioTerminado");
 
         $("#idInput").val(id);
 
@@ -731,50 +731,50 @@ $(document).ready(function () {
 
         monto = monto.toString().replace(",", ".");
         $("#montoInput").val(monto);
-        $("#montoInput").prop("readonly", false);
+        $("#montoInput").prop("readonly", true);
 
         $("#montoLetraInput").val(monto_letra);
-        $("#montoLetraInput").prop("readonly", false);
+        $("#montoLetraInput").prop("readonly", true);
 
         $("#fechaInicioInput").val(fecha_inicio);
-        $("#fechaInicioInput").prop("readonly", false);
+        $("#fechaInicioInput").prop("readonly", true);
 
         $("#fechaFinInput").val(fecha_fin);
-        $("#fechaFinInput").prop("readonly", false);
+        $("#fechaFinInput").prop("readonly", true);
 
         capertura = capertura.toString().replace(",", ".");
         $("#cAperturaInput").val(capertura);
-        $("#cAperturaInput").prop("readonly", false);
+        $("#cAperturaInput").prop("readonly", true);
 
         cmensual = cmensual.toString().replace(",", ".");
         $("#cMensualInput").val(cmensual);
-        $("#cMensualInput").prop("readonly", false);
+        $("#cMensualInput").prop("readonly", true);
 
         ctrimestral = ctrimestral.toString().replace(",", ".");
         $("#cTrimestralInput").val(ctrimestral);
-        $("#cTrimestralInput").prop("readonly", false);
+        $("#cTrimestralInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", false);
 
         $("#numeroCuentaInput").val(numerocuenta);
-        $("#numeroCuentaInput").prop("readonly", false);
+        $("#numeroCuentaInput").prop("readonly", true);
 
         $("#logginInput").val(loggin);
-        $("#logginInput").prop("readonly", false);
+        $("#logginInput").prop("readonly", true);
 
         $("#psIdInput").val(ps_id);
-        $("#psIdInput").prop("disabled", false);
+        $("#psIdInput").prop("disabled", true);
 
         $("#clienteIdInput").val(cliente_id);
-        $("#clienteIdInput").prop("disabled", false);
+        $("#clienteIdInput").prop("disabled", true);
 
         $("#bancoIdInput").val(banco_id);
-        $("#bancoIdInput").prop("disabled", false);
+        $("#bancoIdInput").prop("disabled", true);
 
-        $("#modifySwitch").prop("disabled", false);
+        $("#modifySwitch").prop("disabled", true);
 
-        $("#beneficiariosInput").prop("disabled", false);
+        $("#beneficiariosInput").prop("disabled", true);
         $.ajax({
             type: "GET",
             url: "/admin/getBeneficiariosConvenio",
@@ -811,52 +811,42 @@ $(document).ready(function () {
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input"
-                                        name="nombre-ben${i}" minlength="3" maxlength="255">
+                                    <input type="text" class="form-control" placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input" name="nombre-ben${i}" minlength="3" maxlength="255" readonly>
                                     <label for="nombreBen${i}Input">Nombre del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input"
-                                        name="porcentaje-ben${i}" value="0">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input" name="porcentaje-ben${i}" value="0" readonly>
                                     <label for="porcentajeBen${i}Input">Porcentaje del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="number" class="form-control"
-                                        placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input"
-                                        name="telefono-ben${i}" minlength="3" maxlength="100">
+                                    <input type="number" class="form-control" placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input" name="telefono-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="telefonoBen${i}Input">Teléfono del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input style="text-transform: lowercase;" type="email" class="form-control"
-                                        placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input"
-                                        name="correo-ben${i}" minlength="3" maxlength="100">
+                                    <input style="text-transform: lowercase;" type="email" class="form-control" placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input" name="correo-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="correoBen${i}Input">Correo del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>                            
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
-                                        name="curp-ben${i}" minlength="3" maxlength="100">
+                                    <input type="text" class="form-control" placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input" name="curp-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                         `);
 
-                        $(`#nombreBen${i}Input`).prop("readonly", false);
-                        $(`#porcentajeBen${i}Input`).prop("readonly", false);
-                        $(`#telefonoBen${i}Input`).prop("readonly", false);
-                        $(`#correoBen${i}Input`).prop("readonly", false);
-                        $(`#curpBen${i}Input`).prop("readonly", false);
-                        $(`#curpBen${i}InputCheck`).prop("disabled", false);
+                        $(`#nombreBen${i}Input`).prop("readonly", true);
+                        $(`#porcentajeBen${i}Input`).prop("readonly", true);
+                        $(`#telefonoBen${i}Input`).prop("readonly", true);
+                        $(`#correoBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}InputCheck`).prop("disabled", true);
                     }
                     if (response.beneficiarios[0]) {
                         var nombreben1 = response.beneficiarios[0].nombre;
@@ -961,41 +951,31 @@ $(document).ready(function () {
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
-                                    name="nombre-ben1" minlength="3" maxlength="255">
+                                <input type="text" class="form-control" placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input" name="nombre-ben1" minlength="3" maxlength="255" readonly>
                                 <label for="nombreBen1Input">Nombre del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="number" step="any" class="form-control"
-                                    placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
-                                    name="porcentaje-ben1" value="0">
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input" name="porcentaje-ben1" value="0" readonly>
                                 <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="number" class="form-control"
-                                    placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
-                                    name="telefono-ben1" minlength="3" maxlength="100">
+                                <input type="number" class="form-control" placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input" name="telefono-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="telefonoBen1Input">Teléfono del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">                                
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
-                                    name="correo-ben1" minlength="3" maxlength="100">
+                                <input type="text" class="form-control" placeholder="Ingresa el correo del beneficiario" id="correoBen1Input" name="correo-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="correoBen1Input">Correo del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
-                                    name="curp-ben1" minlength="3" maxlength="100">
+                                <input type="text" class="form-control" placeholder="Ingresa la curp del beneficiario" id="curpBen1Input" name="curp-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="curpBen1Input">CURP del beneficiario</label>
                             </div>
                         </div>
@@ -1196,7 +1176,7 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/validateClaveConvenio",
+                    url: "/admin/validateClaveConvenioTerminado",
                     data: {
                         clave: clave,
                     },
@@ -1267,7 +1247,7 @@ $(document).ready(function () {
                     success: function (result) {
                         if (result == "success") {
                             $.post(
-                                "/admin/deleteConvenio",
+                                "/admin/deleteConvenioTerminado",
                                 {
                                     id: id,
                                 },

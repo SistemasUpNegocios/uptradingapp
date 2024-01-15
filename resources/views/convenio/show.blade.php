@@ -239,6 +239,7 @@
                                         <option value="Finiquitado">Finiquitado</option>
                                         <option value="Refrendado">Refrendado</option>
                                         <option value="Cancelado">Cancelado</option>
+                                        <option value="Nuevo convenio">Nuevo convenio</option>
                                     </select>
                                     <label for="statusInput">Status del convenio</label>
                                 </div>

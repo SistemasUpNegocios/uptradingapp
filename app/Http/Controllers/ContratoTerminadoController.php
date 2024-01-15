@@ -71,9 +71,10 @@ class ContratoTerminadoController extends Controller
             ->where("contrato.ps_id", "like", $psid)
             ->where("contrato.cliente_id", "like", $clienteid)
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where("contrato.status", "!=", "Pendiente de activación")
-            ->where("contrato.status", "!=", "Activado")
-            ->where("contrato.status", "!=", "Refrendado")
+            ->where(function ($query) {
+                $query->where("contrato.status", "Finiquitado")
+                ->orWhere("contrato.status", "Cancelado");
+            })
             ->orderBy("contrato.id", "desc")
             ->get();        
 
@@ -86,21 +87,17 @@ class ContratoTerminadoController extends Controller
         if ($request->ajax()) {
 
             $contrato = Contrato::find($request->id);
-
             $contrato->status = $request->input('status');
-
             $contrato->update();
 
             $contrato_id = $contrato->id;
             $bitacora_id = session('bitacora_id');
 
             $log = new Log;
-
             $log->tipo_accion = "Actualización";
             $log->tabla = "Contrato";
             $log->id_tabla = $contrato_id;
             $log->bitacora_id = $bitacora_id;
-
             $log->save();
 
             return response($contrato);
