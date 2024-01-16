@@ -317,6 +317,11 @@ $(document).ready(function () {
 
         let id = $(this).data("id");
         let contratoid = $(this).data("contratoid");
+        let rendimiento = $(this).data("rendimientod");
+        let pos = rendimiento.toString().indexOf(",");
+        if (pos != -1) {
+            rendimiento = rendimiento.replaceAll(",", "");
+        }
         let pago = $(this).data("pago");
         let statusValor = $(this).val();
         let moneda = $(this).data("moneda");
@@ -351,6 +356,7 @@ $(document).ready(function () {
                 pago: pago,
                 contratoid: contratoid,
                 dolar: dolar,
+                rendimiento: rendimiento,
             },
             success: function () {
                 Toast.fire({

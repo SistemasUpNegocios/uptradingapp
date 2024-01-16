@@ -93,7 +93,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="mensual" data-tipo="{{$resumen->tipo_id}}" data-moneda="dolares" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_dolares_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif ($resumen->tipo_id == 1 && $reporte == "liquidacion")
@@ -112,7 +112,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="liquidacion" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-inversioneuros="{{$resumen->inversion_eur}}" data-inversionfrancos="{{$resumen->inversion_chf}}" data-moneda="dolares" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_dolares_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif($resumen->tipo_id == 2)
@@ -131,7 +131,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_dolares}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($resumen->fecha_contrato)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" data-moneda="dolares" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" data-rendimientod="{{$pago_dolares_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @endif
@@ -205,7 +205,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_euros}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="mensual" data-tipo="{{$resumen->tipo_id}}" data-moneda="euros" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_euros_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif ($resumen->tipo_id == 1 && $reporte == "liquidacion")
@@ -224,7 +224,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_euros}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="liquidacion" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-inversioneuros="{{$resumen->inversion_eur}}" data-inversionfrancos="{{$resumen->inversion_chf}}" data-moneda="euros" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_euros_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif($resumen->tipo_id == 2)
@@ -243,7 +243,7 @@
                                 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_euros}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($resumen->fecha_contrato)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" data-moneda="euros" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" data-rendimientod="{{$pago_euros_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @endif
@@ -317,7 +317,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_francos}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="mensual" data-tipo="{{$resumen->tipo_id}}" data-moneda="francos" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_francos_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif ($resumen->tipo_id == 1 && $reporte == "liquidacion")
@@ -336,7 +336,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_francos}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($fecha)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-reporte="liquidacion" data-tipo="{{$resumen->tipo_id}}" data-inversionus="{{$resumen->inversion_us}}" data-inversioneuros="{{$resumen->inversion_eur}}" data-inversionfrancos="{{$resumen->inversion_chf}}" data-moneda="francos" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
                                 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="{{$pago}}" data-rendimientod="{{$pago_francos_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @elseif($resumen->tipo_id == 2)
@@ -355,7 +355,7 @@
 
                                 <button class="btn btn-primary abrirTrans whatsTrans_tabla ms-1" data-pago="{{$pago}}" data-cliente="{{$cliente}}" data-rendimiento="{{$pago_francos}}" data-rendimientoini="{{ $resumen->pago }}" data-fecha="{{ \Carbon\Carbon::parse($resumen->fecha_contrato)->formatLocalized('%d de %B de %Y') }}" data-contrato="{{$contrato}}" data-clientenumero="{{ $resumen->clientenumero }}" data-tipo="{{$resumen->tipo_id}}" data-moneda="francos" title="Mandar whats para pago por transferencia Swissquote"><i class="bi bi-whatsapp"></i></button>
 
-                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
+                                <input id="pagadoStatus" class="status form-check-input fs-6 m-0 p-0 ms-1" type="checkbox" data-id="{{ $resumen->pagoid }}" data-contratoid="{{ $resumen->contratoid }}" data-pago="Compuesto" data-rendimientod="{{$pago_francos_liquidacion}}" @if ($resumen->status=="Pagado" ) {{"checked"}} @endif>
                                 <label class="form-check-label ms-1" style="font-size: 15px" for="pagadoStatus">¿Pago realizado?</label>
                             </td>
                         @endif

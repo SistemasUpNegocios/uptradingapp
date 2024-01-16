@@ -33,24 +33,24 @@ class ConcentradoController extends Controller
     public function getConcentrado(Request $request)
     {
         $cliente = Cliente::where("id", $request->id)->first();
-        $contratos = Contrato::where("cliente_id", $request->id)->count();
-        $contrato_mensual = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->count();
-        $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->count();
-        $convenios = Convenio::where("cliente_id", $request->id)->count();
+        $contratos = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->count();
+        $contrato_mensual = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->count();
+        $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->count();
+        $convenios = Convenio::where("cliente_id", $request->id)->where('status', 'Activado')->count();
 
-        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion');
-        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion');
+        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where('status', 'Activado')->sum('inversion');
+        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where('status', 'Activado')->sum('inversion');
 
-        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "dolares")->sum('inversion_us');
-        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "dolares")->sum('inversion_us');
+        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where('status', 'Activado')->where("moneda", "dolares")->sum('inversion_us');
+        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where('status', 'Activado')->where("moneda", "dolares")->sum('inversion_us');
 
-        $contratos_inv_eur_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "euros")->sum('inversion_eur');
-        $contratos_inv_eur_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "euros")->sum('inversion_eur');
+        $contratos_inv_eur_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where('status', 'Activado')->where("moneda", "euros")->sum('inversion_eur');
+        $contratos_inv_eur_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where('status', 'Activado')->where("moneda", "euros")->sum('inversion_eur');
 
-        $contratos_inv_chf_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "francos")->sum('inversion_chf');
-        $contratos_inv_chf_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "francos")->sum('inversion_chf');
+        $contratos_inv_chf_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where('status', 'Activado')->where("moneda", "francos")->sum('inversion_chf');
+        $contratos_inv_chf_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where('status', 'Activado')->where("moneda", "francos")->sum('inversion_chf');
 
-        $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->sum('monto');
+        $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->where('status', 'Activado')->sum('monto');
         $convenios_monto = $convenios_monto_dol * $request->dolar;
 
         $total_euros = $contratos_inv_eur_mens + $contratos_inv_eur_comp;
@@ -66,6 +66,7 @@ class ConcentradoController extends Controller
             ->where("contrato.cliente_id", $request->id)
             ->where("contrato.tipo_id", 1)
             ->where("pago_cliente.fecha_pago", "like", "$anio-$mes%")
+            ->where('contrato.status', 'Activado')
             ->orderBy("tipo_id", "ASC")
             ->distinct("contrato.contrato")
             ->get();
@@ -73,6 +74,7 @@ class ConcentradoController extends Controller
         $contratos_comp_tot_prim = Contrato::join("pago_cliente", "pago_cliente.contrato_id", "contrato.id")
             ->select("contrato.contrato", "pago_cliente.fecha_pago", "contrato.tipo_id", "contrato.inversion", "contrato.inversion_us", "contrato.inversion_eur", "contrato.inversion_chf", "contrato.moneda")
             ->where("contrato.cliente_id", $request->id)
+            ->where('contrato.status', 'Activado')
             ->where("contrato.tipo_id", 2)
             ->orderBy("tipo_id", "ASC")
             ->distinct("contrato.contrato")
@@ -83,7 +85,7 @@ class ConcentradoController extends Controller
             array_push($contratos_comp_tot, $contrato_comp_tot);
         }
 
-        $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
+        $convenio_tot = Convenio::select("folio", "monto")->where('status', 'Activado')->where("cliente_id", $request->id)->get();
 
         $dolar = $request->dolar;
 
@@ -93,24 +95,24 @@ class ConcentradoController extends Controller
     public function reporteConcentrado(Request $request)
     {
         $cliente = Cliente::where("id", $request->id)->first();
-        $contratos = Contrato::where("cliente_id", $request->id)->count();
-        $contrato_mensual = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->count();
-        $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->count();
-        $convenios = Convenio::where("cliente_id", $request->id)->count();
+        $contratos = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->count();
+        $contrato_mensual = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->count();
+        $contrato_compuesto = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->count();
+        $convenios = Convenio::where("cliente_id", $request->id)->where('status', 'Activado')->count();
 
-        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->sum('inversion');
-        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->sum('inversion');
+        $contratos_inv_mens = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->sum('inversion');
+        $contratos_inv_comp = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->sum('inversion');
 
-        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "dolares")->sum('inversion_us');
-        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "dolares")->sum('inversion_us');
+        $contratos_inv_dol_mens = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->where("moneda", "dolares")->sum('inversion_us');
+        $contratos_inv_dol_comp = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->where("moneda", "dolares")->sum('inversion_us');
 
-        $contratos_inv_eur_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "euros")->sum('inversion_eur');
-        $contratos_inv_eur_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "euros")->sum('inversion_eur');
+        $contratos_inv_eur_mens = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->where("moneda", "euros")->sum('inversion_eur');
+        $contratos_inv_eur_comp = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->where("moneda", "euros")->sum('inversion_eur');
 
-        $contratos_inv_chf_mens = Contrato::where("cliente_id", $request->id)->where("tipo_id", 1)->where("moneda", "francos")->sum('inversion_chf');
-        $contratos_inv_chf_comp = Contrato::where("cliente_id", $request->id)->where("tipo_id", 2)->where("moneda", "francos")->sum('inversion_chf');
+        $contratos_inv_chf_mens = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 1)->where("moneda", "francos")->sum('inversion_chf');
+        $contratos_inv_chf_comp = Contrato::where("cliente_id", $request->id)->where('status', 'Activado')->where("tipo_id", 2)->where("moneda", "francos")->sum('inversion_chf');
 
-        $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->sum('monto');
+        $convenios_monto_dol = Convenio::where("cliente_id", $request->id)->where('status', 'Activado')->sum('monto');
         $convenios_monto = $convenios_monto_dol * $request->dolar;
 
         $total_euros = $contratos_inv_eur_mens + $contratos_inv_eur_comp;
@@ -126,6 +128,7 @@ class ConcentradoController extends Controller
             ->where("contrato.cliente_id", $request->id)
             ->where("contrato.tipo_id", 1)            
             ->where("pago_cliente.fecha_pago", "like", "$anio-$mes%")
+            ->where('contrato.status', 'Activado')
             ->orderBy("tipo_id", "ASC")
             ->distinct("contrato.contrato")
             ->get();
@@ -134,11 +137,12 @@ class ConcentradoController extends Controller
             ->select("contrato.contrato", "pago_cliente.fecha_pago", "contrato.tipo_id", "contrato.inversion", "contrato.inversion_us", "contrato.inversion_eur", "contrato.inversion_chf", "contrato.moneda")
             ->where("contrato.cliente_id", $request->id)
             ->where("contrato.tipo_id", 2)
+            ->where('contrato.status', 'Activado')
             ->orderBy("tipo_id", "ASC")
             ->distinct("contrato.contrato")
             ->get();
 
-        $convenio_tot = Convenio::select("folio", "monto")->where("cliente_id", $request->id)->get();
+        $convenio_tot = Convenio::select("folio", "monto")->where('status', 'Activado')->where("cliente_id", $request->id)->get();
 
         $dolar = $request->dolar;
 
