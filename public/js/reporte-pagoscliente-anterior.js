@@ -322,7 +322,6 @@ $(document).ready(function () {
         if (pos != -1) {
             rendimiento = rendimiento.replaceAll(",", "");
         }
-        console.log(rendimiento);
         let pago = $(this).data("pago");
         let statusValor = $(this).val();
         let moneda = $(this).data("moneda");

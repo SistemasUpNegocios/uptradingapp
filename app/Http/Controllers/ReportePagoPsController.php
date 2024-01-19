@@ -10,7 +10,6 @@ use App\Models\Ps;
 use App\Models\Pago;
 use App\Models\PagoPS;
 use App\Models\PagoPSConvenio;
-use App\Models\TipoCambio;
 use App\Models\Log;
 use App\Exports\PagosPsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -141,6 +140,16 @@ class ReportePagoPsController extends Controller
                 if($request->status == "Pagado"){
                     $fecha = Carbon::now()->format('Y-m');
                     $pago_ps->fecha_pagado = $fecha."-10";
+
+                    $serie = str_pad($pago_ps->serie, 2, "0", STR_PAD_LEFT);
+
+                    $pago = new Pago;
+                    $pago->id_contrato = $pago_ps->contrato_id;
+                    $pago->memo = "Pago a PS ($serie/12)";
+                    $pago->monto = $pago_ps->pago;
+                    $pago->tipo_pago = "efectivo,";
+                    $pago->tipo_cambio = $request->dolar;
+                    $pago->save();
 
                     $log = new Log;
                     $log->tipo_accion = "Actualización";

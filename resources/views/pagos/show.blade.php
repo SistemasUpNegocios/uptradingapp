@@ -28,9 +28,8 @@
                                 <tr>
                                     <th data-priority="0" scope="col">Contrato</th>
                                     <th data-priority="0" scope="col">Monto</th>
-                                    <th data-priority="0" scope="col">Tipo de pago</th>
-                                    <th data-priority="0" scope="col">Moneda</th>
-                                    <th data-priority="0" scope="col">Tipo de cambio</th>
+                                    <th data-priority="0" scope="col">Pago</th>
+                                    <th data-priority="0" scope="col">Dólar</th>
                                     <th data-priority="0" scope="col">Memo</th>
                                     <th data-priority="0" scope="col">Acciones</th>
                                 </tr>
