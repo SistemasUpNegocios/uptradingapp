@@ -227,7 +227,7 @@
         @endif
 
         <li class="nav-heading">Opciones de administrador</li>
-        @if (auth()->user()->is_root)
+        @if (auth()->user()->id == 1 || auth()->user()->id == 2)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/porcentaje')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/porcentaje') }}">                
@@ -248,11 +248,13 @@
                             <i class="bi bi-circle"></i><span>Clientes</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ URL::to('admin/cuentasmam') }}">
-                            <i class="bi bi-circle"></i><span>Cuentas MAM</span>
-                        </a>
-                    </li>
+                    @if (auth()->user()->id != 4)
+                        <li>
+                            <a href="{{ URL::to('admin/cuentasmam') }}">
+                                <i class="bi bi-circle"></i><span>Cuentas MAM</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <a href="{{ URL::to('admin/conteocontratosclientes') }}">
                             <i class="bi bi-circle"></i><span>Número de contratos</span>
@@ -397,7 +399,7 @@
             </ul>
         </li>
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente)
+        @if (auth()->user()->id == 1 || auth()->user()->id == 2  || auth()->user()->id == 3 || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_gold || auth()->user()->is_cliente)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#pagosCliente-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-cash"></i><span>Pagos a clientes</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -428,7 +430,7 @@
             </li>
         @endif
         
-        @if (!auth()->user()->is_cliente)
+        @if (!auth()->user()->is_cliente && auth()->user()->id != 4)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#pagos-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-cash-stack"></i><span>Pagos a PS</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -467,7 +469,7 @@
             </li>
         @endif
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+        @if (auth()->user()->id == 1 || auth()->user()->id == 2  || auth()->user()->id == 3 || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#pagos-anteriores-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-cash-stack"></i><span>Otros pagos</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -497,7 +499,7 @@
                         <a href="{{ URL::to('admin/ps') }}">
                             <i class="bi bi-circle"></i><span>PS</span>
                         </a>
-                    </li>                    
+                    </li>
                     <li>
                         <a href="{{ URL::to('admin/psmovil') }}">
                             <i class="bi bi-circle"></i><span>PS Móvil</span>
@@ -586,7 +588,7 @@
             </button>
         </li>
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
+        @if (auth()->user()->id == 1)
             <li class="nav-heading">Configuración</li>
 
             <li class="nav-item">
@@ -594,30 +596,26 @@
                     <i class="bi bi-clock-history"></i><span>Control</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="control-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    @if (auth()->user()->is_root)
-                        <li>
-                            <a href="{{ URL::to('admin/cuentasGoogle') }}">
-                                <i class="bi bi-circle"></i><span>Cuentas Google</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/bitacoraAcceso') }}">
-                                <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('admin/historialCambios') }}">
-                                <i class="bi bi-circle"></i><span>Historial de cambios</span>
-                            </a>
-                        </li>
-                    @endif
-                    @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos)
-                        <li>
-                            <a href="{{ URL::to('admin/usuario') }}">
-                                <i class="bi bi-circle"></i><span>Usuarios del sistema</span>
-                            </a>
-                        </li>
-                    @endif
+                    <li>
+                        <a href="{{ URL::to('admin/cuentasGoogle') }}">
+                            <i class="bi bi-circle"></i><span>Cuentas Google</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/bitacoraAcceso') }}">
+                            <i class="bi bi-circle"></i><span>Bitácora de accesos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/historialCambios') }}">
+                            <i class="bi bi-circle"></i><span>Historial de cambios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/usuario') }}">
+                            <i class="bi bi-circle"></i><span>Usuarios del sistema</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif

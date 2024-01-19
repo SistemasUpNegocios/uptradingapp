@@ -15,7 +15,7 @@
             @endif
         @endif
 
-        @if (auth()->user()->is_root)
+        @if (auth()->user()->id == 1 || auth()->user()->id == 2)
             <input id="contratoStatusInputs" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-cambiarporcentaje="{{ $cambiar_porcentaje }}" data-porcentajerendimiento="{{ $porcentaje_rendimiento }}" data-status="{{ $status }}" data-celular="{{ $celular }}" data-contrato="{{ $contrato }}" @if ($status=="Activado" ) {{"checked"}} @endif>
             <label class="form-check-label ms-1" for="contratoStatusInput">@if ($status == "Activado") Desactivar @else Activar @endif</label>
         @endif

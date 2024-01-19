@@ -69,6 +69,13 @@ class ConvenioVencerController extends Controller
         $convenio->nota_convenio = $request->nota_convenio;
         $convenio->save();
 
+        $log = new Log;
+        $log->tipo_accion = "Actualización";
+        $log->tabla = "Convenio (nota)";
+        $log->id_tabla = $convenio->id;
+        $log->bitacora_id = $bitacora_id;
+        $log->save();
+
         return response($convenio);
     }
     

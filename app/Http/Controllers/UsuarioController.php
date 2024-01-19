@@ -73,14 +73,11 @@ class UsuarioController extends Controller
 
             $usuario_id = $usuario->id;
             $bitacora_id = session('bitacora_id');
-
             $log = new Log;
-
             $log->tipo_accion = "Inserción";
             $log->tabla = "Usuario";
             $log->id_tabla = $usuario_id;
             $log->bitacora_id = $bitacora_id;
-
             $log->save();
 
             return response($usuario);
@@ -110,6 +107,13 @@ class UsuarioController extends Controller
             $usuario->privilegio = $request->input('privilegio');
 
             $usuario->update();
+
+            $log = new Log;
+            $log->tipo_accion = "Actualización";
+            $log->tabla = "Usuario";
+            $log->id_tabla = $usuario->id;
+            $log->bitacora_id = session('bitacora_id');
+            $log->save();
 
             return response($usuario);
 

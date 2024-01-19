@@ -225,12 +225,6 @@ class ReportePagoPsController extends Controller
                     }
                     $pago->save();
 
-                    $tipo_cambio = new TipoCambio;
-                    $tipo_cambio->valor = number_format($request->dolar, 2);
-                    $tipo_cambio->contrato_id = $pago_ps->contrato_id;
-                    $tipo_cambio->memo = "Pago de comisión ($numero_pago_arr[$i])";
-                    $tipo_cambio->save();
-
                     $log = new Log;
                     $log->tipo_accion = "Actualización";
                     $log->tabla = "Pago de PS";

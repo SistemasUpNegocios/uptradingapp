@@ -2188,7 +2188,7 @@ class Kernel extends ConsoleKernel
         
         //Tareas para Bakups de archivos y base de datos y envier correos.
         $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
-        $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
+        // $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
         // $schedule->call(function () { 
         //     Drive::dispatch(); 
         // })->dailyAt("22:00")->timezone('America/Mexico_City');

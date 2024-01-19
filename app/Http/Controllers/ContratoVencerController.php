@@ -85,7 +85,7 @@ class ContratoVencerController extends Controller
         $contrato_id = $contrato->id;
         $log = new Log;
         $log->tipo_accion = "Inserción";
-        $log->tabla = "Ticket";
+        $log->tabla = "Contrato (nota)";
         $log->id_tabla = $contrato_id;
         $log->bitacora_id = $bitacora_id;
         $log->save();
@@ -113,8 +113,8 @@ class ContratoVencerController extends Controller
 
         $ticket_id = $ticket->id;
         $log = new Log;
-        $log->tipo_accion = "Actualización";
-        $log->tabla = "Contrato (nota)";
+        $log->tipo_accion = "Inserción";
+        $log->tabla = "Ticket";
         $log->id_tabla = $ticket_id;
         $log->bitacora_id = $bitacora_id;
         $log->save();

@@ -28,7 +28,7 @@
                     <label class="form-check-label ms-1" for="convenioStatusInput">@if ($status_oficina == "Activado") Rechazar convenio @else Aceptar convenio @endif</label>
                 @endif
             @endif
-        @elseif (auth()->user()->is_root)
+        @elseif (auth()->user()->id == 1 || auth()->user()->id == 3)
             @if ($status_oficina == "Activado")
                 @if ($loggin != NULL)
                     <input id="convenioStatusInput" class="status form-check-input fs-5 m-0 p-0 ms-1" type="checkbox" value="{{ $status }}" data-id="{{ $id }}" data-status="{{ $status }}" @if ($status == "Activado") {{"checked"}} @endif>

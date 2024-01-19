@@ -443,7 +443,7 @@ class ReportePagoClienteAnteriorController extends Controller
 
             $log = new Log;
             $log->tipo_accion = "Actualización";
-            $log->tabla = "Pago de cliente";
+            $log->tabla = "Pago de cliente ($request->pago)";
             $log->id_tabla = $request->id;
             $log->bitacora_id = session('bitacora_id');
             $log->save();

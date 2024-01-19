@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TipoContrato;
 use Illuminate\Http\Request;
 use App\Models\Modelo;
+use App\Models\Log;
 use Illuminate\Support\Facades\DB;
 
 class TipoContratoController extends Controller
@@ -79,6 +80,13 @@ class TipoContratoController extends Controller
             $tipoContrato->modelo_id = $request->input('modelo_id');
             $tipoContrato->save();
 
+            $log = new Log;
+            $log->tipo_accion = "Inserción";
+            $log->tabla = "Tipo de contrato";
+            $log->id_tabla = $tipoContrato->id;
+            $log->bitacora_id = session('bitacora_id');
+            $log->save();
+
             return response($tipoContrato);
         }
     }
@@ -111,6 +119,13 @@ class TipoContratoController extends Controller
             $tipoContrato->modelo_id = $request->input('modelo_id');
 
             $tipoContrato->update();
+
+            $log = new Log;
+            $log->tipo_accion = "Actualización";
+            $log->tabla = "Tipo de contrato";
+            $log->id_tabla = $tipoContrato->id;
+            $log->bitacora_id = session('bitacora_id');
+            $log->save();
 
             return response($tipoContrato);
         }
