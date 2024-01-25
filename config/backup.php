@@ -169,7 +169,7 @@ return [
             'to' => 'javiersalazar@uptradingexperts.com',
             'from' => [
                 'name' => 'Sistemas',
-                'address' => 'mensajes@uptradingexperts.com'
+                'address' => 'clientes@uptradingexperts.com'
             ]
         ],
 
