@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', 'Gestión de convenios terminados')
+@section('title', 'Gestión de convenios anteriores')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
@@ -9,11 +9,11 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Gestión de convenios terminados</h1>
+        <h1>Gestión de convenios anteriores</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">Vista general</a></li>
-                <li class="breadcrumb-item active">Gestión de convenios terminados</li>
+                <li class="breadcrumb-item active">Gestión de convenios anteriores</li>
             </ol>
         </nav>
     </div>
@@ -23,7 +23,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body mt-3">
-                        <table class="table table-striped table-bordered nowrap text-center" id="convenioTerminado">
+                        <table class="table table-striped table-bordered nowrap text-center" id="convenioAnterior">
                             <thead>
                                 <tr>
                                     <th data-priority="0" scope="col">Folio</th>
@@ -268,5 +268,5 @@
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="{{ asset('js/convenioterminado.js') }}"></script>
+    <script src="{{ asset('js/convenioanterior.js') }}"></script>
 @endsection

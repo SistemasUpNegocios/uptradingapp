@@ -1,8 +1,8 @@
 $(document).ready(function () {
     let acc = "";
 
-    var table = $("#contratoTerminado").DataTable({
-        ajax: "/admin/showContratoTerminado",
+    var table = $("#contratoAnterior").DataTable({
+        ajax: "/admin/showContratoAnterior",
         columns: [
             { data: "contrato" },
             { data: "tipo" },
@@ -454,7 +454,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosTerminado",
+            url: "/admin/getBeneficiariosAnterior",
             data: { id: id },
             dataType: "json",
             success: function (response) {
@@ -863,7 +863,7 @@ $(document).ready(function () {
         var inversionletus = $(this).data("inversionletus");
         var status = $(this).data("status");
 
-        $("#contratoForm").attr("action", "/admin/editContratoTerminado");
+        $("#contratoForm").attr("action", "/admin/editContratoAnterior");
 
         $("#psIdInput2").val(psid);
         $("#periodoInput2").val(periodo);
@@ -959,7 +959,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosTerminado",
+            url: "/admin/getBeneficiariosAnterior",
             data: { id: id },
             dataType: "json",
             success: function (response) {
@@ -1350,7 +1350,7 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/showClaveTerminado",
+                    url: "/admin/showClaveAnterior",
                     data: { clave: clave },
                     success: function (result) {
                         if (result == "success") {
@@ -1412,12 +1412,12 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/showClaveTerminado",
+                    url: "/admin/showClaveAnterior",
                     data: { clave: clave },
                     success: function (result) {
                         if (result == "success") {
                             $.post(
-                                "/admin/deleteContratoTerminado",
+                                "/admin/deleteContratoAnterior",
                                 { id: id },
                                 function () {
                                     table.ajax.reload(null, false);

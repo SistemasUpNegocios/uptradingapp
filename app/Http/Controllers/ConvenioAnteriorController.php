@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
-class ConvenioTerminadoController extends Controller
+class ConvenioAnteriorController extends Controller
 {
     public function __construct()
     {
@@ -41,7 +41,7 @@ class ConvenioTerminadoController extends Controller
                 "bancos" => $bancos,
             );
 
-            return response()->view('convenioterminado.show', $data, 200);
+            return response()->view('convenioanterior.show', $data, 200);
         }else{
             return redirect()->to('/admin/dashboard');
         }
@@ -60,14 +60,11 @@ class ConvenioTerminadoController extends Controller
             ->join('banco', 'banco.id', '=', 'convenio.banco_id')
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("convenio.id, convenio.folio, convenio.monto, convenio.monto_letra, convenio.firma, convenio.fecha_inicio, convenio.fecha_fin, convenio.fecha_carga, convenio.capertura, convenio.cmensual, convenio.ctrimestral, convenio.status, convenio.status_oficina, convenio.numerocuenta, convenio.loggin, ps.id AS ps_id, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS cliente_id,  CONCAT(cliente.nombre, ' ', cliente.apellido_p, ' ', cliente.apellido_m) AS clientenombre, banco.id AS banco_id"))
-            ->where(function ($query) {
-                $query->where("convenio.status", "Finiquitado")
-                ->orWhere("convenio.status", "Cancelado");
-            })
+            ->where("convenio.status", "Nuevo Convenio")
             ->orderBy("convenio.id", "desc")
             ->get();
 
-        return datatables()->of($convenio)->addColumn('btn', 'convenioterminado.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($convenio)->addColumn('btn', 'convenioanterior.buttons')->rawColumns(['btn'])->toJson();
     }
 
     public function editConvenio(Request $request)

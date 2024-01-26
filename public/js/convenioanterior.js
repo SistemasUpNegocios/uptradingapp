@@ -1,14 +1,9 @@
 $(document).ready(function () {
     let acc = "";
 
-    var table = $("#contratoTerminado").DataTable({
-        ajax: "/admin/showContratoTerminado",
-        columns: [
-            { data: "contrato" },
-            { data: "tipo" },
-            { data: "status" },
-            { data: "btn" },
-        ],
+    var table = $("#convenioAnterior").DataTable({
+        ajax: "/admin/showConvenioAnterior",
+        columns: [{ data: "folio" }, { data: "status" }, { data: "btn" }],
         responsive: {
             breakpoints: [
                 {
@@ -31,12 +26,12 @@ $(document).ready(function () {
         },
         language: {
             processing: "Procesando...",
-            lengthMenu: "Mostrar _MENU_ contratos",
+            lengthMenu: "Mostrar _MENU_ convenios",
             zeroRecords: "No se encontraron resultados",
-            emptyTable: "No se ha registrado ningún contrato",
+            emptyTable: "No se ha registrado ningún convenio",
             infoEmpty:
-                "Mostrando contratos del 0 al 0 de un total de 0 contratos",
-            infoFiltered: "(filtrado de un total de _MAX_ contratos)",
+                "Mostrando convenios del 0 al 0 de un total de 0 convenios",
+            infoFiltered: "(filtrado de un total de _MAX_ convenios)",
             search: "Buscar:",
             infoThousands: ",",
             loadingRecords: "Cargando...",
@@ -144,7 +139,7 @@ $(document).ready(function () {
             },
             searchPanes: {
                 clearMessage: "Borrar todo",
-                collacontratoe: {
+                collaconvenioe: {
                     0: "Paneles de búsqueda",
                     _: "Paneles de búsqueda (%d)",
                 },
@@ -208,7 +203,7 @@ $(document).ready(function () {
                         "Este registro puede ser editado individualmente, pero no como parte de un grupo.",
                 },
             },
-            info: "Mostrando de _START_ a _END_ de _TOTAL_ contratos",
+            info: "Mostrando de _START_ a _END_ de _TOTAL_ convenios",
         },
         aaSorting: [],
     });
@@ -219,8 +214,9 @@ $(document).ready(function () {
         },
     });
 
-    $("#contratoForm").on("submit", function (e) {
+    $("#convenioForm").on("submit", function (e) {
         e.preventDefault();
+        var form = $(this).serialize();
         var url = $(this).attr("action");
         $("#alertMessage").text("");
 
@@ -234,13 +230,13 @@ $(document).ready(function () {
             processData: false,
             success: function () {
                 $("#formModal").modal("hide");
-                $("#contratoForm")[0].reset();
+                $("#convenioForm")[0].reset();
                 table.ajax.reload(null, false);
                 if (acc == "new") {
                     Swal.fire({
                         icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato añadido</h1>',
-                        html: '<p style="font-family: Poppins">El contrato ha sido añadido correctamente</p>',
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Convenio añadido</h1>',
+                        html: '<p style="font-family: Poppins">El convenio ha sido añadido correctamente</p>',
                         confirmButtonText:
                             '<a style="font-family: Poppins">Aceptar</a>',
                         confirmButtonColor: "#01bbcc",
@@ -248,8 +244,8 @@ $(document).ready(function () {
                 } else if (acc == "edit") {
                     Swal.fire({
                         icon: "success",
-                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato actualizado</h1>',
-                        html: '<p style="font-family: Poppins">El contrato ha sido actualizado correctamente</p>',
+                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Convenio actualizado</h1>',
+                        html: '<p style="font-family: Poppins">El convenio ha sido actualizado correctamente</p>',
                         confirmButtonText:
                             '<a style="font-family: Poppins">Aceptar</a>',
                         confirmButtonColor: "#01bbcc",
@@ -272,7 +268,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input type="text" class="form-control"
                                 placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
-                                name="nombre-ben1" minlength="3" maxlength="255" disabled>
+                                name="nombre-ben1" minlength="3" maxlength="255">
                             <label for="nombreBen1Input">Nombre del beneficiario</label>
                         </div>
                     </div>
@@ -280,7 +276,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input type="number" step="any" class="form-control"
                                 placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
-                                name="porcentaje-ben1" value="0" disabled>
+                                name="porcentaje-ben1" value="0">
                             <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
                         </div>
                     </div>
@@ -288,7 +284,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input type="number" class="form-control"
                                 placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
-                                name="telefono-ben1" minlength="3" maxlength="100" disabled>
+                                name="telefono-ben1" minlength="3" maxlength="100">
                             <label for="telefonoBen1Input">Teléfono del beneficiario</label>
                         </div>
                     </div>
@@ -296,7 +292,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-3">                                
                             <input style="text-transform: lowercase;" type="email" class="form-control"
                                 placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
-                                name="correo-ben1" minlength="3" maxlength="100" disabled>
+                                name="correo-ben1" minlength="3" maxlength="100">
                             <label for="correoBen1Input">Correo del beneficiario</label>
                         </div>
                     </div>                    
@@ -304,7 +300,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control"
                                 placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
-                                name="curp-ben1" minlength="3" maxlength="100" disabled>
+                                name="curp-ben1" minlength="3" maxlength="100">
                             <label for="curpBen1Input">CURP del beneficiario</label>
                         </div>
                     </div>
@@ -322,140 +318,118 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".view", function (e) {
-        $("#contratoForm")[0].reset();
+        $("#convenioForm")[0].reset();
 
         $("#alertMessage").text("");
         acc = "view";
         e.preventDefault();
 
         var id = $(this).data("id");
+        var folio = $(this).data("folio");
         var nombrecliente = $(this).data("nombrecliente");
-        var operador = $(this).data("operador");
-        var operadorine = $(this).data("operadorine");
-        var lugarfirma = $(this).data("lugarfirma");
-        var fechainicio = $(this).data("fecha");
-        var fecharen = $(this).data("fecharen");
-        var fechapag = $(this).data("fechapag");
-        var fechalimite = $(this).data("fechalimite");
-        var periodo = $(this).data("periodo");
-        var contrato = $(this).data("contrato");
-        var psid = $(this).data("psid");
+        var monto = $(this).data("monto");
+        var monto_letra = $(this).data("monto_letra");
+        var fecha_inicio = $(this).data("fecha_inicio");
+        var fecha_fin = $(this).data("fecha_fin");
         var capertura = $(this).data("capertura");
         var cmensual = $(this).data("cmensual");
-        var clienteid = $(this).data("clienteid");
-        var tipoid = $(this).data("tipoid");
-        var porcentaje = $(this).data("porcentaje");
-        var folio = $(this).data("folio");
-        var modeloid = $(this).data("modeloid");
-        var inversion = $(this).data("inversion");
-        var inversionus = $(this).data("inversionus");
-        var tipocambio = $(this).data("tipocambio");
-        var inversionlet = $(this).data("inversionlet");
-        var inversionletus = $(this).data("inversionletus");
-        var pagocomisionS1 = (capertura + cmensual) * inversionus;
-        var pagocomisionSN = cmensual * inversionus;
+        var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
+        var numerocuenta = $(this).data("numerocuenta");
+        var loggin = $(this).data("loggin");
+        var ps_id = $(this).data("ps_id");
+        var cliente_id = $(this).data("cliente_id");
+        var banco_id = $(this).data("banco_id");
+        var psnombre = $(this).data("psnombre");
+        var firma = $(this).data("firma");
 
-        $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
+        $("#clienteIdInput").next().children().first().empty();
+        $("#clienteIdInput").next().children().first().text(nombrecliente);
+        $("#clienteIdInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", nombrecliente);
+        $("#clienteIdInput").next().children().first().attr("disabled", true);
+
+        $("#psIdInput").next().children().first().empty();
+        $("#psIdInput").next().children().first().text(psnombre);
+        $("#psIdInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", psnombre);
+        $("#psIdInput").next().children().first().attr("disabled", true);
+
+        $("#modalTitle").text(`Vista previa del convenio de: ${nombrecliente}`);
 
         $("#formModal").modal("show");
-
-        $("#psIdInput2").val(psid);
-        $("#periodoInput2").val(periodo);
-        $("#clienteIdInput2").val(clienteid);
-        $("#tipoIdInput2").val(tipoid);
-
-        $("#operadorInput").val(operador);
-        $("#operadorInput").prop("readonly", true);
-
-        $("#operadorINEInput").val(operadorine);
-        $("#operadorINEInput").prop("readonly", true);
-
-        $("#lugarFirmaInput").val(lugarfirma);
-        $("#lugarFirmaInput").prop("readonly", true);
-
-        $("#fechaInicioInput").val(fechainicio);
-        $("#fechaInicioInput").prop("readonly", true);
-
-        $("#fechaRenInput").val(fecharen);
-        $("#fechaRenInput").prop("readonly", true);
-
-        $("#fechaPagInput").val(fechapag);
-        $("#fechaPagInput").prop("readonly", true);
-
-        $("#fechaLimiteInput").val(fechalimite);
-        $("#fechaLimiteInput").prop("readonly", true);
-
-        $("#periodoInput").val(periodo);
-        $("#periodoInput").prop("disabled", true);
-
-        $("#contratoInput").val(contrato);
-        $("#contratoInput").prop("readonly", true);
-
-        $("#psIdInput").val(psid);
-        $("#psIdInput").prop("disabled", true);
-
-        $("#clienteIdInput").val(clienteid);
-        $("#clienteIdInput").prop("disabled", true);
-
-        $("#tipoIdInput").val(tipoid);
-        $("#tipoIdInput").prop("disabled", true);
-
-        porcentaje = porcentaje.toString().replace(",", ".");
-        $("#porcentajeInput").val(porcentaje);
-        // $("#porcentajeInput").prop("readonly", true);
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
-        $("#modeloIdInput").val(modeloid);
-        $("#modeloIdInput").prop("disabled", true);
+        if (firma == "MARIA EUGENIA RINCON ACEVAL") {
+            $("#gerenteInput").prop("checked", true);
+            $("#representanteInput").prop("checked", false);
+        } else {
+            $("#representanteInput").prop("checked", true);
+            $("#gerenteInput").prop("checked", false);
+        }
+        $("#gerenteInput").prop("disabled", true);
+        $("#representanteInput").prop("disabled", true);
 
-        inversion = inversion.toString().replace(",", ".");
-        $("#inversionInput").val(inversion);
-        $("#inversionInput").prop("readonly", true);
+        monto = monto.toString().replace(",", ".");
+        $("#montoInput").val(monto);
+        $("#montoInput").prop("readonly", true);
 
-        inversionus = inversionus.toString().replace(",", ".");
-        $("#inversionUsInput").val(inversionus);
-        $("#inversionUsInput").prop("readonly", true);
+        $("#montoLetraInput").val(monto_letra);
+        $("#montoLetraInput").prop("readonly", true);
 
-        $("#PagoComisionSerie1Input").val(pagocomisionS1);
-        $("#PagoComisionSerie1Input").prop("readonly", true);
+        $("#fechaInicioInput").val(fecha_inicio);
+        $("#fechaInicioInput").prop("readonly", true);
 
-        $("#PagoComisionSerieNInput").val(pagocomisionSN);
-        $("#PagoComisionSerieNInput").prop("readonly", true);
+        $("#fechaFinInput").val(fecha_fin);
+        $("#fechaFinInput").prop("readonly", true);
 
-        tipocambio = tipocambio.toString().replace(",", ".");
-        $("#tipoCambioInput").val(tipocambio);
-        $("#tipoCambioInput").prop("readonly", true);
+        capertura = capertura.toString().replace(",", ".");
+        $("#cAperturaInput").val(capertura);
+        $("#cAperturaInput").prop("readonly", true);
 
-        $("#inversionLetInput").val(inversionlet);
-        $("#inversionLetInput").prop("readonly", true);
+        cmensual = cmensual.toString().replace(",", ".");
+        $("#cMensualInput").val(cmensual);
+        $("#cMensualInput").prop("readonly", true);
 
-        $("#inversionLetUsInput").val(inversionletus);
-        $("#inversionLetUsInput").prop("readonly", true);
+        ctrimestral = ctrimestral.toString().replace(",", ".");
+        $("#cTrimestralInput").val(ctrimestral);
+        $("#cTrimestralInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", true);
 
+        $("#numeroCuentaInput").val(numerocuenta);
+        $("#numeroCuentaInput").prop("readonly", true);
+
+        $("#logginInput").val(loggin);
+        $("#logginInput").prop("readonly", true);
+
+        $("#psIdInput").val(ps_id);
+        $("#psIdInput").prop("disabled", true);
+
+        $("#clienteIdInput").val(cliente_id);
+        $("#clienteIdInput").prop("disabled", true);
+
+        $("#bancoIdInput").val(banco_id);
+        $("#bancoIdInput").prop("disabled", true);
+
+        $("#modifySwitch").prop("disabled", true);
+
         $("#beneficiariosInput").prop("disabled", true);
-
-        $("#comprobantePagoInput").prop("disabled", true);
-        comprobantePago(this);
-
-        $("#efectivoInput").prop("disabled", true);
-        $("#transferenciaSwissInput").prop("disabled", true);
-        $("#transferenciaMXInput").prop("disabled", true);
-        $("#ciBankInput").prop("disabled", true);
-        $("#hsbcInput").prop("disabled", true);
-        $("#renovacionInput").prop("disabled", true);
-        $("#rendimientosInput").prop("disabled", true);
-        tipoPago(this);
-
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosTerminado",
-            data: { id: id },
+            url: "/admin/getBeneficiariosConvenioAnterior",
+            data: {
+                id: id,
+            },
             dataType: "json",
             success: function (response) {
                 $("#beneficiariosInput").val(response.countBeneficiarios);
@@ -469,6 +443,8 @@ $(document).ready(function () {
                             adjetivo = "segundo";
                         } else if (i == 3) {
                             adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
                         }
                         $("#contBeneficiarios").append(`             
                             <div class="col-12">
@@ -523,11 +499,11 @@ $(document).ready(function () {
                             </div>
                         `);
 
-                        $(`#nombreBen${i}Input`).prop("disabled", true);
-                        $(`#porcentajeBen${i}Input`).prop("disabled", true);
-                        $(`#telefonoBen${i}Input`).prop("disabled", true);
-                        $(`#correoBen${i}Input`).prop("disabled", true);
-                        $(`#curpBen${i}Input`).prop("disabled", true);
+                        $(`#nombreBen${i}Input`).prop("readonly", true);
+                        $(`#porcentajeBen${i}Input`).prop("readonly", true);
+                        $(`#telefonoBen${i}Input`).prop("readonly", true);
+                        $(`#correoBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}Input`).prop("readonly", true);
                         $(`#curpBen${i}InputCheck`).prop("disabled", true);
                     }
 
@@ -596,6 +572,28 @@ $(document).ready(function () {
                         $("#correoBen3Input").val("sin correo de contácto");
                         $("#curpBen3Input").val("sin curp");
                     }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("sin beneficiario");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("sin telefono de contácto");
+                        $("#correoBen4Input").val("sin correo de contácto");
+                        $("#curpBen4Input").val("sin curp");
+                    }
                 } else {
                     $("#beneficiariosInput").val(1);
                     $("#contBeneficiarios").empty();
@@ -614,7 +612,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input readonly type="text" class="form-control"
                                 placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
-                                name="nombre-ben1" minlength="3" maxlength="255" disabled>
+                                name="nombre-ben1" minlength="3" maxlength="255">
                             <label for="nombreBen1Input">Nombre del beneficiario</label>
                         </div>
                     </div>
@@ -622,7 +620,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input readonly type="number" step="any" class="form-control"
                                 placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
-                                name="porcentaje-ben1" value="0" disabled>
+                                name="porcentaje-ben1" value="0">
                             <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
                         </div>
                     </div>
@@ -630,7 +628,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-2">
                             <input readonly type="number" class="form-control"
                                 placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
-                                name="telefono-ben1" minlength="3" maxlength="100" disabled>
+                                name="telefono-ben1" minlength="3" maxlength="100">
                             <label for="telefonoBen1Input">Teléfono del beneficiario</label>
                         </div>
                     </div>
@@ -638,7 +636,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-3">                                
                             <input readonly type="text" class="form-control"
                                 placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
-                                name="correo-ben1" minlength="3" maxlength="100" disabled>
+                                name="correo-ben1" minlength="3" maxlength="100">
                             <label for="correoBen1Input">Correo del beneficiario</label>
                         </div>
                     </div>
@@ -646,7 +644,7 @@ $(document).ready(function () {
                         <div class="form-floating mb-3">
                             <input readonly type="text" class="form-control"
                                 placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
-                                name="curp-ben1" minlength="3" maxlength="100" disabled>
+                                name="curp-ben1" minlength="3" maxlength="100">
                             <label for="curpBen1Input">CURP del beneficiario</label>
                         </div>
                     </div>
@@ -658,177 +656,11 @@ $(document).ready(function () {
         $("#btnCancel").text("Cerrar vista previa");
         $("#btnSubmit").hide();
 
-        var meses = $("#periodoInput").val();
-
         $("#contPagos").empty();
-        $(".cont-tabla").empty();
-
-        var tipo_contrato = $("option:selected", "#tipoIdInput").attr(
-            "data-tipo"
-        );
-
-        if (tipo_contrato == "Rendimiento compuesto") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (MXN)</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                                <th scope="col">Rendimiento</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        } else if (tipo_contrato == "Rendimiento mensual") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (MXN)</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        }
-
-        var cmensual = parseFloat($("#cMensualInput").val());
-
-        var inversionMXN = $("#inversionInput").val();
-        inversionMXN = parseFloat(inversionMXN);
-
-        var inversionUSD = $("#inversionUsInput").val();
-        inversionUSD = parseFloat(inversionUSD);
-        // var inversionInicialUSD = parseFloat(inversionUSD);
-
-        var porcentaje = $("#porcentajeInput").val();
-        porcentaje = parseFloat(porcentaje);
-
-        var fecha = $("#fechaInicioInput").val();
-
-        var porcentaje = $("#porcentajeInput").val();
-        var usd = parseFloat($("#tipoCambioInput").val());
-
-        var cmensual2 = `0.0${cmensual}`;
-        cmensual2 = parseFloat(cmensual2);
-
-        // var rendimiento = 0;
-        for (var i = 0; i < meses; i++) {
-            fecha = fecha.split("-");
-            fecha = new Date(fecha[0], parseInt(fecha[1]), fecha[2]);
-            fecha = formatDate(fecha);
-
-            var formatterUSD = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            });
-
-            var formatterMXN = new Intl.NumberFormat("es-MX", {
-                style: "currency",
-                currency: "MXN",
-            });
-
-            var fechaInput = fecha.split("/").reverse().join("-");
-
-            if (porcentaje.length < 3 && porcentaje.length > 0) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `0.0${porcentaje}`;
-                }
-            } else if (porcentaje.length == 3) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `${porcentaje}`;
-                }
-            }
-            porcentaje2 = parseFloat(porcentaje2);
-
-            var monto = inversionUSD;
-            var redito = inversionUSD * porcentaje2;
-            var monto_redito = monto + redito;
-            var pagoPS = cmensual2 * inversionUSD;
-
-            $("#contPagos").append(
-                `
-                <input type="hidden" name="serie-reintegro${
-                    i + 1
-                }" id="serieReintegro${i + 1}Input" value="${i + 1}">
-                <input type="hidden" name="fecha-reintegro${
-                    i + 1
-                }" id="fechaReintegro${i + 1}Input" value="${fechaInput}">
-                <input type="hidden" name="monto-reintegro${
-                    i + 1
-                }" id="montoReintegro${i + 1}Input" value="${monto.toFixed(2)}">
-                <input type="hidden" name="redito-reintegro${
-                    i + 1
-                }" id="reditoReintegro${i + 1}Input" value="${redito.toFixed(
-                    2
-                )}">
-                <input type="hidden" name="montoredito-reintegro${
-                    i + 1
-                }" id="montoReditoReintegro${
-                    i + 1
-                }Input" value="${monto_redito.toFixed(2)}">
-
-                <input type="hidden" name="monto-pagops${
-                    i + 1
-                }" id="montoPagoPs${i + 1}Input" value="${pagoPS.toFixed(2)}">
-                `
-            );
-
-            if (tipo_contrato == "Rendimiento compuesto") {
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterMXN.format(inversionMXN)}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                    <td>${formatterUSD.format(
-                        inversionUSD + inversionUSD * porcentaje2
-                    )}</td>
-                </tr>
-                `);
-                inversionMXN = inversionMXN + inversionMXN * porcentaje2;
-                inversionUSD = inversionUSD + inversionUSD * porcentaje2;
-            } else if (tipo_contrato == "Rendimiento mensual") {
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterMXN.format(inversionMXN)}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                </tr>
-                `);
-            }
-
-            fecha = fecha.split("/").reverse().join("-");
-        }
     });
 
     $(document).on("click", ".edit", function (e) {
-        $("#contratoForm")[0].reset();
+        $("#convenioForm")[0].reset();
 
         $("#alertMessage").text("");
         acc = "edit";
@@ -836,131 +668,119 @@ $(document).ready(function () {
 
         var id = $(this).data("id");
 
+        var folio = $(this).data("folio");
         var nombrecliente = $(this).data("nombrecliente");
-        var operador = $(this).data("operador");
-        var operadorine = $(this).data("operadorine");
-        var lugarfirma = $(this).data("lugarfirma");
-        var fechainicio = $(this).data("fecha");
-        var fecharen = $(this).data("fecharen");
-        var fechapag = $(this).data("fechapag");
-        var fechalimite = $(this).data("fechalimite");
-        var periodo = $(this).data("periodo");
-        var contrato = $(this).data("contrato");
-        var psid = $(this).data("psid");
+        var monto = $(this).data("monto");
+        var monto_letra = $(this).data("monto_letra");
+        var fecha_inicio = $(this).data("fecha_inicio");
+        var fecha_fin = $(this).data("fecha_fin");
         var capertura = $(this).data("capertura");
         var cmensual = $(this).data("cmensual");
-        var clienteid = $(this).data("clienteid");
-        var tipoid = $(this).data("tipoid");
-        var porcentaje = $(this).data("porcentaje");
-        var folio = $(this).data("folio");
-        var modeloid = $(this).data("modeloid");
-        var inversion = $(this).data("inversion");
-        var inversionus = $(this).data("inversionus");
-        var pagocomisionS1 = (capertura + cmensual) * inversionus;
-        var pagocomisionSN = cmensual * inversionus;
-        var tipocambio = $(this).data("tipocambio");
-        var inversionlet = $(this).data("inversionlet");
-        var inversionletus = $(this).data("inversionletus");
+        var ctrimestral = $(this).data("ctrimestral");
         var status = $(this).data("status");
+        var numerocuenta = $(this).data("numerocuenta");
+        var loggin = $(this).data("loggin");
+        var ps_id = $(this).data("ps_id");
+        var cliente_id = $(this).data("cliente_id");
+        var psnombre = $(this).data("psnombre");
+        var banco_id = $(this).data("banco_id");
+        var firma = $(this).data("firma");
 
-        $("#contratoForm").attr("action", "/admin/editContratoTerminado");
+        if (cmensual.toString().charAt(1) == ",") {
+            cmensual = cmensual.replace(",", ".");
+        }
 
-        $("#psIdInput2").val(psid);
-        $("#periodoInput2").val(periodo);
-        $("#clienteIdInput2").val(clienteid);
-        $("#tipoIdInput2").val(tipoid);
+        dataInversionUS = $(this).data("monto");
+        dataFechaInicio = $(this).data("fecha_inicio");
+        dataFechaFin = $(this).data("fecha_fin");
+
+        $("#clienteIdInput").next().children().first().empty();
+        $("#clienteIdInput").next().children().first().text(nombrecliente);
+        $("#clienteIdInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", nombrecliente);
+        $("#clienteIdInput").next().children().first().attr("disabled", false);
+
+        $("#psIdInput").next().children().first().empty();
+        $("#psIdInput").next().children().first().text(psnombre);
+        $("#psIdInput")
+            .next()
+            .children()
+            .first()
+            .attr("data-dselect-text", psnombre);
+        $("#psIdInput").next().children().first().attr("disabled", false);
+
+        $("#convenioForm").attr("action", "/admin/editConvenioAnterior");
 
         $("#idInput").val(id);
-
-        $("#operadorInput").val(operador);
-        $("#operadorInput").prop("readonly", true);
-
-        $("#operadorINEInput").val(operadorine);
-        $("#operadorINEInput").prop("readonly", true);
-
-        $("#lugarFirmaInput").val(lugarfirma);
-        $("#lugarFirmaInput").prop("readonly", true);
-
-        $("#fechaInicioInput").val(fechainicio);
-        $("#fechaInicioInput").prop("readonly", true);
-
-        $("#fechaRenInput").val(fecharen);
-        $("#fechaRenInput").prop("readonly", true);
-
-        $("#fechaPagInput").val(fechapag);
-        $("#fechaPagInput").prop("readonly", true);
-
-        $("#fechaLimiteInput").val(fechalimite);
-        $("#fechaLimiteInput").prop("readonly", true);
-
-        $("#periodoInput").val(periodo);
-        $("#periodoInput").prop("disabled", true);
-
-        $("#contratoInput").val(contrato);
-        $("#contratoInput").prop("readonly", true);
-
-        $("#psIdInput").val(psid);
-        $("#psIdInput").prop("disabled", true);
-
-        $("#clienteIdInput").val(clienteid);
-        $("#clienteIdInput").prop("disabled", true);
-
-        $("#tipoIdInput").val(tipoid);
-        $("#tipoIdInput").prop("disabled", true);
-
-        porcentaje = porcentaje.toString().replace(",", ".");
-        $("#porcentajeInput").val(porcentaje);
 
         $("#folioInput").val(folio);
         $("#folioInput").prop("readonly", true);
 
-        $("#modeloIdInput").val(modeloid);
-        $("#modeloIdInput").prop("disabled", true);
+        if (firma == "MARIA EUGENIA RINCON ACEVAL") {
+            $("#gerenteInput").prop("checked", true);
+            $("#representanteInput").prop("checked", false);
+        } else {
+            $("#representanteInput").prop("checked", true);
+            $("#gerenteInput").prop("checked", false);
+        }
+        $("#gerenteInput").prop("disabled", false);
+        $("#representanteInput").prop("disabled", false);
 
-        inversion = inversion.toString().replace(",", ".");
-        $("#inversionInput").val(inversion);
-        $("#inversionInput").prop("readonly", true);
+        monto = monto.toString().replace(",", ".");
+        $("#montoInput").val(monto);
+        $("#montoInput").prop("readonly", true);
 
-        inversionus = inversionus.toString().replace(",", ".");
-        $("#inversionUsInput").val(inversionus);
-        $("#inversionUsInput").prop("readonly", true);
+        $("#montoLetraInput").val(monto_letra);
+        $("#montoLetraInput").prop("readonly", true);
 
-        $("#PagoComisionSerie1Input").val(pagocomisionS1);
-        $("#PagoComisionSerie1Input").prop("readonly", true);
+        $("#fechaInicioInput").val(fecha_inicio);
+        $("#fechaInicioInput").prop("readonly", true);
 
-        $("#PagoComisionSerieNInput").val(pagocomisionSN);
-        $("#PagoComisionSerieNInput").prop("readonly", true);
+        $("#fechaFinInput").val(fecha_fin);
+        $("#fechaFinInput").prop("readonly", true);
 
-        tipocambio = tipocambio.toString().replace(",", ".");
-        $("#tipoCambioInput").val(tipocambio);
-        $("#tipoCambioInput").prop("readonly", true);
+        capertura = capertura.toString().replace(",", ".");
+        $("#cAperturaInput").val(capertura);
+        $("#cAperturaInput").prop("readonly", true);
 
-        $("#inversionLetInput").val(inversionlet);
-        $("#inversionLetInput").prop("readonly", true);
+        cmensual = cmensual.toString().replace(",", ".");
+        $("#cMensualInput").val(cmensual);
+        $("#cMensualInput").prop("readonly", true);
 
-        $("#inversionLetUsInput").val(inversionletus);
-        $("#inversionLetUsInput").prop("readonly", true);
+        ctrimestral = ctrimestral.toString().replace(",", ".");
+        $("#cTrimestralInput").val(ctrimestral);
+        $("#cTrimestralInput").prop("readonly", true);
 
         $("#statusInput").val(status);
         $("#statusInput").prop("disabled", false);
 
+        $("#numeroCuentaInput").val(numerocuenta);
+        $("#numeroCuentaInput").prop("readonly", true);
+
+        $("#logginInput").val(loggin);
+        $("#logginInput").prop("readonly", true);
+
+        $("#psIdInput").val(ps_id);
+        $("#psIdInput").prop("disabled", true);
+
+        $("#clienteIdInput").val(cliente_id);
+        $("#clienteIdInput").prop("disabled", true);
+
+        $("#bancoIdInput").val(banco_id);
+        $("#bancoIdInput").prop("disabled", true);
+
+        $("#modifySwitch").prop("disabled", true);
+
         $("#beneficiariosInput").prop("disabled", true);
-
-        $("#comprobantePagoInput").prop("disabled", true);
-        comprobantePago(this);
-
-        $("#efectivoInput").prop("disabled", true);
-        $("#transferenciaSwissInput").prop("disabled", true);
-        $("#transferenciaMXInput").prop("disabled", true);
-        $("#ciBankInput").prop("disabled", true);
-        $("#hsbcInput").prop("disabled", true);
-        $("#renovacionInput").prop("disabled", true);
-        $("#rendimientosInput").prop("disabled", true);
-
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosTerminado",
-            data: { id: id },
+            url: "/admin/getBeneficiariosConvenioAnterior",
+            data: {
+                id: id,
+            },
             dataType: "json",
             success: function (response) {
                 $("#beneficiariosInput").val(response.countBeneficiarios);
@@ -974,6 +794,8 @@ $(document).ready(function () {
                             adjetivo = "segundo";
                         } else if (i == 3) {
                             adjetivo = "tercer";
+                        } else if (i == 4) {
+                            adjetivo = "cuarto";
                         }
                         $("#contBeneficiarios").append(`             
                             <div class="col-12">
@@ -989,51 +811,41 @@ $(document).ready(function () {
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input"
-                                        name="nombre-ben${i}" minlength="3" maxlength="255">
+                                    <input type="text" class="form-control" placeholder="Ingresa el nombre del ${adjetivo} beneficiario" id="nombreBen${i}Input" name="nombre-ben${i}" minlength="3" maxlength="255" readonly>
                                     <label for="nombreBen${i}Input">Nombre del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="number" step="any" class="form-control"
-                                        placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input"
-                                        name="porcentaje-ben${i}" value="0">
+                                    <input type="number" step="any" class="form-control" placeholder="Ingresa el porcentaje del ${adjetivo} beneficiario" id="porcentajeBen${i}Input" name="porcentaje-ben${i}" value="0" readonly>
                                     <label for="porcentajeBen${i}Input">Porcentaje del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-2">
-                                    <input type="number" class="form-control"
-                                        placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input"
-                                        name="telefono-ben${i}" minlength="3" maxlength="100">
+                                    <input type="number" class="form-control" placeholder="Ingresa el telefono del ${adjetivo} beneficiario" id="telefonoBen${i}Input" name="telefono-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="telefonoBen${i}Input">Teléfono del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input style="text-transform: lowercase;" type="email" class="form-control"
-                                        placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input"
-                                        name="correo-ben${i}" minlength="3" maxlength="100">
+                                    <input style="text-transform: lowercase;" type="email" class="form-control" placeholder="Ingresa el correo del ${adjetivo} beneficiario" id="correoBen${i}Input" name="correo-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="correoBen${i}Input">Correo del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>                            
                             <div class="col-md-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control"
-                                        placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input"
-                                        name="curp-ben${i}" minlength="3" maxlength="100">
+                                    <input type="text" class="form-control" placeholder="Ingresa la curp del ${adjetivo} beneficiario" id="curpBen${i}Input" name="curp-ben${i}" minlength="3" maxlength="100" readonly>
                                     <label for="curpBen${i}Input">CURP del ${adjetivo} beneficiario</label>
                                 </div>
                             </div>
                         `);
 
-                        $(`#nombreBen${i}Input`).prop("disabled", true);
-                        $(`#porcentajeBen${i}Input`).prop("disabled", true);
-                        $(`#telefonoBen${i}Input`).prop("disabled", true);
-                        $(`#correoBen${i}Input`).prop("disabled", true);
-                        $(`#curpBen${i}Input`).prop("disabled", true);
+                        $(`#nombreBen${i}Input`).prop("readonly", true);
+                        $(`#porcentajeBen${i}Input`).prop("readonly", true);
+                        $(`#telefonoBen${i}Input`).prop("readonly", true);
+                        $(`#correoBen${i}Input`).prop("readonly", true);
+                        $(`#curpBen${i}Input`).prop("readonly", true);
                         $(`#curpBen${i}InputCheck`).prop("disabled", true);
                     }
                     if (response.beneficiarios[0]) {
@@ -1101,6 +913,28 @@ $(document).ready(function () {
                         $("#correoBen3Input").val("");
                         $("#curpBen3Input").val("");
                     }
+
+                    if (response.beneficiarios[3]) {
+                        var nombreben4 = response.beneficiarios[3].nombre;
+                        var porcentajeben4 =
+                            response.beneficiarios[3].porcentaje;
+                        var telefonoben4 = response.beneficiarios[3].telefono;
+                        var correoben4 =
+                            response.beneficiarios[3].correo_electronico;
+                        var curpben4 = response.beneficiarios[3].curp;
+
+                        $("#nombreBen4Input").val(nombreben4);
+                        $("#porcentajeBen4Input").val(porcentajeben4);
+                        $("#telefonoBen4Input").val(telefonoben4);
+                        $("#correoBen4Input").val(correoben4);
+                        $("#curpBen4Input").val(curpben4);
+                    } else {
+                        $("#nombreBen4Input").val("");
+                        $("#porcentajeBen4Input").val(0);
+                        $("#telefonoBen4Input").val("");
+                        $("#correoBen4Input").val("");
+                        $("#curpBen4Input").val("");
+                    }
                 } else {
                     $("#beneficiariosInput").val(1);
                     $("#contBeneficiarios").empty();
@@ -1117,41 +951,31 @@ $(document).ready(function () {
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input"
-                                    name="nombre-ben1" minlength="3" maxlength="255" disabled>
+                                <input type="text" class="form-control" placeholder="Ingresa el nombre del beneficiario" id="nombreBen1Input" name="nombre-ben1" minlength="3" maxlength="255" readonly>
                                 <label for="nombreBen1Input">Nombre del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="number" step="any" class="form-control"
-                                    placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input"
-                                    name="porcentaje-ben1" value="0" disabled>
+                                <input type="number" step="any" class="form-control" placeholder="Ingresa el porcentaje del beneficiario" id="porcentajeBen1Input" name="porcentaje-ben1" value="0" readonly>
                                 <label for="porcentajeBen1Input">Porcentaje del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-2">
-                                <input type="number" class="form-control"
-                                    placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input"
-                                    name="telefono-ben1" minlength="3" maxlength="100" disabled>
+                                <input type="number" class="form-control" placeholder="Ingresa el telefono del beneficiario" id="telefonoBen1Input" name="telefono-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="telefonoBen1Input">Teléfono del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">                                
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa el correo del beneficiario" id="correoBen1Input"
-                                    name="correo-ben1" minlength="3" maxlength="100" disabled>
+                                <input type="text" class="form-control" placeholder="Ingresa el correo del beneficiario" id="correoBen1Input" name="correo-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="correoBen1Input">Correo del beneficiario</label>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control"
-                                    placeholder="Ingresa la curp del beneficiario" id="curpBen1Input"
-                                    name="curp-ben1" minlength="3" maxlength="100" disabled>
+                                <input type="text" class="form-control" placeholder="Ingresa la curp del beneficiario" id="curpBen1Input" name="curp-ben1" minlength="3" maxlength="100" readonly>
                                 <label for="curpBen1Input">CURP del beneficiario</label>
                             </div>
                         </div>
@@ -1160,185 +984,187 @@ $(document).ready(function () {
             },
         });
 
-        $("#modalTitle").text(`Editar contrato de: ${nombrecliente}`);
+        $("#modalTitle").text(`Editar convenio de: ${nombrecliente}`);
         $("#btnSubmit").show();
-        $("#btnSubmit").text("Editar contrato");
+        $("#btnSubmit").text("Editar convenio");
         $("#btnCancel").text("Cancelar");
 
-        var meses = $("#periodoInput").val();
-
         $("#contPagos").empty();
-        $(".cont-tabla").empty();
+        var meses = 12;
 
-        var tipo_contrato = $("option:selected", "#tipoIdInput").attr(
-            "data-tipo"
-        );
+        if ($("#fechaInicioInput").val()) {
+            var fechaInicio = $("#fechaInicioInput").val();
+            fechaInicio = new Date(fechaInicio);
+            fechaInicio = fechaInicio.addDays(1);
 
-        if (tipo_contrato == "Rendimiento compuesto") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (MXN)</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                                <th scope="col">Rendimiento</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        } else if (tipo_contrato == "Rendimiento mensual") {
-            $(".cont-tabla").append(`
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">Serie</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Capital (MXN)</th>
-                                <th scope="col">Capital (USD)</th>
-                                <th scope="col">Interés</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablaBody">                        
-                        </tbody>
-                    </table>
-                </div>
-            `);
-        }
-
-        var cmensual = parseFloat($("#cMensualInput").val());
-
-        var inversionMXN = $("#inversionInput").val();
-        inversionMXN = parseFloat(inversionMXN);
-
-        var inversionUSD = $("#inversionUsInput").val();
-        inversionUSD = parseFloat(inversionUSD);
-        // var inversionInicialUSD = parseFloat(inversionUSD);
-
-        var porcentaje = $("#porcentajeInput").val();
-        porcentaje = parseFloat(porcentaje);
-
-        var fecha = $("#fechaInicioInput").val();
-
-        var porcentaje = $("#porcentajeInput").val();
-        var usd = parseFloat($("#tipoCambioInput").val());
-
-        var cmensual2 = `0.0${cmensual}`;
-        cmensual2 = parseFloat(cmensual2);
-
-        // var rendimiento = 0;
-        for (var i = 0; i < meses; i++) {
-            fecha = fecha.split("-");
-            fecha = new Date(fecha[0], parseInt(fecha[1]), fecha[2]);
-            fecha = formatDate(fecha);
-
-            var formatterUSD = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            });
-
-            var formatterMXN = new Intl.NumberFormat("es-MX", {
-                style: "currency",
-                currency: "MXN",
-            });
-
-            var fechaInput = fecha.split("/").reverse().join("-");
-
-            if (porcentaje.length < 3 && porcentaje.length > 0) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `0.0${porcentaje}`;
-                }
-            } else if (porcentaje.length == 3) {
-                var posicion = porcentaje.indexOf(".");
-                if (posicion > 0) {
-                    var porcentaje2 = porcentaje.replace(".", "");
-                    porcentaje2 = `0.0${porcentaje2}`;
-                } else {
-                    var porcentaje2 = `${porcentaje}`;
-                }
-            }
-            porcentaje2 = parseFloat(porcentaje2);
-
-            var monto = inversionUSD;
-            var redito = inversionUSD * porcentaje2;
-            var monto_redito = monto + redito;
-            var pagoPS = cmensual2 * inversionUSD;
-
-            $("#contPagos").append(
-                `
-                <input type="hidden" name="serie-reintegro${
-                    i + 1
-                }" id="serieReintegro${i + 1}Input" value="${i + 1}">
-                <input type="hidden" name="fecha-reintegro${
-                    i + 1
-                }" id="fechaReintegro${i + 1}Input" value="${fechaInput}">
-                <input type="hidden" name="monto-reintegro${
-                    i + 1
-                }" id="montoReintegro${i + 1}Input" value="${monto.toFixed(2)}">
-                <input type="hidden" name="redito-reintegro${
-                    i + 1
-                }" id="reditoReintegro${i + 1}Input" value="${redito.toFixed(
-                    2
-                )}">
-                <input type="hidden" name="montoredito-reintegro${
-                    i + 1
-                }" id="montoReditoReintegro${
-                    i + 1
-                }Input" value="${monto_redito.toFixed(2)}">
-
-                <input type="hidden" name="monto-pagops${
-                    i + 1
-                }" id="montoPagoPs${i + 1}Input" value="${pagoPS.toFixed(2)}">
-                `
+            var fechaFin = new Date(
+                fechaInicio.setMonth(fechaInicio.getMonth() + parseInt(meses))
             );
 
-            if (tipo_contrato == "Rendimiento compuesto") {
-                // rendimiento = inversionUSD * porcentaje2 + rendimiento;
+            fechaFin = formatDate(fechaFin).split("/").reverse().join("-");
 
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterMXN.format(inversionMXN)}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                    <td>${formatterUSD.format(
-                        inversionUSD + inversionUSD * porcentaje2
-                    )}</td>
-                </tr>
-                `);
-                inversionMXN = inversionMXN + inversionMXN * porcentaje2;
-                inversionUSD = inversionUSD + inversionUSD * porcentaje2;
-            } else if (tipo_contrato == "Rendimiento mensual") {
-                $("#tablaBody").append(` 
-                <tr>
-                    <th scope="row">${i + 1}</th>
-                    <td>${fecha}</td>
-                    <td>${formatterMXN.format(inversionMXN)}</td>
-                    <td>${formatterUSD.format(inversionUSD)}</td>
-                    <td>${formatterUSD.format(inversionUSD * porcentaje2)}</td>
-                </tr>
-                `);
-            }
-
-            fecha = fecha.split("/").reverse().join("-");
+            $("#fechaFinInput").val(fechaFin);
         }
-        tipoPago(this);
+        if (
+            $("#montoInput").val() &&
+            $("#fechaInicioInput").val() &&
+            $("#fechaFinInput").val()
+        ) {
+            $("#contPagos").empty();
+
+            var capertura = $("#cAperturaInput").val();
+            if (capertura.length < 3 && capertura.length > 0) {
+                var posicion = capertura.indexOf(".");
+                if (posicion > 0) {
+                    capertura = capertura.replace(".", "");
+                    capertura = `0.0${capertura}`;
+                } else {
+                    var capertura = `0.0${capertura}`;
+                }
+            } else if (capertura.length == 3) {
+                var posicion = capertura.indexOf(".");
+                if (posicion > 0) {
+                    capertura = capertura.replace(".", "");
+                    capertura = `0.0${capertura}`;
+                } else {
+                    var capertura = `${capertura}`;
+                }
+            }
+            capertura = parseFloat(capertura);
+
+            var cmensual = $("#cMensualInput").val();
+            if (cmensual.length < 3 && cmensual.length > 0) {
+                var posicion = cmensual.indexOf(".");
+                if (posicion > 0) {
+                    cmensual = cmensual.replace(".", "");
+                    cmensual = `0.0${cmensual}`;
+                } else {
+                    var cmensual = `0.0${cmensual}`;
+                }
+            } else if (cmensual.length == 3) {
+                var posicion = cmensual.indexOf(".");
+                if (posicion > 0) {
+                    cmensual = cmensual.replace(".", "");
+                    cmensual = `0.0${cmensual}`;
+                } else {
+                    var cmensual = `${cmensual}`;
+                }
+            }
+            cmensual = parseFloat(cmensual);
+
+            var ctrimestral = $("#cTrimestralInput").val();
+            if (ctrimestral.length < 3 && ctrimestral.length > 0) {
+                var posicion = ctrimestral.indexOf(".");
+                if (posicion > 0) {
+                    ctrimestral = ctrimestral.replace(".", "");
+                    ctrimestral = `0.0${ctrimestral}`;
+                } else {
+                    var ctrimestral = `0.0${ctrimestral}`;
+                }
+            } else if (ctrimestral.length == 3) {
+                var posicion = ctrimestral.indexOf(".");
+                if (posicion > 0) {
+                    ctrimestral = ctrimestral.replace(".", "");
+                    ctrimestral = `0.0${ctrimestral}`;
+                } else {
+                    var ctrimestral = `${ctrimestral}`;
+                }
+            }
+            ctrimestral = parseFloat(ctrimestral);
+
+            var monto = $("#montoInput").val();
+            monto = parseFloat(monto);
+
+            var fecha = $("#fechaInicioInput").val();
+            fecha = new Date(fecha);
+            fecha = fecha.addDays(1);
+
+            for (var i = 1; i < 13; i++) {
+                monto = $("#montoInput").val();
+                var monto2 = monto;
+
+                var fechaPago = fecha;
+                fechaPago.setMonth(fechaPago.getMonth() + 1);
+                var añoPago = fechaPago.getFullYear();
+                var mesPago = fechaPago.getMonth();
+
+                fechaPago = lastDay(añoPago, mesPago);
+                fechaPago = formatDate(fechaPago);
+                fechaPago = fechaPago.split("/").reverse().join("-");
+
+                var fechaLimite = fecha;
+                fechaLimite.setMonth(fechaLimite.getMonth() + 1);
+                fechaLimite.setDate(10);
+                fechaLimite = formatDate(fechaLimite);
+                fechaLimite = fechaLimite.split("/").reverse().join("-");
+
+                if (i == 1) {
+                    monto = monto * capertura;
+                    monto2 = monto2 * cmensual;
+                    $("#contPagos").append(
+                        `
+                            <input type="hidden" name="serie-pagops0" id="seriePagoPS0Input" value="0">
+                            <input type="hidden" name="fecha-pagops0" id="fechaPago0Input" value="${fechaPago}">
+                            <input type="hidden" name="fecha-limitepagops0" id="fechaLimite0Input" value="${fechaLimite}">
+                            <input type="hidden" name="pago-pagops0" id="montoReintegro0Input" value="${monto.toFixed(
+                                2
+                            )}">
+                            `
+                    );
+                    $("#contPagos").append(
+                        `
+                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
+                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
+                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
+                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto2.toFixed(
+                            2
+                        )}">
+                            `
+                    );
+                } else if (i == 3 || i == 6 || i == 9 || i == 12) {
+                    monto2 = monto * ctrimestral;
+                    $("#contPagos").append(
+                        `
+                            <input type="hidden" name="serie-pagops${i}trimestral" id="seriePagoPS${i}TrimestralInput" value="${i}">
+                            <input type="hidden" name="fecha-pagops${i}trimestral" id="fechaPago${i}TrimestralInput" value="${fechaPago}">
+                            <input type="hidden" name="fecha-limitepagops${i}trimestral" id="fechaLimite${i}TrimestralInput" value="${fechaLimite}">
+                            <input type="hidden" name="pago-pagops${i}trimestral" id="montoReintegro${i}TrimestralInput" value="${monto2.toFixed(
+                            2
+                        )}">
+                            `
+                    );
+                    monto = monto * cmensual;
+                    $("#contPagos").append(
+                        `
+                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
+                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
+                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
+                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
+                            2
+                        )}">
+                            `
+                    );
+                } else {
+                    monto = monto * cmensual;
+                    $("#contPagos").append(
+                        `
+                            <input type="hidden" name="serie-pagops${i}" id="seriePagoPS${i}Input" value="${i}">
+                            <input type="hidden" name="fecha-pagops${i}" id="fechaPago${i}Input" value="${fechaPago}">
+                            <input type="hidden" name="fecha-limitepagops${i}" id="fechaLimite${i}Input" value="${fechaLimite}">
+                            <input type="hidden" name="pago-pagops${i}" id="montoReintegro${i}Input" value="${monto.toFixed(
+                            2
+                        )}">
+                            `
+                    );
+                }
+
+                fecha = new Date(fechaPago);
+            }
+        }
 
         Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar contrato</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para editar el contrato</p>',
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Editar convenio</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para editar el convenio</p>',
             icon: "warning",
             showCancelButton: true,
             cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
@@ -1350,8 +1176,10 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/showClaveTerminado",
-                    data: { clave: clave },
+                    url: "/admin/validateClaveConvenioAnterior",
+                    data: {
+                        clave: clave,
+                    },
                     success: function (result) {
                         if (result == "success") {
                             $("#formModal").modal("show");
@@ -1370,7 +1198,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: "error",
                             title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                            html: '<p style="font-family: Poppins">Clave es correcta</p>',
+                            html: '<p style="font-family: Poppins">Se ha cancelado la operación</p>',
                             confirmButtonText:
                                 '<a style="font-family: Poppins">Aceptar</a>',
                             confirmButtonColor: "#01bbcc",
@@ -1384,7 +1212,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: "error",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El contrato no se ha editado</p>',
+                    html: '<p style="font-family: Poppins">El convenio no se ha editado</p>',
                     confirmButtonText:
                         '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",
@@ -1399,8 +1227,8 @@ $(document).ready(function () {
         var id = $(this).data("id");
 
         Swal.fire({
-            title: '<h1 style="font-family: Poppins; font-weight: 700;">Eliminar contrato</h1>',
-            html: '<p style="font-family: Poppins">Necesitas una clave para eliminar el contrato</p>',
+            title: '<h1 style="font-family: Poppins; font-weight: 700;">Eliminar convenio</h1>',
+            html: '<p style="font-family: Poppins">Necesitas una clave para eliminar el convenio</p>',
             icon: "warning",
             showCancelButton: true,
             cancelButtonText: '<a style="font-family: Poppins">Cancelar</a>',
@@ -1412,19 +1240,23 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/showClaveTerminado",
-                    data: { clave: clave },
+                    url: "/admin/validateClaveConvenio",
+                    data: {
+                        clave: clave,
+                    },
                     success: function (result) {
                         if (result == "success") {
                             $.post(
-                                "/admin/deleteContratoTerminado",
-                                { id: id },
+                                "/admin/deleteConvenioAnterior",
+                                {
+                                    id: id,
+                                },
                                 function () {
                                     table.ajax.reload(null, false);
                                     Swal.fire({
                                         icon: "success",
-                                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Contrato eliminado</h1>',
-                                        html: '<p style="font-family: Poppins">El contrato se ha eliminado correctamente</p>',
+                                        title: '<h1 style="font-family: Poppins; font-weight: 700;">Convenio eliminado</h1>',
+                                        html: '<p style="font-family: Poppins">El convenio se ha eliminado correctamente</p>',
                                         confirmButtonText:
                                             '<a style="font-family: Poppins">Aceptar</a>',
                                         confirmButtonColor: "#01bbcc",
@@ -1435,7 +1267,7 @@ $(document).ready(function () {
                             Swal.fire({
                                 icon: "error",
                                 title: '<h1 style="font-family: Poppins; font-weight: 700;">Clave incorrecta</h1>',
-                                html: '<p style="font-family: Poppins">El contrato no se ha eliminado porque la clave es incorrecta</p>',
+                                html: '<p style="font-family: Poppins">El convenio no se ha eliminado porque la clave es incorrecta</p>',
                                 confirmButtonText:
                                     '<a style="font-family: Poppins">Aceptar</a>',
                                 confirmButtonColor: "#01bbcc",
@@ -1446,7 +1278,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: "error",
                             title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                            html: '<p style="font-family: Poppins">El contrato no se ha eliminado porque la clave no es correcta</p>',
+                            html: '<p style="font-family: Poppins">El convenio no se ha eliminado porque la clave no es correcta</p>',
                             confirmButtonText:
                                 '<a style="font-family: Poppins">Aceptar</a>',
                             confirmButtonColor: "#01bbcc",
@@ -1460,7 +1292,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: "error",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Cancelado</h1>',
-                    html: '<p style="font-family: Poppins">El contrato no se ha eliminado</p>',
+                    html: '<p style="font-family: Poppins">El convenio no se ha eliminado</p>',
                     confirmButtonText:
                         '<a style="font-family: Poppins">Aceptar</a>',
                     confirmButtonColor: "#01bbcc",
@@ -1468,48 +1300,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    const comprobantePago = (thiss) => {
-        var comprobantepago = $(thiss).data("comprobantepago");
-        if (comprobantepago.length > 0) {
-            $("#comprobantePagoInput").addClass("is-valid");
-            $("#comprobantePagoInput").removeClass("is-invalid");
-
-            $("#comprobantePagoDesc").attr("download", `${comprobantepago}`);
-            $("#comprobantePagoDesc").attr(
-                "href",
-                `../documentos/contratos/${comprobantepago}`
-            );
-            $("#comprobantePagoDesc").removeClass("d-none");
-        } else {
-            $("#comprobantePagoInput").addClass("is-invalid");
-            $("#comprobantePagoInput").removeClass("is-valid");
-
-            $("#comprobantePagoDesc").addClass("d-none");
-        }
-    };
-
-    const tipoPago = (thiss) => {
-        let checkbox = [
-            "#efectivoInput",
-            "#transferenciaSwissInput",
-            "#transferenciaMXInput",
-            "#ciBankInput",
-            "#hsbcInput",
-            "#renovacionInput",
-            "#rendimientosInput",
-        ];
-        let tipopago = $(thiss).data("tipopago");
-
-        tipopago = tipopago.split(", ");
-        tipopago.map((tipo) => {
-            checkbox.map((input) => {
-                if (tipo == $(input).val()) {
-                    $(input).prop("checked", true);
-                }
-            });
-        });
-    };
 });
 
 $(".table").addClass("compact nowrap w-100");

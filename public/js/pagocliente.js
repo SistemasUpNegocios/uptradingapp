@@ -1049,8 +1049,6 @@ $(document).ready(function () {
                         <th data-priority="0" scope="col">Mes</th>
                         <th data-priority="0" scope="col">Fecha de pago</th>
                         <th data-priority="0" scope="col">Pago (USD)</th>
-                        <th data-priority="0" scope="col">Status del pago</th>
-                        <th data-priority="0" scope="col">Tipo de pago</th>
                         <th data-priority="0" scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -1081,12 +1079,6 @@ $(document).ready(function () {
                             render: function (data) {
                                 return formatearCantidad.format(data);
                             },
-                        },
-                        {
-                            data: "status",
-                        },
-                        {
-                            data: "tipo_pago",
                         },
                         {
                             data: "acciones",

@@ -112,7 +112,14 @@ Route::post('/admin/editContratoTerminado', [App\Http\Controllers\ContratoTermin
 Route::post('/admin/deleteContratoTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'deleteContrato']);
 Route::get('/admin/getBeneficiariosTerminido', [App\Http\Controllers\ContratoTerminadoController::class, 'getBeneficiarios']);
 Route::get('/admin/showClaveTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'getClave']);
-Route::get('/admin/editStatusTerminado', [App\Http\Controllers\ContratoTerminadoController::class, 'editStatus']);
+
+// Rutas para gestión de contrato terminado
+Route::get('/admin/contratos-anteriores', [App\Http\Controllers\ContratoAnteriorController::class, 'index'])->name('contratosanteriores');
+Route::get('/admin/showContratoAnterior', [App\Http\Controllers\ContratoAnteriorController::class, 'getContrato']);
+Route::post('/admin/editContratoAnterior', [App\Http\Controllers\ContratoAnteriorController::class, 'editContrato']);
+Route::post('/admin/deleteContratoAnterior', [App\Http\Controllers\ContratoAnteriorController::class, 'deleteContrato']);
+Route::get('/admin/getBeneficiariosAnterior', [App\Http\Controllers\ContratoAnteriorController::class, 'getBeneficiarios']);
+Route::get('/admin/showClaveAnterior', [App\Http\Controllers\ContratoAnteriorController::class, 'getClave']);
 
 Route::get('/admin/contratovencer', [App\Http\Controllers\ContratoVencerController::class, 'index'])->name('contratovencer');
 Route::get('/admin/showContratoVencer', [App\Http\Controllers\ContratoVencerController::class, 'getContratoVencer']);
@@ -149,6 +156,14 @@ Route::post('/admin/editConvenioTerminado', [App\Http\Controllers\ConvenioTermin
 Route::post('/admin/deleteConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'deleteConvenio']);
 Route::get('/admin/getBeneficiariosConvenioTerminido', [App\Http\Controllers\ConvenioTerminadoController::class, 'getBeneficiarios']);
 Route::get('/admin/validateClaveConvenioTerminado', [App\Http\Controllers\ConvenioTerminadoController::class, 'validateClave']);
+
+// Rutas para gestión de convenio anterior
+Route::get('/admin/convenios-anteriores', [App\Http\Controllers\ConvenioAnteriorController::class, 'index'])->name('conveniosanteriores');
+Route::get('/admin/showConvenioAnterior', [App\Http\Controllers\ConvenioAnteriorController::class, 'getConvenio']);
+Route::post('/admin/editConvenioAnterior', [App\Http\Controllers\ConvenioAnteriorController::class, 'editConvenio']);
+Route::post('/admin/deleteConvenioAnterior', [App\Http\Controllers\ConvenioAnteriorController::class, 'deleteConvenio']);
+Route::get('/admin/getBeneficiariosConvenioAnterior', [App\Http\Controllers\ConvenioAnteriorController::class, 'getBeneficiarios']);
+Route::get('/admin/validateClaveConvenioAnterior', [App\Http\Controllers\ConvenioAnteriorController::class, 'validateClave']);
 
 Route::get('/admin/conveniovencer', [App\Http\Controllers\ConvenioVencerController::class, 'index'])->name('conveniovencer');
 Route::get('/admin/showConvenioVencer', [App\Http\Controllers\ConvenioVencerController::class, 'getConvenioVencer']);

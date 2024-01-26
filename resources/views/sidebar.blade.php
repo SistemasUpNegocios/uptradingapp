@@ -362,7 +362,12 @@
                             <a href="{{ URL::to('admin/contratoTerminado') }}">
                                 <i class="bi bi-circle"></i><span>Contratos terminados</span>
                             </a>
-                        </li>                    
+                        </li>
+                        <li>
+                            <a href="{{ URL::to('admin/contratos-anteriores') }}">
+                                <i class="bi bi-circle"></i><span>Nuevos contratos</span>
+                            </a>
+                        </li>
                     @endif
                 </ul>
             </li>
@@ -389,7 +394,12 @@
                         <a href="{{ URL::to('admin/convenioTerminado') }}">
                             <i class="bi bi-circle"></i><span>Convenios terminados</span>
                         </a>
-                    </li>                    
+                    </li>
+                    <li>
+                        <a href="{{ URL::to('admin/convenios-anteriores') }}">
+                            <i class="bi bi-circle"></i><span>Convenios anteriores</span>
+                        </a>
+                    </li>
                 @endif
                 <li>
                     <a href="{{ URL::to('admin/incrementoConvenio') }}">

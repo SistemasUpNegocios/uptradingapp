@@ -777,7 +777,7 @@ $(document).ready(function () {
         $("#beneficiariosInput").prop("disabled", true);
         $.ajax({
             type: "GET",
-            url: "/admin/getBeneficiariosConvenio",
+            url: "/admin/getBeneficiariosConvenioTerminido",
             data: {
                 id: id,
             },
@@ -1240,7 +1240,7 @@ $(document).ready(function () {
             preConfirm: (clave) => {
                 $.ajax({
                     type: "GET",
-                    url: "/admin/validateClaveConvenio",
+                    url: "/admin/validateClaveConvenioTerminado",
                     data: {
                         clave: clave,
                     },

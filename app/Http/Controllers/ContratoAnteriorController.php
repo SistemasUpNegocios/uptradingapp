@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use ZipArchive;
 use Illuminate\Support\Facades\Auth;
 
-class ContratoTerminadoController extends Controller
+class ContratoAnteriorController extends Controller
 {
     public function __construct()
     {
@@ -49,7 +49,7 @@ class ContratoTerminadoController extends Controller
                 "lista_pendientes" => $pendientes,
             );
 
-            return response()->view('contratoterminado.show', $data, 200);
+            return response()->view('contratoanterior.show', $data, 200);
 
         }else{
             return redirect()->to('/admin/dashboard');
@@ -71,14 +71,11 @@ class ContratoTerminadoController extends Controller
             ->where("contrato.ps_id", "like", $psid)
             ->where("contrato.cliente_id", "like", $clienteid)
             ->where("oficina.codigo_oficina", "like", $codigo)
-            ->where(function ($query) {
-                $query->where("contrato.status", "Finiquitado")
-                ->orWhere("contrato.status", "Cancelado");
-            })
+            ->where("contrato.status", "Nuevo contrato")
             ->orderBy("contrato.id", "desc")
             ->get();        
 
-        return datatables()->of($contrato)->addColumn('btn', 'contratoterminado.buttons')->rawColumns(['btn'])->toJson();
+        return datatables()->of($contrato)->addColumn('btn', 'contratoanterior.buttons')->rawColumns(['btn'])->toJson();
         
     }
 

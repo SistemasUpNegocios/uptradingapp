@@ -2186,13 +2186,10 @@ class Kernel extends ConsoleKernel
             }
         })->dailyAt("10:00")->timezone('America/Mexico_City');
         
-        //Tareas para Bakups de archivos y base de datos y envier correos.
+        //Tareas para Bakups de archivos y base de datos y enviar correos.
         $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
-        // $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
-        // $schedule->call(function () { 
-        //     Drive::dispatch(); 
-        // })->dailyAt("22:00")->timezone('America/Mexico_City');
-        // $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
+        $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
+        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**
