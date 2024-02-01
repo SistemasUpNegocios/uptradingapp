@@ -3454,6 +3454,21 @@ body.dark .btn-close {
     background-image: url("../img/btn-close-dark.png") !important;
 }
 
+body.dark .dataTables_length .form-select {
+    background-image: url("../img/flecha_dark.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.9rem center !important;
+    background-size: 10px 6px !important;
+}
+
+body.dark .accordion-button::after {
+    background-image: url("../img/flecha_dark.png") !important;
+    margin-top: 10px !important;
+    width: 1rem !important;
+    height: 1rem !important;
+    background-size: 1rem !important;
+}
+
 #valor_dolar_dashboard {
     font-size: 14px;
     color: #fff;

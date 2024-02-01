@@ -17,7 +17,7 @@
                             {{ $pregunta->informacion }}
                             <br>
                             <div class="mt-3 text-center">
-                                <img src="{{asset("img/preguntas/$pregunta->imagen")}}" alt="{{$pregunta->pregunta}}" class="img-fluid" width="350px">
+                                <img src="{{asset("img/preguntas/$pregunta->imagen")}}" alt="{{$pregunta->pregunta}}" class="img-fluid" width="850px">
                             </div>
                         </div>
                     </div>

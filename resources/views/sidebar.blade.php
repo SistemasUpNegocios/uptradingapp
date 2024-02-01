@@ -152,7 +152,7 @@
             </a>
         </li>
 
-        @if (!auth()->user()->is_cliente)
+        @if (!auth()->user()->is_cliente && !auth()->user()->is_ps_diamond)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
                     href="{{ URL::to('admin/tickets') }}">
@@ -237,7 +237,7 @@
             </li>
         @endif
 
-        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos || auth()->user()->is_ps_diamond)
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#clientes-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-people"></i>Clientes</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -365,7 +365,7 @@
                         </li>
                         <li>
                             <a href="{{ URL::to('admin/contratos-anteriores') }}">
-                                <i class="bi bi-circle"></i><span>Nuevos contratos</span>
+                                <i class="bi bi-circle"></i><span>Contratos anteriores</span>
                             </a>
                         </li>
                     @endif

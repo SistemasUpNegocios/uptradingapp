@@ -2187,9 +2187,8 @@ class Kernel extends ConsoleKernel
         })->dailyAt("10:00")->timezone('America/Mexico_City');
         
         //Tareas para Bakups de archivos y base de datos y enviar correos.
-        $schedule->command("backup:run")->dailyAt("20:00")->timezone('America/Mexico_City');
+        $schedule->call(function () { set_time_limit(900); \Artisan::call('backup:run'); })->dailyAt("20:00")->timezone('America/Mexico_City');
         $schedule->command("backup:clean")->dailyAt("21:00")->timezone('America/Mexico_City');
-        $schedule->command("queue:work")->dailyAt("23:00")->timezone('America/Mexico_City');
     }
 
     /**
