@@ -373,7 +373,7 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("change", "#fechaInicioInput", function () {
+    $(document).on("click", ".buscar-pagos-fechas", function () {
         let fecha_inicio = $("#fechaInicioInput").val();
         let fecha_fin = $("#fechaFinInput").val();
         dolar = $("#dolarInput").val();
@@ -388,8 +388,6 @@ $(document).ready(function () {
 
         if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
             if (fecha_inicio > fecha_fin) {
-                $("#fechaInicioInput").val(0);
-                $("#fechaFinInput").val(0);
                 Swal.fire({
                     icon: "warning",
                     title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
@@ -411,110 +409,6 @@ $(document).ready(function () {
 
                 $("#generarResumenClientes").prop("disabled", false);
                 $("#botonActualizar").removeClass("d-none");
-
-                $.ajax({
-                    type: "GET",
-                    data: {
-                        fecha_inicio: fecha_inicio,
-                        fecha_fin: fecha_fin,
-                        dolar: dolar,
-                        euro: euros,
-                        franco: francos,
-                    },
-                    url: url_filtro,
-                    success: function (response) {
-                        $("#tablaResumen").empty();
-                        $("#tablaResumen").html(response);
-                        tablaResumen();
-
-                        let vacio = $("#vacioInput").val();
-                        if (vacio == "vacio") {
-                            $("#contImprimirResum").addClass("d-none");
-                        } else {
-                            $("#contImprimirResum").removeClass("d-none");
-                        }
-
-                        let monedaDolaresChecked = $("#monedaDolaresInput").is(
-                            ":checked"
-                        );
-                        let monedaEurosChecked =
-                            $("#monedaEurosInput").is(":checked");
-                        let monedaFrancosChecked = $("#monedaFrancosInput").is(
-                            ":checked"
-                        );
-
-                        if (monedaDolaresChecked) {
-                            $(".contEuro").hide();
-                            $(".contFranco").hide();
-                            $(".contDolar").show();
-                        } else if (monedaEurosChecked) {
-                            $(".contDolar").hide();
-                            $(".contFranco").hide();
-                            $(".contEuro").show();
-                        } else if (monedaFrancosChecked) {
-                            $(".contDolar").hide();
-                            $(".contEuro").hide();
-                            $(".contFranco").show();
-                        }
-                    },
-                    error: function (response) {
-                        $("#tablaResumen").empty();
-                        $("#tablaResumen").html(
-                            `
-                                <div class="text-center mt-4">
-                                    <div class="spinner-border text-danger" role="status"></div>
-                                    <p class="text-danger">Ocurrio un problema<span class="dotting"> </span></p>
-                                </div>
-                            `
-                        );
-                    },
-                });
-            }
-        } else {
-            $("#generarResumenClientes").prop("disabled", true);
-            $("#contImprimirResum").addClass("d-none");
-            $("#contVacio").empty();
-        }
-    });
-
-    $(document).on("change", "#fechaFinInput", function () {
-        let fecha_inicio = $("#fechaInicioInput").val();
-        let fecha_fin = $("#fechaFinInput").val();
-        dolar = $("#dolarInput").val();
-        euros = $("#euroInput").val();
-        francos = $("#francoInput").val();
-
-        if (filtro == "mensual") {
-            url_filtro = "/admin/getResumenPagoClienteMensual";
-        } else if (filtro == "compuesto") {
-            url_filtro = "/admin/getResumenPagoClienteCompuesto";
-        }
-
-        if (fecha_inicio.length > 0 && fecha_fin.length > 0) {
-            if (fecha_inicio > fecha_fin) {
-                $("#fechaInicioInput").val(0);
-                $("#fechaFinInput").val(0);
-                Swal.fire({
-                    icon: "warning",
-                    title: '<h1 style="font-family: Poppins; font-weight: 700;">Error en fechas</h1>',
-                    html: '<p style="font-family: Poppins">La fecha de inicio debe de ser menor a la fecha de fin.</p>',
-                    confirmButtonText:
-                        '<a style="font-family: Poppins">Aceptar</a>',
-                    confirmButtonColor: "#01bbcc",
-                });
-            } else {
-                $("#generarResumenClientes").prop("disabled", false);
-                $("#botonActualizar").removeClass("d-none");
-
-                $("#tablaResumen").empty();
-                $("#tablaResumen").html(
-                    `
-                        <div class="text-center mt-4">
-                            <div class="spinner-border text-primary" role="status"></div>
-                            <p class="text-primary">Cargando rendimientos<span class="dotting"> </span></p>
-                        </div>
-                    `
-                );
 
                 $.ajax({
                     type: "GET",

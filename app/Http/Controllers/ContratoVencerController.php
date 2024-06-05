@@ -59,7 +59,7 @@ class ContratoVencerController extends Controller
             ->join('oficina', "oficina.id", "=", "ps.oficina_id")
             ->select(DB::raw("contrato.id, contrato.operador, contrato.lugar_firma, contrato.periodo, contrato.fecha, contrato.operador_ine, contrato.fecha_renovacion, contrato.fecha_pago, contrato.fecha_limite, contrato.contrato, ps.id AS psid, CONCAT(ps.nombre, ' ', ps.apellido_p, ' ', ps.apellido_m) AS psnombre, cliente.id AS clienteid,  CONCAT(cliente.apellido_p, ' ', cliente.apellido_m, ' ', cliente.nombre) AS clientenombre, cliente.celular, tipo_contrato.id AS tipoid, tipo_contrato.tipo, tipo_contrato.capertura AS capertura, tipo_contrato.cmensual AS cmensual, tipo_contrato.rendimiento, contrato.porcentaje, contrato.folio, contrato.inversion, contrato.tipo_cambio, contrato.inversion_us, contrato.inversion_letra, contrato.inversion_letra_us, contrato.status, contrato.tipo_pago, contrato.monto_pago, contrato.comprobante_pago, contrato.nota_contrato, contrato.autorizacion_nota"))
             ->where("contrato.status", "Activado")
-            ->where("fecha_renovacion", "<=", Carbon::now()->addDays(30)->format('Y-m-d'))
+            ->where("fecha_renovacion", "<=", Carbon::now()->addDays(90)->format('Y-m-d'))
             ->where("fecha_renovacion", ">=", Carbon::now()->format('Y-m-d'))
             ->orderBy("fecha_renovacion", "ASC")
             ->get();
@@ -104,8 +104,8 @@ class ContratoVencerController extends Controller
 
         if($request->opcion == "si"){
             $notificacion = new Notificacion;
-            $notificacion->titulo = "Retiro de dinero";
-            $notificacion->mensaje = $request->nota_contrato;
+            $notificacion->titulo = "Nota de contrato a vencer";
+            $notificacion->mensaje = "$request->nota_contrato. Cliente: $contrato_completo->cliente. Fecha de termino: $fecha_renovacion_contrato. Contrato: <a href='https://admin.uptradingexperts.com/admin/contrato?con=$contrato->contrato' target='_blank'>$contrato->contrato.</a>";
             $notificacion->status = "Pendiente";
             $notificacion->user_id = 2;
             $notificacion->save();

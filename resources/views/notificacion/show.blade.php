@@ -39,11 +39,7 @@
                                     <div class="col-md-1 text-center">
                                         <img src="{{ asset("img/usuarios/$foto") }}" id="imgPerfilNav" alt="Foto de perfil" class="rounded-circle text-center" width="66px">
                                     </div>
-                                    @if (strlen($notificacion->mensaje) > 50)
-                                        <div class="col-md-6" style="text-align: justify; padding-left: 2rem"><span class="text-muted">{{$notificacion->titulo}}: {{ $notificacion->mensaje }}.</span></div>
-                                    @else
-                                        <div class="col-md-6" style="text-align: center;"><span class="text-muted">{{$notificacion->titulo}}: {{ $notificacion->mensaje }}.</span></div>
-                                    @endif
+                                    <div class="col-md-6" style="{{strlen($notificacion->mensaje) > 50 ? 'text-align: justify; padding-left: 2rem;' : 'text-align: center;' }} "><span class="text-muted">{{$notificacion->titulo}}: @php echo $notificacion->mensaje @endphp</span></div>
                                     <div class="col-md-3 text-center"><span class="text-muted">{{ str_replace('hace', 'Hace', \Carbon\Carbon::parse($notificacion->created_at)->diffForHumans()) }}</span></div>
                                     <div class="col-md-2 text-center">
                                         <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">

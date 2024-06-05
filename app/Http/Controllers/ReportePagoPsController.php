@@ -91,6 +91,8 @@ class ReportePagoPsController extends Controller
         }else{
             $letra_dolares = 'son '.substr_replace($request->letra_dolares, "", $posCON_dolares);
         }
+
+        $mes_pago = Carbon::parse($request->fecha_mes)->formatLocalized('%B');
         
         $data = array(
             "ps" => $request->ps,
@@ -104,6 +106,7 @@ class ReportePagoPsController extends Controller
             "dolar" => $request->dolar,
             "euro" => $request->euro,
             "franco" => $request->franco,
+            "mes" => $mes_pago,
         );        
 
         $pdf = PDF::loadView('reportepagops.reporte', $data);

@@ -12,6 +12,13 @@ Route::get('/admin/getContMensCompCount', [App\Http\Controllers\DashboardControl
 Route::get('/admin/getFormClientCount', [App\Http\Controllers\DashboardController::class, 'getFormClientCount']);
 Route::get('/admin/getPsPmCount', [App\Http\Controllers\DashboardController::class, 'getPsPmCount']);
 
+// Rutas para gestión de numeros
+Route::get('/admin/numeros', [App\Http\Controllers\NumeroController::class, 'index'])->name('numeros');
+Route::get('/admin/showNumeros', [App\Http\Controllers\NumeroController::class, 'getNumeros']);
+Route::post('/admin/editColor', [App\Http\Controllers\NumeroController::class, 'editColor']);
+Route::post('/admin/editModeloNumeros', [App\Http\Controllers\NumeroController::class, 'editModelo']);
+Route::post('/admin/editBitacora', [App\Http\Controllers\NumeroController::class, 'editBitacora']);
+
 // Rutas para gestión de admin
 Route::get('/admin/usuario', [App\Http\Controllers\UsuarioController::class, 'index'])->name('usuario');
 Route::get('/admin/showUsuario', [App\Http\Controllers\UsuarioController::class, 'getUsuario']);
@@ -453,11 +460,12 @@ Route::get('/admin/concentrado', [App\Http\Controllers\ConcentradoController::cl
 Route::get('/admin/showConcentrado', [App\Http\Controllers\ConcentradoController::class, 'getConcentrado']);
 Route::get('/admin/reporteConcentrado', [App\Http\Controllers\ConcentradoController::class, 'reporteConcentrado']);
 
-// Rutas para gestión de notas MAM
+// Rutas para gestión de notas
 Route::get('/admin/notas', [App\Http\Controllers\NotaController::class, 'index'])->name('notas');
-Route::post('/admin/addNota', [App\Http\Controllers\NotaController::class, 'addNota']);
-Route::post('/admin/editNota', [App\Http\Controllers\NotaController::class, 'editNota']);
-Route::post('/admin/deleteNota', [App\Http\Controllers\NotaController::class, 'deleteNota']);
+Route::get('/admin/notas/addNota', [App\Http\Controllers\NotaController::class, 'addNota']);
+Route::get('/admin/notas/editNota', [App\Http\Controllers\NotaController::class, 'editNota']);
+Route::get('/admin/notas/obtenerUsuariosAsignados', [App\Http\Controllers\NotaController::class, 'getUsuariosAsignados']);
+Route::post('/admin/notas/deleteNota', [App\Http\Controllers\NotaController::class, 'deleteNota']);
 
 // Rutas para pagos anteriores a clientes
 Route::get('/admin/pago-anterior-cliente', [App\Http\Controllers\ReportePagoClienteAnteriorController::class, 'index'])->name('reportepagoclienteanterior');

@@ -50,11 +50,6 @@
                                     <i class="bi bi-printer-fill me-1"></i> Imprimir resumen
                                 </button>
                             </div>
-                            {{-- <div class="col-md-4 col-12 mb-3 d-flex">
-                                <button class="btn btn-danger" id="tiposPagos"> 
-                                    <i class="bi bi-file-earmark-pdf"></i> Imprimir tipos de pagos
-                                </button>
-                            </div> --}}
                             <div class="col-md-6 col-12 mb-3 d-flex justify-content-end">
                                 <button class="btn btn-success" id="exportarResumenClientes"> 
                                     <i class="bi bi-file-earmark-spreadsheet-fill"></i> Exportar resumen a excel
@@ -80,22 +75,25 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-2">
+                        <div class="row align-items-center">
+                            <div class="col-md-5 col-12 mt-2">
+                                <div class="form-floating">
                                     <input type="date" class="form-control" id="fechaInicioInput" name="fecha_inicio">
                                     <label for="fechaInicioInput">Fecha de inicio</label>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-2">
+                            <div class="col-md-5 col-12 mt-2">
+                                <div class="form-floating">
                                     <input type="date" class="form-control" id="fechaFinInput" name="fecha_fin">
                                     <label for="fechaFinInput">Fecha de fin</label>
                                 </div>
                             </div>
+                            <div class="col-md-2 col-12 mt-2">
+                                <button class="btn btn-primary buscar-pagos-fechas"><i class="bi bi-search"></i> Buscar</button>
+                            </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-12">
                                 <div class="form-floating mb-2">
                                     <input type="date" class="form-control" id="dateInput" placeholder="echa a imprimir">

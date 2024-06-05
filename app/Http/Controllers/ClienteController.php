@@ -156,7 +156,6 @@ class ClienteController extends Controller
                         $cliente->ine_documento = $formulario->ine_documento;
                 }
                     
-
                 if ($request->hasFile('pasaporte_documento')) {
                     $file = $request->file('pasaporte_documento');
                     $ext = $file->getClientOriginalName();
@@ -443,7 +442,7 @@ class ClienteController extends Controller
             $log = new Log;
 
             $log->tipo_accion = "Eliminación";
-            $log->tabla = "Cláusula";
+            $log->tabla = "Cliente";
             $log->id_tabla = $cliente_id;
             $log->bitacora_id = $bitacora_id;
 

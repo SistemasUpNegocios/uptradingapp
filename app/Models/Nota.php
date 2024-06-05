@@ -9,6 +9,10 @@ class Nota extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'titulo', 'descripcion', 'estatus', 'orden', // y otros campos que puedas tener
+    ];
+
     protected $table = "notas";
     public $timestamps = false;
 }

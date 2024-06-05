@@ -163,7 +163,7 @@ class DashboardController extends Controller
         
         $fecha = Carbon::now()->format('Y-m-d');
 
-        if(auth()->user()->is_admin || auth()->user()->is_procesos){
+        if(auth()->user()->id == 1 || auth()->user()->is_admin || auth()->user()->is_procesos){
             $agenda = Agenda::join('users', 'users.id', 'agenda.asignado_a')
                 ->whereDate('agenda.start', 'like', $fecha.'%')
                 ->orderBy('agenda.start', 'ASC')

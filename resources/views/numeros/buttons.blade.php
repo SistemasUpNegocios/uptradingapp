@@ -1,0 +1,2 @@
+<a href="" data-id="{{ $id_cliente }}" data-bitacora="{{$bitacora}}" type="button" title="Ver cliente" class="btn btn-primary btn-sm btn-icon view"> <i class="bi bi-eye"></i></a>
+<a href="" data-id="{{ $id_cliente }}" data-bitacora="{{$bitacora}}" type="button" title="Editar cliente" class="btn btn-success btn-sm btn-icon edit"> <i class="bi bi-pencil"></i></a>

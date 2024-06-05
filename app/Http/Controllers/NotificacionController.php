@@ -20,7 +20,7 @@ class NotificacionController extends Controller
         ->join('users', 'users.id', '=', 'notificacion.user_id')
         ->select(DB::raw("notificacion.id, notificacion.titulo, notificacion.mensaje, notificacion.status, notificacion.created_at, CONCAT(users.nombre, ' ', users.apellido_p, ' ', users.apellido_m) AS nombreUser, users.id AS userId"))
         ->where('user_id', auth()->user()->id)
-        ->orderBy('notificacion.id', 'DESC')
+        ->orderBy('notificacion.created_at', 'DESC')
         ->get();
 
         return view('notificacion.show', compact("notificacionesList"));
@@ -83,7 +83,7 @@ class NotificacionController extends Controller
             ->join('users', 'users.id', '=', 'notificacion.user_id')
             ->select(DB::raw("notificacion.id, notificacion.titulo, notificacion.mensaje, notificacion.status, notificacion.created_at, CONCAT(users.nombre, ' ', users.apellido_p, ' ', users.apellido_m) AS nombreUser, users.id AS userId"))
             ->where('user_id', auth()->user()->id)
-            ->orderBy('notificacion.id', 'DESC')
+            ->orderBy('notificacion.created_at', 'DESC')
             ->get();
 
             $fechaNotif = array();

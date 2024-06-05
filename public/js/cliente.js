@@ -776,7 +776,6 @@ $(document).ready(function () {
 
             tipopago.map((tipo) => {
                 checkbox.map((input) => {
-                    console.log(tipo, $(input).val());
                     if (tipo == $(input).val()) {
                         $(input).prop("checked", true);
                     }
@@ -1403,10 +1402,6 @@ $(document).ready(function () {
         if ($("#LPOADocumentoInput")[0].files[0]?.name) {
             $("#LPOADocumentoInput").removeClass("is-invalid");
             $("#LPOADocumentoInput").addClass("is-valid");
-            // ext = validarExtension(
-            //     $("#LPOADocumentoInput").val(),
-            //     "#LPOADocumentoInput"
-            // );
         } else {
             if (datatarget < 1) {
                 $("#LPOADocumentoInput").removeClass("is-valid");

@@ -359,14 +359,32 @@
                 <th colspan="2">ACUMULADO</th>
                 <th>$@convert($acumulado)</th>
               </tr>
-              <tr style="background: #0070c0 !important; color: #fff;">
-                <th colspan="2">CAPITAL</th>
-                <th>$@convert($amortizaciones[0]->monto)</th>
-              </tr>
-              <tr style="background: #175c67 !important; color: #fff;">
-                <th colspan="2">BENEFICIO TOTAL</th>
-                <th>$@convert($amortizaciones[0]->monto + $acumulado)</th>
-              </tr>
+              @if ($contratos[0]->id == 804)
+                <tr style="background: #0070c0 !important; color: #fff;">
+                  <th colspan="2">CAPITAL INICIAL</th>
+                  <th>$@convert($amortizaciones[0]->monto)</th>
+                </tr>
+                <tr style="background: #333A73 !important; color: #fff;">
+                  <th colspan="2">CAPITAL ACUMULADO EN MARZO</th>
+                  <th>$140,143.19</th>
+                </tr>
+              @else
+                <tr style="background: #0070c0 !important; color: #fff;">
+                  <th colspan="2">CAPITAL</th>
+                  <th>$@convert($amortizaciones[0]->monto)</th>
+                </tr>
+              @endif
+              @if ($contratos[0]->id == 804)
+                <tr style="background: #175c67 !important; color: #fff;">
+                  <th colspan="2">BENEFICIO TOTAL</th>
+                  <th>$@convert($amortizaciones[0]->monto + $acumulado + 140143.19)</th>
+                </tr>
+              @else
+                <tr style="background: #175c67 !important; color: #fff;">
+                  <th colspan="2">BENEFICIO TOTAL</th>
+                  <th>$@convert($amortizaciones[0]->monto + $acumulado)</th>
+                </tr>
+              @endif
             </tbody>
           </table>
         </div>
@@ -410,7 +428,7 @@
         </div>
       </div>
     </div> --}}
-    <div class="contenedor_firma">
+    <div class="contenedor_firma" style="margin-top: 6rem !important">
       <div class="contenedor_firma__izquierda" style="margin-top: -2rem">
         @if ($contratos[0]->firma_electronica == 'SI')
           <div style="position: relative;">
@@ -444,7 +462,7 @@
               </p>
           </div>
       </div>
-      <div class="contenedor_firma__centro" style="margin-top: 3rem">
+      {{-- <div class="contenedor_firma__centro" style="margin-top: 3rem">
           <hr class="contenedor_firma__hr">
           <div class=" text-center">
               <p class="contrato_parrafo_firmas">
@@ -457,7 +475,7 @@
                   <span class="contrato_parrafo_firmas_nombre">MARIA EUGENIA RINCON ACEVAL</span>
               </p>
           </div>
-      </div>
+      </div> --}}
     </div>
   </div>
 

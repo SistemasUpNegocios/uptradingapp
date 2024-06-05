@@ -109,7 +109,7 @@ class AgendaController extends Controller
     public function getAgenda(Request $request)
     {
         if ($request->citas == "all") {
-            if(auth()->user()->is_admin || auth()->user()->is_procesos){
+            if(auth()->user()->id == 1 || auth()->user()->is_admin || auth()->user()->is_procesos){
                 $cita = Agenda::join('users', 'users.id', 'agenda.asignado_a')
                 ->select("agenda.id", "agenda.title", "agenda.description", "agenda.start", "agenda.color", "agenda.asignado_a", "agenda.generado_por")
                 ->where(function ($query) {

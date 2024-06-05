@@ -157,7 +157,7 @@
           <hr class="contenedor_firma__hr" style="width: 60% !important">        
         </div>
         <p style="font-size: 14px; !important; color: #000;">
-          Quién entrega pago
+          TESTIGO
         </p>
       </div>
     </div>
@@ -264,7 +264,7 @@
     <div style="margin-top: 18rem">
       <div class="contenedor_firma__izquierda">
         <p style="margin-left: 3rem !important; font-size: 15px; !important; color: #000; margin-top: 10px">
-          Quién entrega pago:
+          TESTIGO:
         </p>
         <div style="margin-top: 4.6rem;">
           <hr class="contenedor_firma__hr" style="width: 70% !important">        

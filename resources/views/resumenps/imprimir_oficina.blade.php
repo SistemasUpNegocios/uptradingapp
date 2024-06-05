@@ -51,6 +51,46 @@
           @endphp
         @foreach ($lista_ps as $ps)
           @php
+            $pago_total = 0;
+
+            $date1 = \Carbon\Carbon::now()->subMonth();
+            $date2 = \Carbon\Carbon::parse("$fecha-10");
+
+            if($date2->lte($date1)){
+              $contratos_pasados = DB::table('contrato')
+              ->join('ps', 'ps.id', '=', 'contrato.ps_id')
+              ->join('cliente', 'cliente.id', '=', 'contrato.cliente_id')
+              ->join('pago_ps', 'pago_ps.contrato_id', '=', 'contrato.id')
+              ->select('cliente.correo_institucional AS correocliente', 'ps.correo_institucional AS correops', 'pago_ps.pago')
+              ->where('ps.id', $ps->id)
+              ->where('pago_ps.fecha_limite', 'like', "$fecha%")
+              ->where('ps.correo_institucional', '!=', "hamiltonherrera@uptradingexperts.com")
+              ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
+              ->where("contrato.status", "Finiquitado")
+              ->get();
+
+              foreach ($contratos_pasados as $contrato) {
+                $pago_total += $contrato->pago;
+              }
+
+              if ($mes_num < 4) {
+                $convenios_pasados = DB::table('convenio')
+                  ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                  ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                  ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
+                  ->select('cliente.correo_institucional AS correocliente', 'ps.correo_institucional AS correops', 'pago_ps_convenio.pago')
+                  ->where('ps.id', $ps->id)
+                  ->where('pago_ps_convenio.fecha_limite', 'like', "$fecha%")
+                  ->where('ps.correo_institucional', '!=', "hamiltonherrera@uptradingexperts.com")
+                  ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
+                  ->where("convenio.status", "Finiquitado")
+                  ->get();
+                  
+                  foreach ($convenios_pasados as $convenio) {
+                    $pago_total += $convenio->pago;
+                  }
+              }
+            }
 
             $contratos = DB::table('contrato')
               ->join('ps', 'ps.id', '=', 'contrato.ps_id')
@@ -64,26 +104,26 @@
               ->where("contrato.status", "Activado")
               ->get();
 
-            $convenios = DB::table('convenio')
-              ->join('ps', 'ps.id', '=', 'convenio.ps_id')
-              ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
-              ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
-              ->select('cliente.correo_institucional AS correocliente', 'ps.correo_institucional AS correops', 'pago_ps_convenio.pago')
-              ->where('ps.id', $ps->id)
-              ->where('pago_ps_convenio.fecha_limite', 'like', "$fecha%")
-              ->where('ps.correo_institucional', '!=', "hamiltonherrera@uptradingexperts.com")
-              ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
-              ->where("convenio.status", "Activado")
-              ->get();
-
-            $pago_total = 0;
+            if ($mes_num < 4) {
+              $convenios = DB::table('convenio')
+                ->join('ps', 'ps.id', '=', 'convenio.ps_id')
+                ->join('cliente', 'cliente.id', '=', 'convenio.cliente_id')
+                ->join('pago_ps_convenio', 'pago_ps_convenio.convenio_id', '=', 'convenio.id')
+                ->select('cliente.correo_institucional AS correocliente', 'ps.correo_institucional AS correops', 'pago_ps_convenio.pago')
+                ->where('ps.id', $ps->id)
+                ->where('pago_ps_convenio.fecha_limite', 'like', "$fecha%")
+                ->where('ps.correo_institucional', '!=', "hamiltonherrera@uptradingexperts.com")
+                ->where('ps.correo_institucional', '!=', "jorgeherrera@uptradingexperts.com")
+                ->where("convenio.status", "Activado")
+                ->get();
+                
+                foreach ($convenios as $convenio) {
+                  $pago_total += $convenio->pago;
+                }
+            }
 
             foreach ($contratos as $contrato) {
               $pago_total += $contrato->pago;
-            }
-
-            foreach ($convenios as $convenio) {
-              $pago_total += $convenio->pago;
             }
 
             $total += $pago_total;

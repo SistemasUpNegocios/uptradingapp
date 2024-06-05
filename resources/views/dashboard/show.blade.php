@@ -79,7 +79,7 @@
                                                         @else
                                                             {{ $cita->title }} a las {{ $horario }}
                                                         @endif
-                                                        @if (auth()->user()->is_admin || auth()->user()->is_procesos)                                                                
+                                                        @if (auth()->user()->id == 1 || auth()->user()->is_admin || auth()->user()->is_procesos)                                                                
                                                             para {{ $nombre }} {{ $apellidop }} {{ $apellidom }}.
                                                         @endif
                                                     </li>

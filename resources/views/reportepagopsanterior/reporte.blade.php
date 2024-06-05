@@ -61,7 +61,7 @@
         <hr class="contenedor_firma__hr" style="width: 60% !important">        
       </div>
       <p style="font-size: 14px; !important; color: #000;">
-        Quién entrega pago
+        TESTIGO
       </p>
     </div>
   </div>

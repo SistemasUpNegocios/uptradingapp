@@ -152,10 +152,27 @@
             </a>
         </li>
 
+        @if (auth()->user()->is_root)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/numeros')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/numeros') }}">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span>Números</span>
+                </a>
+            </li>
+        @endif
+
+        {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/notas')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/notas') }}">
+                    <i class="bi bi-card-checklist"></i>
+                    <span>Notas</span>
+                </a>
+            </li>
+        @endif --}}
+
         @if (!auth()->user()->is_cliente && !auth()->user()->is_ps_diamond)
             <li class="nav-item">
-                <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif"
-                    href="{{ URL::to('admin/tickets') }}">
+                <a class="@if (request()->is('admin/tickets')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/tickets') }}">
                     <i class="bi bi-send"></i>
                     <span>Tickets</span>
                 </a>
@@ -280,13 +297,6 @@
                             <i class="bi bi-circle"></i><span>Agenda</span>
                         </a>
                     </li>
-                    {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_ps_gold || auth()->user()->is_ps_diamond || auth()->user()->is_ps_bronze)
-                        <li>
-                            <a href="{{ URL::to('admin/notas') }}">
-                                <i class="bi bi-circle"></i><span>Notas MAM</span>
-                            </a>
-                        </li>
-                    @endif --}}
                     <li>
                         <a href="{{ URL::to('admin/documentos') }}">
                             <i class="bi bi-circle"></i><span>Documentos</span>

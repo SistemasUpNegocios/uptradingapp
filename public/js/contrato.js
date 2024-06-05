@@ -15,7 +15,7 @@ $(document).ready(function () {
             { data: "contrato" },
             {
                 data: function (data) {
-                    return moment(data.fecha).format("LL");
+                    return moment(data.fecha).format("L");
                 },
             },
             { data: "tipo" },
@@ -241,6 +241,11 @@ $(document).ready(function () {
             ajax: "/admin/showContrato",
             columns: [
                 { data: "contrato" },
+                {
+                    data: function (data) {
+                        return moment(data.fecha).format("L");
+                    },
+                },
                 { data: "tipo" },
                 { data: "status" },
                 { data: "btn" },
@@ -473,6 +478,11 @@ $(document).ready(function () {
             ajax: "/admin/showContratoMensuales",
             columns: [
                 { data: "contrato" },
+                {
+                    data: function (data) {
+                        return moment(data.fecha).format("L");
+                    },
+                },
                 { data: "tipo" },
                 { data: "status" },
                 { data: "btn" },
@@ -706,6 +716,11 @@ $(document).ready(function () {
             ajax: "/admin/showContratoCompuestos",
             columns: [
                 { data: "contrato" },
+                {
+                    data: function (data) {
+                        return moment(data.fecha).format("L");
+                    },
+                },
                 { data: "tipo" },
                 { data: "status" },
                 { data: "btn" },
@@ -939,6 +954,11 @@ $(document).ready(function () {
             ajax: "/admin/showContratoActivados",
             columns: [
                 { data: "contrato" },
+                {
+                    data: function (data) {
+                        return moment(data.fecha).format("L");
+                    },
+                },
                 { data: "tipo" },
                 { data: "status" },
                 { data: "btn" },
@@ -1174,6 +1194,11 @@ $(document).ready(function () {
             ajax: "/admin/showContratoPendientes",
             columns: [
                 { data: "contrato" },
+                {
+                    data: function (data) {
+                        return moment(data.fecha).format("L");
+                    },
+                },
                 { data: "tipo" },
                 { data: "status" },
                 { data: "btn" },
@@ -5216,10 +5241,10 @@ $(document).ready(function () {
             $("#comprobantePagoInput").addClass("is-valid");
             $("#comprobantePagoInput").removeClass("is-invalid");
 
-            $("#comprobantePagoDesc").attr("download", `${contrato}.zip`);
+            $("#comprobantePagoDesc").attr("download", `${documento[0]}`);
             $("#comprobantePagoDesc").attr(
                 "href",
-                `../documentos/comprobantes_pagos/contratos/${contrato}/${contrato}.zip`
+                `../documentos/comprobantes_pagos/contratos/${contrato}/${documento[0]}`
             );
             $("#comprobantePagoView").attr(
                 "href",
