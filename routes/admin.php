@@ -492,3 +492,8 @@ Route::get('/admin/exportarResumenPsAnterior', [App\Http\Controllers\ReportePago
 Route::get('/admin/showClavePagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'getClave']);
 Route::get('/admin/editStatusPagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'editStatus']);
 Route::post('/admin/guardarPagoPsAnterior', [App\Http\Controllers\ReportePagoPsAnteriorController::class, 'guardarPago']);
+
+// Rutas para gestión de vaciado sobre los pendientes de pago de clientes
+Route::get('/admin/pendientes-pago', [App\Http\Controllers\PendientePagoController::class, 'index'])->name('pendientes-pago');
+Route::get('/admin/showPendientePago', [App\Http\Controllers\PendientePagoController::class, 'getPendientePago']);
+Route::get('/admin/generarExcel', [App\Http\Controllers\PendientePagoController::class, 'export']);

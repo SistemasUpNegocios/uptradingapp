@@ -4169,3 +4169,25 @@ body.dark .col_terminada_contribuir {
 body.dark .modal_img_contribucion {
     border-color: #0f0f0f;
 }
+
+body.dark table.vaciado thead th {
+    background: transparent;
+}
+
+body.dark table.vaciado tbody td {
+    background: #464646;
+    color: #fff;
+}
+
+table.vaciado > :not(:first-child) {
+    border-top: 0px solid transparent;
+}
+
+body.dark table.vaciado > thead {
+    border-color: #fff;
+}
+
+body.dark #data div.text-dark,
+body.dark #data p.text-dark {
+    color: #fff !important;
+}

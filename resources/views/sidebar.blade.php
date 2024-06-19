@@ -244,6 +244,16 @@
         @endif
 
         <li class="nav-heading">Opciones de administrador</li>
+        @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/pendientes-pago')) nav-link @else nav-link collapsed @endif"
+                    href="{{ URL::to('admin/pendientes-pago') }}">                
+                    <i class="bi bi-bank"></i>
+                    <span>Pagos pendientes</span>
+                </a>
+            </li>
+        @endif
+
         @if (auth()->user()->id == 1 || auth()->user()->id == 2)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/porcentaje')) nav-link @else nav-link collapsed @endif"

@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    $(".contEuro").hide();
+    $(".contFranco").hide();
+
     const formatearFecha = (fecha) => {
         return fecha.split(" ")[0].split("-").reverse().join("/");
     };
@@ -275,6 +278,13 @@ $(document).ready(function () {
         var inversionlet = $(this).data("inversionlet");
         var inversionletus = $(this).data("inversionletus");
         var status = $(this).data("status");
+        var tipocambio_eur = $(this).data("tipocambioeur");
+        var tipocambio_chf = $(this).data("tipocambiochf");
+        var inversion_eur = $(this).data("inversioneur");
+        var inversion_chf = $(this).data("inversionchf");
+        var inversionlet_eur = $(this).data("inversionleteur");
+        var inversionlet_chf = $(this).data("inversionletchf");
+        var moneda = $(this).data("moneda");
 
         $("#modalTitle").text(`Vista previa del contrato de: ${nombrecliente}`);
 
@@ -333,6 +343,66 @@ $(document).ready(function () {
 
         $("#tipoIdInput").val(tipoid);
         $("#tipoIdInput").prop("disabled", true);
+
+        $("#tipoCambioInputEUR").val(tipocambio_eur);
+        $("#tipoCambioInputEUR").prop("readonly", true);
+
+        $("#tipoCambioInputCHF").val(tipocambio_chf);
+        $("#tipoCambioInputCHF").prop("readonly", true);
+
+        inversion_eur = inversion_eur.toString().replace(",", ".");
+        $("#inversionInputEUR").val(inversion_eur);
+        $("#inversionInputEUR").prop("readonly", true);
+
+        inversion_chf = inversion_chf.toString().replace(",", ".");
+        $("#inversionInputCHF").val(inversion_chf);
+        $("#inversionInputCHF").prop("readonly", true);
+
+        $("#inversionLetInputEUR").val(inversionlet_eur);
+        $("#inversionLetInputEUR").prop("readonly", true);
+
+        $("#inversionLetInputCHF").val(inversionlet_chf);
+        $("#inversionLetInputCHF").prop("readonly", true);
+
+        $("#monedaDolaresInput").prop("disabled", true);
+        $("#monedaDolaresInput").prop("checked", false);
+
+        $("#monedaEurosInput").prop("disabled", true);
+        $("#monedaEurosInput").prop("checked", false);
+
+        $("#monedaFrancosInput").prop("disabled", true);
+        $("#monedaFrancosInput").prop("checked", false);
+
+        console.log("moneda", moneda);
+
+        if (moneda == "dolares") {
+            $("#monedaDolaresInput").prop("checked", true);
+
+            $(".contEuro").hide();
+            $(".contFranco").hide();
+
+            $(".contDolar").show();
+
+            console.log("dolares");
+        } else if (moneda == "euros") {
+            $("#monedaEurosInput").prop("checked", true);
+
+            $(".contDolar").hide();
+            $(".contFranco").hide();
+
+            $(".contEuro").show();
+
+            console.log("euros");
+        } else if (moneda == "francos") {
+            $("#monedaFrancosInput").prop("checked", true);
+
+            $(".contDolar").hide();
+            $(".contEuro").hide();
+
+            $(".contFranco").show();
+
+            console.log("francos");
+        }
 
         porcentaje = porcentaje.toString().replace(",", ".");
         $("#porcentajeInput").val(porcentaje);
