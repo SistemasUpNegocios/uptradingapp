@@ -3819,7 +3819,9 @@ body.dark .sidebar-nav .nav-content a,
 body.dark #busquedaForm input::placeholder,
 body.dark #busquedaForm button i,
 body.dark #busquedaTicketForm input::placeholder,
-body.dark #busquedaTicketForm button i {
+body.dark #busquedaTicketForm button i,
+body.dark #busquedaCitaForm input::placeholder,
+body.dark #busquedaCitaForm button i {
     color: #fff;
 }
 
@@ -3886,7 +3888,8 @@ body.dark .sidebar .nav-link {
 }
 
 body.dark #busquedaForm input,
-body.dark #busquedaTicketForm input {
+body.dark #busquedaTicketForm input,
+body.dark #busquedaCitaForm input {
     background: #383838;
     color: #fff;
 }

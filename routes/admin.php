@@ -497,3 +497,13 @@ Route::post('/admin/guardarPagoPsAnterior', [App\Http\Controllers\ReportePagoPsA
 Route::get('/admin/pendientes-pago', [App\Http\Controllers\PendientePagoController::class, 'index'])->name('pendientes-pago');
 Route::get('/admin/showPendientePago', [App\Http\Controllers\PendientePagoController::class, 'getPendientePago']);
 Route::get('/admin/generarExcel', [App\Http\Controllers\PendientePagoController::class, 'export']);
+
+// Rutas para gestión de citas
+Route::get('/admin/citas', [App\Http\Controllers\CitaController::class, 'index'])->name('citas');
+Route::get('/admin/showCountCitas', [App\Http\Controllers\CitaController::class, 'getCountCitas']);
+Route::get('/admin/showAllCitas', [App\Http\Controllers\CitaController::class, 'getAllCitas']);
+Route::post('/admin/buscarCita', [App\Http\Controllers\CitaController::class, 'buscarCita']);
+Route::post('/admin/editHorarioCita', [App\Http\Controllers\CitaController::class, 'editHorarioCita']);
+Route::post('/admin/editBitacoraCita', [App\Http\Controllers\CitaController::class, 'editBitacoraCita']);
+Route::post('/admin/editStatusCita', [App\Http\Controllers\CitaController::class, 'editStatusCita']);
+Route::post('/admin/deleteCita', [App\Http\Controllers\CitaController::class, 'deleteCita']);

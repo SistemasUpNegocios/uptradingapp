@@ -161,6 +161,15 @@
             </li>
         @endif
 
+        @if (auth()->user()->is_root)
+            <li class="nav-item">
+                <a class="@if (request()->is('admin/citas')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/citas') }}">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>Citas</span>
+                </a>
+            </li>
+        @endif
+
         {{-- @if (auth()->user()->is_root || auth()->user()->is_admin || auth()->user()->is_procesos || auth()->user()->is_egresos)
             <li class="nav-item">
                 <a class="@if (request()->is('admin/notas')) nav-link @else nav-link collapsed @endif" href="{{ URL::to('admin/notas') }}">
